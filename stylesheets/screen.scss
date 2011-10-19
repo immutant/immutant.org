@@ -46,9 +46,9 @@ body {
 }
 
 #header {
-  img.header-text {
-      height: 60px;
-  }
+    img.header-text {
+        height: 60px;
+    }
 }
 
 #nav-wrapper {
@@ -348,4 +348,10 @@ div.gist {
         }
     }
 
+}
+
+#home-page {
+    #intro {
+        font-size: 1.8em;
+    }
 }
