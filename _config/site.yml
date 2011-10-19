@@ -1,0 +1,16 @@
+title: Immutant
+
+profiles:
+  staging:
+    base_url: http://staging.immutant.org/
+    deploy:
+      host: immutant.org
+      path: /var/www/domains/immutant.org/staging/htdocs
+  production:
+    base_url: http://immutant.org/
+    deploy:
+      host: immutant.org
+      path: /var/www/domains/immutant.org/www/htdocs
+#intense_debate_acct: 10ac347f1bbe55fd627210502aeb736d
+#google_analytics: UA-6435340-5
+

@@ -1,0 +1,29 @@
+---
+layout: base
+---
+
+#header-bar
+  #header-wrapper
+    #header
+      %img.header-text(src="/images/logos/immutant_text.png")
+      #nav-wrapper
+        = partial( 'menu.html.haml' )
+
+#primary-wrapper
+  #primary-container
+    - unless page.inhibit_title 
+      %h1.page-title
+        - sections = page.section ? [page.section] : page.sections
+        - if sections
+          - sections.each_with_index do |section, index|
+            - path = sections[0, index+1].join("/").downcase.gsub(' ', '_')
+            %a{:href=>"/#{path}/"} #{section}
+            \:
+        #{page.title}
+    #primary-content
+      ~ content
+#footer-bar
+  #footer-wrapper
+    #footer
+      = partial( 'footer.html.haml' )
+

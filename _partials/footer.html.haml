@@ -1,0 +1,17 @@
+#bottom-nav
+  //= partial( 'bottom-nav.html.haml' )
+  #bottom-left
+    #legal
+      %p
+        The #{site.title} project is a member of the 
+        <a href="http://jboss.org/">JBoss Community</a> and
+        produced by the <a href="http://projectodd.org/">Project:odd</a> team.
+      %p
+        Copyright 2011 <a href="http://redhat.com/">Red Hat, Inc.</a>
+        #{site.title}&trade; is a trademark of Red Hat, Inc.
+  #bottom-right
+    #badges
+      %a{:href=>'http://jboss.org/'}
+        %img#jbosscommunity-logo{ :src=>'http://torquebox.org/images/jbosscommunity-logo.png' }
+      %a{:href=>'http://projectodd.org/'}
+        %img#projectodd-logo{ :src=>'http://projectodd.org/images/projectodd-logo.png' }
