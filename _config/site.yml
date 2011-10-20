@@ -11,6 +11,6 @@ profiles:
     deploy:
       host: immutant.org
       path: /var/www/domains/immutant.org/www/htdocs
-#intense_debate_acct: 10ac347f1bbe55fd627210502aeb736d
-#google_analytics: UA-6435340-5
+intense_debate_acct: 350476a030c25a50bd9e5b33c5c937f3
+google_analytics: UA-6435340-7
 
