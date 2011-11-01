@@ -49,12 +49,14 @@ such as:
  - How to deploy your Clojure apps (hint: Leiningen plugin)
  - How to configure Immutant to serve both Ruby and Clojure apps
  - How to pass messages between Ruby and Clojure components
- - How to distribute Clojure message handlers across a cluster
+ - How to distribute Clojure message handlers across a cluster of immutants
 
-Please join the [mailing lists] and hang out on [IRC]. It'll be fun!
+Please follow along on [Twitter], join the [mailing lists] and/or hang
+out with us on [IRC]. It'll be fun!
 
 [Clojure]: http://clojure.org/
 [TorqueBox]: http://torquebox.org/
 [Ruby]: http://jruby.org/
 [mailing lists]: /community/mailing_lists/
 [IRC]: /community#irc
+[Twitter]: http://twitter.com/immutants
