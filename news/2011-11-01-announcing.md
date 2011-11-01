@@ -5,6 +5,8 @@ layout: news
 tags: [ announcement, first, beginning ]
 ---
 
+<img src="http://clojure.org/file/view/clojure-icon.gif" alt="[Clojure]" class="alignright"/>
+
 The time has come for us to officially announce the Immutant
 project. Immutant is going to be for [Clojure] what [TorqueBox] is for
 [Ruby][Ruby]: a true, enterprise-grade application server, encapsulating the
