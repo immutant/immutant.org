@@ -21,6 +21,7 @@ body {
     @include blueprint-interaction;
 
     font-family: Interstate,Helvetica,Arial,sans-serif;
+    background-color: $background_color;
 }
 
 .hidden {

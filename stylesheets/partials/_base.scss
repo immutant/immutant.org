@@ -11,12 +11,14 @@ $blueprint-grid-width: ($blueprint-container-size + $blueprint-grid-margin) / $b
 
 // 4 main colors that determine palette
 
-$color_dark: #2B435A;
-$color_light: #656565;
-$page_title_color: #8b00ff;
-$header_color: #225533;
+$background_color: #f0f0f0;
+$color_dark: #5d6928;
+$color_light: #f8ffcc;
+$page_title_color: #ff9933;
+$header_color: #ff9933;
 
-$bar_background_color: #85bb18;
+//$bar_background_color: #85bb18;
+$bar_background_color: #bbca87;
 
 $link_color: $color_dark;
 $link_visited_color: $color_dark;
