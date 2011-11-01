@@ -5,11 +5,9 @@ layout: news
 tags: [ announcement, first, beginning ]
 ---
 
-# Introducing Immutant
-
-So we should probably officially announce the Immutant
-project. Immutant is going to be for Clojure what TorqueBox is for
-Ruby: a true, enterprise-grade application server, encapsulating the
+The time has come for us to officially announce the Immutant
+project. Immutant is going to be for [Clojure] what [TorqueBox] is for
+[Ruby][Ruby]: a true, enterprise-grade application server, encapsulating the
 robust services provided by JBoss AS7 within intuitive Clojure API's.
 
 Further, Immutant has inspired us to attempt to achieve a sort of
@@ -51,4 +49,10 @@ such as:
  - How to pass messages between Ruby and Clojure components
  - How to distribute Clojure message handlers across a cluster
 
-Please join the mailing lists and hang out on IRC. It'll be fun!
+Please join the [mailing lists] and hang out on [IRC]. It'll be fun!
+
+[Clojure]: http://clojure.org/
+[TorqueBox]: http://torquebox.org/
+[Ruby]: http://jruby.org/
+[mailing lists]: /community/mailing_lists/
+[IRC]: /community#irc
