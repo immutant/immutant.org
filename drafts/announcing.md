@@ -1,6 +1,7 @@
 ---
 title: 'Introducing Immutant'
 author: Jim Crossley
+layout: default
 tags: [ announcement, first, beginning ]
 ---
 
