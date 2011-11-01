@@ -14,7 +14,7 @@ Awestruct::Extensions::Pipeline.new do
   extension Awestruct::Extensions::Paginator.new(:posts, '/news/index', :per_page => 5)
   extension Awestruct::Extensions::Indexifier.new
   extension Awestruct::Extensions::Atomizer.new(:posts, '/news.atom')
-  extension Awestruct::Extensions::IntenseDebate.new
+  extension Awestruct::Extensions::Disqus.new
 #  extension ReleaseSizes.new
 
   extension Awestruct::Extensions::Tagger.new(:posts,

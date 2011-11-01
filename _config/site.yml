@@ -11,8 +11,9 @@ profiles:
     deploy:
       host: immutant.org
       path: /var/www/domains/immutant.org/www/htdocs
+  development:
+    disqus_developer: true
 
-intense_debate_base_url: http://immutant.org
-intense_debate_acct: 82f59e335081be13846c34fa627b3208
+disqus: immutant
 google_analytics: UA-6435340-7
 
