@@ -159,6 +159,109 @@ body {
     }
 }
 
+#right-sidebar {
+    #main-column {
+        @include column(14);
+        @include append(1);
+    }
+    #sidebar-column {
+        @include column(9);
+        @include last;
+    }
+}
+
+#latest-news {
+    .item {
+        margin-bottom: 1em;
+    }
+    h1, h2 {
+        font-weight: bold;
+    }
+    h1 {
+        font-size: 160%;
+        border-bottom: 1px solid $top_nav_border_color;
+    }
+    h2 {
+        font-size: 120%;
+        margin-bottom: 0px;
+        a {
+            text-decoration: none;
+        }
+    }
+    .tail {
+        border-bottom: 1px solid $post_tail_border_color;
+        padding: .8ex;
+        padding-right: 0px;
+        margin-bottom: 1em;
+        margin-top: 1em;
+        text-align: right;
+    }
+    #even-more {
+        display: block;
+        text-align: center;
+        font-size: 180%;
+        font-weight: bold;
+    }
+}
+
+#upcoming-talks {
+    .item {
+        margin-bottom: 1em;
+        padding-bottom: 1em;
+        border-bottom: 1px solid $post_tail_border_color;
+    }
+    h1, h2 {
+        font-weight: bold;
+    }
+    h1 {
+        font-size: 160%;
+        border-bottom: 1px solid $top_nav_border_color;
+    }
+    h2 {
+        font-size: 120%;
+        margin-bottom: 0px;
+        a {
+            text-decoration: none;
+        }
+    }
+    h3 {
+        font-size: 100%;
+    }
+    .event_details {
+        float: right;
+        font-weight: bold;
+        text-align: right;
+    }
+    img.event_logo {
+        clear: both;
+        max-width: 200px;
+        display:block;
+        margin: auto;
+        margin-bottom: 2em;
+        margin-top: 2em;
+    }
+    .details {
+        clear: both;
+        margin-bottom: 1ex;
+    }
+    .links {
+        text-align: right;
+        font-weight: bold;
+    }
+}
+
+#bottom-row {
+    .left-column {
+        @include column(11);
+        @include append(1);
+    }
+    .right-column {
+        @include prepend(1);
+        @include column(11);
+        @include last;
+    }
+}
+
 .post-navigation {
     line-height: 1.4em;
     margin-bottom: 2em;
@@ -356,133 +459,133 @@ div.gist {
 }
 
 #primary-container table.incremental-builds {
-  font-size: 90%;
-  border-right: 1px solid #999;
-  border-left: 1px solid #999;
-  border-top: 1px solid #999;
+    font-size: 90%;
+    border-right: 1px solid #999;
+    border-left: 1px solid #999;
+    border-top: 1px solid #999;
 
-  &#latest-stable {
-      td {
-          border-bottom: 1px solid black;
-      }
-  }
-
-  a {
-    text-decoration: none;
-  }
-
-  th.build-info {
-    padding-left: 18px;
-  }
-
-  .number, .date, .time, .sha1 {
-    display: block;
-  }
-
-  .number {
-    font-size: 150%;
-    font-weight: bold;
-  }
-
-  tr {
-    td {
-      background-color: #eee;
-      border: 0 none;
+    &#latest-stable {
+        td {
+            border-bottom: 1px solid black;
+        }
     }
-    th {
-      border-bottom: 1px solid black;
+
+    a {
+        text-decoration: none;
     }
-  }
 
-  tr.divide td {
-    border-bottom: 1px solid #777;
-  }
- 
-  tr {
-    td.first {
-      border-left: 12px solid #999999;
-      padding-left: 1ex;
+    th.build-info {
+        padding-left: 18px;
     }
-    td.last {
-      border-right: 4px solid #999999;
-      padding-right: 1ex;
+
+    .number, .date, .time, .sha1 {
+        display: block;
     }
-  }
 
-  tr.header { 
-    background-color: white;
-  }
-
-  tr.build-building {
-    td.first {
-      border-left: 12px solid #ffffcc - #444;
+    .number {
+        font-size: 150%;
+        font-weight: bold;
     }
-    td {
-      background-color: #ffffcc;
+
+    tr {
+        td {
+            background-color: #eee;
+            border: 0 none;
+        }
+        th {
+            border-bottom: 1px solid black;
+        }
     }
-  }
 
-  tr.build-success {
-    td.first {
-      border-left: 12px solid #ccffcc - #444;
+    tr.divide td {
+        border-bottom: 1px solid #777;
     }
-    td {
-      background-color: #ccffcc - #222;
-      /*background-color: #ccffcc;*/
+
+    tr {
+        td.first {
+            border-left: 12px solid #999999;
+            padding-left: 1ex;
+        }
+        td.last {
+            border-right: 4px solid #999999;
+            padding-right: 1ex;
+        }
     }
-  }
 
-  tr.build-aborted {
-    font-size: 60%;
-  }
-
-  tr.build-failure {
-    td.first {
-      border-left: 12px solid #ffcccc - #222;
+    tr.header {
+        background-color: white;
     }
-    td {
-      background-color: #ffcccc;
+
+    tr.build-building {
+        td.first {
+            border-left: 12px solid #ffffcc - #444;
+        }
+        td {
+            background-color: #ffffcc;
+        }
     }
-  }
 
-  tr.build-aborted td {
-      background-color: #ccc;
-  }
+    tr.build-success {
+        td.first {
+            border-left: 12px solid #ccffcc - #444;
+        }
+        td {
+            background-color: #ccffcc - #222;
+        /*background-color: #ccffcc;*/
+        }
+    }
 
-  tr.build-unknown td {
-      background-color: #eee;
-  }
+    tr.build-aborted {
+        font-size: 60%;
+    }
 
-  tr.build-details.hidden td {
-    margin: 0px;
-    padding: 0px;
-    height: 1px;
-  }
+    tr.build-failure {
+        td.first {
+            border-left: 12px solid #ffcccc - #222;
+        }
+        td {
+            background-color: #ffcccc;
+        }
+    }
 
-  td.result {
-      font-size: 1.2em;
-      font-weight: bold;
-  }
+    tr.build-aborted td {
+        background-color: #ccc;
+    }
 
-  ul {
-    list-style-type: circle;
-  }
-  color: #444;
-  a { 
+    tr.build-unknown td {
+        background-color: #eee;
+    }
+
+    tr.build-details.hidden td {
+        margin: 0px;
+        padding: 0px;
+        height: 1px;
+    }
+
+    td.result {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    ul {
+        list-style-type: circle;
+    }
     color: #444;
-  }
+    a {
+        color: #444;
+    }
 
-  .binary {
-    width: 17%;
-  }
-  .docs {
-    width: 17%;
-  }
-  .git{
-    width: 10%;
-  }
+    .binary {
+        width: 17%;
+    }
+    .docs {
+        width: 17%;
+    }
+    .git{
+        width: 10%;
+    }
 
-  .result {
-    width: 20%;
-  }
+    .result {
+        width: 20%;
+    }
 }
