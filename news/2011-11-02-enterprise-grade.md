@@ -2,7 +2,7 @@
 title: 'WTF is an enterprise-grade app server?'
 author: Jim Crossley
 layout: news
-tags: [ enterprise, app-server ]
+tags: [ wtf, enterprise, app-server ]
 ---
 
 [hn]: http://news.ycombinator.com/item?id=3184284
