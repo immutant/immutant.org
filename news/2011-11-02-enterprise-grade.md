@@ -1,5 +1,5 @@
 ---
-title: 'WTF is an enterprise-grade app server?
+title: 'WTF is an enterprise-grade app server?'
 author: Jim Crossley
 layout: news
 tags: [ enterprise, app-server ]
@@ -70,9 +70,9 @@ behind simple Ruby API's. The goal for Immutant is to do the same with
 Clojure.
 
 But by integrating **any** JVM-based language with JBoss AS7, the
-ultimate goal is to keep both the "system operations" group and the
-development groups within enterprises happy, or at least significantly
-less soul-sucky and hopefully more productive.
+ultimate goal is to keep all the groups -- both operations and
+development -- in an enterprise happy, or at least significantly less
+soul-sucky and hopefully more productive.
 
 # But why should I care?
 
