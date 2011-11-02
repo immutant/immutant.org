@@ -10,6 +10,9 @@ tags: [ enterprise, app-server ]
 [company]: http://redhat.com
 [jbossas]: https://github.com/jbossas/jboss-as
 [fast]: http://torquebox.org/news/2011/10/06/torquebox-2x-performance/
+[Heroku]: http://heroku.com
+[EngineYard]: http://engineyard.com
+[openshift]: https://openshift.redhat.com/
 
 That's a great question. We get it a lot. It was [asked on Hacker News][hn]
 in response to our birth announcement of Immutant yesterday.
@@ -90,7 +93,7 @@ you're not even in a group!
 Maybe you're perfectly content being both developer and sys admin for
 your apps and the various external processes on which they depend, or
 you're quite happy delegating some of those responsibilities to the
-fine folks at Heroku, EngineYard, or someone else.
+fine folks at [Heroku], [EngineYard], or [someone else][openshift].
 
 If that's the case, you are probably a very happy person, and I'm very
 happy for you!
@@ -99,5 +102,3 @@ But if you feel you could benefit from a more integrated "all in the
 tin" solution, and especially if you're thinking along polyglot lines,
 I think TorqueBox (and Immutant, once it matures) is a compelling
 alternative, whether you work in an enterprise or not.
-
-There, my existence is justified. ;)
