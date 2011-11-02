@@ -5,8 +5,21 @@ inhibit_title: true
 ---
 
 #home-page
-  #intro
-    :markdown
+  #top-row
+    .left-column
+      :markdown
+        ...doing for [Clojure](http://clojure.org) what [TorqueBox](http://torquebox.org) does for [Ruby](http://www.ruby-lang.org/en/)
+
+    .right-column
+      %table.details
+        %tr
+          %th Source
+          %td
+            %a{:href=>"http://github.com/immutant/immutant"}http://github.com/immutant/immutant
+        %tr.release_date
+          %th Issues
+          %td
+            %a{:href=>"https://issues.jboss.org/browse/IMMUTANT"}https://issues.jboss.org/browse/IMMUTANT
 
   #bottom-row
     .left-column

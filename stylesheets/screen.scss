@@ -250,6 +250,19 @@ body {
     }
 }
 
+#top-row {
+    font-size: 130%;
+    .left-column {
+        @include column(11);
+        @include append(1);
+    }
+    .right-column {
+        @include prepend(1);
+        @include column(11);
+        @include last;
+    }
+}
+
 #bottom-row {
     .left-column {
         @include column(11);
