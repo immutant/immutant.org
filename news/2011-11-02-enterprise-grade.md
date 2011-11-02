@@ -67,10 +67,10 @@ any app deployed to it with a web server, messaging, transactions,
 scheduling, security, caching, clustering, and more. JBoss AS7 is one
 such app server. It's [open-source][jbossas] and it's [fast].
 
-Unfortunately, the most popular commercial Java app servers provided
-those robust enterprise services at a very high price. Not only in
-dollars, but in the form of complex Java API's, overly-configured
-slow implementations, vendor-negotiated standards and general "acronym
+Unfortunately, most popular commercial Java app servers provide those
+robust enterprise services at a very high price. Not only in dollars,
+but in the form of complex Java API's, overly-configured slow
+implementations, vendor-negotiated standards and general "acronym
 soup".
 
 But it doesn't have to be that way. The Rails "convention over
