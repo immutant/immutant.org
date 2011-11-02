@@ -45,7 +45,7 @@ So "enterprise grade" implies a capacity for supporting these types of
 environments. It usually involves, among other things, **messaging**
 so that the disparate apps may communicate, **transactions** to ensure
 the integrity of distributed data stores, and **clustering**, not only
-for scalability, but also to enable the lifecycles of the multiple
+for scalability, but also to allow the lifecycles of the multiple
 versions of the apps to vary independently. And oh yeah, it also has
 to stay up, all the time.
 
