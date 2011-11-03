@@ -45,9 +45,28 @@ body {
     border-top: 1px solid $bar_background_color - #333;
 }
 
-#header {
-    img.header-text {
-        height: 60px;
+#header-wrapper {
+    #header {
+        @include column(13);
+        img.header-text {
+            height: 60px;
+        }
+    }
+
+    #quick-links {
+        @include column(11);
+        @include last;
+        font-size: 0.9em;
+        table {
+            margin-bottom: 0;
+            th, td {
+                padding: 0;
+            }
+            th {
+                text-align: right;
+                padding-right: 4px;
+            }
+        }
     }
 }
 
@@ -251,15 +270,14 @@ body {
 }
 
 #top-row {
-    font-size: 130%;
-    .left-column {
-        @include column(11);
-        @include append(1);
+    @include column(24);
+    @include last;
+    #intro, #callout {
+        font-size: 1.3em;     
     }
-    .right-column {
-        @include prepend(1);
-        @include column(11);
-        @include last;
+    #callout {
+        text-align: center;
+        font-weight: bold;
     }
 }
 
@@ -463,12 +481,6 @@ div.gist {
         }
     }
 
-}
-
-#home-page {
-    #intro {
-        font-size: 1.8em;
-    }
 }
 
 #primary-container table.incremental-builds {

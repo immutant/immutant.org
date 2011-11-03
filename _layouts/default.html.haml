@@ -9,6 +9,14 @@ layout: base
   #header-wrapper
     #header
       %img.header-text(src="/images/logos/immutant_text-red.png")
+    #quick-links
+      %table
+        - site.quick_links.each do |label, link, text|
+          - text ||= link
+          %tr
+            %th== #{label}:
+            %td  
+              %a{:href=>link}=text
 
 #primary-wrapper
   #primary-container

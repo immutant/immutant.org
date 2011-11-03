@@ -6,20 +6,22 @@ inhibit_title: true
 
 #home-page
   #top-row
-    .left-column
+    #intro
       :markdown
-        ...doing for [Clojure](http://clojure.org) what [TorqueBox](http://torquebox.org) does for [Ruby](http://www.ruby-lang.org/en/)
-
-    .right-column
-      %table.details
-        %tr
-          %th Source
-          %td
-            %a{:href=>"http://github.com/immutant/immutant"}http://github.com/immutant/immutant
-        %tr.release_date
-          %th Issues
-          %td
-            %a{:href=>"https://issues.jboss.org/browse/IMMUTANT"}https://issues.jboss.org/browse/IMMUTANT
+        Immutant is an application server for [Clojure](http://clojure.org) applications built on top of 
+        [JBossAS 7](http://www.jboss.org/as7). It currently provides support for [Ring](https://github.com/mmcgrana/ring) 
+        handlers and messaging based on [HornetQ](http://www.jboss.org/hornetq). It is a new project,
+        and we are working furiously on addding new features, such as:
+      
+        * Daemons (long-running threads)
+        * Scheduled jobs
+        * Cluster distributed futures
+        * XA distributed transactions
+        * Cluster distributed caching
+  
+    #callout  
+      :markdown
+        Want to get involved? Come see us in [IRC](/community/#irc) or join our [mailing lists](/community/mailing_lists/)!
 
   #bottom-row
     .left-column

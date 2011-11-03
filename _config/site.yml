@@ -17,3 +17,8 @@ profiles:
 disqus: immutant
 google_analytics: UA-6435340-7
 
+quick_links:
+  - [ Latest Build, http://immutant.org/builds/immutant-dist-bin.zip ]
+  - [ Issues, https://issues.jboss.org/browse/IMMUTANT ]
+  - [ Chat, 'http://webchat.freenode.net/?channels=immutant', '#immutant on freenode' ]
+  - [ Source, https://github.com/immutant/immutant ]
