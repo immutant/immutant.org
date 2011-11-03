@@ -37,8 +37,9 @@ renderer = {
       row.find( 'td *' ).hide();
       row.find( 'td .number' ).show();
       row.find( 'td .number a' ).show();
-      $( '.build-' + build.number + '.build-details td *' ).hide();
-      $( '.build-' + build.number + '.build-details' ).addClass( 'hidden' );
+      column.append( 
+        $( '<a href="' + build.url + '/console' + '" class="status">Aborted</a>' )
+      );
     }  else if ( build.building ) {
       row.addClass( 'build-building' );
       column.append(
