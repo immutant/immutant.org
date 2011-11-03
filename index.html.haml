@@ -8,16 +8,16 @@ inhibit_title: true
   #top-row
     #intro
       :markdown
-        Immutant is an application server for [Clojure](http://clojure.org) applications built on top of 
-        [JBossAS 7](http://www.jboss.org/as7). It currently provides support for [Ring](https://github.com/mmcgrana/ring) 
-        handlers and messaging based on [HornetQ](http://www.jboss.org/hornetq). It is a new project,
-        and we are working furiously on addding new features, such as:
+
+        Immutant is an application server for [Clojure](http://clojure.org) built on top of 
+        [JBoss AS7](http://www.jboss.org/as7). It is a new project, but we already support [Ring](https://github.com/mmcgrana/ring) 
+        handlers and asynchronous messaging, and we are working furiously on additional features, including:
       
-        * Daemons (long-running threads)
+        * Daemons (long-running services)
         * Scheduled jobs
-        * Cluster distributed futures
-        * XA distributed transactions
-        * Cluster distributed caching
+        * Distributed futures
+        * Distributed caching
+        * Distributed (XA) transactions
   
     #callout  
       :markdown
