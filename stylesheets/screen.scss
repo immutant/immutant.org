@@ -163,9 +163,10 @@ body {
         font-size: 90%;
         code {
             display: block;
-            padding: 1em;
-            border: 1px dotted $code_border_color;
             overflow-x: auto;
+            background-color: #F0F0F0;
+            padding: 0.6em;
+            border: 1px solid #AAA;
         }
     }
     p {
@@ -175,6 +176,10 @@ body {
     ul {
         padding-left: 2em;
         list-style-type: square;
+    }
+
+    .syntax-container {
+        margin-bottom: 12px;
     }
 }
 
