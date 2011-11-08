@@ -81,10 +81,10 @@ this requirement will go away.
 
 ## Running Immutant
 
-To verify that Immutant is properly installed, let's fire it up. To do so, 
-use the `lein immutant run` command. This will start Immutant and
+To verify that Immutant is properly installed, let's fire one up. To do so, 
+use the `lein immutant run` command. This will start an Immutant and
 give you the console log. You'll see lots of log messages that you can ignore - the
-one to look for should be the last message, and should tell you the app was properly
+one to look for should be the last message, and will tell you the Immutant was properly
 started:
 
     ~/immutant $ lein immutant run

@@ -2,14 +2,15 @@
 title: "Getting Started: Deploying a Web Application"
 author: Toby Crawley
 layout: news
+sequence: 1
 tags: [ lein, deploy, tutorial, getting-started, ring ]
 ---
 
-Welcome back! This article covers creating and deploying a basic [Ring] web application
-to Immutant. It is the second installment in a 
+Welcome back! This article covers creating a basic [Ring] web application and deploying 
+to an Immutant. It is the second installment in a 
 [series of tutorials on getting started][getting-started] with Immutant. If you haven't
-read the [first installment][installing], go do so now, since it covers installing Immutant.
-your first application. This tutorial assumes you are on a *nix system.
+read the [first installment][installing], go do so now, since it covers installation
+and setup. This tutorial assumes you are on a *nix system.
 
 ## Creating an Immutant Clojure application
 
@@ -40,7 +41,7 @@ file (`immutant.clj`). It is equivalent to calling:
 
     ~/immutant $ lein new immutant-demo && cd immutant-demo && lein immutant init
 
-We'll come back to `immutant.clj` in a bit. Now, let's add a ring handler to our core namespace:
+We'll come back to `immutant.clj` in a sec. Now, let's add a ring handler to our core namespace:
 
 <pre class="syntax clojure">(ns immutant-demo.core)
 
@@ -54,7 +55,9 @@ We'll come back to `immutant.clj` in a bit. Now, let's add a ring handler to our
     
 When an Immutant starts up, it looks for a file named `immutant.clj` at the root of the
 application. If that file exists, it is evaluated. This file is used to configure the
-Immutant services you want your application to consume. 
+Immutant services you want your application to consume. It's the single place you 
+defines all the components required by your application, and saves you from having to
+keep multiple configuration files in sync (crontabs, message queue definitions, etc).
 
 The file has example code for configuring web endpoints and messaging services, but we're
 just going to deal with web endpoints in this article. Edit your `immutant.clj` so it 
@@ -72,7 +75,7 @@ We'll come back to what `web/start` is doing after we get the application runnin
 
 ## Deploying your application
 
-Before we can start up the Immutant, we need to tell it about our application. We do that
+Before we can start up an Immutant, we need to tell it about our application. We do that
 by deploying (for this to work, you need to have `IMMUTANT_HOME` set - see the 
 [previous article][installing] for details):
 
@@ -85,7 +88,7 @@ fire it up.
 
 ## Starting Immutant
 
-To launch Immutant, use the `lein immutant run` command. This will start Immutant and
+To launch an Immutant, use the `lein immutant run` command. This will start Immutant and
 give you the console log. You'll see lots of log messages that you can ignore - the
 one to look for should be the last message, and should tell you the app was deployed:
 
@@ -104,7 +107,7 @@ let's hit it and see what happens:
 
 Yay!
 
-You can kill Immutant with Ctrl-C.
+You can kill the Immutant with Ctrl-C.
 
 ## Context Paths
 
@@ -113,7 +116,7 @@ do that, however, we need to first talk about *context paths*. The context path 
 the portion of the URL between the hostname and the routes within the application.
 It basically tells Immutant which requests to route to a particular application.
 
-Immutant can host multiple applications at the same time, but each application must 
+An Immutant can host multiple applications at the same time, but each application must 
 have a unique context path. If no context path is provided when an application
 is deployed, it defaults to one based on the name of the deployment. The 
 deployment name is taken from the name of the deployment descriptor, which
@@ -161,7 +164,7 @@ Redeploy the application to pick up the `:context-path` from `immutant.clj`:
     ~/immutant/immutant-demo $ lein immutant deploy
     Deployed immutant-demo to /Users/tobias/immutant/current/jboss/standalone/deployments/immutant-demo.clj
 
-Then fire Immutant back up with `lein immutant run`, we can see they
+Then fire an Immutant up again with `lein immutant run`, we can see they
 both work:
 
     ~ $ curl http://localhost:8080
