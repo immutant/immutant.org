@@ -81,7 +81,7 @@ this requirement will go away.
 
 ## Running Immutant
 
-To verify that Immutant is properly installed, let's fire one up. To do so, 
+To verify that Immutant is properly installed, let's fire it up. To do so, 
 use the `lein immutant run` command. This is a convenient way to start the Immutant's 
 JBoss server, and will run in the foreground displaying the console log. 
 You'll see lots of log messages that you can ignore - the

@@ -53,11 +53,11 @@ We'll come back to `immutant.clj` in a sec. Now, let's add a ring handler to our
 
 ## Configuring the application for Immutant
     
-When the Immutant deploys an application, it looks for a file named `immutant.clj` at the root of the
-application. If that file exists, it is evaluated. This file is used to configure the
+When the Immutant deploys an application, it looks for a file named `immutant.clj` 
+at the root and evaluates it if it exists. This file is used to configure the
 Immutant services you want your application to consume. It's the single place you 
 defines all the components required by your application, and saves you from having to
-keep external configuration files in sync (crontabs, message queue definitions, etc).
+keep external configuration files in sync (crontabs, message queue definitions, init scripts, etc).
 
 The file has example code for configuring web endpoints and messaging services, but we're
 just going to deal with web endpoints in this article. Edit your `immutant.clj` so it 
