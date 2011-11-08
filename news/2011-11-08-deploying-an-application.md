@@ -88,8 +88,9 @@ fire it up.
 
 ## Starting Immutant
 
-To launch an Immutant, use the `lein immutant run` command. This will start Immutant and
-give you the console log. You'll see lots of log messages that you can ignore - the
+To launch an Immutant, use the `lein immutant run` command. This will
+start the Immutant's JBoss server, and will run in the foreground displaying the console log.
+You'll see lots of log messages that you can ignore - the
 one to look for should be the last message, and should tell you the app was deployed:
 
     ~/immutant/immutant-demo $ lein immutant run

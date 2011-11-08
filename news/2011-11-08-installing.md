@@ -82,8 +82,9 @@ this requirement will go away.
 ## Running Immutant
 
 To verify that Immutant is properly installed, let's fire one up. To do so, 
-use the `lein immutant run` command. This will start an Immutant and
-give you the console log. You'll see lots of log messages that you can ignore - the
+use the `lein immutant run` command. This is a convenient way to start the Immutant's 
+JBoss server, and will run in the foreground displaying the console log. 
+You'll see lots of log messages that you can ignore - the
 one to look for should be the last message, and will tell you the Immutant was properly
 started:
 
@@ -94,7 +95,7 @@ started:
     ...
     22:46:31,663 INFO  [org.jboss.as] (Controller Boot Thread) JBoss AS 7.x.incremental.182 "Ahoy!" started in 2990ms - Started 136 of 200 services (61 services are passive or on-demand)
     
-You can kill Immutant with Ctrl-C.
+You can kill the Immutant with Ctrl-C.
 
 ## Wrapping up
 
