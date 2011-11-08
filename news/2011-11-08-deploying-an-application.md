@@ -1,53 +1,46 @@
 ---
-title: Running Immutant
+title: "Getting Started: Deploying a Web Application"
 author: Toby Crawley
 layout: news
-tags: [ installation, lein, deploy, tutorial ]
+tags: [ lein, deploy, tutorial, getting-started, ring ]
 ---
 
-Greetings! Today I'd like to walk you through installing Immutant and deploying
-your first application. This is the first in a series of basic tutorials covering
-Immutant features, and will cover installing Immutant and deploying a [Ring] based
-web application. This tutorial assumes you are on a *nix system.
+Welcome back! This article covers creating and deploying a basic [Ring] web application
+to Immutant. It is the second installment in a 
+[series of tutorials on getting started][getting-started] with Immutant. If you haven't
+read the [first installment][installing], go do so now, since it covers installing Immutant.
+your first application. This tutorial assumes you are on a *nix system.
 
-## Installing Immutant
+## Creating an Immutant Clojure application
 
-The first step is downloading an Immutant distribution. We've yet to make any official
-releases, but our [CI] server is setup to publish an [incremental build] every time
-we push to the [git repo]. The latest incremental build is always available at
-http://immutant.org/builds/immutant-dist-bin.zip. Go ahead and download that.
+In our [previous article][installing], we installed the [lein plugin]. Let's take another
+look at the tasks it provides:
 
-Once you have the zip file downloaded, unzip it somewhere handy. For this 
-walk-through, I'm going to put it in `~/immutant/`. When unzipped, the distribution
-will have the build number in the directory name. It's handy to have a consistent
-path to the distribution, allowing us to download other incremental builds in the
-future with minimal fuss. To do that, link the distribution to `current`. Here is
-my shell session doing just that:
+    ~/immutant $ lein immutant
+    Manage the deployment lifecycle of an Immutant application.
 
-    ~ $ mkdir immutant
-    ~ $ cd immutant
-    ~/immutant $ unzip ../downloads/immutant-dist-bin.zip
-    ~/immutant $ ln -s immutant-1.x.incremental.13 current
-    ~/immutant $ ls -l
-    total 8
-    lrwxr-xr-x  1 tobias  staff   27 Nov  4 10:30 current -> immutant-1.x.incremental.13
-    drwxrwxr-x  3 tobias  staff  102 Nov  2 17:42 immutant-1.x.incremental.13
+    Subtasks available:
+    new        Create a new project skeleton initialized for immutant.
+    init       Adds a sample immutant.clj configuration file to an existing project
+    deploy     Deploys the current project to the Immutant specified by $IMMUTANT_HOME
+    undeploy   Undeploys the current project from the Immutant specified by $IMMUTANT_HOME
+    run        Starts up the Immutant specified by $IMMUTANT_HOME, displaying its console output
 
-Now we'll set a environment variable pointing to the distribution:
+We talked about `run` last time. This time, we'll cover `new` and `deploy`. To do so, 
+we'll build a basic application that demonstrates the current web features. To get
+started, let's create an Immutant project:
 
-    export IMMUTANT_HOME=~/immutant/current
-
-## Creating a Clojure application
-
-Now that we have Immutant installed, let's create an application. I'm assuming you already have 
-[Leiningen] installed. If not, follow [these instructions], then come back here.
-
-The application we're going to build demonstrates the current web features. To get
-started, let's create a lein project:
-
-    ~/immutant $ lein init immutant-demo
+    ~/immutant $ lein immutant new immutant-demo
+    Created new project in: /Users/tobias/immutant/immutant-demo
+    Look over project.clj and start coding in immutant_demo/core.clj
+    Wrote sample immutant.clj
     
-Now, let's add a ring handler to our core namespace:
+The `new` task creates a [Leiningen] project and gives it a sample Immutant configuration
+file (`immutant.clj`). It is equivalent to calling:
+
+    ~/immutant $ lein new immutant-demo && cd immutant-demo && lein immutant init
+
+We'll come back to `immutant.clj` in a bit. Now, let's add a ring handler to our core namespace:
 
 <pre class="syntax clojure">(ns immutant-demo.core)
 
@@ -58,41 +51,10 @@ Now, let's add a ring handler to our core namespace:
 </pre>
 
 ## Configuring the application for Immutant
-
-We provide a [lein plugin] for deploying your application. It can be installed as a global
-plugin, but we'll make it a local dev dependency for now in `project.clj`. While we're in
-there, let's update to Clojure v1.3.0:
-
-<pre class="syntax clojure">(defproject immutant-demo "1.0.0-SNAPSHOT"
-  :description "A basic demo"
-  :dependencies [[org.clojure/clojure "1.3.0"]]
-  :dev-dependencies [[lein-immutant "0.1.0"]])
-</pre>
-
-As of this post, the latest version of the plugin is 0.1.0. Check [clojars] for the current
-version.
-
-Run `lein deps` to update the application dependencies, then `lein immutant` to see the commands
-the plugin provides:
-
-    ~/immutant/immutant-demo $ lein immutant                                                                                 
-    Manage the deployment lifecycle of an Immutant application.
     
-    Subtasks available:
-    init       Adds a sample immutant.clj configuration file to the project
-    deploy     Deploys the current project to the Immutant specified by $IMMUTANT_HOME
-    undeploy   Undeploys the current project from the Immutant specified by $IMMUTANT_HOME
-    run        Starts up the Immutant specified by $IMMUTANT_HOME
-    
-    Arguments: ([immutant subtask])
-    
-When Immutant starts up, it looks for a file named `immutant.clj` at the root of the
+When an Immutant starts up, it looks for a file named `immutant.clj` at the root of the
 application. If that file exists, it is evaluated. This file is used to configure the
-Immutant services you want your application to consume. You can generate a sample `immutant.clj`
-by calling `lein immutant init`:
-
-    ~/immutant/immutant-demo $ lein immutant init
-     Wrote sample ./immutant.clj
+Immutant services you want your application to consume. 
 
 The file has example code for configuring web endpoints and messaging services, but we're
 just going to deal with web endpoints in this article. Edit your `immutant.clj` so it 
@@ -110,14 +72,16 @@ We'll come back to what `web/start` is doing after we get the application runnin
 
 ## Deploying your application
 
-Before we can start up Immutant, we need to tell it about our application. We do that
-by deploying:
+Before we can start up the Immutant, we need to tell it about our application. We do that
+by deploying (for this to work, you need to have `IMMUTANT_HOME` set - see the 
+[previous article][installing] for details):
 
     ~/immutant/immutant-demo $ lein immutant deploy
     Deployed immutant-demo to /Users/tobias/immutant/current/jboss/standalone/deployments/immutant-demo.clj
 
 This writes a *deployment descriptor* to Immutant's deploy directory which points back
-to the application's root directory.
+to the application's root directory. Now the Immutant can find your application - so let's 
+fire it up.
 
 ## Starting Immutant
 
@@ -135,14 +99,14 @@ one to look for should be the last message, and should tell you the app was depl
 Now, let's verify that our app is really there. Immutant runs on port 8080 by default, so 
 let's hit it and see what happens:
 
-    ~ $ curl http://localhost:8080
+    ~ $ curl http://localhost:8080/immutant-demo/
     Hello from Immutant!
 
 Yay!
 
 You can kill Immutant with Ctrl-C.
 
-## Now, some details
+## Context Paths
 
 Remember our call to `web/start` earlier? Let's talk about what that is doing. To 
 do that, however, we need to first talk about *context paths*. The context path is 
@@ -151,14 +115,18 @@ It basically tells Immutant which requests to route to a particular application.
 
 Immutant can host multiple applications at the same time, but each application must 
 have a unique context path. If no context path is provided when an application
-is deployed, the default path of '/' is used. The simplest way to do that is to 
-specify a `:context-path` within an `:immutant` map in your `project.clj`:
+is deployed, it defaults to one based on the name of the deployment. The 
+deployment name is taken from the name of the deployment descriptor, which
+in turn is taken from the name of the project given to `defproject` in
+`project.clj`. So for our sample app above, the context path defaults to 
+`/immutant-demo`. You can override this default by specifying
+a `:context-path` within an `:immutant` map in your `project.clj`. Let's
+go ahead and do that:
 
 <pre class="syntax clojure">(defproject immutant-demo "1.0.0-SNAPSHOT"
   :description "A basic demo"
-  :dependencies [[org.clojure/clojure "1.3.0"]]
-  :dev-dependencies [[lein-immutant "0.1.0"]] 
-  :immutant {:context-path "/demo"})
+  :dependencies [[org.clojure/clojure "1.2.1"]]
+  :immutant {:context-path "/"})
 </pre>
 
 Now, when you call `lein immutant deploy`, the context path will be picked up
@@ -169,9 +137,9 @@ context path.
 Which brings us back to `web/start`. `web/start` stands up a web endpoint
 for you, and takes two arguments: a *sub-context path* and a [Ring] handler
 function. The sub-context path is relative to the application's context
-path, so a context path of "/demo" and a sub-context path of "/" makes
-the handler function available at `/demo`, whereas a sub-context path
-of "/biscuits" makes the handler function available at `/demo/biscuits`.
+path, so a context path of "/ham" and a sub-context path of "/" makes
+the handler function available at `/ham`, whereas a sub-context path
+of "/biscuits" makes the handler function available at `/ham/biscuits`.
 Make sense?
 
 You can register as many web endpoints as you like within an application -
@@ -187,6 +155,11 @@ this to our `core.clj`:
 And this to our `immutant.clj`:
 
 <pre class="syntax clojure">(web/start "/biscuits" another-ring-handler)</pre>
+
+Redeploy the application to pick up the `:context-path` from `immutant.clj`:
+
+    ~/immutant/immutant-demo $ lein immutant deploy
+    Deployed immutant-demo to /Users/tobias/immutant/current/jboss/standalone/deployments/immutant-demo.clj
 
 Then fire Immutant back up with `lein immutant run`, we can see they
 both work:
@@ -212,6 +185,14 @@ to download it.
 
 If you have any feedback or questions, [get in touch]! And stay tuned - our next 
 tutorial will cover using Immutant's messaging features. 
+
+[Ring]: https://github.com/mmcgrana/ring
+[getting-started]: /news/tags/getting-started/
+[installing]: /news/2011/11/08/installing/
+[lein plugin]: https://github.com/immutant/lein-immutant/
+[Leiningen]: https://github.com/technomancy/leiningen
+[demo application]: https://github.com/immutant/immutant-basic-web-demo
+[get in touch]: /community
 
 
 
