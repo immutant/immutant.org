@@ -20,7 +20,8 @@ layout: base
 #header-bar
   #header-wrapper
     #header
-      %img.header-text(src="/images/logos/immutant_text-red.png")
+      %a{:href=>"/"}
+        %img.header-text(src="/images/logos/immutant_text-red.png")
     #quick-links
       %table
         - site.quick_links.each do |label, link, text|
