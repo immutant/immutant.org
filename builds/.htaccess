@@ -3,6 +3,8 @@ RewriteEngine on
 
 RewriteRule ^([0-9]+)/(.*)$                         http://repository-projectodd.forge.cloudbees.com/incremental/immutant/$1/$2 [P]
 
+RewriteRule ^(torquebox-immutant\.zip)$             http://projectodd.ci.cloudbees.com/job/overlay/lastSuccessfulBuild/artifact/target/$1 [P]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(LATEST/)?(.*)$                        http://repository-projectodd.forge.cloudbees.com/incremental/immutant/LATEST/$2 [P]
@@ -11,3 +13,7 @@ RewriteRule ^(LATEST/)?(.*)$                        http://repository-projectodd
 SetEnvIfNoCase Request_URI immutant-dist-bin\.zip$ immutant-latest
 Header set Content-Disposition \
     "attachment; filename=immutant-dist-bin.zip" env=immutant-latest
+
+SetEnvIfNoCase Request_URI torquebox-immutant\.zip$ torquebox-immutant
+Header set Content-Disposition \
+    "attachment; filename=torquebox-immutant.zip" env=torquebox-immutant
