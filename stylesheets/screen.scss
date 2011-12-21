@@ -641,3 +641,9 @@ img.aligncenter {
 img.bordered {
   border: 3px solid $img_border_color;
 }
+
+.notice.big {
+  font-weight: bold;
+  font-size: 1.2em;
+  color: $color_dark;
+}

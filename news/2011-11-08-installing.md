@@ -5,6 +5,11 @@ layout: news
 tags: [ installation, lein, tutorial, getting-started ]
 ---
 
+<div class="notice big">
+  This article is out of date - see our <a href="/news/2011/12/21/installing-redux/">new tutorial</a> for
+  the latest instructions for installing Immutant.
+</div>
+
 Greetings! This article is the first in a [series of tutorials on getting started][getting-started]
 with Immutant. This entry covers setting up a development environment and installing
 Immutant. This tutorial assumes you are on a *nix system. It also assumes you have 
