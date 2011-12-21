@@ -46,8 +46,9 @@ Now, run `lein immutant` to see what tasks the plugin provides:
     undeploy   Undeploys the current project from the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
     run        Starts up the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME, displaying its console output
 
-We'll only talk about the `install`, and `run` tasks in this article -
-we covered the application specific management tasks in our [second tutorial].
+We'll only talk about the `install` and `run` tasks in this article -
+we covered the application specific management tasks in our [second tutorial], 
+and cover `overlay` in [its own article](/news/2011/12/21/overlay/).
 
 ## Installing Immutant
 
