@@ -2,6 +2,7 @@
 title: "Getting Started: Installing Immutant v2"
 author: Toby Crawley
 layout: news
+sequence: 1
 tags: [ installation, lein, tutorial, getting-started ]
 ---
 
