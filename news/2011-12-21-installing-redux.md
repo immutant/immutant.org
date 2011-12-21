@@ -15,13 +15,13 @@ Immutant. This tutorial assumes you are on a *nix system. It also assumes you ha
 
 We provide a [lein plugin] for creating your Immutant applications and 
 managing their life-cycles. As of this post, the latest version of the plugin 
-is 0.3.0. Check [clojars] for the current version.
+is 0.3.1. Check [clojars] for the current version.
 
 Let's install it as a global plugin:
 
-     $ lein plugin install lein-immutant 0.3.0
+     $ lein plugin install lein-immutant 0.3.1
     Copying 3 files to /a/nice/long/tmp/path/lib
-    Including lein-immutant-0.3.0.jar
+    Including lein-immutant-0.3.1.jar
     Including clojure-1.2.0.jar
     Including clojure-contrib-1.2.0.jar
     Including data.json-0.1.1.jar
@@ -37,7 +37,7 @@ Now, run `lein immutant` to see what tasks the plugin provides:
 
     Subtasks available:
     install    Downloads and installs Immutant
-    overlay    Overlays layer onto ~/.lein/immutant/current or $IMMUTANT_HOME
+    overlay    Overlays features onto ~/.lein/immutant/current or $IMMUTANT_HOME
     env        Displays paths to the Immutant that the plugin can find
     new        Creates a new project skeleton initialized for Immutant
     init       Adds a sample immutant.clj configuration file to an existing project
