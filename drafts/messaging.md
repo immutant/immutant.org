@@ -5,12 +5,14 @@ layout: narrow
 tags: [ messaging, tutorial, getting-started ]
 ---
 
-Because Immutant is built atop [JBoss AS7][as7], it includes the
-excellent [HornetQ] messaging broker. Hence, there is no additional
-configuration required to enjoy the benefits of asynchronous
-messaging. In this post, we'll explore the
-[messaging abstractions available][immutant.messaging] to your Clojure
-apps when deployed on Immutant.
+Happy 2012! For the next installment of our
+[getting started series][getting-started] we'll explore the
+[messaging abstractions][immutant.messaging] available to your Clojure
+apps when deployed on Immutant. Because Immutant is built atop
+[JBoss AS7][as7], it includes the excellent [HornetQ] messaging
+service built right in. Hence, there is nothing extra to install or
+configure in order for your applications to benefit from asynchronous
+messaging.
 
 ## Destinations are either Queues or Topics
 
@@ -163,3 +165,4 @@ free to follow along on
 [community]: http://immutant.org/community/
 [Clamq]: https://github.com/sbtourist/clamq
 [as7]: http://www.jboss.org/jbossas
+[getting-started]: /news/tags/getting-started/
