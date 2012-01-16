@@ -134,7 +134,7 @@ Ruby and Clojure applications deployed on a single platform. With the
 `:json` encoding, it's trivial to let other JVM-based languages --
 i.e. anything you could conceivably cram into a war file -- join in
 the fun, too. For non-JVM languages or external endpoints, something
-like the Pipes and Filters API's provided by Clamq could be useful
+like the Pipes and Filters API's provided by [Clamq] could be useful
 since we expose our JMS connection factory.
 
 Another advantage we get from AS7 is its clustering support. Once we
@@ -157,3 +157,4 @@ free to follow along on
 [HornetQ]: http://hornetq.org
 [javax.jms.Message]: http://java.sun.com/javaee/5/docs/api/javax/jms/Message.html
 [community]: http://immutant.org/community/
+[Clamq]: https://github.com/sbtourist/clamq
