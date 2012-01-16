@@ -1,12 +1,12 @@
 ---
 title: 'Messaging'
 author: Jim Crossley
-layout: default
+layout: narrow
 tags: [ messaging ]
 ---
 
-Because Immutant is built atop JBoss AS7, it includes the excellent
-[HornetQ] messaging broker. Hence, there is no additional
+Because Immutant is built atop [JBoss AS7][as7], it includes the
+excellent [HornetQ] messaging broker. Hence, there is no additional
 configuration required to enjoy the benefits of asynchronous
 messaging. In this post, we'll explore the
 [messaging abstractions available][immutant.messaging] to your Clojure
@@ -27,9 +27,10 @@ naming convention designates an endpoint as either a queue or a topic:
 if its name begins with `/queue`, it's a queue; if it begins with
 `/topic`, it's a topic.
 
-    (require '[immutant.messaging :as msg])
-    (msg/start "/queue/work")   ; to start a queue
-    (msg/start "/topic/news")   ; to start a topic
+<pre class="syntax clojure">(require '[immutant.messaging :as msg])
+(msg/start "/queue/work")   ; to start a queue
+(msg/start "/topic/news")   ; to start a topic
+</pre>
 
 You can invoke `start` from anywhere in your application, but
 typically it's done in the `immutant.clj` initialization file, as
@@ -65,17 +66,18 @@ of optional key-value parameters may be passed as well.
 
 Some examples:
 
-    ;; A simple string
-    (msg/publish "/queue/work" "simple string")
-    ;; Notify everyone something interesting just happened
-    (msg/publish "/topic/news" {:event "VISIT" :url "/sales-inquiry"})
-    ;; Move this message to the front of the line
-    (msg/publish "/queue/work" some-message :priority :high :ttl 1000)
-    ;; Make messages as complex as necessary
-    (msg/publish "/queue/work" {:a "b" :c [1 2 3 {:foo 42}]})
-    ;; Make messages consumable by your Ruby app
-    (msg/publish "/queue/work" {:a "b" :c [1 2 3 {:foo 42}]} :encoding :json)
-
+<pre class="syntax clojure">;; A simple string
+(msg/publish "/queue/work" "simple string")
+;; Notify everyone something interesting just happened
+(msg/publish "/topic/news" {:event "VISIT" :url "/sales-inquiry"})
+;; Move this message to the front of the line
+(msg/publish "/queue/work" some-message :priority :high :ttl 1000)
+;; Make messages as complex as necessary
+(msg/publish "/queue/work" {:a "b" :c [1 2 3 {:foo 42}]})
+;; Make messages consumable by your Ruby app
+(msg/publish "/queue/work" {:a "b" :c [1 2 3 {:foo 42}]} :encoding :json)
+</pre>
+    
 Regarding the last example, [TorqueBox] (Ruby) processors
 automatically grok the `:json` encoding and will decode the message
 into the analogous Ruby data types, so as long as you limit the
@@ -85,8 +87,6 @@ direction. See the [overlay] post for more details on TorqueBox
 integration.
 
 ## Three Ways to Consume Messages
-
-There are three ways to consume messages:
 
 ### receive
 
@@ -106,26 +106,28 @@ Pass a destination name and function to `listen` and the decoded
 content of a message sent to that destination will be passed to the
 function. Options include:
 
-* `:concurrency` the maximum number of threads invoking the
-  function. Default is 1.
+* `:concurrency` the maximum number of listening threads that can
+  simultaneouly call the function. Default is 1.
 
 ### message-seq
 
 Create a lazy sequence of messages via `message-seq`, which accepts
 the same options as `receive`.
 
-Some examples
+Some examples:
 
-    ;; A simple task queue
-    todo = (msg/receive "/queue/work")
+<pre class="syntax clojure">;; Wait on a task
+(let [task (msg/receive "/queue/work")]
+  (perform task))
 
-    ;; Case-sensitive work queues?
-    (msg/listen "/queue/lower" #(msg/publish "/queue/upper" (.toUpperCase %)))
+;; Case-sensitive work queues?
+(msg/listen "/queue/lower" #(msg/publish "/queue/upper" (.toUpperCase %)))
 
-    ;; Contrived laziness
-    (let [messages (message-seq queue)]
-      (doseq [i (range 4)] (publish queue i))
-      (= (range 4) (take 4 messages)))
+;; Contrived laziness
+(let [messages (message-seq queue)]
+  (doseq [i (range 4)] (publish queue i))
+  (= (range 4) (take 4 messages)))
+</pre>
 
 ## Anything Else?
 
@@ -158,3 +160,4 @@ free to follow along on
 [javax.jms.Message]: http://java.sun.com/javaee/5/docs/api/javax/jms/Message.html
 [community]: http://immutant.org/community/
 [Clamq]: https://github.com/sbtourist/clamq
+[as7]: http://www.jboss.org/jbossas
