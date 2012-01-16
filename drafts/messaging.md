@@ -1,8 +1,8 @@
 ---
-title: 'Messaging'
+title: 'Getting Started: Messaging'
 author: Jim Crossley
 layout: narrow
-tags: [ messaging ]
+tags: [ messaging, tutorial, getting-started ]
 ---
 
 Because Immutant is built atop [JBoss AS7][as7], it includes the
@@ -74,18 +74,10 @@ Some examples:
 (msg/publish "/queue/work" some-message :priority :high :ttl 1000)
 ;; Make messages as complex as necessary
 (msg/publish "/queue/work" {:a "b" :c [1 2 3 {:foo 42}]})
-;; Make messages consumable by your Ruby app
+;; Make messages consumable by a Ruby app
 (msg/publish "/queue/work" {:a "b" :c [1 2 3 {:foo 42}]} :encoding :json)
 </pre>
     
-Regarding the last example, [TorqueBox] (Ruby) processors
-automatically grok the `:json` encoding and will decode the message
-into the analogous Ruby data types, so as long as you limit the
-content of your messages to standard collections and types, they are
-transparently interoperable between Clojure and Ruby in either
-direction. See the [overlay] post for more details on TorqueBox
-integration.
-
 ## Three Ways to Consume Messages
 
 ### receive
@@ -129,15 +121,25 @@ Some examples:
   (= (range 4) (take 4 messages)))
 </pre>
 
-## Anything Else?
+## Language Interop
 
-Our initial goal for Immutant messaging was simple interop between
-Ruby and Clojure applications deployed on a single platform. With the
-`:json` encoding, it's trivial to let other JVM-based languages --
-i.e. anything you could conceivably cram into a war file -- join in
-the fun, too. For non-JVM languages or external endpoints, something
-like the Pipes and Filters API's provided by [Clamq] could be useful
-since we expose our JMS connection factory.
+One of our initial goals for Immutant messaging was simple interop
+between Ruby and Clojure applications deployed on a single
+platform. [TorqueBox] Ruby processors already grok the `:json`
+encoding and will automatically decode the message into the analogous
+Ruby data structures, so as long as you limit the content of your
+messages to standard collections and types, they are transparently
+interoperable between Clojure and Ruby in either direction. See the
+[overlay] post for more details on TorqueBox/Immutant integration.
+
+Of course, the `:json` encoding enables other JVM-based languages --
+anything you could conceivably cram into a war file -- to join in the
+fun, too. For non-JVM languages or external endpoints, something like
+the Pipes and Filters API's provided by [Clamq] could be used since
+we expose our JMS connection factory as
+`immutant.messaging.core/connection-factory`.
+
+## Anything Else?
 
 Another advantage we get from AS7 is its clustering support. Once we
 work out some small integration bits, the consumers of your endpoints
