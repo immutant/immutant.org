@@ -102,6 +102,7 @@ function. Options include:
 
 * `:concurrency` the maximum number of listening threads that can
   simultaneouly call the function. Default is 1.
+* `:selector` same as `:receive`
 
 ### message-seq
 
