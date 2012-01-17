@@ -144,9 +144,9 @@ we expose our JMS connection factory as
 ## Anything Else?
 
 Another advantage we get from AS7 is its clustering support. Once we
-work out some small integration bits, the consumers of your endpoints
-will be automatically discoverable (hence no configuration),
-load-balanced and fault-tolerant.
+work out some small integration bits, message distribution across a
+cluster of dynamic nodes will be automatically load-balanced and
+fault-tolerant, with minimal to no configuration required.
 
 Of course, we still have other messaging features on our roadmap,
 e.g. XA transactions, durable subscribers and synchronous
