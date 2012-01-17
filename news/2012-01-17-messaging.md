@@ -1,7 +1,7 @@
 ---
 title: 'Getting Started: Messaging'
 author: Jim Crossley
-layout: narrow
+layout: news
 tags: [ messaging, tutorial, getting-started ]
 ---
 
