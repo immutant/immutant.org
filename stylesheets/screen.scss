@@ -364,6 +364,15 @@ body {
     }
 }
 
+table.fancy {
+    td, th {
+        border: 1px solid #AAA;
+    }
+    th {
+        background-color: #F0F0F0;
+    }
+}
+
 #error-404 {
     @include prepend(4);
     @include column(16);
