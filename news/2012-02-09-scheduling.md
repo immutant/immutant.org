@@ -2,7 +2,7 @@
 title: "Getting Started: Scheduling Jobs"
 author: Toby Crawley
 layout: news
-tags: [ tutorial, getting-started, scheduling, jobs ]
+tags: [ tutorial, getting-started, scheduled-jobs ]
 ---
 
 
@@ -47,7 +47,6 @@ The `schedule` function requires three arguments:
 * *name* - the name of the job.
 * *spec* - the cron-style specification string (see below).
 * *f* - the zero argument function that will be invoked each time the job fires.
-
 
 Job scheduling is dynamic, and can occur anywhere in your application code. 
 Jobs that share the lifecycle of your application are idiomatically placed in `immutant.clj`.
@@ -109,7 +108,7 @@ once for the entire cluster with the `:singleton` option:
                 :singleton true)</pre>
 
 If `:singleton` is `true`, the job will be scheduled to run on only one node in the cluster
-at a time. If that node goes down, the job will automatically scheduled on another node, giving
+at a time. If that node goes down, the job will automatically be scheduled on another node, giving
 you failover. If `:singleton` is `false` or not provided, the job will be scheduled to run on
 all nodes where the `schedule` call is executed.
 
