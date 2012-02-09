@@ -25,7 +25,7 @@ I'm glad you asked! There are several reasons:
   have to worry about managing [Schedulers] and creating [JobDetails], and
   provides enough functionality for a majority of use cases. For 
   cases where you need advanced scheduling functionality, you can still use
-  quartz-clj or the Quartz classes directly.
+  [quartz-clj] or the Quartz classes directly.
 * If you are using Immutant in a cluster, jobs that should fire only once per
   cluster (aka 'singleton jobs') are handled automatically (see below).
 * When your application is undeployed, your jobs are automatically unscheduled.
@@ -45,7 +45,6 @@ Scheduling a job is as simple as calling the `schedule`  function from the
 The `schedule` function requires three arguments:
 
 * *name* - the name of the job.
-  unscheduled and the new job will be scheduled in its place. 
 * *spec* - the cron-style specification string (see below).
 * *f* - the zero argument function that will be invoked each time the job fires.
 
@@ -124,7 +123,7 @@ support for [SimpleTrigger] (or 'at') functionality at some point in the future,
 allowing you to do something similar to:
 
 <pre class="syntax clojure">(require '[immutant.jobs :as jobs])
-(jobs/schedule "my-at-job" :every "3s" :times 5
+(jobs/schedule "my-at-job" (jobs/every "3s" :times 5)
                 #(println "I fire 5 times, every 3 seconds"))</pre>
 
 Since Immutant is still in a pre-alpha state, none of what I said above is set in stone. If 
@@ -134,6 +133,7 @@ If you have any feedback or questions, [get in touch]!
 
 [getting-started]: /news/tags/getting-started/
 [Quartz]: http://quartz-scheduler.org/
+[quartz-clj]: https://github.com/mdpendergrass/quartz-clj
 [Schedulers]: http://quartz-scheduler.org/api/1.8.5/org/quartz/Scheduler.html
 [JobDetails]: http://quartz-scheduler.org/api/1.8.5/org/quartz/JobDetail.html
 [CronTrigger]: http://quartz-scheduler.org/api/1.8.5/org/quartz/CronTrigger.html
