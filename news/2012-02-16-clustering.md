@@ -14,10 +14,10 @@ documentation is still evolving. If you insist, try [this][intro] or
 possibly [this][howto].
 
 We'll save *Domain Mode* with respect to Immutant for a future
-post. It's not required to form a cluster, only to more easily manage
-them. In this post, we'll reveal a trick to simulate a cluster on your
-development box so that you can experiment with Immutant clustering
-features, which we should probably enumerate now:
+post. It's not required for clustering, but it is an option for easier
+cluster management. In this post, we'll reveal a trick to simulate a
+cluster on your development box so that you can experiment with
+Immutant clustering features, which we should probably enumerate now:
 
 * Automatic load balancing and failover of message consumers
 * HTTP session replication
@@ -55,9 +55,9 @@ Any options passed to `lein immutant run` are forwarded to
 
 ## Simulating a Cluster
 
-**TL;DR** 
+### TL;DR
 
-To run two immutant instances on a single machine...
+To run two immutant instances on a single machine, fire up two shells and...
 
 In one shell, run:
 
@@ -68,6 +68,8 @@ In another shell, run:
     $ lein immutant run --clustered -Djboss.node.name=two -Djboss.server.data.dir=/tmp/two -Djboss.socket.binding.port-offset=100
 
 Boom, you're a cluster!
+
+### Details
 
 Each cluster node requires a unique name, which is usually derived
 from the hostname, but since our Immutants are on the same host, we
@@ -106,8 +108,8 @@ First, you'll need a `project.clj`
   :dependencies [[org.clojure/clojure "1.3.0"]])
 </pre>
 
-Next, the Immutant app bootstrap file, `immutant.clj` into which we'll
-put all our code for this example.
+Next, the Immutant application bootstrap file, `immutant.clj`, into
+which we'll put all our code for this example.
 
 <pre class="syntax clojure">(ns example.init
   (:require [immutant.messaging :as messaging]
@@ -143,11 +145,11 @@ We've defined a message queue, a message listener, and a daemon
 service that, once started, publishes messages to the queue every
 second. 
 
-Daemons require a name (for referencing it as a JMX MBean), a start
+Daemons require a name (for referencing as a JMX MBean), a start
 function to be invoked asynchronously, and a stop function that will
 be automatically invoked when your app is undeployed, allowing you to
 cleanly teardown any resources used by your service. Optionally, you
-can declare the service to be a *singleton* which means it will only
+can declare the service to be a *singleton*. This means it will only
 be started on one node in your cluster, and should that node crash, it
 will be automatically started on another node, essentially giving you
 a robust, highly-available service.
@@ -156,7 +158,10 @@ In the same directory that contains your files, run this:
 
     $ lein immutant deploy
 
-Then watch the output of the shells in which your Immutant servers are
+Because both Immutants are monitoring the same deployment directory,
+this should trigger both to deploy the app.
+
+Now watch the output of the shells in which your Immutants are
 running. You should see the daemon start up on only one of them, but
 both should be receiving messages. This is the automatic load
 balancing of message consumers.
