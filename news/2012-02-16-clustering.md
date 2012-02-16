@@ -21,8 +21,9 @@ Immutant clustering features, which we should probably enumerate now:
 
 * Automatic load balancing and failover of message consumers
 * HTTP session replication
-* Fine-grained, dynamic configuration and control via [mod_cluster]
-* Efficiently-replicated distributed caching
+* Fine-grained, dynamic web-app configuration and control via
+  [mod_cluster]
+* Efficiently-replicated distributed caching via [Infinispan]
 * Singleton scheduled jobs
 * Automatic failover of singleton daemons
 
@@ -187,3 +188,4 @@ get you going. Above all, have fun!
 [howto]: https://docs.jboss.org/author/display/AS71/AS7+Cluster+Howto
 [intro]: http://xebee.xebia.in/2011/11/01/all-about-managed-domain-jboss-as7/
 [mod_cluster]: http://www.jboss.org/mod_cluster
+[Infinispan]: http://infinispan.org
