@@ -91,15 +91,14 @@ renderer = {
 
     // Docs
 
-    // docs_column = $( '.build-summary.build-' + build.number ).find( 'td.docs' );
-    // ul = $( '<ul/>' );
-    // ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/html-docs/">Browse HTML</a></li>' ) );
-    // ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/immutant-docs.pdf">PDF</a></li>' ) );
-    // ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/immutant-docs.epub">ePub</a></li>' ) );
+     docs_column = $( '.build-summary.build-' + build.number ).find( 'td.docs' );
+     if (build.number >= 194) {
+          ul = $( '<ul/>' );
+          ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/html-docs/index.html">Browse Manual</a></li>' ) );
+          ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/html-docs/apidoc/index.html">Browse Clojure API</a></li>' ) );
     // ul.append( $( '<li class="artifact newdocs"><a href="/builds/' + build.number + '/javadocs/">Java API Docs</a></li>' ) );    
-    // ul.append( $( '<li class="artifact newdocs"><a href="/builds/' + build.number + '/yardocs/">Gem RDocs</a></li>' ) );
-
-    // docs_column.append( ul );
+         docs_column.append( ul );
+     }
 
   },
 
@@ -138,7 +137,7 @@ renderer = {
               $( '<span class="time">' + self.build_time( build ) + '</span>' )
             ),
             $( '<td class="binary"/>' ),
-            //$( '<td class="docs"/>' ),
+            $( '<td class="docs"/>' ),
             $( '<td class="git"/>' ),
             $( '<td rowspan="2" class="result"/>' )
           );
@@ -162,7 +161,7 @@ renderer = {
     }
 
     details_row = $( '<tr class="build-details build-' + build.number + '"/>' ).append( 
-      $( '<td class="first" colspan="4"/>' )
+      $( '<td class="first" colspan="5"/>' )
     );
 
     if ( build.result == 'FAILURE' ) {
@@ -177,7 +176,7 @@ renderer = {
     if ( build.building ) {
       row.addClass( 'build-building' );
       details_row.addClass( 'build-building' );
-      $('#build-currently-building').append( $( '<b>A build is currently in progress.</b>' ) );
+      $('#build-currently-building').append( $( '<span>A build is currently in progress.</span>' ) );
     }
 
     return [ row, details_row ];

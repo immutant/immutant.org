@@ -18,7 +18,7 @@ layout: default
   Our incremental builds are performed by our [CI system](/development/#ci) any time the code changes.
   The incremental builds are supported by a contribution from [CloudBees](http://cloudbees.com/).  
 
-<span id="build-currently-building"/>
+<div id="build-currently-building"></div>
 
  
 .clearfix{:style=>'clear:both; height: 0px;'}
@@ -34,6 +34,14 @@ layout: default
     %a{:href=>'/builds/immutant-dist-bin.zip'}
       http://immutant.org/builds/immutant-dist-bin.zip
 
+%p
+  And its documentation is available at:
+
+%ul
+  %li
+    %a{:href=>'/builds/LATEST/html-docs/'}
+      http://immutant.org/builds/LATEST/html-docs/
+
 %p 
   Details of this build are immediately below.
 
@@ -41,7 +49,7 @@ layout: default
   %tr.header
     %th.build-info Build
     %th.binary Binary Distribution
-    /%th.docs Documentation
+    %th.docs Documentation
     %th.git Git
     %th.result Result
 
@@ -59,7 +67,7 @@ layout: default
   %tr.header
     %th.build-info Build
     %th.binary Binary Distribution
-    /%th.docs Documentation
+    %th.docs Documentation
     %th.git Git
     %th.result Result
   
