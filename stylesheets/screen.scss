@@ -49,7 +49,7 @@ body {
     #header {
         @include column(13);
         img.header-text {
-            height: 60px;
+            height: 80px;
         }
     }
 
