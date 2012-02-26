@@ -5,7 +5,7 @@ layout: narrow
 tags: [ caching, infinispan, clustering, tutorial, getting-started ]
 ---
 
-[<img src="/images/Jeremy_Lin.jpg" width="35%" alt="Jeremy Lin" class="alignright bordered"/>](http://en.wikipedia.org/wiki/File:Jeremy_Lin_with_the_Knicks_and_reporters.jpg)
+[<img src="/images/Jeremy_Lin.jpg" alt="Jeremy Lin" class="alignright bordered"/>](http://en.wikipedia.org/wiki/File:Jeremy_Lin_with_the_Knicks_and_reporters.jpg)
 
 # Linfinispanity!
 
@@ -54,17 +54,17 @@ mode. But when clustered, you have other options.
 # immutant.cache/InfinispanCache
 
 The first thing you must understand about Immutant's `InfinispanCache`
-is that it's mutable. This makes sense in a clustered environment,
+is that it's **mutable**. This is sensible in a clustered environment,
 because the local process benefits from fast reads of data that may
-have been put there by a remote process. We've effectively shifted the
+have been put there by a remote process. We effectively shift the
 responsibility of "sane data management", i.e. MVCC, from Clojure to
 Infinispan.
 
 The second thing to know is that every Immutant cache has a name and a
 mode. When you call `immutant.cache/cache` to obtain a cache, a name
-is required, and the mode (`:local` `:invalidated` `:replicated` or
-`:distributed`) is optional, defaulting to `:invalidated` if clustered
-and `:local` otherwise.
+is required, and the mode (one of `:local`, `:invalidated`,
+`:replicated`, or `:distributed`) is optional, defaulting to
+`:invalidated` if clustered and `:local` otherwise.
 
 Because the cache implements many core Clojure interfaces, functions
 that typically return immutable copies will actually affect the cache
@@ -89,17 +89,18 @@ contents:
   {}
 </pre>
 
-Further, the `InfinispanCache` supports a variety of `put` methods
-that atomically store entries based on their presence or
-absence. These all take lifespan options for *time-to-live* and
-*max-idle* expiration policies.
+Further, the `InfinispanCache` supports a variety of `put` methods,
+some that expose the [ConcurrentMap] features of atomically storing
+entries based on their presence or absence. These all take lifespan
+options for *time-to-live* and *max-idle* expiration policies.
 
 # Memoization
 
-Memoization is a means of associating a cache of calculated values
-with a potentially expensive function, incurring the expense only
-once, with subsequent calls retrieving the result from the cache. The
-keys of the cache are the arguments passed to the function.
+Memoization is an optimization technique associating a cache of
+calculated values with a potentially expensive function, incurring the
+expense only once, with subsequent calls retrieving the result from
+the cache. The keys of the cache are the arguments passed to the
+function.
 
 Standards for caching and memoization in Clojure are emerging in the
 form of [core.cache] and [core.memoize], respectively. Because the
@@ -188,9 +189,11 @@ the first completes.
 # Caveats
 
 Though tested and toyed with, this is seriously Alpha code, and the
-API is probably still coagulating, especially with respect to the
-options for the `cache` and `memo` functions, which should probably
-include `:ttl` and `:idle` themselves, for example.
+API is still coagulating, especially with respect to the options for
+the `cache` and `memo` functions, which should probably include `:ttl`
+and `:idle` themselves, for example. Other options may be introduced
+as more of Infinispan's features are exposed, e.g. transactions and
+persistence.
 
 By the way, Toby has recently hammered our [user manual][manual] and
 [api] docs into shape, so take a gander there for more details on
