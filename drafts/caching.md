@@ -5,29 +5,119 @@ layout: narrow
 tags: [ caching, infinispan, clustering, tutorial, getting-started ]
 ---
 
-For our next [getting started series][getting-started] tutorial, we'll
-explore Immutant's built-in caching service.
+[<img src="/images/Jeremy_Lin.jpg" width="35%" alt="Jeremy Lin" class="alignright bordered"/>](http://en.wikipedia.org/wiki/File:Jeremy_Lin_with_the_Knicks_and_reporters.jpg)
 
-## Linfinispanity!
+# Linfinispanity!
 
-Yay, another Jeremy Lin pun! :)
+Yay, another [Jeremy Lin](http://en.wikipedia.org/wiki/Jeremy_Lin) pun! :-)
 
-[JBoss AS7][as7] -- and therefore, Immutant -- comes with the
-[Infinispan] data grid baked right in, so there's no need to manage a
-separate caching service for your application.
+This is the next tutorial in our
+[getting started series][getting-started]: an exploration of
+Immutant's caching features. [JBoss AS7][as7] -- and therefore,
+Immutant -- comes with the [Infinispan] data grid baked right in, so
+there's no need to manage a separate caching service for your
+applications.
 
-## The immutant.cache/InfinispanCache
+Infinispan is a state-of-the-art, high-speed, low-latency, distributed
+data grid. It is capable of efficiently replicating key-value stores
+-- essentially souped-up [ConcurrentMap] implementations -- across a
+cluster. But it can also serve as a capable in-memory data cache, too:
+providing features such as write-through/write-behind persistence,
+multiple eviction policies, and transactions.
 
-## Memoization
+# Clustering Modes
 
-## An Example
+Infinispan caches adhere to a particular [mode] of operation. In a
+non-clustered, standalone Immutant, `:local` is the **only** supported
+mode. But when clustered, you have other options.
 
-Let's ammend the example from [our clustering tutorial][clustering]
-slightly to demonstrate a replicated cache. We'll create a simple web
-app with a single request to which we'll pass an integer. The request
-handler will pass that number to a very slow increment function: it'll
-sleep for that number of seconds before returning its increment. For
-us, this sleepy function represents a particularly time-consuming
+* `:local` -- This is what you get in non-clustered mode, roughly
+   equivalent to a hash map with write-through/write-behind
+   persistence, JTA/XA support, MVCC (non-blocking, thread-safe reads
+   even during concurrent writes), and JMX manageability.
+* `:invalidated` -- This is the default clustered mode. It doesn't
+   actually share any data at all, so it's very "bandwidth friendly".
+   Whenever data is changed in a cache, other caches in the cluster
+   are notified that their copies are now stale and should be evicted
+   from memory.
+* `:replicated` -- In this mode, entries added to any cache instance
+   will be copied to all other cache instances in the cluster, and can
+   then be retrieved locally from any instance.  Though simple, it's
+   impractical for clusters of any significant size (>10), and its
+   capacity is equal to the amount of RAM in its smallest peer.
+* `:distributed` -- This mode is what enables Infinispan clusters to
+   achieve "linear scalability". Cache entries are copied to a fixed
+   number of cluster nodes (default is 2) regardless of the cluster
+   size.  Distribution uses a consistent hashing algorithm to
+   determine which nodes will store a given entry.
+
+# immutant.cache/InfinispanCache
+
+The first thing you must understand about Immutant's `InfinispanCache`
+is that it's mutable. This makes sense in a clustered environment,
+because the local process benefits from fast reads of data that may
+have been put there by a remote process. We've effectively shifted the
+responsibility of "sane data management", i.e. MVCC, from Clojure to
+Infinispan.
+
+The second thing to know is that every Immutant cache has a name and a
+mode. When you call `immutant.cache/cache` to obtain a cache, a name
+is required, and the mode (`:local` `:invalidated` `:replicated` or
+`:distributed`) is optional, defaulting to `:invalidated` if clustered
+and `:local` otherwise.
+
+Because the cache implements many core Clojure interfaces, functions
+that typically return immutable copies will actually affect the cache
+contents:
+
+<pre class="syntax clojure">
+  user> (def cache (immutant.cache/cache "test"))
+  #'user/cache
+  user> cache
+  {}
+  user> (assoc cache :a 1)
+  {:a 1}
+  user> (merge cache {:b 2, :c 3})
+  {:c 3, :a 1, :b 2}
+  user> (dissoc cache :c)
+  {:a 1, :b 2}
+  user> cache
+  {:a 1, :b 2}
+  user> (empty cache)
+  {}
+  user> cache
+  {}
+</pre>
+
+Further, the `InfinispanCache` supports a variety of `put` methods
+that atomically store entries based on their presence or
+absence. These all take lifespan options for *time-to-live* and
+*max-idle* expiration policies.
+
+# Memoization
+
+Memoization is a means of associating a cache of calculated values
+with a potentially expensive function, incurring the expense only
+once, with subsequent calls retrieving the result from the cache. The
+keys of the cache are the arguments passed to the function.
+
+Standards for caching and memoization in Clojure are emerging in the
+form of [core.cache] and [core.memoize], respectively. Because the
+`InfinispanCache` implements `clojure.core.cache/CacheProtocol` it can
+act as an underlying implementation for
+`clojure.core.memoize/PluggableMemoization`. We provide a `memo`
+function for doing exactly that:
+
+<pre class="syntax clojure">(immutant.cache/memo a-slow-function "a name" :distributed)</pre>
+
+# An Example
+
+Let's ammend the example from [our clustering tutorial][clustering] to
+demonstrate a replicated cache. We'll create a simple web app with a
+single request to which we'll pass an integer. The request handler
+will pass that number to a very slow increment function: it'll sleep
+for that number of seconds before returning its increment. For us,
+this sleepy function represents a particularly time-consuming
 operation that will benefit from memoization.
 
 Of course we'll need a `project.clj`
@@ -45,23 +135,78 @@ which we'll put all our code for this example.
   (:require [immutant.cache :as cache]
             [immutant.web :as web]))
 
+;; Our slow function
 (defn slow-inc [t]
   (Thread/sleep (* t 1000))
   (inc t))
 
+;; Our memoized version of the slow function
 (def memoized (cache/memo slow-inc "sleepy" :replicated))
 
+;; Our Ring handler
 (defn handler [{params :params}]
   (let [t (Integer. (get params "t" 1))]
     (response (str "value=" (memoized t) "\n"))))
 
+;; Start up our web app
 (web/start "/" (wrap-params handler))
 </pre>
 
+Make sure you have a recent version of Immutant:
 
+    $ lein immutant install
+
+And cd to the directory containing the above two files and deploy your app:
+
+    $ lein immutant deploy
+    
+Now bring up your simulated cluster. In one shell, run:
+
+    $ lein immutant run --clustered -Djboss.node.name=one -Djboss.server.data.dir=/tmp/one
+
+In another shell, run:
+
+    $ lein immutant run --clustered -Djboss.node.name=two -Djboss.server.data.dir=/tmp/two -Djboss.socket.binding.port-offset=100
+
+You should have one server listening on port 8080 and another on
+8180. So in yet another shell, run this:
+
+    $ curl "http://localhost:8080/example/?t=5"
+
+With any luck, that should return 6 after about 5 seconds. Now run it
+again and it should return 6 immediately. Now for the moment of truth:
+change the port to 8180. That should return 6 immediately, too! Each
+unique value of `t` should only sleep `t` seconds the first time
+called on any peer in the cluster.
+
+Here's another trick. Fire off a request with `t=20` or so, and wait a
+few seconds, but before it completes hit the same server again with
+the same `t` value. You'll notice that the second request will not
+have to sleep for the full 20 seconds; it returns immediately after
+the first completes.
+
+# Caveats
+
+Though tested and toyed with, this is seriously Alpha code, and the
+API is probably still coagulating, especially with respect to the
+options for the `cache` and `memo` functions, which should probably
+include `:ttl` and `:idle` themselves, for example.
+
+By the way, Toby has recently hammered our [user manual][manual] and
+[api] docs into shape, so take a gander there for more details on
+caching or any of the other Immutant components. And remember to
+[pester us in the usual ways][community] if you have any questions.
+
+Happy hacking!
 
 [clustering]: /news/2012/02/16/clustering/
 [community]: http://immutant.org/community/
 [as7]: http://www.jboss.org/jbossas
 [getting-started]: /news/tags/getting-started/
 [Infinispan]: http://infinispan.org
+[ConcurrentMap]: http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ConcurrentMap.html
+[mode]: https://docs.jboss.org/author/display/ISPN/Clustering+modes
+[core.cache]: https://github.com/clojure/core.cache
+[core.memoize]: https://github.com/clojure/core.memoize
+[manual]: http://immutant.org/builds/LATEST/html-docs/index.html
+[api]: http://immutant.org/builds/LATEST/html-docs/apidoc/index.html
