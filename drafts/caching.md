@@ -5,18 +5,12 @@ layout: narrow
 tags: [ caching, infinispan, clustering, tutorial, getting-started ]
 ---
 
-[<img src="/images/Jeremy_Lin.jpg" alt="Jeremy Lin" class="alignright bordered"/>](http://en.wikipedia.org/wiki/File:Jeremy_Lin_with_the_Knicks_and_reporters.jpg)
-
-# Linfinispanity!
-
-Yay, another [Jeremy Lin](http://en.wikipedia.org/wiki/Jeremy_Lin) pun! :-)
-
 This is the next tutorial in our
 [getting started series][getting-started]: an exploration of
 Immutant's caching features. [JBoss AS7][as7] -- and therefore,
-Immutant -- comes with the [Infinispan] data grid baked right in, so
-there's no need to manage a separate caching service for your
-applications.
+Immutant -- comes with the [Infinispan] data grid baked right in,
+obviating the need to manage a separate caching service like Memcached
+for your applications.
 
 Infinispan is a state-of-the-art, high-speed, low-latency, distributed
 data grid. It is capable of efficiently replicating key-value stores
@@ -106,8 +100,8 @@ Standards for caching and memoization in Clojure are emerging in the
 form of [core.cache] and [core.memoize], respectively. Because the
 `InfinispanCache` implements `clojure.core.cache/CacheProtocol` it can
 act as an underlying implementation for
-`clojure.core.memoize/PluggableMemoization`. We provide a `memo`
-function for doing exactly that:
+`clojure.core.memoize/PluggableMemoization`. Immutant includes a
+higher-order `memo` function for doing exactly that:
 
 <pre class="syntax clojure">(immutant.cache/memo a-slow-function "a name" :distributed)</pre>
 
@@ -142,12 +136,12 @@ which we'll put all our code for this example.
   (inc t))
 
 ;; Our memoized version of the slow function
-(def memoized (cache/memo slow-inc "sleepy" :replicated))
+(def memoized-inc (cache/memo slow-inc "sleepy" :replicated))
 
 ;; Our Ring handler
 (defn handler [{params :params}]
   (let [t (Integer. (get params "t" 1))]
-    (response (str "value=" (memoized t) "\n"))))
+    (response (str "value=" (memoized-inc t) "\n"))))
 
 ;; Start up our web app
 (web/start "/" (wrap-params handler))
@@ -195,10 +189,11 @@ and `:idle` themselves, for example. Other options may be introduced
 as more of Infinispan's features are exposed, e.g. transactions and
 persistence.
 
-By the way, Toby has recently hammered our [user manual][manual] and
-[api] docs into shape, so take a gander there for more details on
-caching or any of the other Immutant components. And remember to
-[pester us in the usual ways][community] if you have any questions.
+By the way, we've recently gotten a decent start on our
+[user manual][manual] and [api] docs, so take a gander there for more
+details on caching or any of the other Immutant components. And
+remember to [pester us in the usual ways][community] if you have any
+questions.
 
 Happy hacking!
 
