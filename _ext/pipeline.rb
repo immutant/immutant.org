@@ -1,8 +1,10 @@
-#require 'release_helper'
+require 'release_helper'
 #require 'release_sizes'
 require 'rss_widget'
 require 'tagger_atomizer'
 require 'events_munger'
+require 'downloads'
+require 'documentation'
 
 Awestruct::Extensions::Pipeline.new do
   extension Awestruct::Extensions::DataDir.new
@@ -10,6 +12,8 @@ Awestruct::Extensions::Pipeline.new do
   extension EventsMunger.new()
   extension Awestruct::Extensions::Atomizer.new(:events, '/events.atom')
 
+  extension Downloads.new()
+  
   extension Awestruct::Extensions::Posts.new('/news')
   extension Awestruct::Extensions::Paginator.new(:posts, '/news/index', :per_page => 5)
   extension Awestruct::Extensions::Indexifier.new
@@ -30,6 +34,8 @@ Awestruct::Extensions::Pipeline.new do
   
   helper Awestruct::Extensions::GoogleAnalytics
   helper Awestruct::Extensions::Partial
-  #helper ReleaseHelper
+  helper ReleaseHelper
   helper RssWidget
+
+  extension Documentation.new()
 end
