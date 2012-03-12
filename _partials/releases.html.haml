@@ -1,0 +1,43 @@
+#latest-release
+  .tabbable
+    %ul.nav.nav-tabs
+      %li.bold.active
+        %a{:href=>'#stable-release', 'data-toggle'=>'tab'}Latest Release
+      %li.bold
+        %a{:href=>'#incremental-release', 'data-toggle'=>'tab'}Latest Incremental Build
+    .tab-content
+      #stable-release.tab-pane.active
+        - version = latest_release.version
+        - announcement = announcement_for_version( version )
+
+        :markdown
+          __Version *#{version}* was released on
+          #{announcement && announcement.date.strftime( '%A, %B %e, %Y' )}__. 
+          You can [read the announcement](#{announcement && announcement.url})
+          or [browse the documentation](/documentation/#{version}/).
+
+        .install-command
+          :markdown
+            Install via:
+                $ lein immutant install #{version}
+            Don't have the `lein-immutant` plugin installed? 
+            [Learn how](/install/), or 
+            [download the zip archive](#{latest_release.urls.remote_dist_zip}).
+
+
+      #incremental-release.tab-pane
+        :markdown
+          Every push to our [git repository](https://github.com/immutant/immutant) 
+          generates a build on our [CI server](https://projectodd.ci.cloudbees.com/job/immutant-incremental/).
+          You can view the results of those builds on our [builds page](/builds/),
+          and can install the latest successful build via:
+              $ lein immutant install LATEST
+          Don't have the `lein-immutant` plugin installed? 
+          [Learn how](/install/), or [download the zip archive](/builds/immutant-dist-bin.zip).
+          
+          You can also [browse the documentation](/builds/LATEST/html-docs/index.html) for the 
+          latest incremental build.
+
+
+          
+  

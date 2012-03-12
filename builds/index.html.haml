@@ -6,17 +6,16 @@ layout: default
 %script{:type=>'text/javascript', :src=>'http://torquebox.org/javascripts/jenkins.js'}
 %script{:type=>'text/javascript', :src=>'incremental-builds.js'}
 
-%a{:href=>'http://cloudbees.com/', :style=>'display: block; float:right; margin-left: 3em; margin-bottom: 3em;'}
-  %img{:src=>'http://torquebox.org/images/cloudbees_logo.png'}
 
-%h1 Incremental Builds
 
-:markdown
-  Immutant is brand new, and has had zero official releases. If you want to try it out, the best way to get
-  it is by downloading our [latest incremental build](/builds/immutant-dist-bin.zip).
+#intro
+  %h1 Incremental Builds
 
-  Our incremental builds are performed by our [CI system](/development/#ci) any time the code changes.
-  The incremental builds are supported by a contribution from [CloudBees](http://cloudbees.com/).  
+  :markdown
+    <a href='http://cloudbees.com/'>  <img src='http://torquebox.org/images/cloudbees_logo.png' align='right'/></a>
+
+    Our incremental builds are performed by our [CI system](/development/#ci) any time the code changes.
+    The incremental builds are supported by a contribution from [CloudBees](http://cloudbees.com/).  
 
 <div id="build-currently-building"></div>
 
@@ -24,28 +23,21 @@ layout: default
 .clearfix{:style=>'clear:both; height: 0px;'}
   &nbsp;
 
-%h2 Latest Stable Incremental Build
+%h2 Latest Incremental Build
 
-%p
+:markdown
   The latest stable build may be fetched using this constant URL:
 
-%ul
-  %li
-    %a{:href=>'/builds/immutant-dist-bin.zip'}
-      http://immutant.org/builds/immutant-dist-bin.zip
+  * [http://immutant.org/builds/immutant-dist-bin.zip](/builds/immutant-dist-bin.zip)
 
-%p
-  And its documentation is available at:
+  or installed via our [Leiningen plugin](/install/):
+      $ lein immutant install LATEST
+  
+  It's documentation is available at:
 
-%ul
-  %li
-    %a{:href=>'/builds/LATEST/html-docs/index.html'}
-      HTML Manual
-  %li
-    %a{:href=>'/builds/LATEST/html-docs/apidoc/index.html'}
-      HTML API Docs
+  * [HTML Manual](/builds/LATEST/html-docs/index.html)
+  * [HTML API Docs](/builds/LATEST/html-docs/apidoc/index.html)
 
-%p 
   Details of this build are immediately below.
 
 %table.downloads.incremental-builds#latest-stable

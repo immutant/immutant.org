@@ -4,23 +4,15 @@ title: Development
 ---
 
 #development
-  #intro.hero-unit
+  #intro
+    %h1 Development
     %p
       The Immutant team fully welcomes all contributors to the project. We have attempted to
       organize our code and development tools to make it easy for community members to participate
       as deeply as they desire.
 
-  #main-content
-    .section
-      %h1
-        Sponsorship
-
-      %a{:href=>'http://redhat.com/'}
-        %img{:src=>'/images/logos/redhat.png', :style=>'float:right; margin-bottom: 2em'}
-
-      %p
-        The development of Immutant is primarily sponsored by Red Hat, Inc.
-    #sourcerepo.section
+  .row
+    #sourcerepo.span12
       %h1
         Code Repository
 
@@ -53,13 +45,30 @@ title: Development
       %pre
         git clone git://github.com/immutant/immutant.git
 
-    #ci.section
+  .row
+    .span6
+      %h1
+        Sponsorship
+
+
+      %p
+        The development of Immutant is primarily sponsored by Red Hat, Inc.
+        %a{:href=>'http://redhat.com/'}
+          %img{:src=>'/images/logos/redhat.png', :class=>'aligncenter'}
+
+
+    #ci.span6
       %h1
         Continuous Integration
 
       %p
         The code is continuously built using our 
-        <a href='https://projectodd.ci.cloudbees.com/view/Immutant/'>continuous integration service</a>.
+        <a href='https://projectodd.ci.cloudbees.com/view/Immutant/'>continuous integration service</a>,
+        which is provided by <a href='http://cloudbees.com/'>CloudBees</a>.
+
+        %a{:href=>'http://cloudbees.com/'}
+          %img{:src=>'http://torquebox.org/images/cloudbees_logo.png', :class=>'aligncenter'}
+
 
 
    

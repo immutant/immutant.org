@@ -1,0 +1,37 @@
+---
+layout: default
+title: Documentation
+---
+
+#intro
+  %h1 Documentation
+  :markdown
+    We provide documentation for each versioned release and each [incremental build](/builds/).
+
+:markdown
+  ## Latest Release
+
+  The documentation for the latest release (currently #{latest_release.version}) are always 
+  available at:
+
+  * [http://immutant.org/documentation/current/](/documentation/current/) - Manual
+  * [http://immutant.org/documentation/current/apidoc/](/documentation/current/apidoc/) - Clojure API docs
+
+  ## Latest Incremental Build
+
+  The documentation for the latest successful incremental build are always
+  available at:
+
+  * [http://immutant.org/builds/LATEST/html-docs](/builds/LATEST/html-doc/) - Manual
+  * [http://immutant.org/builds/LATEST/html-doc/apidoc/](/builds/LATEST/html-doc/apidoc/) - Clojure API docs
+
+  You can access the documentation for prior incremental builds on our [builds page](/builds/).
+
+  ## Documentation Issues
+
+  If you find any issues with our documentation or have any questions about it, please 
+  [let us know](/community/). 
+
+  The manual is written in [org-mode](http://orgmode.org/), and you can find the source in 
+  our [git repository](https://github.com/immutant/immutant/tree/master/docs/src/org)
+  if you are inclined to provide a patch.

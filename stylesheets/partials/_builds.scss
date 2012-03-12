@@ -1,0 +1,136 @@
+$build-left-border-width: 12px;
+
+table.incremental-builds {
+    width: 100%;
+    border-right: 1px solid #999;
+    border-left: 1px solid #999;
+    border-top: 1px solid #999;
+
+    &#latest-stable {
+        td {
+            border-bottom: 1px solid black;
+        }
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    th.build-info {
+        padding-left: 18px;
+    }
+
+    .number, .date, .time, .sha1 {
+        display: block;
+    }
+
+    .number {
+        font-size: 150%;
+        font-weight: bold;
+    }
+
+    tr {
+        td {
+            background-color: #eee;
+            border: 0 none;
+        }
+        th {
+            border-bottom: 1px solid black;
+        }
+    }
+
+    tr.divide td {
+        border-bottom: 1px solid #777;
+    }
+
+    tr {
+        td.first {
+            border-left: $build-left-border-width solid #999999;
+            padding-left: 1ex;
+        }
+        td.last {
+            border-right: 4px solid #999999;
+            padding-right: 1ex;
+        }
+    }
+
+    tr.header {
+        background-color: #777;
+        border-left: $build-left-border-width solid #777;
+        color: white;
+    }
+
+    tr.build-building {
+        td.first {
+            border-left: $build-left-border-width solid #ffffcc - #444;
+        }
+        td {
+            background-color: #ffffcc;
+        }
+    }
+
+    tr.build-success {
+        td.first {
+            border-left: $build-left-border-width solid #ccffcc - #444;
+        }
+        td {
+            background-color: #ccffcc - #222;
+        /*background-color: #ccffcc;*/
+        }
+    }
+
+    tr.build-aborted {
+        font-size: 60%;
+    }
+
+    tr.build-failure {
+        td.first {
+            border-left: $build-left-border-width solid #ffcccc - #222;
+        }
+        td {
+            background-color: #ffcccc;
+        }
+    }
+
+    tr.build-aborted td {
+        background-color: #ccc;
+    }
+
+    tr.build-unknown td {
+        background-color: #eee;
+    }
+
+    tr.build-details.hidden td {
+        margin: 0px;
+        padding: 0px;
+        height: 1px;
+    }
+
+    td.result {
+        font-size: 1.2em;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    ul {
+        list-style-type: circle;
+    }
+    color: #444;
+    a {
+        color: #444;
+    }
+
+    .binary {
+        width: 17%;
+    }
+    .docs {
+        width: 17%;
+    }
+    .git{
+        width: 10%;
+    }
+
+    .result {
+        width: 20%;
+    }
+}

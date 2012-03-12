@@ -1,11 +1,11 @@
 //disable some of the syntax highlighter style
 .syntax.plain {
-  border: none !important;
-  padding: 0 !important;
+    border: none !important;
+    padding: 0 !important;
 }
 
 .syntax-container {
-  margin-bottom: 9px;
+    margin-bottom: 9px;
 }
 
 .post {
@@ -17,7 +17,20 @@
     }
 }
 
+.post-navigation {
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+#release-block {
+    margin-bottom: 20px;
+}
+
 .tag-cloud {
+    @include border-radius(6px);
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f5f5f5;
     margin: auto;
     text-align: justify;
 

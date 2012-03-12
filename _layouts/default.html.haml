@@ -19,7 +19,7 @@ layout: base
           %li
             %a{ :href=>'/install/' } Install
           %li
-            %a{ :href=>'/documentation/current/', :target=>'_blank' } Documentation
+            %a{ :href=>'/documentation/' } Documentation
           %li
             %a{ :href=>'/community/' } Community
           %li
@@ -30,13 +30,23 @@ layout: base
               %b.caret
             %ul.dropdown-menu
               %li
+                %a{ :href=>'/documentation/current/', :target=>'_blank' } Manual
+              %li
+                %a{ :href=>'/documentation/current/apidoc/', :target=>'_blank' } API Docs
+              %li.divider  
+              %li
                 %a{ :href=>'/builds/' } Incremental Builds
+              %li
                 %a{ :href=>'https://issues.jboss.org/browse/IMMUTANT', :target=>'_blank' } Issues
+              %li
                 %a{ :href=>'http://webchat.freenode.net/?channels=immutant', :target=>'_blank' } #immutant on IRC
+              %li
                 %a{ :href=>'https://github.com/immutant/immutant', :target=>'_blank' } Source
 
-#main-content.container
-  ~ content
+#wrapper
+  #main-content.container
+    ~ content
+  #footer-push
 
 #footer
   .container

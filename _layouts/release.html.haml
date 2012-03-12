@@ -8,6 +8,8 @@ change_frequency: monthly
 
 .row
   #main-column.span8 
+    %h1.title
+      = page.title
     .post
       .byline
         .author
@@ -27,29 +29,24 @@ change_frequency: monthly
     .post-navigation
       .previous
         - if page.previous_post
-          .label
-            previous
-          %a{:href=>page.previous_post.url}= page.previous_post.title
+          Previous: 
+          %a{:href => page.previous_post.url}= page.previous_post.title
       .next
         - if page.next_post
-          .label
-            next
-          %a{:href=>page.next_post.url}= page.next_post.title
-    .hero-unit
-      %h2
-        Release: #{page.version}
-      - if release
-        %ul
-          %li
-            %a{:href=>release.urls.dist_zip} Download #{release.version} binary
-          %li
-            %a{:href=>release.urls.docs.browse} Browse manual for #{release.version}
-          - unless release.urls.docs.javadocs.empty?
-            %li
-              %a{:href=>release.urls.docs.javadocs} Browse JavaDocs for #{release.version}
-            %li
-              %a{:href=>release.urls.docs.yardocs} Browse Gem rDocs for #{release.version}
-          %li
-            %a{:href=>release.urls.github.tree} Browse sources for #{release.version}
-    .tag-cloud
+          Next: 
+          %a{:href => page.next_post.url}= page.next_post.title
+    #release-block
+      %hr
+      :markdown
+        __Version *#{release.version}* was released on
+        #{page.date.strftime( '%A, %B %e, %Y' )}__. 
+        You [browse the documentation](/documentation/#{release.version}/) or
+        install it via:
+            $ lein immutant install #{version}
+        Don't have the `lein-immutant` plugin installed? 
+        [Learn how](/install/), or 
+        [download the zip archive](#{release.urls.remote_dist_zip}).
+      %hr
+
+    .tags
       = site.posts_tag_cloud

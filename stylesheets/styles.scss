@@ -8,8 +8,12 @@ $navbarLinkColor: #000;
 
 $linkColor: #835c0f;
 
+$topbar-height: 90px;
+$footer-height: 120px;
+
 @import "bootstrap";
 @import "partials/news";
+@import "partials/builds";
 
 // fix for https://github.com/twitter/bootstrap/issues/1540
 .navbar .nav {
@@ -26,7 +30,7 @@ $linkColor: #835c0f;
 // end fix
 
 body {
-    padding-top: 70px;
+    padding-top: $topbar-height;
 }
 
 .navbar .brand {
@@ -34,29 +38,48 @@ body {
 }
 
 .navbar-fixed-top {
-  font-size: 1.2em;
-  border-top: 12px solid #fff;
-  #logo {
-      max-height: 64px;
-      margin-top: -18px;
-      margin-bottom: -19px;
-  }
+    font-size: 1.2em;
+    border-top: 12px solid #fff;
+    #logo {
+        max-height: 64px;
+        margin-top: -18px;
+        margin-bottom: -19px;
+    }
 }
 
-#main-content {
-    padding-bottom: 30px;
+
+.gray-box {
+    @include border-radius(6px);
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
 }
 
 #intro {
+    @extend .gray-box;
     padding: 30px;
+    margin-bottom: 20px;
+    h1 {
+        margin-bottom: 0;
+        font-size: 35px;
+        line-height: 1;
+        letter-spacing: -1px;
+    }
+
+    p {
+        font-size: 18px;
+        font-weight: 200;
+        line-height: $baseLineHeight * 1.5;
+    }
 }
 
-#latest-news {
-    #even-more {
-        text-align: center;
-        font-weight: bold;
-        font-size: 1.2em;
-    }
+#gil-left {
+    max-height: 175px;
+}
+
+.even-more {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
 }
 
 #upcoming-talks {
@@ -90,14 +113,49 @@ body {
 }
 
 .bold {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .underline-header {
-  border-bottom: 1px solid $grayLight;
-  margin-bottom: 18px;
+    border-bottom: 1px solid $grayLight;
+    margin-bottom: 18px;
 }
+
+img.alignleft {
+    float: left;
+    margin: 0 1em 1em 0;
+}
+
+img.alignright {
+    float: right;
+    margin: 0 0 1em 1em;
+}
+
+img.aligncenter {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img.bordered {
+    border: 3px solid $grayLightish;
+}
+
+// sticky footer from: https://github.com/twitter/bootstrap/issues/306#issuecomment-2880409
+html, body {
+    height: 100%;
+}
+
+#wrapper {
+    min-height: 100%;
+    margin: 0 auto -1*($topbar-height + $footer-height - 10px);
+}
+
+#footer, #footer-push {
+    clear: both;
+    height: $topbar-height + $footer-height;
+}
+//end sticky footer
 
 // Include responsive Bootstrap styles
 @import "bootstrap-responsive";
-
