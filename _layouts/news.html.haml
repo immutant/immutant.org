@@ -2,23 +2,26 @@
 layout: default
 ---
 
-#right-sidebar
-  #main-column
+.row
+  #main-column.span8
+    %h1.title
+      = page.title
     .post
       .byline
         .author
           = page.author
         .date
           = page.date.strftime('%d %b %Y')
-        .tags
-          - page.tags.each do |tag|
-            %a{:href=>tag.primary_page.url}
-              = tag
+      .tags
+        - page.tags.each do |tag|
+          %a{:href=>tag.primary_page.url}<
+            = tag
       .body
         ~ content
       .comments
         = page.disqus_comments
-  #sidebar-column
+
+  #sidebar-column.span4
     .post-navigation
       .previous
         - if page.previous_post

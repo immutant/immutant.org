@@ -3,72 +3,112 @@ title: Home
 layout: default
 inhibit_title: true
 ---
-
-#home-page
-  #top-row
-    #intro
+.row
+  .span8
+    #intro.hero-unit
       :markdown
-
         Immutant is an application server for [Clojure](http://clojure.org) built on top of 
         [JBoss AS7](http://www.jboss.org/as7). It is a new project, but we already support [Ring](https://github.com/mmcgrana/ring) 
-        handlers, asynchronous messaging, daemons, caching, and scheduled jobs. We are working on additional features, including:
-
-        * [OpenShift](http://openshift.com) integration      
-        * Distributed (XA) transactions
-        * Distributed futures
+        handlers, asynchronous messaging, daemons, caching, and scheduled jobs. 
   
-    #callout  
-      :markdown
-        Want to get involved? Come see us in [IRC](/community/#irc) or join our [mailing lists](/community/mailing_lists/)!
+      #callout  
+        :markdown
+          Want to get involved? Come see us in [IRC](/community/#irc) or join our [mailing lists](/community/mailing_lists/)!
+      %a.btn.btn-large.btn-info{:href=>'/install/'}Install Immutant
+      %a.btn.btn-large{:href=>'/documentation/current/'}Read the Docs
+  .span4
+    #latest-release
+      .tabbable
+        %ul.nav.nav-tabs
+          %li.bold.active
+            %a{:href=>'#stable-release', 'data-toggle'=>'tab'}Latest Release
+          %li.bold
+            %a{:href=>'#incremental-release', 'data-toggle'=>'tab'}Latest Incremental Build
+        .tab-content
+          #stable-release.tab-pane.active
+            - version = latest_release.version
+            - announcement = announcement_for_version( version )
 
-  #bottom-row
-    .left-column
-      #latest-news
-        %h1 Latest News &amp; Articles
-        - for post in site.posts[0,4] do
-          .item
-            %h2 
-              %a{:href=>post.url}= post.title
-            %h3 #{post.date.strftime( '%d %B %Y' )}
-            .body
-              #{summarize( html_to_text( post.content ), 50 )}...
-            .tail
-              = post.disqus_comments_link
-              | 
-              %a{:href=>post.url} Read more
-        #even-more
-          %a{:href=>'/news'}Even more news!
-    .right-column
-      #upcoming-talks
-        %h1 Upcoming Talks/Conferences
-        - for talk in site.upcoming_talks
-          .item{:effective_date=>talk.effective_date}
-            .event_details
-              .event_date
-                #{talk.event_date}
-              .event_location
-                #{talk.location}
-            %h2
-              %a{:href=>talk.event_url}
-                = talk.event
-            - if ( talk.event_logo_url )
-              %a{:href=>talk.event_url}
-                %img.event_logo{:src=>talk.event_logo_url}
-            - if talk.title      
+            :markdown
+              __Version *#{version}* was released on
+              #{announcement && announcement.date.strftime( '%A, %B %e, %Y' )}__. 
+              You can [read all about it](#{announcement && announcement.url})
+              or [browse the documentation](/documentation/#{version}/).
+
+            .install-command
+              :markdown
+                Install via:
+                    $ lein immutant install #{version}
+                Don't have the `lein-immutant` plugin installed? 
+                [Learn how](/install/), or 
+                [download the zip archive](#{site.releases.first.urls.remote_dist_zip}).
+
+
+          #incremental-release.tab-pane
+            :markdown
+              __The latest incremental build was built on {{date}}, and is
+              build {{build_number}}__.
+              You can browse its [commits]({{git_url}}) or [documentation]({{doc_url}}).
+
+            .install-command
+              :markdown
+                Install via:
+                    $ lein immutant install {{build_number}}
+                Don't have the `lein-immutant` plugin installed? 
+                [Learn how](/install/), or 
+                [download the zip archive]({{dist_url}}).
+
+.row
+  #latest-news.span6
+    %h2.underline-header Latest News
+    - for post in site.posts[0,4] do
+      .item
+        %h3 
+          %a{:href=>post.url}= post.title
+        %h5 #{post.date.strftime( '%d %B %Y' )}
+        .body
+          #{summarize( html_to_text( post.content ), 30 )}
+        .row
+          .span2.offset4.tail
+            = post.disqus_comments_link
+            | 
+            %a{:href=>post.url} Read more
+      %hr
+    #even-more
+      %a{:href=>'/news'}More news &raquo;
+  .span6    
+   
+
+    #upcoming-talks
+      %h2.underline-header Upcoming Talks    
+      - for talk in site.upcoming_talks
+        .item{:effective_date=>talk.effective_date}
+          .row
+            .span3
               %h3
-                = talk.title
-            .details
-              - if talk.details
-                = talk.details
-              - else              
-                #{talk.presentor} will present at #{talk.event} in #{talk.location}.
-            .links
-              %a{:href=>talk.event_url}
-                #{talk.event} Site
-        #speakers-link
-          :markdown
-            Interested in hosting or giving a talk on Immutant? 
-            [Get in touch](/community).
+                %a{:href=>talk.event_url}
+                  = talk.event
+            .span3
+              .event-details
+                #{talk.event_date} | #{talk.location}
+          - if ( talk.event_logo_url )
+            %a{:href=>talk.event_url}
+              %img.event-logo{:src=>talk.event_logo_url}
+          - if talk.title      
+            %h3
+              = talk.title
+          .details
+            - if talk.details
+              = talk.details
+            - else              
+              #{talk.presentor} will present at #{talk.event} in #{talk.location}.
+          %hr
+      #get-in-touch
+        :markdown
+          Interested in hosting or giving a talk on Immutant? 
+          [Get in touch]('/community').
+
+        
 
 :javascript
   $(document).ready( function() {

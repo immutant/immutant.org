@@ -1,0 +1,78 @@
+//disable some of the syntax highlighter style
+.syntax.plain {
+  border: none !important;
+  padding: 0 !important;
+}
+
+.syntax-container {
+  margin-bottom: 9px;
+}
+
+.post {
+    .byline {
+        font-weight: bold;
+    }
+    .tags {
+        margin-bottom: 15px;
+    }
+}
+
+.tag-cloud {
+    margin: auto;
+    text-align: justify;
+
+    .tag {
+        a {
+            text-decoration: none;
+        }
+    }
+
+    .tag-0 {
+        font-size: 110%;
+    }
+
+    .tag-1 {
+        font-size: 125%;
+    }
+
+    .tag-2 {
+        font-size: 140%;
+    }
+
+    .tag-3 {
+        font-size: 155%;
+    }
+
+    .tag-4 {
+        font-size: 170%;
+    }
+
+    .tag-5 {
+        font-size: 185%;
+    }
+
+    .tag-6 {
+        font-size: 200%;
+    }
+
+    .tag-7 {
+        font-size: 215%;
+    }
+
+    .tag-8 {
+        font-size: 230%;
+    }
+
+    .tag-9 {
+        font-size: 245%;
+    }
+
+    .tag-10 {
+        font-size: 250%;
+    }
+
+    .tag-11 {
+        font-size: 250%;
+    }
+
+}

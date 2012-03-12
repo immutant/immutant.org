@@ -2,50 +2,60 @@
 layout: base
 ---
 
-#nav-wrapper
-  = partial( 'menu.html.haml' )
+.navbar.navbar-fixed-top
+  .navbar-inner
+    .container
+      %a.brand{ :href=>'/' } 
+        %img#logo{ :src=>'/images/logo-horizontal-centered.png' }
+
+      %a.btn.btn-navbar{'data-toggle'=>'collapse', 'data-target'=>'.nav-collapse'}
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      .nav-collapse
+        %ul.nav
+          %li
+            %a{ :href=>'/news/' } News
+          %li
+            %a{ :href=>'/install/' } Install
+          %li
+            %a{ :href=>'/documentation/current/', :target=>'_blank' } Documentation
+          %li
+            %a{ :href=>'/community/' } Community
+          %li
+            %a{ :href=>'/development/' } Development
+          %li.dropdown
+            %a.dropdown-toggle{ :href=>'#', 'data-toggle'=>'dropdown' }
+              Quick Links
+              %b.caret
+            %ul.dropdown-menu
+              %li
+                %a{ :href=>'/builds/' } Incremental Builds
+                %a{ :href=>'https://issues.jboss.org/browse/IMMUTANT', :target=>'_blank' } Issues
+                %a{ :href=>'http://webchat.freenode.net/?channels=immutant', :target=>'_blank' } #immutant on IRC
+                %a{ :href=>'https://github.com/immutant/immutant', :target=>'_blank' } Source
+
+#main-content.container
+  ~ content
+
+#footer
+  .container
+    = partial( 'footer.html.haml' )
+
+%script{ :type=>'text/javascript', :src=>'/javascripts/bootstrap-collapse.js' }
+%script{ :type=>'text/javascript', :src=>'/javascripts/bootstrap-dropdown.js' }
+%script{ :type=>'text/javascript', :src=>'/javascripts/bootstrap-tab.js' }
 
 :javascript
   $( function () {
-    var syntax_root = "/javascripts/jquery-syntax/"
+     var syntax_root = "/javascripts/jquery-syntax/"
 
-    if (!$.browser.msie && $( '.syntax' ).length) {
-      $.getScript( syntax_root + "jquery.syntax.min.js", function () {
-        $.syntax( {root: syntax_root,
-                  blockLayout: 'plain'} )
-      } )
-    }
-  } )
+     if (!$.browser.msie && $( '.syntax' ).length) {
+       $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+         $.syntax( {root: syntax_root,
+                   blockLayout: 'plain'} )
+       } )
+     }
+   } )
 
-#header-bar
-  #header-wrapper
-    #header
-      %a{:href=>"/"}
-        %img.header-text(src="/images/logos/immutant_text-red.png")
-    #quick-links
-      %table
-        - site.quick_links.each do |label, link, text|
-          - text ||= link
-          %tr
-            %th== #{label}:
-            %td  
-              %a{:href=>link}=text
-
-#primary-wrapper
-  #primary-container
-    - unless page.inhibit_title 
-      %h1.page-title
-        - sections = page.section ? [page.section] : page.sections
-        - if sections
-          - sections.each_with_index do |section, index|
-            - path = sections[0, index+1].join("/").downcase.gsub(' ', '_')
-            %a{:href=>"/#{path}/"} #{section}
-            \:
-        #{page.title}
-    #primary-content
-      ~ content
-#footer-bar
-  #footer-wrapper
-    #footer
-      = partial( 'footer.html.haml' )
 

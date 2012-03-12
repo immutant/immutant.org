@@ -1,0 +1,103 @@
+$mustard: #e4a932;
+$grayLightish: #bbb;
+
+$navbarBackground: $mustard;
+$navbarHeight: 40px;
+$navbarBackgroundHighlight: $mustard - #111;
+$navbarLinkColor: #000;
+
+$linkColor: #835c0f;
+
+@import "bootstrap";
+@import "partials/news";
+
+// fix for https://github.com/twitter/bootstrap/issues/1540
+.navbar .nav {
+    height: $navbarHeight;
+}
+
+.navbar .nav > li > a {
+    padding: ($navbarHeight - 20)/2 10px (($navbarHeight - 20)/2 + 1);
+}
+
+.navbar-text {
+    line-height: $navbarHeight;
+}
+// end fix
+
+body {
+    padding-top: 70px;
+}
+
+.navbar .brand {
+    padding: 6px 20px 4px;
+}
+
+.navbar-fixed-top {
+  font-size: 1.2em;
+  border-top: 12px solid #fff;
+  #logo {
+      max-height: 64px;
+      margin-top: -18px;
+      margin-bottom: -19px;
+  }
+}
+
+#main-content {
+    padding-bottom: 30px;
+}
+
+#intro {
+    padding: 30px;
+}
+
+#latest-news {
+    #even-more {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+}
+
+#upcoming-talks {
+    .event-details {
+        text-align: right;
+        margin-top: 5px;
+        font-weight: bold;
+    }
+    .event-logo {
+        max-width: 200px;
+        margin: auto;
+        display: block;
+    }
+    #get-in-touch p {
+        font-weight: bold;
+    }
+}
+
+#footer {
+    @include gradient-vertical($white, $grayLightish);
+    padding-top: 30px;
+    padding-bottom: 30px;
+
+    #badges img {
+        width: 130px;
+        margin-left: 15px;
+    }
+    #projectodd-logo {
+        margin-bottom: 14px;
+    }
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.underline-header {
+  border-bottom: 1px solid $grayLight;
+  margin-bottom: 18px;
+}
+
+// Include responsive Bootstrap styles
+@import "bootstrap-responsive";
+

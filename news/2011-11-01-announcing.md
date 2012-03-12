@@ -23,7 +23,7 @@ and the "glue", i.e. those critical enterprisey services like
 messaging, security, transactions, clustering, etc. that all
 successful applications eventually require.
 
-# Why?
+## Why?
 
 Because learning new programming languages is fun. Because no one
 language is good for everything a non-trivial application needs to
@@ -37,7 +37,7 @@ things. Embracing polyglot and enabling the choice of the right
 language/framework for a specific job is a good thing. We hope to
 deliver that goodness via Immutant.
 
-# An Invitation
+## An Invitation
 
 We just got started with this, and though still Clojure noobs, we're
 learning fast. We have a lot to do, and we'd love to have you help

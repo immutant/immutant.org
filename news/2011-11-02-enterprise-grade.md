@@ -28,7 +28,7 @@ application server?"
 
 The answer requires answering another question first: 
 
-# What's an Enterprise? 
+## What's an Enterprise? 
 
 Here's my definition: it's an organization of mostly-independent teams
 building and maintaining applications used by other internal groups
@@ -58,7 +58,7 @@ and **clustering**, not only for scalability, but also to allow the
 lifecycles of the multiple versions of the apps to vary
 independently. And oh yeah, it also has to stay up, all the time.
 
-# What's an App Server?
+## What's an App Server?
 
 An app server is a single product that provides all those
 services. It's a multi-threaded process that, once started, provides
@@ -83,7 +83,7 @@ ultimate goal is to keep all the groups in an enterprise -- both
 operations and development -- happy. Or at least significantly less
 soul-sucky and hopefully more productive.
 
-# But why should you care?
+## But why should you care?
 
 Maybe you shouldn't. Maybe you only need a web server and a database,
 maybe just a JVM! Maybe you're not in a group of groups. Heck, maybe

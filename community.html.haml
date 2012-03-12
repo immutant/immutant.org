@@ -5,7 +5,7 @@ title: Community
 
 #community
   #one-column
-    #intro 
+    #intro.hero-unit 
       %p
         Being an open-source project, the Immutant community has many entry-points.  You're
         welcome to participate via one or several, depending on your level of interest.
@@ -16,9 +16,9 @@ title: Community
         easy.
  
   
-    #main-content
-      #irc.section 
-        %h1 
+    .row
+      #irc.span6
+        %h3
           IRC
     
         %p
@@ -37,9 +37,26 @@ title: Community
           %a{:href=>"http://webchat.freenode.net/?channels=immutant"}web chat
           interface.
       
+      #issues.span6
+        %h3
+          %a{:href=>'/community/issues/'}
+            Issue Tracker
+    
+        %p
+          The project tracks bugs, feature-requests, and other issues
+          through the JIRA issue-tracking system at JBoss.org.
+    
+        %p
+          To file issues or requests with JIRA, you must have a
+          JBoss Community account.  Signing up is easy.
+    
+        %p.more
+          %a{:href=>'/community/issues/'}
+            More information about our issue-tracker    
 
-      .section 
-        %h1
+    .row
+      #mailing-lists.span6
+        %h3
           %a{:href=>'/community/mailing_lists/'}
             Mailing Lists
     
@@ -55,25 +72,9 @@ title: Community
           %a{:href=>'/community/mailing_lists/'}
             More information about our mailing lists
        
-      .section
-        %h1 
-          %a{:href=>'/community/issues/'}
-            Issue Tracker
-    
-        %p
-          The project tracks bugs, feature-requests, and other issues
-          through the JIRA issue-tracking system at JBoss.org.
-    
-        %p
-          To file issues or requests with JIRA, you must have a
-          JBoss Community account.  Signing up is easy.
-    
-        %p.more
-          %a{:href=>'/community/issues/'}
-            More information about our issue-tracker    
-         
-      .section
-        %h1
+               
+      #twitter.span6
+        %h3
           %a{:href=>"http://twitter.com/immutants"}
             Twitter
     

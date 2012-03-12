@@ -2,8 +2,8 @@
 title: News
 layout: default
 ---
-#right-sidebar
-  #main-column
+.row
+  #main-column.span8
     - for post in page.posts
       .post
         %h1.title
@@ -13,15 +13,16 @@ layout: default
             = post.author
           .date
             #{post.date.strftime( '%d %B %Y' )}
-          .tags
-            - post.tags.each do |tag|
-              %a{:href=>tag.primary_page.url}
-                = tag
+        .tags
+          - post.tags.each do |tag|
+            %a{:href=>tag.primary_page.url}
+              = tag
         .body
           ~ post.content
         .tail
           = post.disqus_comments_link
+          %hr
     = page.posts.links
-  #sidebar-column
+  #sidebar-column.span4
     .tag-cloud
       = site.posts_tag_cloud
