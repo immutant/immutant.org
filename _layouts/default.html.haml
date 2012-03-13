@@ -45,6 +45,11 @@ layout: base
 
 #wrapper
   #main-content.container
+    - unless page.inhibit_title
+      .page-header
+        %h1 
+          #{page.title}
+
     ~ content
   #footer-push
 

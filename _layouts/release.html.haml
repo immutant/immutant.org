@@ -8,8 +8,6 @@ change_frequency: monthly
 
 .row
   #main-column.span8 
-    %h1.title
-      = page.title
     .post
       .byline
         .author
@@ -18,7 +16,7 @@ change_frequency: monthly
           = page.date.strftime( '%d %B %Y' )
       .tags
         - page.tags.each do |tag|
-          %a{:href=>tag.primary_page.url}
+          %a{:href=>tag.primary_page.url}<
             = tag
       .body
         ~ content

@@ -8,7 +8,7 @@ $navbarLinkColor: #000;
 
 $linkColor: #835c0f;
 
-$topbar-height: 90px;
+$topbar-height: 70px;
 $footer-height: 120px;
 
 @import "bootstrap";
@@ -47,28 +47,40 @@ body {
     }
 }
 
+//overrides parts of .page-header from bootstrap
+.page-header {
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
 
 .gray-box {
     @include border-radius(6px);
     border: 1px solid #ccc;
     background-color: #f5f5f5;
 }
-
-#intro {
-    @extend .gray-box;
+#main-intro {
     padding: 30px;
     margin-bottom: 20px;
-    h1 {
-        margin-bottom: 0;
-        font-size: 35px;
-        line-height: 1;
-        letter-spacing: -1px;
+    p {
+        font-size: 20px;
+        line-height: $baseLineHeight * 1.5;
     }
+}
+
+#intro {
+    //@extend .gray-box;
+    //padding: 30px;
+    margin-bottom: 20px;
+    /* h1 { */
+    /*     margin-bottom: 0; */
+    /*     font-size: 35px; */
+    /*     line-height: 1; */
+    /*     letter-spacing: -1px; */
+    /* } */
 
     p {
-        font-size: 18px;
-        font-weight: 200;
-        line-height: $baseLineHeight * 1.5;
+        font-size: 16px;
+        line-height: $baseLineHeight * 1.2;
     }
 }
 
@@ -139,6 +151,12 @@ img.aligncenter {
 
 img.bordered {
     border: 3px solid $grayLightish;
+}
+
+table.fancy {
+  @extend .table;
+  @extend .table-bordered;
+  @extend .table-condensed;
 }
 
 // sticky footer from: https://github.com/twitter/bootstrap/issues/306#issuecomment-2880409
