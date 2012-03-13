@@ -6,7 +6,7 @@ layout: base
   .navbar-inner
     .container
       %a.brand{ :href=>'/' } 
-        %img#logo{ :src=>'/images/logo-horizontal-centered.png' }
+        %img#logo{ :src=>'/images/logos/logo-horizontal-centered.png' }
 
       %a.btn.btn-navbar{'data-toggle'=>'collapse', 'data-target'=>'.nav-collapse'}
         %span.icon-bar
@@ -30,18 +30,18 @@ layout: base
               %b.caret
             %ul.dropdown-menu
               %li
-                %a{ :href=>'/documentation/current/', :target=>'_blank' } Manual
+                %a{ :href=>'/documentation/current/' } Manual
               %li
-                %a{ :href=>'/documentation/current/apidoc/', :target=>'_blank' } API Docs
+                %a{ :href=>'/documentation/current/apidoc/' } API Docs
               %li.divider  
               %li
                 %a{ :href=>'/builds/' } Incremental Builds
               %li
-                %a{ :href=>'https://issues.jboss.org/browse/IMMUTANT', :target=>'_blank' } Issues
+                %a{ :href=>'https://issues.jboss.org/browse/IMMUTANT' } Issues
               %li
-                %a{ :href=>'http://webchat.freenode.net/?channels=immutant', :target=>'_blank' } #immutant on IRC
+                %a{ :href=>'http://webchat.freenode.net/?channels=immutant' } #immutant on IRC
               %li
-                %a{ :href=>'https://github.com/immutant/immutant', :target=>'_blank' } Source
+                %a{ :href=>'https://github.com/immutant/immutant' } Source
 
 #wrapper
   #main-content.container

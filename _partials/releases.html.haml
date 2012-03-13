@@ -12,7 +12,7 @@
 
         :markdown
           __Version *#{version}* was released on
-          #{announcement && announcement.date.strftime( '%A, %B %e, %Y' )}__. 
+          #{announcement && format_date( announcement.date )}__. 
           You can [read the announcement](#{announcement && announcement.url})
           or [browse the documentation](/documentation/#{version}/).
 

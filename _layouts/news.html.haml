@@ -9,7 +9,7 @@ layout: default
         .author
           = page.author
         .date
-          = page.date.strftime('%d %b %Y')
+          = format_date( page.date )
       .tags
         - page.tags.each do |tag|
           %a{:href=>tag.primary_page.url}<

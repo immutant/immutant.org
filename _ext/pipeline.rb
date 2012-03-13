@@ -1,4 +1,5 @@
 require 'release_helper'
+require 'format_helper'
 #require 'release_sizes'
 require 'rss_widget'
 require 'tagger_atomizer'
@@ -35,6 +36,7 @@ Awestruct::Extensions::Pipeline.new do
   helper Awestruct::Extensions::GoogleAnalytics
   helper Awestruct::Extensions::Partial
   helper ReleaseHelper
+  helper FormatHelper
   helper RssWidget
 
   extension Documentation.new()

@@ -68,24 +68,11 @@ body {
 }
 
 #intro {
-    //@extend .gray-box;
-    //padding: 30px;
     margin-bottom: 20px;
-    /* h1 { */
-    /*     margin-bottom: 0; */
-    /*     font-size: 35px; */
-    /*     line-height: 1; */
-    /*     letter-spacing: -1px; */
-    /* } */
-
     p {
         font-size: 16px;
         line-height: $baseLineHeight * 1.2;
     }
-}
-
-#gil-left {
-    max-height: 175px;
 }
 
 .even-more {

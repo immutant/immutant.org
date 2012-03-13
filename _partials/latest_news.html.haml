@@ -3,7 +3,7 @@
     .item
       %h3 
         %a{:href=>post.url}= post.title
-      %h5 #{post.date.strftime( '%d %B %Y' )}
+      %h5 #{format_date( post.date )}
       .body
         #{summarize( html_to_text( post.content ), 30 )}
         %a{:href=>post.url} Read more &raquo;
