@@ -87,8 +87,12 @@ Verify that the artifacts you expect have been uploaded and deployed to
 
 ## Post it on `immutant.org`
 
-## Notify the `immutant-users@` list
+## Notify `immutant-users@`
+
+## Notify `the-core`
+
+## Notify `clojure@`
 
 ## Tweet it.
 
-## Set the /topic in #immutant IRC channel using ChanServ (if you can).
+## Set the /topic in `#immutant` IRC channel using ChanServ (if you can).

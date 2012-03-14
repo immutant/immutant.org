@@ -12,4 +12,8 @@ module ReleaseHelper
     site.releases.first
   end
 
+  def doc_chapter_for_version(version, chapter)
+    "/documentation/#{version}/#{chapter}.html"
+  end
+
 end
