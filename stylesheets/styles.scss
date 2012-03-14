@@ -58,8 +58,9 @@ body {
     border: 1px solid #ccc;
     background-color: #f5f5f5;
 }
+
 #main-intro {
-    padding: 30px;
+    padding: 0px 30px 30px;
     margin-bottom: 20px;
     p {
         font-size: 20px;
@@ -73,10 +74,6 @@ body {
         font-size: 16px;
         line-height: $baseLineHeight * 1.2;
     }
-}
-
-#gil-left {
-    margin-left: 30px;
 }
 
 .even-more {
