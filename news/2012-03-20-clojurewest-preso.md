@@ -9,7 +9,7 @@ This past weekend I gave an "Introducing Immutant" talk at
 [Clojure/West](http://clojurewest.org) in San Jose, CA. And except for
 one tiny slide, it seemed to go fairly well.
 
-I was more than a little nervous to see both
+I was a little nervous to see both
 [Rich](http://twitter.com/richhickey) and
 [Stu](http://twitter.com/stuarthalloway) in attendance. And that was
 *before* they gently chided me for slide #63, in which I demonstrate
@@ -17,11 +17,12 @@ the use of core Clojure functions to alter Immutant caches. They were
 justifiably concerned that doing so would be confusing, to say the
 least.
 
-I explained that the `core.cache` library, upon which the Immutant
-cache is built, requires `IPersistentMap` implementations. But I later
-realized I was wrong. I got this wrong impression by attempting to
-make the Immutant caches successfully pass the `core.cache` test
-suite. That was very close to being a good idea.
+In the talk, I explained that the `core.cache` library, upon which the
+Immutant cache is built, requires `IPersistentMap`
+implementations. But after reviewing the code later, I realized I was
+wrong. I got this wrong impression by attempting to make the Immutant
+caches successfully pass the `core.cache` test suite. That was very
+close to being a good idea.
 
 The `core.cache` test suite ensures that its caches can `assoc` and
 `dissoc` expected results, which works great for local,
@@ -30,7 +31,9 @@ distributed, inefficiently-copied collections. So I implemented them
 by mutating instead of copying, just to make the tests pass...
 
 ...and completely violated
-[The Principle Of Least Surprise](http://en.wikipedia.org/wiki/Principle_of_least_astonishment).
+[The Principle Of Least Surprise](http://en.wikipedia.org/wiki/Principle_of_least_astonishment). I
+was focusing more on the polymorphic aspect of the core functions than
+their implied immutability.
 
 The
 [fix was easy](https://github.com/immutant/immutant/commit/fabe041d995c5b02dbeaafa87bc161b5b79bd883),
