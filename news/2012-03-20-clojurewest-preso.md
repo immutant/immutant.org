@@ -9,7 +9,7 @@ This past weekend I gave an "Introducing Immutant" talk at
 [Clojure/West](http://clojurewest.org) in San Jose, CA. And except for
 one tiny slide, it seemed to go fairly well.
 
-I was not a little bit nervous to see both
+I was more than a little nervous to see both
 [Rich](http://twitter.com/richhickey) and
 [Stu](http://twitter.com/stuarthalloway) in attendance. And that was
 *before* they gently chided me for slide #63, in which I demonstrate
@@ -37,12 +37,12 @@ The
 of course: just remove the core interface implementations that mutate
 stuff along with the `assoc/dissoc` tests. We can still use the
 read-only core functions (`get`, `seq`, `find`, etc.) and we still
-have the `immutant.cache/Mutable` functions. Essentially, we just want
-to make sure the Immutant cache responds to the core Clojure functions
-like any other mutable structure would, e.g. `java.util.HashMap`.
+have the mutation functions in their own `immutant.cache/Mutable`
+namespace. In effect, an Immutant cache now responds to the core
+Clojure functions exactly like a `java.util.HashMap` would.
 
-Slide decks for open-source projects often become obsolete. In this
-deck, #63 already is. 
+Slide decks for open-source projects often quickly become obsolete. In
+this deck, #63 already is.
 
 The slides are also available on
 [github along with all the others](https://github.com/strangeloop/clojurewest2012-slides)
