@@ -145,6 +145,16 @@ table.fancy {
   @extend .table-condensed;
 }
 
+.big {
+    font-size: 18px;
+}
+
+.notice {
+    @extend .alert;
+    border-color: #f00;
+    color: #000;
+}
+
 // sticky footer from: https://github.com/twitter/bootstrap/issues/306#issuecomment-2880409
 html, body {
     height: 100%;
