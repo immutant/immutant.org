@@ -14,15 +14,18 @@ title: Installation
     %h2 Installation via Leiningen
 
     :markdown
-      _**Note:** These instructions are for Leiningen >= 1.6.2 and < 2.0. A version of the plugin supporting Leiningen 2 is currently in the works._
-
       To install Immutant via the [Leiningen](http://leiningen.org/) plugin, you'll need to
       first install Leiningen, followed by the [lein-immutant](https://github.com/immutant/lein-immutant/)
-      plugin:
+      plugin. If you are using Leiningen 1.x, install via:
           $ lein plugin install lein-immutant VERSION
+          
+      If using Leiningen 2.x, install the plugin by adding it to the plugin
+      list in `~/.lein/profiles.clj`:
+          {:user {:plugins [[lein-immutant "0.7.0"]]}
 
       You can determine the current version of the plugin by looking at
-      its [page on clojars](http://clojars.org/lein-immutant).
+      its [page on clojars](http://clojars.org/lein-immutant). _**Note:**
+      the plugin requires Leiningen **1.6.2** or greater._
 
       The plugin provides a number of subcommands, one of which is
       `install`. So installing Immutant is as easy as this:
