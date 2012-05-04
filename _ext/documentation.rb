@@ -9,10 +9,12 @@ class Documentation
     return unless @enabled
 
     @tmp_dir = site.tmp_dir
-    
-    current_path = File.join( site.output_dir, 'documentation', 'current' ) 
-    FileUtils.rm( current_path ) if File.exist?( current_path )
 
+    current_path = File.join( site.output_dir, 'documentation', 'current' )
+    
+    FileUtils.mkdir_p( site.output_dir )
+    FileUtils.rm( current_path ) if File.exist?( current_path )
+    
     (site.releases).each do |release|
       doc_bundle_name = "immutant-docs-#{release.version}.jar"
       base_dir = File.join( site.output_dir, 'documentation' )
