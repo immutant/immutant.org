@@ -1,0 +1,188 @@
+---
+title: 'Runtime Isolation In Immutant'
+author: Toby Crawley
+layout: news
+tags: [ runtime, isolation, under-the-hood ]
+---
+:markdown
+  In this article, we're going to take a look at some of Immutant's internals
+  to see how we achieve runtime isolation.
+
+  Each application deployed to Immutant gets its very own [Clojure](http://clojure.org/) runtime.
+  These runtimes are truly isolated from each other - each thinks it is the only 
+  Clojure runtime within the JVM. In addition to preventing collisions between
+  application namespaces, it also allows you to optionally use a different Clojure
+  version for each application.
+  
+  Normally Clojure doesn't support multiple runtimes within the same JVM - the
+  runtime is implemented as static methods/members on the 
+  [RT](https://github.com/clojure/clojure/blob/clojure-1.4.0/src/jvm/clojure/lang/RT.java) class,
+  and there is (usually) only one copy of this class loaded.
+  We'll cover how Immutant achieves runtime isolation given that limitation, along with 
+  some of the implications of doing so.
+  
+  ## It's (mostly) class loaders
+  
+  Since the Clojure runtime is implemented as statics on `RT`, each application needs
+  its own copy of the `RT` class. To achieve this, we have to do a bit of class loader
+  trickery. Immutant is built on top of [JBoss AS7](http://www.jboss.org/as7),
+  so we take advantage of the  modular isolation provided by its Modular Services 
+  Container (MSC).
+  
+  Under the MSC, each module within Immutant (core, web, daemons, messaging, etc.) 
+  is isolated from the others, and must explicitly state the packages and classes
+  it exposes along with the other modules it requires. It achieves this by giving
+  each module its own class loader which tightly controls which classes can be loaded
+  by the module. If you are familiar with [OSGi](http://en.wikipedia.org/wiki/OSGi), 
+  you can think of it as fulfilling similar functionality with regards to isolation, 
+  but in a saner and much less complex way. Inside Immutant, each application is 
+  considered a module as well and gets its own MSC class loader.
+  
+  Normally, calling Clojure from Java is pretty straightforward:
+
+%pre.syntax.java<
+  :preserve
+    ...
+    import clojure.lang.RT;
+    ...
+    RT.var( "clojure.core", "str" ).invoke( "ham", "biscuit" );
+    ...
+
+:markdown
+  But, in order to have multiple runtimes, we can't write code quite that simple - 
+  any reference to `RT` from Java will trigger the class to be loaded by the same 
+  class loader as the referencing class. In Immutant, this class loader is the one
+  that loads the 'core' module, which is shared by all applications. We really want
+  `RT` to be loaded only in the application's own MSC class loader, which would give
+  each application its own copy. To work around this, we wrap `RT` in an interface class
+  ([ClojureRuntime](https://github.com/immutant/immutant/blob/master/runtime/api/src/main/java/org/immutant/runtime/ClojureRuntime.java)) 
+  and an implementation class 
+  ([ClojureRuntimeImpl](https://github.com/immutant/immutant/blob/master/runtime/impl/src/main/java/org/immutant/runtime/impl/ClojureRuntimeImpl.java))
+  , and never refer to the implementation class directly.
+
+  `ClojureRuntime` has a bit of AS7 and Java boilerplate in it, but the important parts
+  are:
+
+%pre.syntax.java<
+  :preserve
+    public static ClojureRuntime newRuntime(ClassLoader classLoader, String name) {
+        ClojureRuntime runtime;
+        try {
+            runtime = (ClojureRuntime)classLoader.loadClass( "org.immutant.runtime.impl.ClojureRuntimeImpl" ).newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException( "Failed to load ClojureRuntimeImpl", e );
+        }
+
+        runtime.setClassLoader( classLoader );
+        runtime.setName( name );
+
+        return runtime;
+    }
+
+    public abstract Object invoke(String namespacedFunction);
+
+    public abstract Object invoke(String namespacedFunction, Object arg1);
+
+    public abstract Object invoke(String namespacedFunction, Object arg1, Object arg2);
+
+    public abstract Object invoke(String namespacedFunction, Object arg1, Object arg2, Object arg3);
+
+    // ...and many more!
+
+:markdown
+  `newRuntime` is responsible for loading an instance of the implementation in the given 
+  class loader, which will be the application's MSC class loader. This class loader is handed
+  off to the `ClojureRuntime` instance (we'll see why in a bit). 
+
+  `invoke` is the real interface into Clojure - all calls from Java go through it. Its
+  implementation handles looking up the given function `Var` and invoking it. It comes
+  in 22 varieties to match the arities of 
+  [Var#invoke](https://github.com/clojure/clojure/blob/clojure-1.4.0/src/jvm/clojure/lang/Var.java#L410-529).
+
+  Its implementation looks like this (we'll only look at one of the invoke definitions, 
+  they are all the same except for arity):
+
+%pre.syntax.java<
+  :preserve
+    public Object invoke(String namespacedFunction, Object arg1, Object arg2) {
+        ClassLoader originalClassLoader = preInvoke();
+        try {
+            return var( namespacedFunction ).invoke( arg1, arg2 );
+        } finally {
+            postInvoke( originalClassLoader );
+        }
+    }
+
+:markdown
+  It looks almost identical to the `RT.var()` example above. The interesting bits here 
+  are the `preInvoke` and `postInvoke` methods. These two methods are responsible for
+  setting the 
+  [thread context class loader (TCCL)][TCCL] to the application's MSC class loader before
+  invoking the function and restoring the original TCCL afterward (Clojure
+  uses the TCCL internally for its class loading). Threads used for deployment and web request handling in 
+  Immutant come from pools that are shared across all applications, so we have to set
+  the TCCL for the thread on each invocation since we don't know where it has been.
+
+  In addition to restoring the TCCL, `postInvoke` handles the removal of a couple of
+  Clojure's internal thread locals - we'll explore why in the next section.
+
+  [TCCL]: http://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html#getContextClassLoader()
+
+  ## It's also thread locals
+
+  Clojure uses [ThreadLocals](http://docs.oracle.com/javase/6/docs/api/java/lang/ThreadLocal.html) 
+  in a few places ([Agent.nested](https://github.com/clojure/clojure/blob/clojure-1.4.0/src/jvm/clojure/lang/Agent.java#L55), 
+  [LockingTransaction.transaction](https://github.com/clojure/clojure/blob/clojure-1.4.0/src/jvm/clojure/lang/LockingTransaction.java#L36),
+  [Var.dvals](https://github.com/clojure/clojure/blob/clojure-1.4.0/src/jvm/clojure/lang/Var.java#L73-78)) 
+  to manage state, and doesn't explicitly 
+  [remove] them from the current
+  thread when they are no longer needed. In two cases (`LockingTransaction.transaction`,
+  `Var.dvals`) not removing the ThreadLocal causes a hard reference 
+  to a Clojure class to be retained in the thread's `ThreadLocalMap`, which holds a 
+  reference to its class loader, which in turn holds references to every single class that
+  it loaded. This prevents any of those classes from being unloaded, so every application
+  undeploy results in a chunk of memory that cannot be garbage collected. If you undeploy
+  and redeploy enough, you'll eventually exhaust the heap, which isn't good for anyone.
+
+  In addition to making your heap very tired, leaving thread locals set in thread from
+  a global that will possibly be next used by another application is a security risk, since
+  it is possible for that other application to access the thread local data.
+
+  To prevent these issues, `postInvoke` calls `remove` on each of these thread locals after
+  each invocation. Take a look at 
+  [ClojureRuntimeImpl](https://github.com/immutant/immutant/blob/master/runtime/impl/src/main/java/org/immutant/runtime/impl/ClojureRuntimeImpl.java) if you are interested in how this is
+  implemented.
+
+  ### Why doesn't Clojure remove these thread locals itself?
+
+  Mainly because it hasn't needed to. It wasn't designed to allow more than one runtime
+  per JVM, so the security aspect of shared threads wasn't an issue. And since the leaks
+  are caused by retained classes, they aren't a concern in a single runtime environment
+  since there will only ever be one copy of the class.
+
+  [remove]: http://docs.oracle.com/javase/6/docs/api/java/lang/ThreadLocal.html#remove()
+
+  ## Performance
+
+  All this muckery does come at a price - invoking through `ClojureRuntime` is slightly 
+  slower than invoking a `Var` directly. It adds a ~60 nanosecond overhead to each call 
+  based on [this simple benchmark](https://gist.github.com/2721494):
+
+%pre
+  :preserve
+    >>>> RT.var.invoke: Execution time for 1000000 calls: 162.405ms (162ns/call)
+    >>>> ClojureRuntime.invoke: Execution time for 1000000 calls: 219.0318ms (219ns/call)
+
+:markdown
+  As we mentioned earlier, almost every place in the Immutant code where we invoke via 
+  `ClojureRuntime` is during application deployment and initialization. These calls 
+  happen once, so the performance overhead isn't a concern. The one place where it may 
+  matter is with web requests: every request currently results in an invocation through
+  `ClojureRuntime`, though we may be able to eliminate that in the future.
+
+  ## Fare thee well
+
+  We hope you've enjoyed this peek at some of the guts of Immutant. If you have any 
+  comments or questions, feel free to leave them below, or get in touch via the 
+  [usual methods](/community).
+
