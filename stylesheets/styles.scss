@@ -1,4 +1,5 @@
 $mustard: #e4a932;
+$throatGreen: #b29f54;
 $grayLightish: #bbb;
 
 $navbarBackground: $mustard;
@@ -155,6 +156,14 @@ table.fancy {
     color: #000;
 }
 
+code {
+    padding: 0;
+    color: #333;
+    font-weight: bold;
+    background-color: #fff;
+    border: 0;
+}
+
 // sticky footer from: https://github.com/twitter/bootstrap/issues/306#issuecomment-2880409
 html, body {
     height: 100%;
@@ -171,5 +180,5 @@ html, body {
 }
 //end sticky footer
 
-// Include responsive Bootstrap styles
+// Include responsive Bootstrap styles - has to be imported last
 @import "bootstrap-responsive";
