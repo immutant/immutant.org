@@ -174,11 +174,12 @@ tags: [ runtime, isolation, under-the-hood ]
     >>>> ClojureRuntime.invoke: Execution time for 1000000 calls: 219.0318ms (219ns/call)
 
 :markdown
-  As we mentioned earlier, almost every place in the Immutant code where we invoke via 
+  Almost every place in the Immutant code where we invoke via 
   `ClojureRuntime` is during application deployment and initialization. These calls 
   happen once, so the performance overhead isn't a concern. The one place where it may 
   matter is with web requests: every request currently results in an invocation through
-  `ClojureRuntime`, though we may be able to eliminate that in the future.
+  `ClojureRuntime`. We expect the impact of this to be negligible and we hope to prove 
+  this with further performance analysis in the near future.
 
   ## Fare thee well
 
