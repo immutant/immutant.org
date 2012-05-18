@@ -90,7 +90,7 @@ tags: [ runtime, isolation, under-the-hood ]
     // ...and many more!
 
 :markdown
-  `newRuntime` is responsible for loading an instance of the implementation in the given 
+  `newRuntime` is responsible for loading an instance of `ClojureRuntimeImpl` in the given 
   class loader, which will be the application's MSC class loader. This class loader is handed
   off to the `ClojureRuntime` instance (we'll see why in a bit). 
 
