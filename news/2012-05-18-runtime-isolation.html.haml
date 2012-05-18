@@ -26,17 +26,16 @@ tags: [ runtime, isolation, under-the-hood ]
   Since the Clojure runtime is implemented as statics on `RT`, each application needs
   its own copy of the `RT` class. To achieve this, we have to do a bit of class loader
   trickery. Immutant is built on top of [JBoss AS7](http://www.jboss.org/as7),
-  so we take advantage of the  modular isolation provided by its Modular Services 
-  Container (MSC).
+  so we take advantage of the  modular isolation provided by [jboss-modules](https://docs.jboss.org/author/display/MODULES/Introduction).
   
-  Under the MSC, each module within Immutant (core, web, daemons, messaging, etc.) 
+  Under jboss-modules, each module within Immutant (core, web, daemons, messaging, etc.) 
   is isolated from the others, and must explicitly state the packages and classes
   it exposes along with the other modules it requires. It achieves this by giving
   each module its own class loader which tightly controls which classes can be loaded
   by the module. If you are familiar with [OSGi](http://en.wikipedia.org/wiki/OSGi), 
   you can think of it as fulfilling similar functionality with regards to isolation, 
   but in a saner and much less complex way. Inside Immutant, each application is 
-  considered a module as well and gets its own MSC class loader.
+  considered a module as well and gets its own modular class loader.
   
   Normally, calling Clojure from Java is pretty straightforward:
 
@@ -53,7 +52,7 @@ tags: [ runtime, isolation, under-the-hood ]
   any reference to `RT` from Java will trigger the class to be loaded by the same 
   class loader as the referencing class. In Immutant, this class loader is the one
   that loads the 'core' module, which is shared by all applications. We really want
-  `RT` to be loaded only in the application's own MSC class loader, which would give
+  `RT` to be loaded only in the application's own modular class loader, which would give
   each application its own copy. To work around this, we wrap `RT` in an interface class
   ([ClojureRuntime](https://github.com/immutant/immutant/blob/master/runtime/api/src/main/java/org/immutant/runtime/ClojureRuntime.java)) 
   and an implementation class 
@@ -91,7 +90,7 @@ tags: [ runtime, isolation, under-the-hood ]
 
 :markdown
   `newRuntime` is responsible for loading an instance of `ClojureRuntimeImpl` in the given 
-  class loader, which will be the application's MSC class loader. This class loader is handed
+  class loader, which will be the application's modular class loader. This class loader is handed
   off to the `ClojureRuntime` instance (we'll see why in a bit). 
 
   `invoke` is the real interface into Clojure - all calls from Java go through it. Its
@@ -117,7 +116,7 @@ tags: [ runtime, isolation, under-the-hood ]
   It looks almost identical to the `RT.var()` example above. The interesting bits here 
   are the `preInvoke` and `postInvoke` methods. These two methods are responsible for
   setting the 
-  [thread context class loader (TCCL)][TCCL] to the application's MSC class loader before
+  [thread context class loader (TCCL)][TCCL] to the application's modular class loader before
   invoking the function and restoring the original TCCL afterward (Clojure
   uses the TCCL internally for its class loading). Threads used for deployment and web request handling in 
   Immutant come from pools that are shared across all applications, so we have to set
