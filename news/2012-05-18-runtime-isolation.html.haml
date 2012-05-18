@@ -176,9 +176,7 @@ tags: [ runtime, isolation, under-the-hood ]
 :markdown
   For every single immutant component (messaging, caching, daemons, etc) except web, 
   we only invoke through `ClojureRuntime` at deployment. For the web component, 
-  we invoke on every request, which may mean an extra 60ns per request. Since the above 
-  benchmark doesn't exercise the full web request lifecycle, it's unclear at this
-  point if it is meaningful for real applications.
+  we invoke on every request, which means an extra 60ns per request. 
 
   ## Fare thee well
 
