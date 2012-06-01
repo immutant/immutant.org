@@ -59,4 +59,4 @@ out with us on [IRC]. It'll be fun!
 [Ruby]: http://jruby.org/
 [mailing lists]: /community/mailing_lists/
 [IRC]: /community#irc
-[Twitter]: http://twitter.com/immutants
+[Twitter]: http://twitter.com/immutant
