@@ -2,7 +2,7 @@
 title: 'Introducing Distributed XA Transaction Support'
 author: Jim Crossley
 layout: news
-tags: [ transactions, xa ]
+tags: [ transactions, xa, caching, messaging, enterprise, bears ]
 ---
 
 [bear]: http://www.youtube.com/watch?v=v6cY0zz-958
