@@ -16,6 +16,7 @@ tags: [ transactions, xa ]
 [Korma]: http://sqlkorma.com/
 [ClojureQL]: http://clojureql.org/
 [Lobos]: https://github.com/budu/lobos
+[incrementals]: http://immutant.org/builds/
 
 We're as happy as [a bear in a koi pond][bear] to announce support for
 Distributed (XA) Transactions in Immutant.
@@ -196,13 +197,15 @@ See the [manual][transactions] for more details.
 
 ## Conclusion
 
-XA is not for every application. It's mostly used when you have
-multiple JDBC backends or you need to synchronize your JDBC and JMS
-(HornetQ messaging) calls. Transactional data-grids (Infinispan
-caching) are also often handy, so we feel good about making all of
-these resources automatically transactional in Immutant, not to
-mention providing clean Clojure interfaces for them.
+XA is not for every application. It's useful when you have multiple
+JDBC backends or you need to synchronize your JDBC and JMS (HornetQ
+messaging) calls. Transactional data-grids (Infinispan caching) are
+also often handy, so we feel good about making all of these resources
+automatically transactional in Immutant, not to mention providing
+clean Clojure interfaces for them.
 
-Look for a new 0.2.0 release of Immutant in the coming weeks, and feel
-free to [find us in the normal channels][community] if you have any
-questions.
+Distributed transactions are available now in our
+[latest incremental builds][incrementals] and will of course be
+included in our upcoming 0.2.0 release of Immutant expected in the
+next week or so. As always, feel free to
+[find us in the normal channels][community] if you have any questions.
