@@ -1,0 +1,50 @@
+---
+layout: default
+title: Releases
+---
+
+#intro
+  :markdown
+    Official, versioned releases are listed here. You can see a list of incremental builds on
+    our [builds page](/builds/).
+
+%p
+  %table.table.table-striped.table-bordered
+    %tr
+      %th Version
+      %th Release Date
+      %th Binary Distribution
+      %th Documentation
+      %th Changelog
+      %th Git Tree
+    - site.releases.each do |release|
+      - announcement = announcement_for_version(release.version)
+      %tr
+        %td.version
+          %a{:href => announcement.url}= release.version
+        %td.date
+          = announcement.date.strftime( '%d %B %Y' )
+        %td.dist
+          %a{:href => release.urls.remote_dist_zip, :rel => latest_release?(release) ? 'download' : 'nofollow'}
+            == ZIP archive (#{release.dist_size}mb)
+        %td
+          - rel = latest_release?(release) ? 'documentation' : 'nofollow'
+          %ul
+            %li
+              Browse:
+              %ul
+                %li
+                  %a{:href=>release.urls.docs.browse, :rel=>rel} Manual
+                %li
+                  %a{:href=>release.urls.docs.apidocs, :rel=>rel} Clojure API Docs
+            %li
+              %a{:href=>release.urls.docs.remote_html_zip, :rel=>rel} HTML Manual (ZIP)
+        %td
+          %ul
+            %li
+              %a{:href=>release.urls.jira} JIRA Issues
+            %li
+              %a{:href=>release.urls.github.log} Git Log
+        %td
+          %a{:href=>release.urls.github.tree} Browse
+
