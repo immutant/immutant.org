@@ -1,6 +1,6 @@
 require 'release_helper'
 require 'format_helper'
-#require 'release_sizes'
+require 'release_sizes'
 require 'rss_widget'
 require 'tagger_atomizer'
 require 'events_munger'
@@ -20,7 +20,7 @@ Awestruct::Extensions::Pipeline.new do
   extension Awestruct::Extensions::Indexifier.new
   extension Awestruct::Extensions::Atomizer.new(:posts, '/news.atom')
   extension Awestruct::Extensions::Disqus.new
-#  extension ReleaseSizes.new
+  extension ReleaseSizes.new
 
   extension Awestruct::Extensions::Tagger.new(:posts,
                                               '/news/index',

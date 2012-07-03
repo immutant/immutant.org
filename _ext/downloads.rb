@@ -17,8 +17,9 @@ class Downloads
       release.urls ||= OpenStruct.new
       release.urls.docs ||= OpenStruct.new
       release.urls.docs.browse = "/documentation/#{release.version}/"
+      release.urls.docs.apidocs = "/documentation/#{release.version}/apidoc/"
 
-      release.urls.docs.remote_html_zip = "#{DOCS_PREFIX}/#{release.version}/immutant-docs-#{release.version}.jar"
+      release.urls.docs.remote_html_zip = "#{DOCS_PREFIX}/#{release.version}/#{doc_bundle_name(release)}"
 
       release.urls.jira = "https://jira.jboss.org/jira/secure/IssueNavigator.jspa?reset=true&jqlQuery=project=IMMUTANT+AND+fixVersion=#{release.jira_version}&sorter/field=issuekey&sorter/order=DESC"
 

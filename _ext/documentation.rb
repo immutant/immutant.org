@@ -1,6 +1,7 @@
 
 class Documentation
-
+  include ReleaseHelper
+  
   def initialize(enabled=true)
     @enabled = enabled
   end
@@ -16,7 +17,7 @@ class Documentation
     FileUtils.rm( current_path ) if File.exist?( current_path )
     
     (site.releases).each do |release|
-      doc_bundle_name = "immutant-docs-#{release.version}.jar"
+      doc_bundle_name = doc_bundle_name( release )
       base_dir = File.join( site.output_dir, 'documentation' )
       doc_root = File.join( base_dir, release.version )
       
