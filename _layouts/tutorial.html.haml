@@ -1,0 +1,27 @@
+---
+layout: default
+---
+
+.page-header
+  %h1
+    == Tutorial: #{page.title}
+
+.row
+  #main-column.span8
+    .tutorial.article
+      .byline
+        Last updated:
+        %span.date
+          = format_date( page.date )
+      .body
+        ~ content
+      .comments
+        = page.disqus_comments
+
+  #sidebar-column.span4
+    .tutorial-nav
+      %h3 All Tutorials
+      %ul.nav.nav-tabs.nav-stacked
+        - site.tutorials.each do |t|
+          %li{:class => (t == page) ? 'current' : ''}
+            %a{:href => t.output_path}= t.title

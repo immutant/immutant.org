@@ -6,6 +6,7 @@ require 'tagger_atomizer'
 require 'events_munger'
 require 'downloads'
 require 'documentation'
+require 'tutorials'
 
 Awestruct::Extensions::Pipeline.new do
   extension Awestruct::Extensions::DataDir.new
@@ -22,6 +23,8 @@ Awestruct::Extensions::Pipeline.new do
   extension Awestruct::Extensions::Disqus.new
   extension ReleaseSizes.new
 
+  extension Tutorials.new
+  
   extension Awestruct::Extensions::Tagger.new(:posts,
                                               '/news/index',
                                               '/news/tags',

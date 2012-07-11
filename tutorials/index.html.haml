@@ -1,0 +1,17 @@
+---
+layout: default
+title: Tutorials
+---
+
+#intro
+  :markdown
+    Want to know how to do something in Immutant? See if any of these tutorials
+    answer your question. If they don't, [let us know](/community/).
+
+%ul
+  - site.tutorials.each do |t|
+    %li
+      %a{:href => t.output_path}>= t.title
+      - if t.description?
+        \:
+        = t.description

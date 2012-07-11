@@ -8,7 +8,7 @@
     margin-bottom: 9px;
 }
 
-.post {
+.article {
     .byline {
         font-weight: bold;
     }
@@ -19,6 +19,10 @@
     h2 {
         margin-bottom: 10px;
     }
+}
+
+.tutorial-nav .current {
+    font-weight: bold;
 }
 
 .post-navigation {
