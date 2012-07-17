@@ -1,14 +1,11 @@
 ---
 title: "Scheduling Jobs"
 sequence: 4
-description: "You know, cron."
+description: "Covers adding cron-like scheduled jobs to an application."
 ---
 
 
-This article covers job schedulding in Immutant, and is part of our
-[getting started series of tutorials][getting-started]. 
-
-Jobs in Immutant are simply functions that execute on a recurring 
+This tutorial covers job schedulding in Immutant - functions that execute on a recurring 
 schedule. They fire asynchronously, outside of the thread where they are 
 defined, and fire in the same runtime as the rest of the application, so 
 have access to any shared state.
@@ -26,7 +23,8 @@ I'm glad you asked! There are several reasons:
   cases where you need advanced scheduling functionality, you can still use
   [quartz-clj] or the Quartz classes directly.
 * If you are using Immutant in a cluster, jobs that should fire only once per
-  cluster (aka 'singleton jobs') are handled automatically (see below).
+  cluster (aka 'singleton jobs') are handled automatically (see our 
+  [clustering tutorial] for more information).
 * When your application is undeployed, your jobs are automatically unscheduled.
   Note that if you use quartz-clj or Quartz directly from your application,
   you'll need  to clean up after yourself so you don't leave jobs lingering around 
@@ -34,21 +32,44 @@ I'm glad you asked! There are several reasons:
 
 ## Scheduling Jobs
 
-Scheduling a job is as simple as calling the `schedule`  function from the
-`immutant.jobs` namespace:
+Scheduling a job is as simple as calling the `schedule` function from the
+`immutant.jobs` namespace. Let's see it in use - if you need
+an Immutant-ready application, see the [deployment tutorial] or grab the
+[sample application] from that tutorial. The rest of this tutorial will 
+assume you are using that sample application.
 
-<pre class="syntax clojure">(require '[immutant.jobs :as jobs])
+Add a job to your `immutant.clj`:
+
+<pre class="syntax clojure">(ns immutant-demo.init
+  (:use immutant-demo.core)
+  (:require [immutant.web :as web]
+            [immutant.jobs :as jobs)) ;; require the jobs ns
+...
+
 (jobs/schedule "my-job-name" "*/5 * * * * ?" 
                 #(println "I was called!"))</pre>
 
+Now, if we deploy and run the application (via `lein immutant deploy && lein immutant run`),
+you should see the following log output:
+
+    ...
+    11:49:24,691 INFO  [org.jboss.as.server] (DeploymentScanner-threads - 2) JBAS018559: Deployed "immutant-demo.clj"
+    11:49:25,008 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called!
+    11:49:30,018 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-2) I was called!
+    11:49:35,002 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-3) I was called!
+    11:49:40,002 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called!
+    ...
+    
 The `schedule` function requires three arguments:
 
 * *name* - the name of the job.
 * *spec* - the cron-style specification string (see below).
 * *f* - the zero argument function that will be invoked each time the job fires.
 
-Job scheduling is dynamic, and can occur anywhere in your application code. 
-Jobs that share the lifecycle of your application are idiomatically placed in `immutant.clj`.
+Job scheduling is dynamic, and can occur at any time during your application's lifecycle. 
+We started the job above in `immutant.clj`, but it could also be done from anywhere within 
+your application code. Jobs that share the lifecycle of your application are idiomatically 
+placed in `immutant.clj`.
 
 You can safely call `schedule` multiple times with the same job name - the named job will 
 rescheduled.
@@ -76,7 +97,7 @@ day-of-month field would result in the job firing on the 1st and 15th of each mo
 Either day-of-month or day-of-week must be specified using the ? character, since specifying
 both is contradictory.
 
-  See the [Quartz cron specification] for additional details.
+See the [Quartz cron specification] for additional details.
 
 
 ## Unscheduling Jobs
@@ -96,46 +117,22 @@ return `true`, otherwise `nil` is returned.
 
 Jobs are automatically unscheduled when your application is undeployed.
 
-## Clustering
+## Wrapping Up
 
-When using Immutant in a cluster, you'll need to mark any jobs that should only be scheduled
-once for the entire cluster with the `:singleton` option:
-
-<pre class="syntax clojure">(require '[immutant.jobs :as jobs])
-(jobs/schedule "my-job-name" "*/5 * * * * ?" 
-                #(println "I only fire on one node")
-                :singleton true)</pre>
-
-If `:singleton` is `true`, the job will be scheduled to run on only one node in the cluster
-at a time. If that node goes down, the job will automatically be scheduled on another node, giving
-you failover. If `:singleton` is `false` or not provided, the job will be scheduled to run on
-all nodes where the `schedule` call is executed.
-
-Look for a future post in our [Getting Started series][getting-started] on using Immutant in
-a cluster.
-
-## The Future
-
-Currently, jobs can only be scheduled using [CronTrigger] functionality. We plan to add
-support for [SimpleTrigger] (or 'at') functionality at some point in the future, 
-allowing you to do something similar to:
-
-<pre class="syntax clojure">(require '[immutant.jobs :as jobs])
-(jobs/schedule "my-at-job" (jobs/every "3s" :times 5)
-                #(println "I fire 5 times, every 3 seconds"))</pre>
-
-Since Immutant is still in a pre-alpha state, none of what I said above is set in stone. If 
+Since Immutant is still in an alpha state, none of what I said above is set in stone. If 
 anything does change, We'll update this post to keep it accurate. 
 
 If you have any feedback or questions, [get in touch]! 
 
-[getting-started]: /news/tags/getting-started/
 [Quartz]: http://quartz-scheduler.org/
 [quartz-clj]: https://github.com/mdpendergrass/quartz-clj
 [Schedulers]: http://quartz-scheduler.org/api/1.8.5/org/quartz/Scheduler.html
 [JobDetails]: http://quartz-scheduler.org/api/1.8.5/org/quartz/JobDetail.html
 [CronTrigger]: http://quartz-scheduler.org/api/1.8.5/org/quartz/CronTrigger.html
 [SimpleTrigger]: http://quartz-scheduler.org/api/1.8.5/org/quartz/SimpleTrigger.html
+[clustering tutorial]: ../clustering/
+[deployment tutorial]: ../deploying/
+[sample application]: https://github.com/immutant/immutant-basic-web-demo
 [Quartz cron specification]: http://www.quartz-scheduler.org/documentation/quartz-1.x/tutorials/TutorialLesson06
 [get in touch]: /community
 
