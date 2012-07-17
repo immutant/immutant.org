@@ -1,7 +1,7 @@
 ---
 title: Messaging
 sequence: 3
-description: "An introduction to creating destinations and producing & consuming messages on those destinations."
+description: "Simple creation and usage of distributed queues and topics"
 ---
 
 In this tutorial, we'll explore the [messaging] available to your

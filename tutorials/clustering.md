@@ -1,7 +1,7 @@
 ---
-title: Simulated Clustering
+title: Clustering
 sequence: 5
-description: TBD
+description: "How Immutant modules benefit in a clustered environment"
 ---
 
 For this installment of our [getting started series][getting-started]
