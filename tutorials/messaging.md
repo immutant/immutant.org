@@ -4,9 +4,9 @@ sequence: 2
 description: "Simple creation and usage of distributed queues and topics"
 ---
 
-In this tutorial, we'll explore the [messaging] available to your
-Clojure applications when deployed on Immutant. Because Immutant is
-built atop [JBoss AS7][as7], it includes the excellent [HornetQ]
+In this tutorial, we'll explore the [messaging] features available to
+your Clojure applications when deployed on Immutant. Because Immutant
+is built atop [JBoss AS7][as7], it includes the excellent [HornetQ]
 messaging service baked right in. Hence, there is nothing extra to
 install or configure in order for your applications to benefit from
 asynchronous messaging.
@@ -43,7 +43,7 @@ effectively a no-op. Similarly, a call to `stop` will silently fail if
 the endpoint is in use by any other application. The last to leave
 will turn the lights out.
 
-## One Way to Produce Messages
+## Only One Way to Produce Messages
 
 ### publish
 
