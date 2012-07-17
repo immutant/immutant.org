@@ -8,10 +8,10 @@ title: Tutorials
     Want to know how to do something in Immutant? See if any of these tutorials
     answer your question. If they don't, [let us know](/community/).
 
-%ul
+%table.fancy
   - site.tutorials.each do |t|
-    %li
-      %a{:href => t.output_path}>= t.title
-      - if t.description?
-        \:
+    %tr
+      %td
+        %a{:href => t.output_path}>= t.title
+      %td
         = t.description
