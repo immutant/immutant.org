@@ -4,14 +4,12 @@ sequence: 3
 description: "An introduction to creating destinations and producing & consuming messages on those destinations."
 ---
 
-Happy 2012! For the next installment of our
-[getting started series][getting-started] we'll explore the
-[messaging abstractions][immutant.messaging] available to your Clojure
-apps when deployed on Immutant. Because Immutant is built atop
-[JBoss AS7][as7], it includes the excellent [HornetQ] messaging
-service built right in. Hence, there is nothing extra to install or
-configure in order for your applications to benefit from asynchronous
-messaging.
+In this tutorial, we'll explore the [messaging] available to your
+Clojure applications when deployed on Immutant. Because Immutant is
+built atop [JBoss AS7][as7], it includes the excellent [HornetQ]
+messaging service baked right in. Hence, there is nothing extra to
+install or configure in order for your applications to benefit from
+asynchronous messaging.
 
 ## Destinations are either Queues or Topics
 
@@ -23,7 +21,7 @@ sent to a topic will be delivered to all subscribed recipients. In
 both cases, the message producers have no direct knowledge of the
 message consumers.
 
-Use the `start` function to define a messaging destination. A simple
+Use the `start` function to create a messaging destination. A simple
 naming convention designates an endpoint as either a queue or a topic:
 if its name begins with `/queue`, it's a queue; if it begins with
 `/topic`, it's a topic.
@@ -33,9 +31,9 @@ if its name begins with `/queue`, it's a queue; if it begins with
 (msg/start "/topic/news")   ; to start a topic
 </pre>
 
-You can invoke `start` from anywhere in your application, but
-typically it's done in the `immutant.clj` initialization file, as
-described in [an earlier tutorial][deploying].
+You can invoke `start` from anywhere in your application, but an
+obvious place is the `immutant.clj` initialization file, as described
+in [the deployment tutorial][deploying].
 
 While `start` has a complement, `stop`, you needn't call it
 directly. It will be invoked when your application is undeployed. And
@@ -123,46 +121,28 @@ Some examples:
   (= (range 4) (take 4 messages)))
 </pre>
 
-## Language Interop
+## Synchronous request/respond
 
-One of our initial goals for Immutant messaging was simple interop
-between Ruby and Clojure applications deployed on a single
-platform. [TorqueBox] Ruby processors already grok the `:json`
-encoding and will automatically decode the message into the analogous
-Ruby data structures, so as long as you limit the content of your
-messages to standard collections and types, they are transparently
-interoperable between Clojure and Ruby in either direction. See the
-[overlay] post for more details on TorqueBox/Immutant integration.
+Immutant provides an implementation of the request/response pattern, a
+popular means of synchronous work distribution. Clients can publish a
+message, i.e. make a request, and then block awaiting a response
+without knowing exactly which consumer returns the response. For
+example,
 
-Of course, the `:json` encoding enables other JVM-based languages --
-anything you could conceivably cram into a war file -- to join in the
-fun, too. For non-JVM languages or external endpoints, something like
-the Pipes and Filters API's provided by [Clamq] could be used since
-we expose our JMS connection factory as
-`immutant.messaging.core/connection-factory`.
+<pre class="syntax clojure">(require '[immutant.messaging :as msg])
 
-## Anything Else?
+;; setup a responder
+(msg/respond "/queue/work" (partial apply +))
 
-Another advantage we get from AS7 is its clustering support. Once we
-work out some small integration bits, message distribution across a
-cluster of dynamic nodes will be automatically load-balanced and
-fault-tolerant, with minimal to no configuration required.
+;; send a request
+(let [result (msg/request "/queue/work" [1 2 3])]
+  (println @result)) ;; => 6
+</pre>
 
-Of course, we still have other messaging features on our roadmap,
-e.g. XA transactions, durable subscribers and synchronous
-request/response, and we're looking for ways to make container-based
-deployment more developer-friendly, so there's still much to do. Feel
-free to follow along on
-[Twitter, IRC, or the mailing list][community].
+See the [manual][messaging] for more options and examples.
 
-
-[TorqueBox]: http://torquebox.org/
-[immutant.messaging]: https://github.com/immutant/immutant/blob/master/modules/messaging/src/main/clojure/immutant/messaging.clj
-[deploying]: /news/2011/11/08/deploying-an-application/
-[overlay]: /news/2011/12/21/overlay/
+[messaging]: http://immutant.org/builds/LATEST/html-docs/messaging.html
+[as7]: http://www.jboss.org/jbossas
 [HornetQ]: http://hornetq.org
 [javax.jms.Message]: http://java.sun.com/javaee/5/docs/api/javax/jms/Message.html
-[community]: http://immutant.org/community/
-[Clamq]: https://github.com/sbtourist/clamq
-[as7]: http://www.jboss.org/jbossas
-[getting-started]: /news/tags/getting-started/
+[deploying]: ../deploying/
