@@ -5,7 +5,7 @@ description: "Covers adding cron-like scheduled jobs to an application."
 ---
 
 
-This tutorial covers job schedulding in Immutant - functions that execute on a recurring 
+This tutorial covers job scheduling in Immutant - functions that execute on a recurring 
 schedule. They fire asynchronously, outside of the thread where they are 
 defined, and fire in the same runtime as the rest of the application, so 
 have access to any shared state.
@@ -74,7 +74,7 @@ placed in `immutant.clj`.
 You can safely call `schedule` multiple times with the same job name - the named job will 
 rescheduled.
   
-## Cron Sytanx
+## Cron Syntax
 
 The spec attribute should contain a crontab-like entry. This is similar to cron specifications
 used by Vixie cron, anacron and friends, but includes an additional field for specifying seconds.
