@@ -4,54 +4,76 @@ sequence: 5
 description: "How your apps benefit when Immutants form a cluster"
 ---
 
-For this installment of our [getting started series][getting-started]
-we'll experiment a bit with clustering, one of the primary benefits
-provided by the [JBoss AS7][as7] application server, upon which
-Immutant is built. AS7 features a brand new way of configuring and
-managing clusters called *Domain Mode*, but unfortunately its
-documentation is still evolving. If you insist, try [this][intro] or
-possibly [this][howto].
+One of the primary benefits provided by the [JBoss AS7][as7]
+application server, upon which Immutant is built, is clustering. The
+Immutant libraries are orthogonal to clustering, but each library is
+automatically enhanced with certain features inside a cluster:
 
-We'll save *Domain Mode* with respect to Immutant for a future
-post. It's not required for clustering, but it is an option for easier
-cluster management. In this post, we'll reveal a trick to simulate a
-cluster on your development box so that you can experiment with
-Immutant clustering features, which we should probably enumerate now:
+### immutant.web
 
-* Automatic load balancing and failover of message consumers
-* HTTP session replication
-* Fine-grained, dynamic web-app configuration and control via
-  [mod_cluster]
-* Efficiently-replicated distributed caching via [Infinispan]
-* Singleton scheduled jobs
-* Automatic failover of singleton daemons
+In a cluster, HTTP session data is automatically replicated. When
+coupled with the JBoss [mod_cluster] load-balancer, this enables
+transparent failover and fine-grained, dynamic configuration and
+control of your web applications.
 
-## Running an Immutant
+### immutant.messaging
 
-As you know, [installing] Immutant is simple:
+[HornetQ] is cluster-aware, so load balancing and failover of message
+consumers within a cluster are automatic and require no extra
+configuration on your part.
 
-    $ lein plugin install lein-immutant 0.4.1
-    $ lein immutant install
+### immutant.cache
 
-And running an Immutant is, too:
+[Infinispan] caches adhere to a particular [mode] of operation. In a
+non-clustered, standalone Immutant, `:local` is the **only** supported
+mode. But when clustered, you have other options.
 
-    $ lein immutant run
+* `:invalidated` -- This is the default clustered mode. It doesn't
+   actually share any data at all, so it's very "bandwidth friendly".
+   Whenever data is changed in a cache, other caches in the cluster
+   are notified that their copies are now stale and should be evicted
+   from memory.
+* `:replicated` -- In this mode, entries added to any cache instance
+   will be copied to all other cache instances in the cluster, and can
+   then be retrieved locally from any instance.  Though simple, it's
+   impractical for clusters of any significant size (>10), and its
+   capacity is equal to the amount of RAM in its smallest peer.
+* `:distributed` -- This mode is what enables Infinispan clusters to
+   achieve "linear scalability". Cache entries are copied to a fixed
+   number of cluster nodes (default is 2) regardless of the cluster
+   size.  Distribution uses a consistent hashing algorithm to
+   determine which nodes will store a given entry.
 
-By passing the `--clustered` option, you configure the Immutant as a
-node that will discover other nodes (via multicast, by default) to
-form a cluster:
+### immutant.jobs
+
+By default, scheduled jobs are *singletons*, but this term only has
+relevance in a cluster. It means that your job will only execute on
+one node in the cluster, and if it can't, it will failover to the next
+available node until successful.
+
+### immutant.daemons
+
+Similar to jobs, long-running services are also *singletons*, by
+default. A singleton daemon will only be started on one node in your
+cluster, and should that node crash, it will be automatically started
+on another node, enabling you to create robust, highly-available
+services.
+
+## Forming a cluster
+
+By passing the `--clustered` option when you start Immutant, you
+configure it as a node that will automatically discover other nodes
+(via multicast, by default) to form a cluster:
 
     $ lein immutant run --clustered
 
-From the first line of its output, you can see what that command is
-really running:
+It's just that simple.
 
-    $ $JBOSS_HOME/bin/standalone.sh --server-config=standalone-ha.xml
-
-Any options passed to `lein immutant run` are forwarded to
-`standalone.sh`, so run the following to see what those are:
-
-    $ lein immutant run --help
+But it can become complicated in environments where multicast isn't
+enabled, e.g. Amazon's EC2. There are alternative configurations
+available, of course, but for this tutorial we're going to demonstrate
+how to simulate a cluster on a single machine so that you can
+experiment with the features listed above.
 
 ## Simulating a Cluster
 
@@ -67,7 +89,7 @@ In another shell, run:
 
     $ lein immutant run --clustered -Djboss.node.name=two -Djboss.server.data.dir=/tmp/two -Djboss.socket.binding.port-offset=100
 
-Boom, you're a cluster!
+And BAM, you're a cluster!
 
 ### Details
 
@@ -76,7 +98,7 @@ from the hostname, but since our Immutants are on the same host, we
 set the `jboss.node.name` property uniquely.
 
 Each Immutant will attempt to persist its runtime state to the same
-files. Hijinks will ensue. We prevent said hijinks by setting the
+files. Hijinks will ensue, so we prevent said hijinks by setting the
 `jboss.server.data.dir` property uniquely.
 
 JBoss listens for various types of connections on a few ports. One
@@ -138,7 +160,7 @@ which we'll put all our code for this example.
   (reset! done true))
 
 ;; Register the daemon
-(daemon/start "counter" start stop :singleton true)
+(daemon/start "counter" start stop)
 </pre>
 
 We've defined a message queue, a message listener, and a daemon
@@ -148,11 +170,9 @@ second.
 Daemons require a name (for referencing as a JMX MBean), a start
 function to be invoked asynchronously, and a stop function that will
 be automatically invoked when your app is undeployed, allowing you to
-cleanly teardown any resources used by your service. Optionally, you
-can declare the service to be a *singleton*. This means it will only
-be started on one node in your cluster, and should that node crash, it
-will be automatically started on another node, essentially giving you
-a robust, highly-available service.
+cleanly teardown any resources used by your service. By default, our
+daemon is a *singleton*, meaning it will only ever run on one node in
+your cluster.
 
 In the same directory that contains your files, run this:
 
@@ -168,23 +188,24 @@ balancing of message consumers.
 
 Now kill the Immutant running the daemon. Watch the other one to see
 that the daemon will start there within seconds. There's your
-automatic failover. Restart the killed Immutant to see him start to
-receive messages again. It's fun, right? :)
+automatic HA service failover. Restart the killed Immutant to see him
+start to receive messages again. It's fun, right? :)
 
-## Whew!
+## Domain Mode
 
-So that's probably enough to show for now. Give it a try, and let us
-know if it worked for you the very first time. If it doesn't, please
-reach out to us [in the usual ways][community] and we'll be happy to
-get you going. Above all, have fun!
+AS7 features a brand new way of configuring and managing clusters
+called *Domain Mode*, but unfortunately its documentation is still
+evolving. If you insist, try [this][intro] or possibly [this][howto].
 
+*Domain Mode* is not required for clustering, but it is an option for
+easier cluster management. We hope to better document its use with
+respect to Immutant in the future.
 
-[installing]: /news/2011/12/21/installing-redux/
-[deploy]: /news/2011/11/08/deploying-an-application/
-[community]: http://immutant.org/community/
+[deploy]: ../deploying/
 [as7]: http://www.jboss.org/jbossas
-[getting-started]: /news/tags/getting-started/
 [howto]: https://docs.jboss.org/author/display/AS71/AS7+Cluster+Howto
 [intro]: http://xebee.xebia.in/2011/11/01/all-about-managed-domain-jboss-as7/
 [mod_cluster]: http://www.jboss.org/mod_cluster
 [Infinispan]: http://infinispan.org
+[HornetQ]: http://hornetq.org
+[mode]: https://docs.jboss.org/author/display/ISPN/Clustering+modes
