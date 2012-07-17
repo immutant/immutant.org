@@ -1,6 +1,6 @@
 ---
 title: Overlay
-description: 'Overlaying TorqueBox onto Immutant'
+description: 'Mix TorqueBox and Immutant to run Ruby and Clojure apps together'
 sequence: 6
 ---
 

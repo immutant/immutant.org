@@ -1,7 +1,7 @@
 ---
 title: Clustering
 sequence: 5
-description: "How Immutant modules benefit in a clustered environment"
+description: "How your apps benefit when Immutants form a cluster"
 ---
 
 For this installment of our [getting started series][getting-started]

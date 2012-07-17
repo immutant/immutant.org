@@ -1,7 +1,7 @@
 ---
-title: "Scheduling Jobs"
-sequence: 4
-description: "Covers adding cron-like scheduled jobs to an application."
+title: Scheduling
+sequence: 3
+description: "Set up asynchronous jobs with a cron-like syntax"
 ---
 
 

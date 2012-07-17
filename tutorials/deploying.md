@@ -1,7 +1,7 @@
 ---
-title: Deploying an Application
+title: Deployment
 sequence: 1
-description: "Covers the creation and deployment of a basic application."
+description: "Covers the creation and deployment of a basic application"
 ---
 
 This tutorial covers creating a basic [Ring] web application and deploying 

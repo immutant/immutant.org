@@ -1,6 +1,6 @@
 ---
 title: Messaging
-sequence: 3
+sequence: 2
 description: "Simple creation and usage of distributed queues and topics"
 ---
 
