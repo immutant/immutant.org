@@ -4,10 +4,9 @@ description: 'Mix TorqueBox and Immutant to run Ruby and Clojure apps together'
 sequence: 6
 ---
 
-Recently, we've made some progress toward the promise of a polyglot
-application server. With the introduction of the [Overlay] project,
-it's now very easy to create a single app server capable of deploying
-both Ruby and Clojure (not to mention Java, of course) applications.
+The [Overlay] project makes it very easy to create a single JBoss app
+server capable of deploying both Ruby and Clojure (and Java, of
+course) applications.
 
 ## Laying TorqueBox over Immutant
 
@@ -60,9 +59,6 @@ Your overlaid server may be started however you're comfortable: either
 using the [Leiningen] Immutant plugin, the [TorqueBox] command or even
 the standard JBoss commands. It will start up all the apps you've
 deployed to it, regardless of their language.
-
-If you have any trouble at all, please drop by #torquebox or #immutant
-on freenode, and we'll get you going.
 
 [TorqueBox]: http://torquebox.org/
 [Overlay]: http://github.com/immutant/overlay
