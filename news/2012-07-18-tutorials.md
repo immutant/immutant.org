@@ -1,6 +1,6 @@
 ---
 title: Creating some Tutorials
-author: Jim Crossley
+author: Jim and Toby
 layout: news
 tags: [ tutorial, getting-started, wtf ]
 ---
@@ -12,7 +12,7 @@ Good question.
 
 Well, we **do** have one, sort of, in the form of some blog posts
 written over the course of a few months in our [News] section. They're
-all helpfully tagged with *getting-started*, in reverse chronological
+all helpfully tagged with [getting-started], in reverse chronological
 order...
 
 Well, no, I guess we don't have one. :(
@@ -35,3 +35,4 @@ we'd love to hear suggestions for additional ones.
 [tutorials]: /tutorials/
 [documentation]: /documentation/
 [community]: /community/
+[getting-started]: /news/tags/getting-started/
