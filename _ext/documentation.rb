@@ -28,12 +28,16 @@ class Documentation
       
       unless File.exist?( File.join( doc_root, "index.html" ) )
         puts "Unzipping doc bundle for #{release.version}"
-        unzip( bundle_path( doc_bundle_name ), base_dir )
-        FileUtils.mv( File.join( base_dir, 'html'), doc_root )
-        FileUtils.rm_rf( File.join( base_dir, 'META-INF' ) )
+        begin
+          unzip( bundle_path( doc_bundle_name ), base_dir )
+          FileUtils.mv( File.join( base_dir, 'html'), doc_root )
+          FileUtils.rm_rf( File.join( base_dir, 'META-INF' ) )
+        rescue Exception => e
+          puts "ERROR: failed to unzip docs for #{release.version}: " + e
+        end
       end
 
-      if release == site.releases.first
+      if File.exist?( File.join( doc_root, "index.html" ) ) && release == site.releases.first
         #puts "Linking documentation/current to #{release.version}"
         FileUtils.cd( File.join( site.output_dir, 'documentation' ) ) do |dir|
           FileUtils.ln_s( release.version, 'current' ) 
