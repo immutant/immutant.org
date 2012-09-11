@@ -61,6 +61,11 @@ Verify that the artifacts you expect have been uploaded and deployed to
 
 [http://repository-projectodd.forge.cloudbees.com/release](http://repository-projectodd.forge.cloudbees.com/release)
 
+# Push the clojar projects to clojars.org
+
+1. Download the clojars projects as a zip to a machine that has ruby and lein installed. {url coming soon?}
+2. Unzip and run the `bin/push-to-clojars.rb` script.
+
 # Push changes from the release repository to the official repository
 
 ## Fetch the release commits locally:
