@@ -29,10 +29,10 @@ your Ruby applications to your Immutant!
 
 If you'd rather use your own JRuby, and you've already installed the
 `torquebox-server` gem, you can overlay the latest Immutant by cloning
-the [Overlay] project locally, installing [Leiningen] and running the
-following:
+the [Overlay] project locally, installing [Leiningen] (version 2) and
+running the following:
 
-    $ lein run :overlay $(torquebox env TORQUEBOX_HOME) immutant
+    $ lein overlay $(torquebox env TORQUEBOX_HOME) immutant
 
 All that's left is to set `IMMUTANT_HOME` and [proceed as you normally would][deploying]:
 
