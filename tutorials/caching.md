@@ -36,7 +36,7 @@ provided as well.
 ;; Define a cache named 'bob' whose entries will automatically expire
 ;; if either a) 10 minutes elapses since it was written or b) 1 minute
 ;; elapses since it was last accessed
-(def c (cache "bob :ttl 10, :idle 1, :units :minutes))
+(def c (cache "bob" :ttl 10, :idle 1, :units :minutes))
 </pre>
 
 ## Writing to a cache
