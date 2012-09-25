@@ -153,6 +153,10 @@ table.fancy {
     font-size: 18px;
 }
 
+.tags {
+    margin-bottom: 10px;
+}
+
 .notice {
     @extend .alert;
     border-color: #f00;
