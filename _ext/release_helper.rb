@@ -16,8 +16,10 @@ module ReleaseHelper
     release == latest_release
   end
 
-  def doc_chapter_for_version(version, chapter)
-    "/documentation/#{version}/#{chapter}.html"
+  def doc_chapter_for_version(version, chapter, target = nil)
+    path = "/documentation/#{version}/#{chapter}.html"
+    path << "##{target}" if target
+    path
   end
 
   def doc_bundle_name(release)
