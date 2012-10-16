@@ -16,6 +16,12 @@ module ReleaseHelper
     release == latest_release
   end
 
+  def api_doc_for_version(version, group, fn = nil)
+    path = "/documentation/#{version}/apidoc/#{group}-api.html"
+    path << "##{fn}" if fn
+    path
+  end
+  
   def doc_chapter_for_version(version, chapter, target = nil)
     path = "/documentation/#{version}/#{chapter}.html"
     path << "##{target}" if target
