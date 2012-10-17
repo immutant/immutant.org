@@ -2,6 +2,7 @@
 title: 'Installation'
 sequence: 0
 description: 'An in-depth look at the installation process'
+date: 2012-10-17
 ---
 
 This tutorial provides an in-depth look at the process for installing Immutant.
@@ -13,7 +14,7 @@ Immutant itself. This tutorial assumes you are on a *nix system. It also assumes
 
 We provide a [lein plugin] for creating your Immutant applications and 
 managing their life-cycles. The last time this tutorial was updated the plugin was
-at version **0.8.2**, but we recommend you check [clojars] for the latest version.
+at version **0.12.0**, but we recommend you check [clojars] for the latest version.
 
 The plugin supports both Leiningen 1.x and 2.x. If you are running Leiningen 1.x, version
 **1.6.2** or greater should work, but we only test with the latest version (currently **1.7.1**).
@@ -27,24 +28,38 @@ of a project directory.
 
 To install it as a global plugin:
 
-     $ lein plugin install lein-immutant 0.3.1
-    [INFO] Unable to find resource 'lein-immutant:lein-immutant:jar:0.8.2' in repository central (http://repo1.maven.org/maven2)
-    Copying 6 files to /var/folders/x0/5th62wkd2cd74dv5fn2trs6h0000gp/T/lein-23d50dbd-a30f-4e24-ae07-3227404ed444/lib
-    Including lein-immutant-0.8.2.jar
+     $ lein plugin install lein-immutant 0.12.0
+    [INFO] Unable to find resource 'lein-immutant:lein-immutant:jar:0.12.0' in repository central (http://repo1.maven.org/maven2)
+    Copying 20 files to /var/folders/x0/5th62wkd2cd74dv5fn2trs6h0000gp/T/lein-a1f96bfe-33e8-42aa-893f-be22a6cf6fa7/lib
+    Including lein-immutant-0.12.0.jar
+    Including clj-http-0.2.7.jar
+    Including commons-codec-1.5.jar
+    Including commons-io-2.1.jar
+    Including commons-logging-1.1.1.jar
+    Including core.contracts-0.0.1.jar
+    Including core.unify-0.5.3.jar
     Including data.json-0.1.1.jar
-    Including deploy-tools-0.7.0.jar
+    Including deploy-tools-0.9.2.jar
     Including digest-1.4.0.jar
-    Including overlay-1.2.1.jar
+    Including fntest-0.3.2.jar
+    Including httpclient-4.1.2.jar
+    Including httpcore-4.1.2.jar
+    Including httpmime-4.1.2.jar
+    Including jboss-as-management-0.1.2.jar
+    Including leinjacker-0.3.3.jar
+    Including overlay-1.2.2.jar
     Including progress-1.0.1.jar
+    Including slingshot-0.9.0.jar
     Including tools.cli-0.2.1.jar
-    Created lein-immutant-0.8.2.jar
+    Including tools.nrepl-0.2.0-beta9.jar
+    Created lein-immutant-0.12.0.jar
 
 ### Installing under Leiningen 2.x
 
 Installing the plugin for Leiningen 2.x is just a matter of adding it to the
 `:plugin` list in the `:user` profile of `~/.lein/profiles.clj`:
 
-    {:user {:plugins [[lein-immutant "0.8.2"]]}}
+    {:user {:plugins [[lein-immutant "0.12.0"]]}}
     
 
 ## Plugin tasks
@@ -62,7 +77,10 @@ Now that you have the plugin installed, run `lein immutant` to see what tasks it
     init       Adds a sample immutant.clj configuration file to an existing project
     deploy     Deploys the current project to the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
     undeploy   Undeploys the current project from the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
+    archive    Creates an Immutant archive from a project
     run        Starts up the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME, displaying its console output
+    eval       Eval some code in a remote nrepl
+    test       Runs tests inside an Immutant, after starting one (if necessary) and deploying the project
 
 We'll only talk about the `install` and `run` tasks in this tutorial -
 we cover the application specific management tasks in the [deployment tutorial], 
@@ -102,7 +120,7 @@ Running it with no arguments will install the latest incremental build:
 If you want to install a specific incremental build, specify the build number
 (available from our [builds page][incremental build]):
 
-     $ lein immutant install 350
+     $ lein immutant install 534
     
 You can also have it install to a directory of your choosing. In this case, you must
 always specify a version (if you want the latest incremental build, specify 
@@ -129,7 +147,7 @@ started:
     ...
     (a plethora of log messages deleted)
     ...
-    09:18:03,709 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015874: JBoss AS 7.1.x.incremental.1 "Steropes" started in 1610ms - Started 166 of 252 services (85 services are passive or on-demand)
+    09:18:03,709 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015874: JBoss AS 7.1.x.incremental.107 "Arges" started in 1610ms - Started 166 of 252 services (85 services are passive or on-demand)
     
 You can kill the Immutant with Ctrl-C.
 

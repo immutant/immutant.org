@@ -2,6 +2,7 @@
 title: Overlay
 description: 'Mix TorqueBox and Immutant to run Ruby and Clojure apps together'
 sequence: 6
+date: 2012-09-25
 ---
 
 The [Overlay] project makes it very easy to create a single JBoss app

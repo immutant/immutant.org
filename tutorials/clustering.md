@@ -2,6 +2,7 @@
 title: Clustering
 sequence: 5
 description: "How your apps benefit when Immutants form a cluster"
+date: 2012-07-17
 ---
 
 One of the primary benefits provided by the [JBoss AS7][as7]

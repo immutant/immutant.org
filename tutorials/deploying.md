@@ -2,6 +2,7 @@
 title: Deployment
 sequence: 1
 description: "Covers the creation and deployment of a basic application"
+date: 2012-10-17
 ---
 
 This tutorial covers creating a basic [Ring] web application and deploying 
@@ -25,7 +26,10 @@ look at the tasks it provides:
     init       Adds a sample immutant.clj configuration file to an existing project
     deploy     Deploys the current project to the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
     undeploy   Undeploys the current project from the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
+    archive    Creates an Immutant archive from a project
     run        Starts up the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME, displaying its console output
+    eval       Eval some code in a remote nrepl
+    test       Runs tests inside an Immutant, after starting one (if necessary) and deploying the project
 
 In this tutorial we'll cover the `new` and `deploy` tasks. To do so, 
 we'll build a basic application that demonstrates the current web features. To get
@@ -116,15 +120,17 @@ You can kill the Immutant with Ctrl-C.
 
 Remember our call to `web/start` earlier? Let's talk about what that is doing. To 
 do that, however, we need to first talk about *context paths*. The context path is 
-the portion of the URL between the hostname and the routes within the application.
-It basically tells Immutant which requests to route to a particular application.
+the portion of the URL between the hostname and the routes (aka 'path info') within 
+the application. It basically tells Immutant which requests to route to a particular
+application.
 
 An Immutant can host multiple applications at the same time, but each application must 
 have a unique context path. If no context path is provided when an application
 is deployed, it defaults to one based on the name of the deployment. The 
 deployment name is taken from the name of the deployment descriptor, which
 in turn is taken from the name of the project given to `defproject` in
-`project.clj`. So for our sample app above, the context path defaults to 
+`project.clj` (you can override this via the `--name` argument to the deploy command). 
+So for our sample app above, the context path defaults to 
 `/immutant-demo`. You can override this default by specifying
 a `:context-path` within an `:immutant` map in your `project.clj`. Let's
 go ahead and do that:
@@ -139,6 +145,12 @@ Now, when your app is deployed the context path will be picked up
 from your `project.clj` and any
 web endpoints your application stands up will be accessible under that
 context path.
+
+If you want to set the context path for a particular deployment of a project instead
+of globally, you can set the context path in the deployment descriptor via the 
+`--context-path` option to the deploy command:
+
+    ~/immutant/immutant-demo $ lein immutant deploy --context-path /
 
 Which brings us back to `web/start`. `web/start` stands up a web endpoint
 for you, and takes one or two arguments: an optional *sub-context path* 

@@ -2,6 +2,7 @@
 title: Caching
 sequence: 4
 description: "In-memory memoization using a linearly-scalable data grid"
+date: 2012-09-25
 ---
 
 In this tutorial, we'll explore some of Immutant's [caching] features.

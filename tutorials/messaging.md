@@ -2,6 +2,7 @@
 title: Messaging
 sequence: 2
 description: "Simple creation and usage of distributed queues and topics"
+date: 2012-10-17
 ---
 
 In this tutorial, we'll explore the [messaging] features available to
@@ -23,12 +24,12 @@ message consumers.
 
 Use the `start` function to create a messaging destination. A simple
 naming convention designates an endpoint as either a queue or a topic:
-if its name begins with `/queue`, it's a queue; if it begins with
-`/topic`, it's a topic.
+if its name contains `queue`, it's a queue; if it contains
+`topic`, it's a topic.
 
 <pre class="syntax clojure">(require '[immutant.messaging :as msg])
-(msg/start "/queue/work")   ; to start a queue
-(msg/start "/topic/news")   ; to start a topic
+(msg/start "queue.work")   ; to start a queue
+(msg/start "topic.news")   ; to start a topic
 </pre>
 
 You can invoke `start` from anywhere in your application, but an
@@ -66,15 +67,15 @@ of optional key-value parameters may be passed as well.
 Some examples:
 
 <pre class="syntax clojure">;; A simple string
-(msg/publish "/queue/work" "simple string")
+(msg/publish "queue.work" "simple string")
 ;; Notify everyone something interesting just happened
-(msg/publish "/topic/news" {:event "VISIT" :url "/sales-inquiry"})
+(msg/publish "topic.news" {:event "VISIT" :url "/sales-inquiry"})
 ;; Move this message to the front of the line
-(msg/publish "/queue/work" some-message :priority :high :ttl 1000)
+(msg/publish "queue.work" some-message :priority :high :ttl 1000)
 ;; Make messages as complex as necessary
-(msg/publish "/queue/work" {:a "b" :c [1 2 3 {:foo 42}]})
+(msg/publish "queue.work" {:a "b" :c [1 2 3 {:foo 42}]})
 ;; Make messages consumable by a Ruby app
-(msg/publish "/queue/work" {:a "b" :c [1 2 3 {:foo 42}]} :encoding :json)
+(msg/publish "queue.work" {:a "b" :c [1 2 3 {:foo 42}]} :encoding :json)
 </pre>
     
 ## Three Ways to Consume Messages
@@ -109,7 +110,7 @@ the same options as `receive`.
 Some examples:
 
 <pre class="syntax clojure">;; Wait on a task
-(let [task (msg/receive "/queue/work")]
+(let [task (msg/receive "queue.work")]
   (perform task))
 
 ;; Case-sensitive work queues?
@@ -132,10 +133,10 @@ example,
 <pre class="syntax clojure">(require '[immutant.messaging :as msg])
 
 ;; setup a responder
-(msg/respond "/queue/work" (partial apply +))
+(msg/respond "queue.work" (partial apply +))
 
 ;; send a request
-(let [result (msg/request "/queue/work" [1 2 3])]
+(let [result (msg/request "queue.work" [1 2 3])]
   (println @result)) ;; => 6
 </pre>
 
