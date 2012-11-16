@@ -2,7 +2,7 @@ This is the source that becomes [immutant.org](http://immutant.org/).
 
 ## Building It
 
-You'll need ruby 1.8.7 or greater and the [awstruct gem](http://awestruct.org/). 
+You'll need ruby 1.8.7 or greater and the [awestruct gem](http://awestruct.org/). 
 The easiest way to get awestruct and its dependencies is to use [bundler](http://gembundler.com):
 
     ~/immutant.org $ gem install bundler
