@@ -12,7 +12,7 @@ Then run awestruct in development mode:
 
     ~/immutant.org $ bundle exec awestruct -d
 
-This will generate the static site into `_site` and serve it on http://localhost:4242/
+This will generate the static site into `_site` and serve it on [http://localhost:4242/](http://localhost:4242/)
 
 Most of the changes you make to the source files should be noticed immediately
 and trigger the proper regenerations. Some changes may not get picked up - in that
