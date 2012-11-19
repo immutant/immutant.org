@@ -107,7 +107,7 @@ You application can now be accessed [here][noirtant-deployed]. Neat, huh? (Golf 
 everyone!) When you've had your fill of playing with noirtant, you can shut down your 
 immutant with CTRL-c or undeploy noirtant:
 
-    ~/noirtant $ lein immutant deploy
+    ~/noirtant $ lein immutant undeploy
     Undeployed noirtant from ~/.lein/immutant/current/jboss/standalone/deployments
 
 ## Wrapping up
