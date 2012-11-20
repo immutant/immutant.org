@@ -10,9 +10,13 @@ layout: default
   #main-column.span8
     .tutorial.article
       .byline
-        Last updated:
-        %span.date
-          = format_date( page.date )
+        .date
+          Last updated:
+          %span.date
+            = format_date( page.date )
+        .author
+          Author:
+          = author( page )
       .body
         ~ content
       .comments
