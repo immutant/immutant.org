@@ -1,8 +1,10 @@
 ---
-title: Noir App
+title: Using Noir
 sequence: 7
-description: "Covers the creation and deployment of a basic application"
-date: 2012-11-16
+description: "Covers the creation and deployment of a basic Noir application"
+date: 2012-11-20
+author: Doug Selph
+author_url: https://github.com/dougselph
 ---
 
 This tutorial covers creating a basic [Noir] web application and deploying it 
@@ -19,8 +21,8 @@ and create an application named noirtant:
     ~/ $ lein new noir noirtant
     Generating a lovely new Noir project named noirtant...
 
-You now have a skeleton noir application. Provided you don't currently have immutant 
-running on port 8080, you can start it now:
+You now have a skeleton noir application. Provided you don't currently have Immutant 
+running on port 8080, you can start your app under Jetty to verify it is working:
 
      ~/ $ cd noirtant
      ~/noirtant $ lein run
@@ -34,7 +36,7 @@ running on port 8080, you can start it now:
      2012-11-16 15:22:40.734:INFO::Started SocketConnector@0.0.0.0:8080
 
 You can now see your application [here][noirtant]. When you're finished admiring your 
-shiny app, stop the server with CTRL-c.
+shiny app, stop Jetty with CTRL-c.
 
 ## Configure your application to run in immutant
 
@@ -109,6 +111,8 @@ You can now start immutant and deploy your application:
     18:07:58,706 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015951: Admin console listening on http://127.0.0.1:9990
     18:07:58,707 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015874: JBoss AS 7.1.x.incremental.129 "Arges" started in 15449ms - Started 276 of 368 services (91 services are passive or on-demand)
     
+Immutant will run in the foreground, so switch to another shell and run:
+
     ~/noirtant $ lein immutant deploy
     Deployed noirtant to ~/.lein/immutant/current/jboss/standalone/deployments/noirtant.clj
 
