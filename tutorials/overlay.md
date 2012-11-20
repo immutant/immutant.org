@@ -21,7 +21,7 @@ set up your environment for TorqueBox development.
 
     $ export TORQUEBOX_HOME=$HOME/.lein/immutant/current
     $ export PATH=$TORQUEBOX_HOME/jruby/bin:$PATH
-    
+
 The TorqueBox distribution provides its own JRuby with the TorqueBox
 gems pre-installed. You can now use the `torquebox` command to deploy
 your Ruby applications to your Immutant!
@@ -63,6 +63,6 @@ deployed to it, regardless of their language.
 
 [TorqueBox]: http://torquebox.org/
 [Overlay]: http://github.com/immutant/overlay
-[deploying]: ../deployment/
+[deploying]: ../deploying/
 [Leiningen]: http://leiningen.org/
 [plugin]: ../installation/
