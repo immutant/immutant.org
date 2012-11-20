@@ -14,19 +14,19 @@
       - if ( talk.event_logo_url )
         %a{:href=>talk.event_url}
           %img.event-logo{:src=>talk.event_logo_url}
-      - if talk.title      
+      - if talk.title
         %h3
           = talk.title
       .details
         - if talk.details
           = talk.details
-        - else              
+        - else
           #{talk.presentor} will present at #{talk.event} in #{talk.location}.
       %hr
   #get-in-touch
     :markdown
-      Interested in hosting or giving a talk on Immutant? 
-      [Get in touch]('/community').
+      Interested in hosting or giving a talk on Immutant?
+      [Get in touch](/community/).
 
 :javascript
   $(document).ready( function() {
@@ -43,7 +43,7 @@
       }
       today_str = '' + today.getFullYear() + month + date;
       if ( today_str > effective_date ) {
-        $(this).hide();  
+        $(this).hide();
       }
     } );
   } );
