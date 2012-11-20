@@ -4,7 +4,7 @@ sequence: 7
 description: "Covers the creation and deployment of a basic Noir application"
 date: 2012-11-20
 author: Doug Selph
-author_url: https://github.com/dougselph
+author_url: "https://github.com/dougselph"
 ---
 
 This tutorial covers creating a basic [Noir] web application and deploying it 
