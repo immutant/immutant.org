@@ -98,8 +98,17 @@ may raise some questions for you, as they look very similar to lines from your
 noirtant/src/noirtant/server.clj file. Because of the way Immutant initializes your 
 application, this is not a problem. 
 
-You now can deploy your application to your running immutant:
+You can now start immutant and deploy your application:
 
+    ~/noirtant $ lein immutant run
+    Starting Immutant via ~/.lein/immutant/current/jboss/bin/standalone.sh
+    ... 
+    (a plethora of log messages deleted)
+    ...
+    18:07:58,706 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015961: Http management interface listening on http://127.0.0.1:9990/management
+    18:07:58,706 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015951: Admin console listening on http://127.0.0.1:9990
+    18:07:58,707 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015874: JBoss AS 7.1.x.incremental.129 "Arges" started in 15449ms - Started 276 of 368 services (91 services are passive or on-demand)
+    
     ~/noirtant $ lein immutant deploy
     Deployed noirtant to ~/.lein/immutant/current/jboss/standalone/deployments/noirtant.clj
 
