@@ -1,3 +1,7 @@
 ErrorDocument 404 /404.html
 
+SetEnvIf Request_URI .* release_url=http://d2t70pdxfgqbmq.cloudfront.net/release
+
+RewriteRule ^release/(.*)$    %{ENV:release_url}/$1 [R,L]
+
 
