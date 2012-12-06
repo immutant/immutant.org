@@ -59,12 +59,7 @@ Using the [build system](http://projectodd.ci.cloudbees.com/), again select the
 
 Verify that the artifacts you expect have been uploaded and deployed to
 
-[http://repository-projectodd.forge.cloudbees.com/release](http://repository-projectodd.forge.cloudbees.com/release)
-
-# Push the clojar projects to clojars.org
-
-1. Download the clojars projects as a zip to a machine that has ruby and lein installed. {url coming soon?}
-2. Unzip and run the `bin/push-to-clojars.rb` script.
+[http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/](http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/)
 
 # Push changes from the release repository to the official repository
 
@@ -84,6 +79,23 @@ Verify that the artifacts you expect have been uploaded and deployed to
 
     git push origin 0.1.0
 
+# Push the public artifacts to clojars.org
+
+I'd like to automate building these on CI, but haven't yet figured out how. For now:
+
+1. Switch to the tag created by the release:
+    
+    git checkout 0.7.0
+    
+2. Do a build:
+
+    mvn clean && mvn install -Dmaven.test.skip
+    
+3. Publish the artifacts:
+
+    cd namespaces/
+    ./bin/push-to-clojars.rb
+    
 # Release the project in JIRA
 
 <img src="/images/releasing/jira-release.png" style="width: 100%"/>
@@ -94,7 +106,7 @@ Verify that the artifacts you expect have been uploaded and deployed to
 
 ## Notify `immutant-users@`
 
-## Notify `the-core`
+## Notify `the-core@`
 
 ## Notify `clojure@`
 
