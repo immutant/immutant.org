@@ -8,7 +8,7 @@ class ReleaseSizes
 
   def execute(site)
     site.releases.each do |release|
-      puts "Calculating dist size for #{release.version}... #{release.dist_size}"
+      print "Calculating dist size for #{release.version}... "
       uri = URI.parse( release.urls.remote_dist_zip )
       Net::HTTP.start( uri.host, uri.port ) do |http|
         response = http.head( uri.path )
@@ -21,7 +21,9 @@ class ReleaseSizes
         else
           release.dist_size = 'unknown '
         end
+        
       end
+      puts "(#{release.dist_size} mb)"
     end
   end
 end
