@@ -2,7 +2,7 @@
 title: Using Noir
 sequence: 7
 description: "Covers the creation and deployment of a basic Noir application"
-date: 2012-11-20
+date: 2012-12-06
 author: Doug Selph
 author_url: "https://github.com/dougselph"
 ---

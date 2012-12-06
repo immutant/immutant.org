@@ -2,7 +2,7 @@
 title: Messaging
 sequence: 2
 description: "Simple creation and usage of distributed queues and topics"
-date: 2012-10-17
+date: 2012-12-06
 ---
 
 In this tutorial, we'll explore the [messaging] features available to

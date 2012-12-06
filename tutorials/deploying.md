@@ -2,7 +2,7 @@
 title: Deployment
 sequence: 1
 description: "Covers the creation and deployment of a basic application"
-date: 2012-10-17
+date: 2012-12-06
 ---
 
 This tutorial covers creating a basic [Ring] web application and deploying 

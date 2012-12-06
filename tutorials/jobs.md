@@ -2,7 +2,7 @@
 title: Scheduling
 sequence: 3
 description: "Set up asynchronous jobs with a cron-like syntax"
-date: 2012-07-17
+date: 2012-12-06
 ---
 
 

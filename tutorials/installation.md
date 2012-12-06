@@ -2,7 +2,7 @@
 title: 'Installation'
 sequence: 0
 description: 'An in-depth look at the installation process'
-date: 2012-11-09
+date: 2012-12-06
 ---
 
 This tutorial provides an in-depth look at the process for installing Immutant.
