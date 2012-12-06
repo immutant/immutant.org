@@ -43,45 +43,12 @@ shiny app, stop Jetty with CTRL-c.
 You have a working noir application. Now let's make it work with Immutant.
 
     ~/noirtant $ lein immutant init
-    Wrote sample immutant.clj
+    Wrote sample src/immutant/init.clj
 
-Your sample immutant.clj (which will be in the root directory of your noir 
-application) will look like this:
+This creates a sample 'immutant.init' namespace for you. You can
+simply replace its contents with this:
 
-<pre class="syntax clojure">(ns .init
-  ;(:use .core)
-  (:require [immutant.messaging :as messaging]
-            [immutant.web :as web]
-            [immutant.util :as util]))
-
-;; This file will be loaded when the application is deployed to Immutant, and
-;; can be used to start services your app needs. Examples:
-
-
-;; Web endpoints need a context-path and ring handler function. The context
-;; path given here is a sub-path to the global context-path for the app
-;; if any.
-
-; (web/start "/" my-ring-handler)
-; (web/start "/foo" a-different-ring-handler)
-
-;; To start a Noir app:
-; (server/load-views (util/app-relative "src//views"))
-; (web/start "/" (server/gen-handler {:mode :dev :ns '}))
-
-
-;; Messaging allows for starting (and stopping) destinations (queues & topics)
-;; and listening for messages on a destination.
-
-; (messaging/start "/queue/a-queue")
-; (messaging/listen "/queue/a-queue" #(println "received: " %))
-</pre>
-
-There are a few missing bits here, as the immutant plugin for lein doesn't know 
-what sort of app you are preparing to deploy. You can simply replace the contents of 
-your immutant.clj file with this file:
-
-<pre class="syntax clojure">(ns noirtant.init
+<pre class="syntax clojure">(ns immutant.init
   (:require [immutant.messaging :as messaging]
             [immutant.web :as web]
             [immutant.util :as util]

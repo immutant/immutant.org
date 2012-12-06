@@ -17,35 +17,35 @@ look at the tasks it provides:
 
     ~/immutant $ lein immutant
     Manage the deployment lifecycle of an Immutant application.
-
+    
     Subtasks available:
-    install    Downloads and installs Immutant
-    overlay    Overlays features onto ~/.lein/immutant/current or $IMMUTANT_HOME
-    env        Displays paths to the Immutant that the plugin can find
-    new        Creates a new project skeleton initialized for Immutant
-    init       Adds a sample immutant.clj configuration file to an existing project
-    deploy     Deploys the current project to the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
-    undeploy   Undeploys the current project from the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
+    undeploy   Undeploys a project from the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
+    new        Creates a new project skeleton initialized for Immutant.
     archive    Creates an Immutant archive from a project
+    deploy     Deploys a project to the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
     run        Starts up the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME, displaying its console output
-    eval       Eval some code in a remote nrepl
+    env        Displays paths to the Immutant that the plugin can find
+    overlay    Overlays features onto ~/.lein/immutant/current or $IMMUTANT_HOME
+    init       Adds a sample immutant.init namespace to an existing project
     test       Runs tests inside an Immutant, after starting one (if necessary) and deploying the project
+    version    Prints version info for the current Immutant if it can be determined
+    install    Downloads and installs Immutant
+    eval       Eval some code in a remote nrepl
 
 In this tutorial we'll cover the `new` and `deploy` tasks. To do so, 
 we'll build a basic application that demonstrates the current web features. To get
 started, let's create an Immutant project:
 
-    ~/immutant $ lein immutant new immutant-demo
-    Created new project in: /Users/tobias/immutant/immutant-demo
-    Look over project.clj and start coding in immutant_demo/core.clj
-    Wrote sample immutant.clj
+    ~/immutant $ lein new immutant immutant-demo
+    Generating a project called immutant-demo based on the 'immutant' template.
     
-The `new` task creates a [Leiningen] project and gives it a sample Immutant configuration
-file (`immutant.clj`). It is equivalent to calling:
+The `new` task creates a [Leiningen] project and gives it a sample Immutant bootstrap
+namespace (`src/immutant/init.clj`). Alternatively, you can use the
+`init` task to initialize a pre-existing [Leiningen] project:
 
     ~/immutant $ lein new immutant-demo && cd immutant-demo && lein immutant init
 
-We'll come back to `immutant.clj` in a sec. Now, let's add a ring handler to our core namespace:
+We'll come back to `src/immutant/init.clj` in a sec. Now, let's add a ring handler to our core namespace:
 
 <pre class="syntax clojure">(ns immutant-demo.core)
 
@@ -57,20 +57,21 @@ We'll come back to `immutant.clj` in a sec. Now, let's add a ring handler to our
 
 ## Configuring the application for Immutant
     
-When the Immutant deploys an application, it looks for a file named `immutant.clj` 
-at the root and evaluates it if it exists. This file can be used to configure the
-Immutant services you want your application to consume. It provides a single place
-for you to define all the components required by your application, and saves 
-you from having to keep external configuration files in sync (crontabs, message queue 
-definitions, init scripts, etc). Anything you create within `immutant.clj` can instead
-be created anywhere in your application code - `immutant.clj` just provides a convenient
-place to do so. 
+An application can be bootstrapped when deployed to Immutant in a
+number of ways, one of which is the `immutant.init` namespace. It can
+be used to configure the Immutant services you want your application
+to consume. It provides a single place for you to define all the
+components required by your application, and saves you from having to
+keep external configuration files in sync (crontabs, message queue
+definitions, init scripts, etc). Anything you create within
+`src/immutant/init.clj` can instead be created anywhere in your
+application, of course - it just provides a convenient place to do so.
 
-The file has example code for configuring web endpoints and messaging services, but we're
-just going to deal with web endpoints in this article. Edit your `immutant.clj` so it 
-looks like:
+The file has example code for configuring web endpoints and messaging
+services, but we're just going to deal with web endpoints in this
+article. Edit your `src/immutant/init.clj` so it looks like:
 
-<pre class="syntax clojure">(ns immutant-demo.init
+<pre class="syntax clojure">(ns immutant.init
   (:use immutant-demo.core)
   (:require [immutant.messaging :as messaging]
             [immutant.web :as web]))

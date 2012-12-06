@@ -66,21 +66,22 @@ Installing the plugin for Leiningen 2.x is just a matter of adding it to the
 
 Now that you have the plugin installed, run `lein immutant` to see what tasks it provides:
 
-     $ lein immutant
+    $ lein immutant
     Manage the deployment lifecycle of an Immutant application.
-
+    
     Subtasks available:
-    install    Downloads and installs Immutant
-    overlay    Overlays features onto ~/.lein/immutant/current or $IMMUTANT_HOME
-    env        Displays paths to the Immutant that the plugin can find
-    new        Creates a new project skeleton initialized for Immutant
-    init       Adds a sample immutant.clj configuration file to an existing project
-    deploy     Deploys the current project to the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
-    undeploy   Undeploys the current project from the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
+    undeploy   Undeploys a project from the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
+    new        Creates a new project skeleton initialized for Immutant.
     archive    Creates an Immutant archive from a project
+    deploy     Deploys a project to the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
     run        Starts up the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME, displaying its console output
-    eval       Eval some code in a remote nrepl
+    env        Displays paths to the Immutant that the plugin can find
+    overlay    Overlays features onto ~/.lein/immutant/current or $IMMUTANT_HOME
+    init       Adds a sample immutant.init namespace to an existing project
     test       Runs tests inside an Immutant, after starting one (if necessary) and deploying the project
+    version    Prints version info for the current Immutant if it can be determined
+    install    Downloads and installs Immutant
+    eval       Eval some code in a remote nrepl
 
 We'll only talk about the `install` and `run` tasks in this tutorial -
 we cover the application specific management tasks in the [deployment tutorial], 

@@ -133,13 +133,13 @@ memoization.
 Of course we'll need a `project.clj`
 
 <pre class="syntax clojure">(defproject example "1.0.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.3.0"]])
+  :dependencies [[org.clojure/clojure "1.4.0"]])
 </pre>
 
-Next, the Immutant application bootstrap file, `immutant.clj`, into
+Next, the Immutant application bootstrap file, `src/immutant/init.clj`, into
 which we'll put all our code for this example.
 
-<pre class="syntax clojure">(ns example.init
+<pre class="syntax clojure">(ns immutant.init
   (:use [ring.util.response]
         [ring.middleware.params])
   (:require [immutant.cache :as cache]

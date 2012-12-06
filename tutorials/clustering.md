@@ -131,10 +131,10 @@ First, you'll need a `project.clj`
   :dependencies [[org.clojure/clojure "1.3.0"]])
 </pre>
 
-Next, the Immutant application bootstrap file, `immutant.clj`, into
+Next, the Immutant application bootstrap file, `src/immutant/init.clj`, into
 which we'll put all our code for this example.
 
-<pre class="syntax clojure">(ns example.init
+<pre class="syntax clojure">(ns immutant.init
   (:require [immutant.messaging :as messaging]
             [immutant.daemons :as daemon])
 
@@ -161,7 +161,7 @@ which we'll put all our code for this example.
   (reset! done true))
 
 ;; Register the daemon
-(daemon/start "counter" start stop)
+(daemon/daemonize "counter" start stop)
 </pre>
 
 We've defined a message queue, a message listener, and a daemon

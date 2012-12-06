@@ -32,9 +32,9 @@ if its name contains `queue`, it's a queue; if it contains
 (msg/start "topic.news")   ; to start a topic
 </pre>
 
-You can invoke `start` from anywhere in your application, but an
-obvious place is the `immutant.clj` initialization file, as described
-in [the deployment tutorial][deploying].
+You can invoke `start` from anywhere in your application, e.g. the
+`src/immutant/init.clj` initialization file, as described in
+[the deployment tutorial][deploying].
 
 While `start` has a complement, `stop`, you needn't call it
 directly. It will be invoked when your application is undeployed. And
