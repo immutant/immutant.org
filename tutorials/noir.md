@@ -2,7 +2,7 @@
 title: Using Noir
 sequence: 7
 description: "Covers the creation and deployment of a basic Noir application"
-date: 2012-12-06
+date: 2012-12-11
 author: Doug Selph
 author_url: "https://github.com/dougselph"
 ---
@@ -15,8 +15,9 @@ a *nix system.
 
 ## Creating a Noir application
 
-Make sure you have the [lein noir plugin][lein-noir] installed in your leiningen profile,
-and create an application named noirtant:
+First, let's create a noir application named noirtant. If you are
+using lein 1.x, you will need to install the
+[lein noir plugin][lein-noir] beforehand.
 
     ~/ $ lein new noir noirtant
     Generating a lovely new Noir project named noirtant...
@@ -62,7 +63,7 @@ simply replace its contents with this:
 (web/start "/" (server/gen-handler {:mode :dev :ns 'noirtant}))
 </pre>
 
-If you are familiar with noir already, the last two lines of your modified immutant.clj 
+If you are familiar with noir already, the last two lines of your modified init.clj 
 may raise some questions for you, as they look very similar to lines from your 
 noirtant/src/noirtant/server.clj file. Because of the way Immutant initializes your 
 application, this is not a problem. 
