@@ -39,11 +39,11 @@ Immutant modules to AS7 and replace the Java app with a Clojure app:
     git commit -m "Add Immutant modules and setup Clojure project"
 
 At this point, we could `git push`, and after a couple of minutes hit
-http://poorsmatic-$namespace.rhcloud.com to see a static welcome page.
-But we've all seen those before so let's configure our database and
-add the Poorsmatic source files before pushing.
+<http://poorsmatic-$namespace.rhcloud.com> to see a static welcome
+page. Instead, we'll configure our database and add the Poorsmatic
+source files before pushing.
 
-# Add the PostgreSQL database
+# Add the PostgreSQL cartridge
 
 To add a PostgreSQL database to our app, we add a cartridge:
 
@@ -85,9 +85,9 @@ too:
 
 <pre class="syntax clojure">:profiles {...
 
-       :openshift {:immutant {:init poorsmatic.core/start}
-                   :db-spec {:name "java:jboss/datasources/PostgreSQLDS"
-                             :subprotocol "postgresql"}}}
+           :openshift {:immutant {:init poorsmatic.core/start}
+                       :db-spec  {:name "java:jboss/datasources/PostgreSQLDS"
+                                  :subprotocol "postgresql"}}}
 </pre>
 
 And then we'll enable the `:openshift` profile in
@@ -102,19 +102,15 @@ And then we'll enable the `:openshift` profile in
  :lein-profiles [:openshift]
 }</pre>
 
-Note that we have both nREPL and Swank endpoints configured, too. But
-don't worry, they aren't externally accessible. They can only be
-accessed via an ssh tunnel secured with your private key.
-
 # Add your Twitter credentials
 
 Finally, because Poorsmatic accesses Twitter's streaming API, you must
-create an account at [http://dev.twitter.com] and add a file called
+create an account at <http://dev.twitter.com> and add a file called
 `resources/twitter-creds` that contains your OAuth credentials:
 
 <pre class="syntax clojure">
 ["app-key" "app-secret" "user-token" "user-token-secret"]
-}</pre>
+</pre>
 
 # Push!
 
@@ -124,36 +120,45 @@ Now we can commit our changes and push:
     $ git commit -m "Database config and twitter creds"
     $ git push
 
-And now we can wait. The first push will take a few minutes. You
-should login to your app and run:
+And now we wait. The first push will take a few minutes. Immutant will
+be installed and started, your app deployed, the app's dependencies
+fetched, the database schema installed, etc. You should login to your
+app and view the logs while your app boots:
 
+    $ ssh a4117d5ebac04c5f8114f7a96eba2737@poorsmatic-jimi.rhcloud.com
     $ tail_all
 
 Eventually, you should see a log message saying `Deployed
 "your-clojure-application.clj"`, at which point you can go to
-http://poorsmatic-$namespace.rhcloud.com, enter *bieber* and then
-watch your `server.log`. Reload the page to see the URL's and the
-counts. 
+<http://poorsmatic-$namespace.rhcloud.com>, enter *bieber* and then
+watch your `server.log` fill up with meaningless drivel. Reload the
+page to see the scraped URL's and counts.
 
 # The REPL
+
+You may have noticed the nREPL and Swank ports configured in the
+deployment descriptor above. They are not externally accessible. They
+can only be accessed via an ssh tunnel secured with your private key.
 
 Run the following:
 
     $ rhc port-forward -a poorsmatic
 
-If it works -- it may not, depending on your OS -- you can then connect
-your nREPL client to `localhost:27888`. If it doesn't work, try this:
+Depending on your OS, this may not work. If it doesn't, try:
 
     $ ssh -L 27888:127.11.205.129:27888 a4117d5ebac04c5f8114f7a96eba2737@poorsmatic-jimi.rhcloud.com
 
 But replace `127.11.205.129` with whatever `rhc port-forward` told you
-(or log on to your app and `echo $OPENSHIFT_INTERNAL_IP`) and use your
-own ssh URI.
+(or ssh to your instance and `echo $OPENSHIFT_INTERNAL_IP`) and use
+your own ssh URI.
+
+Once the tunnel is established, you can then connect to the remote
+REPL at `127.0.0.1:27888` using whatever REPL client you prefer.
 
 # Tune in next time...
 
-Immutant's clustering capabilities yield its coolest features, e.g.
-load-balanced message distribution, highly-available services and
+Immutant's clustering capabilities yield some of its coolest features,
+e.g. load-balanced message distribution, highly-available services and
 scheduled jobs, etc. But clustering is a pain to configure when
 multicast is disabled. OpenShift aims to simplify that, but it's
 [not quite there yet][883944]. In a future post, I hope to demonstrate
@@ -162,7 +167,6 @@ OpenShift, letting it deal with all the murky cluster configuration
 for you.
 
 Stay tuned!
-
 
 [get started]: https://openshift.redhat.com/community/get-started 
 [Immutant Quickstart]: https://github.com/immutant/openshift-quickstart
