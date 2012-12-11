@@ -108,9 +108,7 @@ Finally, because Poorsmatic accesses Twitter's streaming API, you must
 create an account at <http://dev.twitter.com> and add a file called
 `resources/twitter-creds` that contains your OAuth credentials:
 
-<pre class="syntax clojure">
-["app-key" "app-secret" "user-token" "user-token-secret"]
-</pre>
+<pre class="syntax clojure">["app-key" "app-secret" "user-token" "user-token-secret"]</pre>
 
 # Push!
 
@@ -131,8 +129,12 @@ app and view the logs while your app boots:
 Eventually, you should see a log message saying `Deployed
 "your-clojure-application.clj"`, at which point you can go to
 <http://poorsmatic-$namespace.rhcloud.com>, enter *bieber* and then
-watch your `server.log` fill up with meaningless drivel. Reload the
-page to see the scraped URL's and counts.
+watch your `server.log` fill up with more meaningless drivel than you
+ever dreamed possible.
+
+[And you may even see some bieber tweets.](http://instantrimshot.com/index.php?sound=rimshot&play=true) ;-)
+
+Reload the web page to see the scraped URL's and counts.
 
 # The REPL
 
