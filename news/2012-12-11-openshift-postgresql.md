@@ -1,5 +1,5 @@
 ---
-title: 'Immutant, Poorsmatic, OpenShift and PostgreSQL'
+title: 'OpenShift, PostgreSQL and Poorsmatic'
 author: Jim Crossley
 layout: news
 tags: [ openshift, tutorial, postgresql, poorsmatic ]
@@ -9,12 +9,19 @@ Today we'll get a Clojure application running in Immutant on
 [OpenShift], persisting its data to a [PostgreSQL] database. We'll use
 [Poorsmatic], the app I built in my recent talk at Clojure/Conj 2012.
 
-Poorsmatic, a "poor man's [Prismatic]", is an awful content discovery
-service, but a pretty good example of many of Immutant's features,
-including topics, queues, XA transactions, HA services, and a few
-other things. In my talk I used [Datomic] as my database, but here
-we'll try a more SQL-y approach, using [Lobos] for migrations, the
-[Korma] DSL, and OpenShift's PostgreSQL cartridge for persistence.
+[Poorsmatic], a "poor man's [Prismatic]", is a truly awful content
+discovery service that merely returns URL's from Twitter that contain
+at least one occurrence of the search term used to find the tweets
+containing the URL's in the first place.
+
+Got that? Don't worry. It doesn't matter.
+
+Because Poorsmatic was contrived to be a pretty good example of many
+of Immutant's features, including topics, queues, XA transactions, HA
+services, and a few other things. In my talk I used [Datomic] as my
+database, but here we'll try a different approach, using [Lobos] for
+database migrations, the [Korma] DSL, and OpenShift's PostgreSQL
+cartridge for persistence.
 
 ## Create an app on OpenShift
 
@@ -69,28 +76,23 @@ If you forget to do this, you'll see errors referencing
 
 # Add the Poorsmatic source to your app
 
-We'll use git to pull in the Poorsmatic source. You can use the same
-technique to get your own apps deployed to OpenShift:
+We'll use git to pull in the Poorsmatic source code. You can use the
+same technique to get your own apps deployed to OpenShift:
 
     $ git pull -s recursive -X theirs git://github.com/jcrossley3/poorsmatic.git korma-lobos
     $ git commit -m "Pulled in Poorsmatic"
 
 Note that we specified the `korma-lobos` branch.
 
-# Point the app to the database
+# Configure the app to use PostgreSQL
 
-You'll see profiles in `project.clj` that determine which database
-both lobos and korma use. We'll add one for our OpenShift database,
-too:
+You'll see Leiningen profiles in `project.clj` that determine which
+database both the lobos and korma libraries will use. One of these
+profiles, `:openshift`, refers to the name of the PostgreSQL
+datasource configured in your `.openshift/config/standalone.xml`
+provided by the quickstart.
 
-<pre class="syntax clojure">:profiles {...
-
-           :openshift {:immutant {:init poorsmatic.core/start}
-                       :db-spec  {:name "java:jboss/datasources/PostgreSQLDS"
-                                  :subprotocol "postgresql"}}}
-</pre>
-
-And then we'll enable the `:openshift` profile in
+We'll activate the `:openshift` profile in
 `deployments/your-clojure-application.clj`:
 
 <pre class="syntax clojure">{
@@ -106,7 +108,8 @@ And then we'll enable the `:openshift` profile in
 
 Finally, because Poorsmatic accesses Twitter's streaming API, you must
 create an account at <http://dev.twitter.com> and add a file called
-`resources/twitter-creds` that contains your OAuth credentials:
+`resources/twitter-creds` that contains your OAuth credentials in a
+simple Clojure vector:
 
 <pre class="syntax clojure">["app-key" "app-secret" "user-token" "user-token-secret"]</pre>
 
@@ -134,11 +137,11 @@ ever dreamed possible.
 
 [And you may even see some bieber tweets.](http://instantrimshot.com/index.php?sound=rimshot&play=true) ;-)
 
-Reload the web page to see the scraped URL's and counts.
+Reload the web page to see the scraped URL's and their counts.
 
 # The REPL
 
-You may have noticed the nREPL and Swank ports configured in the
+You may have noticed the [nREPL] and [Swank] ports configured in the
 deployment descriptor above. They are not externally accessible. They
 can only be accessed via an ssh tunnel secured with your private key.
 
@@ -146,13 +149,14 @@ Run the following:
 
     $ rhc port-forward -a poorsmatic
 
-Depending on your OS, this may not work. If it doesn't, try:
+Depending on your OS, this may not work. If it doesn't, try the `-L`
+option:
 
     $ ssh -L 27888:127.11.205.129:27888 a4117d5ebac04c5f8114f7a96eba2737@poorsmatic-jimi.rhcloud.com
 
 But replace `127.11.205.129` with whatever `rhc port-forward` told you
-(or ssh to your instance and `echo $OPENSHIFT_INTERNAL_IP`) and use
-your own ssh URI.
+(or ssh to your instance and `echo $OPENSHIFT_INTERNAL_IP`). And
+obviously, you should use the ssh URI associated with your own app.
 
 Once the tunnel is established, you can then connect to the remote
 REPL at `127.0.0.1:27888` using whatever REPL client you prefer.
@@ -164,8 +168,8 @@ e.g. load-balanced message distribution, highly-available services and
 scheduled jobs, etc. But clustering is a pain to configure when
 multicast is disabled. OpenShift aims to simplify that, but it's
 [not quite there yet][883944]. In a future post, I hope to demonstrate
-those clustering features by creating a *scaled* application on
-OpenShift, letting it deal with all the murky cluster configuration
+those clustering features by creating a *scaled* OpenShift
+application, letting it deal with all the murky cluster configuration
 for you.
 
 Stay tuned!
@@ -180,3 +184,5 @@ Stay tuned!
 [PostgreSQL]: http://www.postgresql.org/
 [OpenShift]: http://openshift.com/
 [883944]: https://bugzilla.redhat.com/show_bug.cgi?id=883944
+[nREPL]: https://github.com/clojure/tools.nrepl
+[Swank]: https://github.com/technomancy/swank-clojure
