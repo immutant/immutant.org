@@ -29,7 +29,7 @@ To [get started] on OpenShift you'll need an account, the command line
 tools installed, and a domain setup. Below you'll see references to
 *$namespace* -- this corresponds to your domain name.
 
-Let's create an app. Call it poorsmatic.
+Once you've setup your domain, create an app. Call it poorsmatic.
 
     $ rhc app create -a poorsmatic -t jbossas-7
 
@@ -70,6 +70,7 @@ to set `max_prepared_transactions` to 10 and then restart the database:
 
     $ perl -p -i -e 's/#(max_prepared_transactions).*/\1 = 10/' postgresql-8.4/data/postgresql.conf
     $ pg_ctl restart -D $PWD/postgresql-8.4/data -m fast
+    $ exit
 
 If you forget to do this, you'll see errors referencing
 `max_prepared_transactions` in the logs.
@@ -112,6 +113,11 @@ create an account at <http://dev.twitter.com> and add a file called
 simple Clojure vector:
 
 <pre class="syntax clojure">["app-key" "app-secret" "user-token" "user-token-secret"]</pre>
+
+You may be concerned about storing sensitive information with your
+app, but remember that OpenShift secures your git repo with ssh
+public/private key pairs and only those people whose public keys
+you've associated with your app have access to it.
 
 # Push!
 
