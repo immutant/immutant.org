@@ -2,7 +2,7 @@
 title: Clustering
 sequence: 5
 description: "How your apps benefit when Immutants form a cluster"
-date: 2012-12-06
+date: 2012-12-13
 ---
 
 One of the primary benefits provided by the [JBoss AS7][as7]
@@ -66,7 +66,7 @@ By passing the `--clustered` option when you start Immutant, you
 configure it as a node that will automatically discover other nodes
 (via multicast, by default) to form a cluster:
 
-    $ lein immutant run --clustered
+    lein immutant run --clustered
 
 It's just that simple.
 
@@ -83,24 +83,32 @@ experiment with the features listed above.
 To run two immutant instances on a single machine, fire up two shells and...
 
 In one shell, run:
-
-    $ lein immutant run --clustered -Djboss.node.name=one -Djboss.server.data.dir=/tmp/one
+    cp -r ~/.lein/immutant/current/ /tmp/node2 
+    lein immutant run --clustered
 
 In another shell, run:
-
-    $ lein immutant run --clustered -Djboss.node.name=two -Djboss.server.data.dir=/tmp/two -Djboss.socket.binding.port-offset=100
+    rm -rf /tmp/node2/jboss/standalone/data
+    IMMUTANT_HOME=/tmp/node2 lein immutant run --clustered -Djboss.node.name=two -Djboss.socket.binding.port-offset=100
 
 And BAM, you're a cluster!
 
 ### Details
 
+It is possible to run a test cluster out of one Immutant install, but
+you can get strange results if multiple nodes in the cluster share the
+same deployments directory. So, we make a copy of the Immutant install
+to `/tmp`. The `/` on the end of the `current` path is important -
+without it, `cp` will just copy the symbolic link instead of the
+directory it points to.
+
+We then have to clear the new node's data directory - the AS caches a
+UUID-based node id there, and if we don't clear it, both nodes will
+end up with the same id, resulting in some nasty log messages.
+
 Each cluster node requires a unique name, which is usually derived
 from the hostname, but since our Immutants are on the same host, we
-set the `jboss.node.name` property uniquely.
-
-Each Immutant will attempt to persist its runtime state to the same
-files. Hijinks will ensue, so we prevent said hijinks by setting the
-`jboss.server.data.dir` property uniquely.
+set the `jboss.node.name` property on our second node to prevent a
+conflict.
 
 JBoss listens for various types of connections on a few ports. One
 obvious solution to the potential conflicts is to bind each Immutant
@@ -121,22 +129,19 @@ HTTP service, for example, listening on 8180 instead of the default
 With any luck at all, you have two Immutants running locally, both
 hungry for an app to deploy, so let's create one.
 
-We've been over how to [deploy] an application before, but this time
-we're gonna keep it real simple: create a new directory and add two
-files.
+We've been over how to [deploy] an application before, and we're going
+to use what we learned there to creae a simple app:
 
-First, you'll need a `project.clj`
+    lein immutant new cluster-example
+    cd cluster-example
+    
+Next, edit the Immutant application bootstrap file,
+`src/immutant/init.clj`, and replace its contents with:
 
-<pre class="syntax clojure">(defproject example "1.0.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.3.0"]])
-</pre>
-
-Next, the Immutant application bootstrap file, `src/immutant/init.clj`, into
-which we'll put all our code for this example.
 
 <pre class="syntax clojure">(ns immutant.init
   (:require [immutant.messaging :as messaging]
-            [immutant.daemons :as daemon])
+            [immutant.daemons :as daemon]))
 
 ;; Create a message queue
 (messaging/start "/queue/msg")
@@ -175,13 +180,14 @@ cleanly teardown any resources used by your service. By default, our
 daemon is a *singleton*, meaning it will only ever run on one node in
 your cluster.
 
-In the same directory that contains your files, run this:
+In the `cluster-example` directory, deploy to our first node:
 
-    $ lein immutant deploy
+    lein immutant deploy
+    
+And to our second:
 
-Because both Immutants are monitoring the same deployment directory,
-this should trigger both to deploy the app.
-
+    IMMUTANT_HOME=/tmp/node2 lein immutant deploy
+    
 Now watch the output of the shells in which your Immutants are
 running. You should see the daemon start up on only one of them, but
 both should be receiving messages. This is the automatic load
