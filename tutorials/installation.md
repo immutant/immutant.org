@@ -14,7 +14,7 @@ Immutant itself. This tutorial assumes you are on a *nix system. It also assumes
 
 We provide a [lein plugin] for creating your Immutant applications and 
 managing their life-cycles. The last time this tutorial was updated the plugin was
-at version **0.13.0**, but we recommend you check [clojars] for the latest version.
+at version **#{site.latest_plugin_version}**, but we recommend you check [clojars] for the latest version.
 
 The plugin supports both Leiningen 1.x and 2.x. If you are running Leiningen 1.x, version
 **1.6.2** or greater should work, but we only test with the latest version (currently **1.7.1**).
@@ -28,10 +28,10 @@ of a project directory.
 
 To install it as a global plugin:
 
-     $ lein plugin install lein-immutant 0.13.0
-    [INFO] Unable to find resource 'lein-immutant:lein-immutant:jar:0.13.0' in repository central (http://repo1.maven.org/maven2)
+     $ lein plugin install lein-immutant #{site.latest_plugin_version}
+    [INFO] Unable to find resource 'lein-immutant:lein-immutant:jar:#{site.latest_plugin_version}' in repository central (http://repo1.maven.org/maven2)
     Copying 20 files to /var/folders/x0/5th62wkd2cd74dv5fn2trs6h0000gp/T/lein-a1f96bfe-33e8-42aa-893f-be22a6cf6fa7/lib
-    Including lein-immutant-0.13.0.jar
+    Including lein-immutant-#{site.latest_plugin_version}.jar
     Including clj-http-0.2.7.jar
     Including commons-codec-1.5.jar
     Including commons-io-2.1.jar
@@ -52,14 +52,14 @@ To install it as a global plugin:
     Including slingshot-0.9.0.jar
     Including tools.cli-0.2.1.jar
     Including tools.nrepl-0.2.0-beta9.jar
-    Created lein-immutant-0.13.0.jar
+    Created lein-immutant-#{site.latest_plugin_version}.jar
 
 ### Installing under Leiningen 2.x
 
 Installing the plugin for Leiningen 2.x is just a matter of adding it to the
 `:plugin` list in the `:user` profile of `~/.lein/profiles.clj`:
 
-    {:user {:plugins [[lein-immutant "0.13.0"]]}}
+    {:user {:plugins [[lein-immutant "#{site.latest_plugin_version}"]]}}
     
 
 ## Plugin tasks
