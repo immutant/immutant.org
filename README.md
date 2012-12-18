@@ -23,7 +23,7 @@ case, you'll need to stop awestruct, `rm -rf _site`, and restart awestruct.
 We use CI to build and deploy. 
 
 Pushing to master should generate a staging build that pushes to:
-<staging.immutant.org>.
+<http://staging.immutant.org>.
 
 To have CI generate the live site, push to the production branch:
     
