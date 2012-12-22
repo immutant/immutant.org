@@ -44,7 +44,7 @@ Add a job to your `src/immutant/init.clj`:
 <pre class="syntax clojure">(ns immutant.init
   (:use immutant-demo.core)
   (:require [immutant.web :as web]
-            [immutant.jobs :as jobs)) ;; require the jobs ns
+            [immutant.jobs :as jobs])) ;; require the jobs ns
 ...
 
 (jobs/schedule "my-job-name" "*/5 * * * * ?" 
