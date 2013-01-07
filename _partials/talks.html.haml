@@ -8,9 +8,10 @@
               = talk.event
         .span3
           .event-details
-            #{talk.event_date}
-            %br
-            #{talk.location}
+            .event-date
+              #{talk.event_date}
+            .event-location
+              #{talk.location}
       - if ( talk.event_logo_url )
         %a{:href=>talk.event_url}
           %img.event-logo{:src=>talk.event_logo_url}
