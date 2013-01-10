@@ -41,7 +41,7 @@ Immutant modules to AS7 and replace the Java app with a Clojure app:
     cd poorsmatic
     rm -rf pom.xml src
     git remote add quickstart -m master git://github.com/immutant/openshift-quickstart.git
-    git pull -s recursive -X theirs quickstart master
+    git pull --no-commit -s recursive -X theirs quickstart master
     git add -A .
     git commit -m "Add Immutant modules and setup Clojure project"
 
