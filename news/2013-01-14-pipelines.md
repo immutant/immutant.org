@@ -25,7 +25,7 @@ using a pipeline.
 
 The first thing we have to do is create a pipeline. We do that with a
 call to the
-[pipeline](#{api_doc_for_version('LATEST','messaging','pipeline')})
+[pipeline](#{api_doc_for_version('LATEST','pipeline','pipeline')})
 function, giving it a name and some single-arity functions that form
 the *steps* of the pipeline:
 
@@ -99,7 +99,7 @@ assume that `reverse` is the slowpoke here, and raise the
 </pre>
 
 Here we've used the
-[step](#{api_doc_for_version('LATEST','messaging','step')}) function
+[step](#{api_doc_for_version('LATEST','pipeline','step')}) function
 to attach options to a particular step. Options attached to steps will
 override the corresponding pipeline option where it makes sense.
 
@@ -129,11 +129,11 @@ and the original argument passed to the step that threw the exception:
 Above we have a simple error handler that demonstrates putting a value
 back onto the pipeline. We do that using a couple of the vars that are
 bound during a pipeline execution:
-[\*pipeline\*](#{api_doc_for_version('LATEST','messaging','*pipeline*')}),
+[\*pipeline\*](#{api_doc_for_version('LATEST','pipeline','*pipeline*')}),
 which is bound to the currently active pipeline-fn, and
-[\*current-step\*](#{api_doc_for_version('LATEST','messaging','*current-step*')}),
+[\*current-step\*](#{api_doc_for_version('LATEST','pipeline','*current-step*')}),
 which is the name of the currently active step. (Not pictured:
-[\*next-step\*](#{api_doc_for_version('LATEST','messaging','*next-step*')})).
+[\*next-step\*](#{api_doc_for_version('LATEST','pipeline','*next-step*')})).
 
 You can also specify an `:error-handler` for a particular step, which
 will override the pipeline error handler.
