@@ -81,7 +81,6 @@ We'll use git to pull in the Poorsmatic source code. You can use the
 same technique to get your own apps deployed to OpenShift:
 
     $ git pull -s recursive -X theirs git://github.com/jcrossley3/poorsmatic.git korma-lobos
-    $ git commit -m "Pulled in Poorsmatic"
 
 Note that we specified the `korma-lobos` branch.
 
