@@ -39,9 +39,10 @@ the *steps* of the pipeline:
 </pre>
 
 This looks similar to a 'thread last' (`->>`), or a `comp` in
-reverse. And for the functions we're using in this sample pipeline,
-let's pretend that each of the functions we are using in the pipeline
-are more computation and time intensive than they actually are.
+reverse. But for the functions we're using in this sample pipeline,
+let's pretend that each of them are more computation and time
+intensive than they actually are, and could benefit from being scaled
+across threads or across a cluster.
             
 ### Putting data onto a pipeline 
 
@@ -71,9 +72,7 @@ increase the number of threads for each step with the `:concurrency`
 option (options are passed as keyword arguments after the list of
 functions). Let's alter our original pipeline definition to do that:
 
-<pre class="syntax clojure">(require '[immutant.pipeline :as pl])
-
-(defonce reverse-pl
+<pre class="syntax clojure">(defonce reverse-pl
   (pl/pipeline :reverse-a-string
     seq
     reverse
@@ -120,13 +119,14 @@ and the original argument passed to the step that threw the exception:
 </pre>
 
 Above we have a simple error handler that demonstrates putting a value
-back onto the pipeline. We do that using a few vars that are bound
-during a pipeline execution:
+back onto the pipeline, but skips the current step. We do that using a
+few vars that are bound during a pipeline execution:
+
 * [\*pipeline\*](#{api_doc_for_version('LATEST','pipeline','*pipeline*')}) -
   bound to the currently active pipeline-fn
 * [\*current-step\*](#{api_doc_for_version('LATEST','pipeline','*current-step*')}) -
   bound to the name of the currently active step
-* [\*next-step\*](#{api_doc_for_version('LATEST','pipeline','*next-step*')})) -
+* [\*next-step\*](#{api_doc_for_version('LATEST','pipeline','*next-step*')}) -
   bound to the name of the next step
 
 If the error handler doesn't put the data back on to the pipeline,
@@ -187,13 +187,12 @@ Pipelines are currently available in the latest Immutant
 [incremental builds](/builds/), and will be part of 0.8.0, which
 should be released today.
 
-Pipeline support is an alpha feature at the moment, so its API is in flux. 
-
-## Learning more
-
 We haven't covered everything about pipelines here, see the
 [documentation](#{doc_chapter_for_version('LATEST','messaging','messaging-pipelines')})
-for more details, and [get in touch](/community/) if you have any
-questions or comments.
+for more details. 
+
+Pipeline support is an alpha feature at the moment, so its API is in
+flux - please give it a try and [let us know](/community/) how we can
+improve it.
 
 *Image credit: [World Bank Photo Collection](http://www.flickr.com/photos/worldbank/7342211086)*
