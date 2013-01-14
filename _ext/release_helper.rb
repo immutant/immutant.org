@@ -17,13 +17,27 @@ module ReleaseHelper
   end
 
   def api_doc_for_version(version, group, fn = nil)
-    path = "/documentation/#{version}/apidoc/#{group}-api.html"
-    path << "##{fn}" if fn
+    if version.to_f > 0 &&
+        version.to_f < 0.8
+      path = "/documentation/#{version}/apidoc/#{group}-api.html"
+      path << "##{fn}" if fn
+    else
+      if version == 'LATEST'
+        path = "/builds/LATEST/html-docs/apidoc/immutant.#{group}.html"
+      else
+        path = "/documentation/#{version}/apidoc/immutant.#{group}.html"
+      end
+      path << "#var-#{fn}" if fn
+    end
     path
   end
   
   def doc_chapter_for_version(version, chapter, target = nil)
-    path = "/documentation/#{version}/#{chapter}.html"
+      if version == 'LATEST'
+        path = "/builds/LATEST/html-docs/#{chapter}.html"
+      else
+        path = "/documentation/#{version}/#{chapter}.html"
+      end
     path << "##{target}" if target
     path
   end
