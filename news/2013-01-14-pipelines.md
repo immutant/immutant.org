@@ -40,14 +40,9 @@ the *steps* of the pipeline:
 
 This looks similar to a 'thread last' (`->>`), or a `comp` in
 reverse. And for the functions we're using in this sample pipeline,
-either of those constructs would make more sense (in fact, the entire
-pipeline could be replaced by a call to `clojure.string/reverse`). But
 let's pretend that each of the functions we are using in the pipeline
-are more computation and time intensive than they actually are - let's
-have them represent much more complex processes for the sake of
-demonstrating the mechanics of pipelines without having to introduce
-and explain new functions.
-
+are more computation and time intensive than they actually are.
+            
 ### Putting data onto a pipeline 
 
 So, moving right along. We now have a pipeline, but how do we put data
@@ -114,29 +109,48 @@ times. If you need errors to be handled differently, you can provide
 an error handler function that must take two arguments: the exception,
 and the original argument passed to the step that threw the exception:
 
-<pre class="syntax clojure">(defonce reverse-pl
-  (pl/pipeline :reverse-a-string
-    seq
-    (pl/step reverse :concurrency 10)
-    (partial apply str)
-    :concurrency 5
+<pre class="syntax clojure">(pl/pipeline :do-something-on-the-network
+    retrieve-a-url
+    process-url-contents
+    more-data-processing
     :error-handler (fn [ex v] 
                      (when (instance? ex SomeNetworkException)
-                       (println "ERROR, retrying" ex)
-                       (pl/*pipeline* v :step pl/*current-step*))))) ;; a naive retry   
+                       (println "ERROR, skipping" pl/*current-step* ex)
+                       (pl/*pipeline* v :step pl/*next-step*)))) ;; jump to the next step
 </pre>
 
 Above we have a simple error handler that demonstrates putting a value
-back onto the pipeline. We do that using a couple of the vars that are
-bound during a pipeline execution:
-[\*pipeline\*](#{api_doc_for_version('LATEST','pipeline','*pipeline*')}),
-which is bound to the currently active pipeline-fn, and
-[\*current-step\*](#{api_doc_for_version('LATEST','pipeline','*current-step*')}),
-which is the name of the currently active step. (Not pictured:
-[\*next-step\*](#{api_doc_for_version('LATEST','pipeline','*next-step*')})).
+back onto the pipeline. We do that using a few vars that are bound
+during a pipeline execution:
+* [\*pipeline\*](#{api_doc_for_version('LATEST','pipeline','*pipeline*')}) -
+  bound to the currently active pipeline-fn
+* [\*current-step\*](#{api_doc_for_version('LATEST','pipeline','*current-step*')}) -
+  bound to the name of the currently active step
+* [\*next-step\*](#{api_doc_for_version('LATEST','pipeline','*next-step*')})) -
+  bound to the name of the next step
+
+If the error handler doesn't put the data back on to the pipeline,
+that particular pipeline execution is halted.
 
 You can also specify an `:error-handler` for a particular step, which
 will override the pipeline error handler.
+
+Let's see the above example again, but with a step-specific error handler
+that rethrows to trigger the default retry semantics:
+
+<pre class="syntax clojure">(pl/pipeline :do-something-on-the-network
+    (pl/step retrieve-a-url 
+      :error-handler (fn [ex v] 
+                       (if (instance? ex SomeNetworkException)
+                         (println "ERROR retrieving url" v ", exiting:" ex) ;; exit the pipeline
+                         (throw x)))) ;; retry
+    process-url-contents
+    more-data-processing
+    :error-handler (fn [ex v] 
+                     (when (instance? ex SomeNetworkException)
+                       (println "ERROR, skipping" pl/*current-step* ex)
+                       (pl/*pipeline* v :step pl/*next-step*))))
+</pre>
 
 ### Pipelines within pipelines 
 
