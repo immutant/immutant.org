@@ -33,7 +33,7 @@ class Documentation
           FileUtils.mv( File.join( base_dir, 'html'), doc_root )
           FileUtils.rm_rf( File.join( base_dir, 'META-INF' ) )
         rescue Exception => e
-          puts "ERROR: failed to unzip docs for #{release.version}: " + e
+          puts "ERROR: failed to unzip docs for #{release.version}: " + e.to_s
         end
       end
 
