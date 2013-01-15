@@ -200,7 +200,7 @@ to download it.
 
 If you have any feedback or questions, [get in touch]! 
 
-[Ring]: https://github.com/mmcgrana/ring
+[Ring]: https://github.com/ring-clojure/ring
 [installing]: ../installation/
 [lein plugin]: https://github.com/immutant/lein-immutant/
 [Leiningen]: http://leiningen.org/
