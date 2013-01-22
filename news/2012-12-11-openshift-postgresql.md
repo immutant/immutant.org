@@ -7,7 +7,7 @@ tags: [ openshift, tutorial, postgresql, poorsmatic ]
 
 Today we'll get a Clojure application running in Immutant on
 [OpenShift], persisting its data to a [PostgreSQL] database. We'll use
-[Poorsmatic], the app I built in my recent talk at Clojure/Conj 2012.
+[Poorsmatic], the app I built in [my recent talk] at Clojure/Conj 2012.
 
 [Poorsmatic], a "poor man's [Prismatic]", is a truly awful content
 discovery service that merely returns URL's from Twitter that contain
@@ -191,3 +191,4 @@ Stay tuned!
 [883944]: https://bugzilla.redhat.com/show_bug.cgi?id=883944
 [nREPL]: https://github.com/clojure/tools.nrepl
 [Swank]: https://github.com/technomancy/swank-clojure
+[my recent talk]: http://www.youtube.com/watch?v=P9tfxdcpkCc
