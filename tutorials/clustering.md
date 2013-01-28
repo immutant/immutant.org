@@ -92,6 +92,17 @@ In another shell, run:
 
 And BAM, you're a cluster!
 
+### TL;DR for Mac users
+
+If you're on a Mac, the above may not work. Try IP aliases instead:
+    for i in {1,2}; do sudo ifconfig en1 inet 192.168.6.20${i}/32 alias; done
+    lein immutant run --clustered -b 192.168.6.201
+    IMMUTANT_HOME=/tmp/node2 lein immutant run --clustered -Djboss.node.name=two -b 192.168.6.202
+
+Note that IP aliases obviate the need for a port offset -- your web
+servers will be available at 192.168.6.201:8080 and 192.168.6.202:8080
+-- but you still need a unique node name for each instance.
+
 ### Details
 
 It is possible to run a test cluster out of one Immutant install, but
@@ -116,7 +127,8 @@ to a different interface, which we could specify using the `-b`
 option. 
 
 But rather than go through a platform-specific example of creating an
-IP alias, I'm going to take advantage of another JBoss feature: the
+IP alias (unless you're on a Mac, see above), I'm going to take
+advantage of another JBoss feature: the
 `jboss.socket.binding.port-offset` property will cause each default
 port number to be incremented by a specified amount.
 
