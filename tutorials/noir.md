@@ -2,7 +2,7 @@
 title: Using Noir
 sequence: 7
 description: "Covers the creation and deployment of a basic Noir application"
-date: 2012-12-11
+date: 2012-02-01
 author: Doug Selph
 author_url: "https://github.com/dougselph"
 ---
@@ -15,9 +15,7 @@ a *nix system.
 
 ## Creating a Noir application
 
-First, let's create a noir application named noirtant. If you are
-using lein 1.x, you will need to install the
-[lein noir plugin][lein-noir] beforehand.
+First, let's create a noir application named noirtant. 
 
     ~/ $ lein new noir noirtant
     Generating a lovely new Noir project named noirtant...
