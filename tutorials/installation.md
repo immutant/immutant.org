@@ -2,7 +2,7 @@
 title: 'Installation'
 sequence: 0
 description: 'An in-depth look at the installation process'
-date: 2012-12-06
+date: 2013-02-01
 ---
 
 This tutorial provides an in-depth look at the process for installing Immutant.
@@ -16,47 +16,11 @@ We provide a [lein plugin] for creating your Immutant applications and
 managing their life-cycles. The last time this tutorial was updated the plugin was
 at version **#{site.latest_plugin_version}**, but we recommend you check [clojars] for the latest version.
 
-The plugin supports both Leiningen 1.x and 2.x. If you are running Leiningen 1.x, version
-**1.6.2** or greater should work, but we only test with the latest version (currently **1.7.1**).
-If you are using Leiningen 2.x, you need **2.0.0-preview7** or newer.
+The plugin only supports both Leiningen 2.0.0 and higher. 
 
-### Installing under Leinignen 1.x
+### Installing under Leiningen
 
-For this tutorial, we'll install `lein-immutant` as a global plugin that can be used within
-any project or outside of a project. The plugin provides several tasks that are useful outside
-of a project directory.
-
-To install it as a global plugin:
-
-     $ lein plugin install lein-immutant #{site.latest_plugin_version}
-    [INFO] Unable to find resource 'lein-immutant:lein-immutant:jar:#{site.latest_plugin_version}' in repository central (http://repo1.maven.org/maven2)
-    Copying 20 files to /var/folders/x0/5th62wkd2cd74dv5fn2trs6h0000gp/T/lein-a1f96bfe-33e8-42aa-893f-be22a6cf6fa7/lib
-    Including lein-immutant-#{site.latest_plugin_version}.jar
-    Including clj-http-0.2.7.jar
-    Including commons-codec-1.5.jar
-    Including commons-io-2.1.jar
-    Including commons-logging-1.1.1.jar
-    Including core.contracts-0.0.1.jar
-    Including core.unify-0.5.3.jar
-    Including data.json-0.1.1.jar
-    Including deploy-tools-0.9.2.jar
-    Including digest-1.4.0.jar
-    Including fntest-0.3.2.jar
-    Including httpclient-4.1.2.jar
-    Including httpcore-4.1.2.jar
-    Including httpmime-4.1.2.jar
-    Including jboss-as-management-0.1.2.jar
-    Including leinjacker-0.3.3.jar
-    Including overlay-1.2.2.jar
-    Including progress-1.0.1.jar
-    Including slingshot-0.9.0.jar
-    Including tools.cli-0.2.1.jar
-    Including tools.nrepl-0.2.0-beta9.jar
-    Created lein-immutant-#{site.latest_plugin_version}.jar
-
-### Installing under Leiningen 2.x
-
-Installing the plugin for Leiningen 2.x is just a matter of adding it to the
+Installing the plugin for Leiningen is just a matter of adding it to the
 `:plugin` list in the `:user` profile of `~/.lein/profiles.clj`:
 
     {:user {:plugins [[lein-immutant "#{site.latest_plugin_version}"]]}}
@@ -67,21 +31,19 @@ Installing the plugin for Leiningen 2.x is just a matter of adding it to the
 Now that you have the plugin installed, run `lein immutant` to see what tasks it provides:
 
     $ lein immutant
-    Manage the deployment lifecycle of an Immutant application.
-    
-    Subtasks available:
-    undeploy   Undeploys a project from the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
-    new        Creates a new project skeleton initialized for Immutant.
+    undeploy   Undeploys a project from the current Immutant
+    new        Creates a new project skeleton initialized for Immutant
     archive    Creates an Immutant archive from a project
-    deploy     Deploys a project to the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME
-    run        Starts up the Immutant specified by ~/.lein/immutant/current or $IMMUTANT_HOME, displaying its console output
-    env        Displays paths to the Immutant that the plugin can find
-    overlay    Overlays features onto ~/.lein/immutant/current or $IMMUTANT_HOME
-    init       Adds a sample immutant.init namespace to an existing project
-    test       Runs tests inside an Immutant, after starting one (if necessary) and deploying the project
-    version    Prints version info for the current Immutant if it can be determined
-    install    Downloads and installs Immutant
-    eval       Eval some code in a remote nrepl
+    deploy     Deploys a project to the current Immutant
+    run        Starts up the current Immutant, displaying its console output
+    env        Displays paths to the Immutant that the plugin is currently using
+    overlay    Overlays a feature set onto the current Immutant
+    init       Adds a sample immutant.init namespace to the current project
+    test       Runs a project's tests inside the current Immutant
+    version    Prints version info for the current Immutant
+    install    Downloads and installs an Immutant version
+
+    Run `lein help immutant $SUBTASK` for subtask details.
 
 We'll only talk about the `install` and `run` tasks in this tutorial -
 we cover the application specific management tasks in the [deployment tutorial], 
@@ -121,7 +83,7 @@ Running it with no arguments will install the latest incremental build:
 If you want to install a specific incremental build, specify the build number
 (available from our [builds page][incremental build]):
 
-     $ lein immutant install 534
+     $ lein immutant install 705
     
 You can also have it install to a directory of your choosing. In this case, you must
 always specify a version (if you want the latest incremental build, specify 
