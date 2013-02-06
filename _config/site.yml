@@ -25,4 +25,4 @@ quick_links:
   - [ Chat, 'http://webchat.freenode.net/?channels=immutant', '#immutant on freenode' ]
   - [ Source, "https://github.com/immutant/immutant" ]
 
-latest_plugin_version: 0.15.0
+latest_plugin_version: 0.15.1
