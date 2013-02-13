@@ -74,8 +74,7 @@ article. Edit your `src/immutant/init.clj` so it looks like:
 
 <pre class="syntax clojure">(ns immutant.init
   (:use immutant-demo.core)
-  (:require [immutant.messaging :as messaging]
-            [immutant.web :as web]))
+  (:require [immutant.web :as web]))
 
 (web/start ring-handler)
 </pre>
