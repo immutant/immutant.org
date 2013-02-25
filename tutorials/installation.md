@@ -2,7 +2,7 @@
 title: 'Installation'
 sequence: 0
 description: 'An in-depth look at the installation process'
-date: 2013-02-01
+date: 2013-02-26
 ---
 
 This tutorial provides an in-depth look at the process for installing Immutant.
@@ -12,9 +12,10 @@ Immutant itself. This tutorial assumes you are on a *nix system. It also assumes
 
 ## Installing the lein plugin
 
-We provide a [lein plugin] for creating your Immutant applications and 
-managing their life-cycles. The last time this tutorial was updated the plugin was
-at version **#{site.latest_plugin_version}**, but we recommend you check [clojars] for the latest version.
+We provide a [lein plugin] for creating your Immutant applications and
+managing their life-cycles. The last time this tutorial was updated
+the plugin was at version **#{site.latest_plugin_version}**, but we
+recommend you check [clojars] for the latest version.
 
 The plugin only supports both Leiningen 2.0.0 and higher. 
 
@@ -58,18 +59,23 @@ is [#{latest_release.version}](#{announcement_for_version(latest_release.version
 you want to stay on the cutting edge, you may want to install the latest incremental
 build. We generate one after every push to [our repo] if the test suite passes.
 
-The plugin provides an `install` command that can install a versioned release,
+The plugin provides an `install` subtask that can install a versioned release,
 the latest incremental release, or any prior incremental release.
 
 To install a versioned release, simply pass the version you want to install
 as an argument to `immutant install`:
 
      $ lein immutant install #{latest_release.version}
-    Downloading http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/#{latest_release.version}/immutant-dist-#{latest_release.version}-bin.zip
+    Downloading http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/#{latest_release.version}/immutant-dist-#{latest_release.version}-slim.zip
     done!                                                                           
-    Extracting /a/nice/long/tmp/path/immutant-dist-#{latest_release.version}-bin.zip
-    Extracted /Users/tobias/.lein/immutant/releases/immutant-#{latest_release.version}
+    Extracting /a/nice/long/tmp/path/immutant-dist-#{latest_release.version}-slim.zip
+    Extracted /Users/tobias/.lein/immutant/releases/slim/immutant-#{latest_release.version}
     Linking /Users/tobias/.lein/immutant/current to /Users/tobias/.lein/immutant/releases/immutant-#{latest_release.version}
+
+The install subtask will install a *slim* distribution by default, but
+will install the *full* distribution if passed the `--full`
+option. For more details on the difference between *slim* and *full*,
+see the [install](/install) page.
 
 Part of the install process links the most recently installed version to 
 `~/.lein/immutant/current` so the plugin can find the Immutant install without
@@ -131,7 +137,7 @@ If you have any feedback or questions, [get in touch]!
 [clojars]: http://clojars.org/lein-immutant
 [incremental build]: /builds
 [our repo]: https://github.com/immutant/immutant
-[latest incremental build]: http://immutant.org/builds/immutant-dist-bin.zip
+[latest incremental build]: http://immutant.org/builds/immutant-dist-slim.zip
 [deployment tutorial]: ../deploying/
 [overlay tutorial]: ../overlay/
 [get in touch]: /community

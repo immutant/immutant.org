@@ -8,6 +8,21 @@ title: Releases
     Official, versioned releases are listed here. You can see a list of incremental builds on
     our [builds page](/builds/).
 
+:markdown
+  Starting with release **0.9.0**,
+  there are two release distributions avaialable:
+
+  * *slim* - a smaller, lighter weight distribution that only
+    includes the functionality needed to run Immutant Clojure
+    applications, but not JavaEE applications. 
+  * *full* - the full JBossAS distribution with Immutant
+    included. If you need to run JavaEE applications alongside
+    Clojure apps in the same AS, this is the distribution for
+    you.
+
+  Older releases and builds only provide a *bin* distribution,
+  which is analogous to the *full* distribution.
+
 %p
   %table.table.table-striped.table-bordered
     %tr
@@ -25,8 +40,17 @@ title: Releases
         %td.date
           = announcement.date.strftime( '%d %B %Y' )
         %td.dist
-          %a{:href => release.urls.remote_dist_zip, :rel => latest_release?(release) ? 'download' : 'nofollow'}
-            == ZIP archive (#{release.dist_size}mb)
+          - if release.dist_type == :bin
+            %a{:href => release.urls.remote_dist_zip, :rel => latest_release?(release) ? 'download' : 'nofollow'}
+              == ZIP archive (#{release.dist_size}mb)
+          - else
+            %ul
+              %li
+                %a{:href => release.urls.remote_dist_zip, :rel => latest_release?(release) ? 'download' : 'nofollow'}
+                  == slim ZIP archive (#{release.dist_size}mb)
+              %li
+                %a{:href => release.urls.remote_full_zip, :rel => latest_release?(release) ? 'download' : 'nofollow'}
+                  == full ZIP archive (#{release.full_dist_size}mb)
         %td
           - rel = latest_release?(release) ? 'documentation' : 'nofollow'
           %ul

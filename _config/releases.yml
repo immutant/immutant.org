@@ -1,17 +1,25 @@
 - version: '0.8.0'
   jira_version: 12320671
   latest: true
+  dist_type: :bin
 - version: '0.7.0'
   jira_version: 12320386
+  dist_type: :bin
 - version: '0.6.0'
   jira_version: 12320016
+  dist_type: :bin
 - version: '0.5.0'
   jira_version: 12320014
+  dist_type: :bin
 - version: '0.4.0'
   jira_version: 12319997
+  dist_type: :bin
 - version: '0.3.0'
   jira_version: 12319525
+  dist_type: :bin
 - version: '0.2.0'
   jira_version: 12318444
+  dist_type: :bin
 - version: '0.1.0'
   jira_version: 12318864
+  dist_type: :bin

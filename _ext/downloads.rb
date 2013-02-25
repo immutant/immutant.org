@@ -28,8 +28,13 @@ class Downloads
       release.urls.github.log = "https://github.com/immutant/immutant/commits/#{release.version}"
       release.urls.github.tree = "https://github.com/immutant/immutant/tree/#{release.version}"
 
-      release_suffix = "/immutant-dist/#{release.version}/immutant-dist-#{release.version}-bin.zip"
-      release.urls.remote_dist_zip  = "#{REPO_PREFIX}#{release_suffix}"
+      release_infix = "/immutant-dist/#{release.version}/immutant-dist-#{release.version}-"
+      if release.dist_type == :bin
+        release.urls.remote_dist_zip  = "#{REPO_PREFIX}#{release_infix}bin.zip"
+      else
+        release.urls.remote_dist_zip  = "#{REPO_PREFIX}#{release_infix}slim.zip"
+        release.urls.remote_full_zip  = "#{REPO_PREFIX}#{release_infix}full.zip"
+      end
     end
   end
 
