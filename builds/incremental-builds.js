@@ -70,62 +70,52 @@ renderer = {
 
 
     self.populate_artifacts( build );
-    //self.update_artifacts( build );
+    self.update_artifacts( build );
 
     
   },
 
   populate_artifacts: function(build) {
+      var self = this;
+      
+      if ( build.result != 'SUCCESS' ) {
+          return;
+      }
+      
+      // Docs
+
+      docs_column = $( '.build-summary.build-' + build.number ).find( 'td.docs' );
+      ul = $( '<ul/>' );
+      ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/html-docs/index.html">Browse Manual</a></li>' ) );
+      ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/html-docs/apidoc/index.html">Browse Clojure API</a></li>' ) );
+      // ul.append( $( '<li class="artifact newdocs"><a href="/builds/' + build.number + '/javadocs/">Java API Docs</a></li>' ) );    
+      docs_column.append( ul );
+  },
+
+
+  format_size: function(val) {
+      return Math.round(val/1024/1024) + " mb";
+  },
+
+  update_artifacts: function(build) {
     var self = this;
 
     if ( build.result != 'SUCCESS' ) {
       return;
     }
 
-    //Binary
-
-    binary_column = $( '.build-summary.build-' + build.number ).find( 'td.binary' );
-    ul = $( '<ul/>' );
-    ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/immutant-dist-bin.zip">Binary ZIP</a></li>' ) );
-    binary_column.append( ul );
-
-    // Docs
-
-     docs_column = $( '.build-summary.build-' + build.number ).find( 'td.docs' );
-     if (build.number >= 194) {
-          ul = $( '<ul/>' );
-          ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/html-docs/index.html">Browse Manual</a></li>' ) );
-          ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/html-docs/apidoc/index.html">Browse Clojure API</a></li>' ) );
-    // ul.append( $( '<li class="artifact newdocs"><a href="/builds/' + build.number + '/javadocs/">Java API Docs</a></li>' ) );    
-         docs_column.append( ul );
-     }
-
-  },
-
-
-  update_artifacts: function(build) {
-    if ( build.result != 'SUCCESS' ) {
-      return;
-    }
-
-    $( '.build-summary.build-' + build.number ).find( 'li.artifact.newdocs' ).hide();
-
-    $.get( '/builds/' + build.number + '/published-artifacts.json',
-           function(data) {
-               $( '.build-summary.build-' + build.number ).find( 'li.artifact' ).each( function(idx, li) {
-                   href = $( li ).find( 'a' ).attr( 'href' );
-                   artifact_name = href.match( new RegExp( "/([^/]*)/?$" ) )[1];
-                   for(i=0; i < data.length; i++) {
-                       url = data[i]
-                       if (url.match( new RegExp( artifact_name ) )) {
-                           $( li ).show();
-                           return;
-                       }
-                   }
-                   $( li ).hide();
-               } );
-           },
-         'json' );
+       $.getJSON( '/builds/' + build.number + '/build-metadata.json',
+             function(data) {
+                 binary_column = $( '.build-summary.build-' + build.number ).find( 'td.binary' );
+                 ul = $( '<ul/>' );
+                 if (data.slim_dist_size > 0) {
+                     ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/immutant-dist-slim.zip">Slim Build ZIP</a> (' + self.format_size(data.slim_dist_size) + ')</li>' ) );
+                     ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/immutant-dist-full.zip">Full Build ZIP</a> (' + self.format_size(data.full_dist_size) + ')</li>' ) );
+                 } else {
+                     ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/immutant-dist-bin.zip">Full Build ZIP</a> (' + self.format_size(data.dist_size) + ')</li>' ) );
+                 }
+                 binary_column.append(ul);
+           } );
   },
 
   create_build_row: function(build) {
