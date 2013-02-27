@@ -1,8 +1,8 @@
 ---
 title: Scheduling
 sequence: 3
-description: "Set up asynchronous jobs with a cron-like syntax"
-date: 2012-12-06
+description: "Set up asynchronous jobs with a cron-style or at-style syntax"
+date: 2013-02-27
 ---
 
 
@@ -12,7 +12,7 @@ defined, and fire in the same runtime as the rest of the application, so
 have access to any shared state.
 
 Jobs are built on top of the [Quartz] library, and support scheduling via a 
-cron-like specification. 
+*cron-like* specification or *at-style* options. 
 
 ## Why would I use this over quartz-clj or calling Quartz directly?
 
@@ -39,7 +39,7 @@ an Immutant-ready application, see the [deployment tutorial] or grab the
 [sample application] from that tutorial. The rest of this tutorial will 
 assume you are using that sample application.
 
-Add a job to your `src/immutant/init.clj`:
+Add a cron-style job to your `src/immutant/init.clj`:
 
 <pre class="syntax clojure">(ns immutant.init
   (:use immutant-demo.core)
@@ -47,10 +47,11 @@ Add a job to your `src/immutant/init.clj`:
             [immutant.jobs :as jobs])) ;; require the jobs ns
 ...
 
-(jobs/schedule "my-job-name" "*/5 * * * * ?" 
-                #(println "I was called!"))</pre>
+(jobs/schedule "my-job-name"  
+                #(println "I was called!")
+                "*/5 * * * * ?")</pre>
 
-Now, if we deploy and run the application (via `lein immutant deploy && lein immutant run`),
+Now, if you deploy and run the application (via `lein immutant deploy && lein immutant run`),
 you should see the following log output:
 
     ...
@@ -61,11 +62,14 @@ you should see the following log output:
     11:49:40,002 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called!
     ...
     
-The `schedule` function requires three arguments:
+The [schedule](#{api_doc_for_version('LATEST','jobs','schedule')})
+function takes two or three arguments, and also accepts options:
 
 * *name* - the name of the job.
-* *spec* - the cron-style specification string (see below).
 * *f* - the zero argument function that will be invoked each time the job fires.
+* *spec* - the cron-style specification string (optional, see below).
+* *options* - options are specified as alternating key & value literals. See [the docs]
+  for a full list of the available options.
 
 Job scheduling is dynamic, and can occur at any time during your application's lifecycle. 
 We started the job above in `immutant.clj`, but it could also be done from anywhere within 
@@ -74,7 +78,7 @@ placed in `immutant.clj`.
 
 You can safely call `schedule` multiple times with the same job name - the named job will 
 rescheduled.
-  
+
 ## Cron Syntax
 
 The spec attribute should contain a crontab-like entry. This is similar to cron specifications
@@ -100,6 +104,27 @@ both is contradictory.
 
 See the [Quartz cron specification] for additional details.
 
+## At-style jobs
+
+Now let's add an at-style job to `src/immutant/init.clj`:
+
+<pre class="syntax clojure">(jobs/schedule "my-at-job"  
+                #(println "I was called via at!")
+                :every 1000)</pre>
+
+Now, if we redeploy the running application (via `lein immutant deploy`), 
+you should see the following log output:
+
+    ...
+    12:01:38,633 INFO  [org.jboss.as.server] (DeploymentScanner-threads - 2) JBAS018559: Deployed "immutant-demo.clj"
+    12:01:40,001 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called via at!
+    12:01:41,001 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called via at!
+    12:01:42,002 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called via at!
+    12:01:43,001 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called via at!
+    ...
+  
+There are several other options that can be used to schedule at-style
+jobs - see [the docs] for more details.
 
 ## Unscheduling Jobs
   
@@ -125,6 +150,7 @@ anything does change, We'll update this post to keep it accurate.
 
 If you have any feedback or questions, [get in touch]! 
 
+[the docs]: #{doc_chapter_for_version('LATEST','jobs')}
 [Quartz]: http://quartz-scheduler.org/
 [quartz-clj]: https://github.com/mdpendergrass/quartz-clj
 [Schedulers]: http://quartz-scheduler.org/api/1.8.5/org/quartz/Scheduler.html
