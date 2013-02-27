@@ -81,20 +81,15 @@ Verify that the artifacts you expect have been uploaded and deployed to
 
 # Push the public artifacts to clojars.org
 
-I'd like to automate building these on CI, but haven't yet figured out how. For now:
 
-1. Switch to the tag created by the release:
-    
-    git checkout 0.7.0
-    
-2. Do a build:
+Grab the public artifacts as a zip file:
 
-    mvn clean && mvn install -Dmaven.test.skip
-    
-3. Publish the artifacts:
+<img src="/images/releasing/artifacts.png" />
 
-    cd namespaces/
-    ./bin/push-to-clojars.rb
+Unzip that file, and run `namespaces/bin/push-to-clojars.rb` with a
+path to the `target/namespaces` dir in from the archive:
+
+    ~/work/immutant/namespaces/bin/push-to-clojars.rb ~/Downloads/archive/namespaces/target/namespaces  
     
 # Release the project in JIRA
 
