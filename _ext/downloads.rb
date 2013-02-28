@@ -2,8 +2,8 @@
 class Downloads
   include ReleaseHelper
   
-  REPO_PREFIX        = "http://repository-projectodd.forge.cloudbees.com/staging/org/immutant"
-  #REPO_PREFIX        = "http://repository-projectodd.forge.cloudbees.com/release/org/immutant"
+  #REPO_PREFIX        = "http://repository-projectodd.forge.cloudbees.com/staging/org/immutant"
+  REPO_PREFIX        = "http://repository-projectodd.forge.cloudbees.com/release/org/immutant"
   DOCS_PREFIX        = "#{REPO_PREFIX}/immutant-docs"
 
   def initialize(enabled=true)
