@@ -2,7 +2,7 @@
 title: Deployment
 sequence: 1
 description: "Covers the creation and deployment of a basic application"
-date: 2013-02-01
+date: 2013-03-14
 ---
 
 This tutorial covers creating a basic [Ring] web application and deploying 
@@ -175,7 +175,7 @@ path. If we add this to our `core.clj`:
    :body "Pssst! Over here!"})
 </pre>
 
-And this to our `immutant.clj`:
+And this to our `init.clj`:
 
 <pre class="syntax clojure">(web/start "/biscuits" #'another-ring-handler)</pre>
 
