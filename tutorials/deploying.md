@@ -76,7 +76,7 @@ article. Edit your `src/immutant/init.clj` so it looks like:
   (:use immutant-demo.core)
   (:require [immutant.web :as web]))
 
-(web/start ring-handler)
+(web/start #'ring-handler)
 </pre>
 
 We'll come back to what `web/start` is doing after we get the
@@ -177,7 +177,7 @@ path. If we add this to our `core.clj`:
 
 And this to our `immutant.clj`:
 
-<pre class="syntax clojure">(web/start "/biscuits" another-ring-handler)</pre>
+<pre class="syntax clojure">(web/start "/biscuits" #'another-ring-handler)</pre>
 
 Then fire an Immutant up again with `lein immutant run`, we can see
 they both work:

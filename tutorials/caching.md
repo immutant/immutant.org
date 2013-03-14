@@ -159,7 +159,7 @@ which we'll put all our code for this example.
     (response (str "value=" (memoized-inc t) "\n"))))
 
 ;; Start up our web app
-(web/start "/" (wrap-params handler))
+(web/start "/" (wrap-params #'handler))
 </pre>
 
 Make sure you have a recent version of Immutant:

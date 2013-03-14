@@ -68,7 +68,7 @@ looks like:
   (:require [immutant.messaging :as messaging]
             [immutant.web :as web]))
 
-(web/start "/" ring-handler)
+(web/start "/" #'ring-handler)
 </pre>
 
 We'll come back to what `web/start` is doing after we get the application running.
@@ -158,7 +158,7 @@ this to our `core.clj`:
 
 And this to our `immutant.clj`:
 
-<pre class="syntax clojure">(web/start "/biscuits" another-ring-handler)</pre>
+<pre class="syntax clojure">(web/start "/biscuits" #'another-ring-handler)</pre>
 
 Redeploy the application to pick up the `:context-path` from `immutant.clj`:
 
