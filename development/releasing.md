@@ -90,7 +90,26 @@ Unzip that file, and run `namespaces/bin/push-to-clojars.rb` with a
 path to the `target/namespaces` dir in from the archive:
 
     ~/work/immutant/namespaces/bin/push-to-clojars.rb ~/Downloads/archive/namespaces/target/namespaces  
-    
+
+# Smoketest the artifacts from clojars
+
+Shutdown any local JBoss instances and run the following:
+
+    ~/work/immutant/support/smoketest/bin/smoke 0.1.0
+
+That will initialize a local maven repository beneath
+`smoketest/target/.m2` and download all required dependencies there
+before running a test to ensure all namespaces can be loaded
+successfully outside the container. Then it will install the desired
+version of Immutant locally, clone the feature-demo app, and test it,
+verifying all the namespaces run correctly inside the container.
+
+If you see any errors... well...
+
+> 'Tis a lesson you should heed,
+> If at first you don't succeed,
+> Try, try again
+
 # Release the project in JIRA
 
 <img src="/images/releasing/jira-release.png" style="width: 100%"/>
