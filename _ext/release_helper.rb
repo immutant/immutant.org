@@ -18,7 +18,8 @@ module ReleaseHelper
 
   def api_doc_for_version(version, group, fn = nil)
     if version.to_f > 0 &&
-        version.to_f < 0.8
+        version.to_f < 0.8 &&
+        version != "0.10.0"
       path = "/documentation/#{version}/apidoc/#{group}-api.html"
       path << "##{fn}" if fn
     else
