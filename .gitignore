@@ -7,3 +7,4 @@ _tmp
 _rewrite.log
 .rvmrc
 .rbenv-version
+/images/releasing/.DS_Store
