@@ -3,7 +3,8 @@ title: Incremental Builds
 layout: default
 ---
 
-%script{:type=>'text/javascript', :src=>'http://torquebox.org/javascripts/jenkins.js'}
+//%script{:type=>'text/javascript', :src=>'http://torquebox.org/javascripts/jenkins.js'}
+%script{:type=>'text/javascript', :src=>'/javascripts/jenkins.js'}
 %script{:type=>'text/javascript', :src=>'incremental-builds.js'}
 
 
@@ -63,7 +64,9 @@ layout: default
     %th.binary Binary Distribution
     %th.docs Documentation
     %th.git Git
-    %th.result Result
+    %th.matrix Clojure 1.3.0
+    %th.matrix Clojure 1.4.0
+    %th.matrix Clojure 1.5.1
 
 .spacer{:style=>'height: 2em;'}
   &nbsp;
@@ -81,5 +84,8 @@ layout: default
     %th.binary Binary Distribution
     %th.docs Documentation
     %th.git Git
-    %th.result Result
+    %th.matrix Clojure 1.3.0
+    %th.matrix Clojure 1.4.0
+    %th.matrix Clojure 1.5.1
+
   

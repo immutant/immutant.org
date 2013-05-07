@@ -14,34 +14,31 @@ renderer = {
       $( '#latest-stable' ).append( row[0].clone() ); 
     }
 
+  },
 
 
-
-    row = $( '.build-' + build.number );
-    row.removeClass( 'result-unknown' );
-
-    column = $( '.build-summary.build-' + build.number ).find( 'td.result' );
+  add_matrix_build: function(build, label) {
+    var self = this;
+    column = $( '.build-summary.build-' + build.number ).find( 'td.' + label );
+    column.removeClass( 'matrix-unknown' );
 
     if ( build.result == 'SUCCESS' ) {
-      row.addClass( 'build-success' );
-      column.append( 
+      column.addClass( 'matrix-success' );
+      column.append(
         $( '<a href="' + build.url + '/console' + '" class="status">Passed</a>' )
       );
     } else if ( build.result == 'FAILURE' ) {
-      row.addClass( 'build-failure' );
-      column.append( 
+      column.addClass( 'matrix-failure' );
+      column.append(
         $( '<a href="' + build.url + '/console' + '" class="status">Failed</a>' )
       );
     }  else if ( build.result == 'ABORTED' ) {
-      row.addClass( 'build-aborted' );
-      row.find( 'td *' ).hide();
-      row.find( 'td .number' ).show();
-      row.find( 'td .number a' ).show();
-      column.append( 
+      column.addClass( 'matrix-aborted' );
+      column.append(
         $( '<a href="' + build.url + '/console' + '" class="status">Aborted</a>' )
       );
     }  else if ( build.building ) {
-      row.addClass( 'build-building' );
+      column.addClass( 'matrix-building' );
       column.append(
         $( '<a href="' + build.url + '/console' + '" class="status"><em>Building</em></a>' )
       );
@@ -59,20 +56,37 @@ renderer = {
 
     column.append( '<span class="duration">: ' + duration + ' min</span>' );
 
-    // if ( build.building ) {
-    //   column.append( $( '<ul class="links"/>' ).append( 
-    //       $( '<li><a href="' + build.url + '../ws/integration-tests/target/integ-dist/jboss/server/default/log/boot.log">boot.log</a></li>'  ),
-    //       $( '<li><a href="' + build.url + '../ws/integration-tests/target/integ-dist/jboss/server/default/log/output.log">output.log</a></li>'  ),
-    //       $( '<li><a href="' + build.url + '../ws/integration-tests/target/integ-dist/jboss/server/default/log/server.log">server.log</a></li>'  )
-    //     ) 
-    //   );
-    // }
+    if ( build.building ) {
+      column.append( $( '<ul class="links"/>' ).append(
+          $( '<li><a href="' + build.url + '../ws/integration-tests/target/integ-dist/jboss/standalone/log/boot.log">boot.log</a></li>'  ),
+          $( '<li><a href="' + build.url + '../ws/integration-tests/target/integ-dist/jboss/standalone/log/server.log">server.log</a></li>'  )
+        )
+      );
+    }
 
 
-    self.populate_artifacts( build );
-    self.update_artifacts( build );
+    if ( label == '1_5_1' ) {
+      self.populate_artifacts( build );
+      self.update_artifacts( build );
+    }
 
-    
+    row = $( '.build-' + build.number );
+
+    if ( row.find( '.matrix' ).size() == row.find( '.matrix-success' ).size() ) {
+      row.addClass( 'build-success' );
+    }
+    if ( row.find( '.matrix-failure' ).size() > 0 ) {
+      row.addClass( 'build-failure' );
+    }
+    if ( row.find( '.matrix' ).size() == row.find( '.matrix-aborted' ).size() ) {
+      row.addClass( 'build-aborted' );
+      row.find( 'td *' ).hide();
+      row.find( 'td .number' ).show();
+      row.find( 'td .number a' ).show();
+      $( '.build-' + build.number + '.build-details td *' ).hide();
+      $( '.build-' + build.number + '.build-details' ).addClass( 'hidden' );
+    }
+
   },
 
   populate_artifacts: function(build) {
@@ -120,7 +134,7 @@ renderer = {
 
   create_build_row: function(build) {
     var self = this;
-    row = $( '<tr class="build-summary result-unknown build-' + build.number + '"/>' ).append(
+    row = $( '<tr class="build-summary build-' + build.number + '"/>' ).append(
             $( '<td class="build-info first"/>' ).append(
               $( '<span class="number"><a href="' + build.url + '">' + build.number + '</a></span>' ),
               $( '<span class="date">' + self.build_date( build ) + '</span>' ),
@@ -129,7 +143,9 @@ renderer = {
             $( '<td class="binary"/>' ),
             $( '<td class="docs"/>' ),
             $( '<td class="git"/>' ),
-            $( '<td rowspan="2" class="result"/>' )
+            $( '<td rowspan="2" class="matrix 1_3_0 matrix-unknown"/>' ),
+            $( '<td rowspan="2" class="matrix 1_4_0 matrix-unknown"/>' ),
+            $( '<td rowspan="2" class="matrix 1_5_1 matrix-unknown"/>' )
           );
 
     if ( self.build_sha1( build ) ) {
@@ -151,7 +167,7 @@ renderer = {
     }
 
     details_row = $( '<tr class="build-details build-' + build.number + '"/>' ).append( 
-      $( '<td class="first" colspan="5"/>' )
+      $( '<td class="first" colspan="7"/>' )
     );
 
     if ( build.result == 'FAILURE' ) {
@@ -210,5 +226,8 @@ renderer = {
 
 };
 
-j = new Jenkins( renderer, 'http://projectodd.ci.cloudbees.com', 'immutant-incremental', [] );
+j = new Jenkins( renderer, 'http://projectodd.ci.cloudbees.com', 'immutant-incremental', 
+                 [['clojure_compat_version=1.3.0,label=m1.large', '1_3_0'],
+                  ['clojure_compat_version=1.4.0,label=m1.large', '1_4_0'],
+                  ['clojure_compat_version=1.5.1,label=m1.large', '1_5_1']] );
 
