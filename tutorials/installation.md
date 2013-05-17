@@ -54,7 +54,7 @@ and cover the `overlay` task in the [overlay tutorial].
 
 Now we need to install an Immutant distribution. You have the option of either 
 installing a versioned release or an [incremental build]. Our latest versioned release
-is [#{latest_release.version}](#{announcement_for_version(latest_release.version)})
+is [#{latest_release.version}](#{announcement_for_version(latest_release.version).url})
 (released #{format_date(announcement_for_version(latest_release.version).date)}), but if
 you want to stay on the cutting edge, you may want to install the latest incremental
 build. We generate one after every push to [our repo] if the test suite passes.
