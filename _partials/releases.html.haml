@@ -19,7 +19,9 @@
         .install-command
           :markdown
             Install via:
+
                 $ lein immutant install #{version}
+
             Don't have the `lein-immutant` plugin installed? 
             [Learn how](/install/), or 
             [download the zip archive](#{latest_release.urls.remote_dist_zip}).
@@ -31,7 +33,9 @@
           generates a build on our [CI server](https://projectodd.ci.cloudbees.com/job/immutant-incremental/).
           You can view the results of those builds on our [builds page](/builds/),
           and can install the latest successful build via:
-              $ lein immutant install LATEST
+
+              $ lein immutant install :latest
+
           Don't have the `lein-immutant` plugin installed? 
           [Learn how](/install/), or [download the zip archive](/builds/immutant-dist-slim.zip).
           

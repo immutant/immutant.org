@@ -2,7 +2,7 @@
 title: Scheduling
 sequence: 3
 description: "Set up asynchronous jobs with a cron-style or at-style syntax"
-date: 2013-02-27
+date: 2013-05-21
 ---
 
 
@@ -144,9 +144,6 @@ return `true`, otherwise `nil` is returned.
 Jobs are automatically unscheduled when your application is undeployed.
 
 ## Wrapping Up
-
-Since Immutant is still in an alpha state, none of what I said above is set in stone. If 
-anything does change, We'll update this post to keep it accurate. 
 
 If you have any feedback or questions, [get in touch]! 
 
