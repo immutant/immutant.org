@@ -19,6 +19,7 @@ title: Installation
 
       Install the plugin by adding it to the plugin
       list in `~/.lein/profiles.clj`:
+
           {:user {:plugins [[lein-immutant "#{site.latest_plugin_version}"]]}}
 
       You can determine the current version of the plugin by looking at
@@ -27,16 +28,15 @@ title: Installation
 
       The plugin provides a number of subtasks, one of which is
       `install`. So installing Immutant is as easy as this:
+
           $ lein immutant install [--full] [VERSION]
 
-      Without a VERSION specified, the latest successful incremental build
-      will be installed. To obtain fixes released in subsequent incremental 
-      builds, Simply run `install` again.
+      Without a `VERSION` specified, the latest versioned release
+      will be installed. 
 
       To obtain a specific version, you can specify an incremental build 
-      number (ex: 123) or a released version (ex: #{latest_release.version}).
-      _**Note:** installing a released version requires version **0.6.0** or newer
-      of the plugin._
+      number (ex: `123`) or a released version (ex: `#{latest_release.version}`).
+      To obtain the latest incremental build, use `:latest` for the version.
 
       The plugin will install the *slim* version by default. To
       install the *full* distribution, pass the `--full` option to 
@@ -46,9 +46,12 @@ title: Installation
       `~/.lein/immutant/releases`, and `~/.lein/immutant/current` is
       linked to that release. You can specify an alternative parent
       install directory by passing it as the third argument to
-      `install`: $ lein immutant install #{latest_release.version}
-      /path/where/you/want/it The plugin will install Immutant there,
-      and link `~/.lein/immutant/current` to that version.
+      `install`: 
+      
+          $ lein immutant install #{latest_release.version} /path/where/you/want/it 
+
+      The plugin will install Immutant there, and link
+      `~/.lein/immutant/current` to that version.
 
     %h2 Installation via Zip Download
 
@@ -61,10 +64,11 @@ title: Installation
       
       Once you have the zip downloaded, expand it somewhere handy. If you want
       to use the Leiningen plugin with this build, you'll need to set `$IMMUTANT_HOME`:
+
           $ mkdir immutant-releases
           $ cd immutant-releases
           $ unzip path/to/immutant-dist-{slim,full}.zip
-          $ export IMMUTANT_HOME=~/immutant-releases/#{latest_release.version}/
+          $ export IMMUTANT_HOME=~/immutant-releases/immutant-#{latest_release.version}-{slim,full}/
 
 
   .span4
@@ -80,7 +84,4 @@ title: Installation
          included. If you need to run JavaEE applications alongside
          Clojure apps in the same AS, this is the distribution for
          you. 
-
-      Older releases and builds only provide a *bin* distribution,
-      which is analogous to the *full* distribution above.
 

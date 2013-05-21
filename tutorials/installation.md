@@ -2,7 +2,7 @@
 title: 'Installation'
 sequence: 0
 description: 'An in-depth look at the installation process'
-date: 2013-02-26
+date: 2013-05-21
 ---
 
 This tutorial provides an in-depth look at the process for installing Immutant.
@@ -17,7 +17,7 @@ managing their life-cycles. The last time this tutorial was updated
 the plugin was at version **#{site.latest_plugin_version}**, but we
 recommend you check [clojars] for the latest version.
 
-The plugin only supports both Leiningen 2.0.0 and higher. 
+The plugin only supports Leiningen 2.0.0 and higher. 
 
 ### Installing under Leiningen
 
@@ -32,20 +32,27 @@ Installing the plugin for Leiningen is just a matter of adding it to the
 Now that you have the plugin installed, run `lein immutant` to see what tasks it provides:
 
     $ lein immutant
-    undeploy   Undeploys a project from the current Immutant
-    new        Creates a new project skeleton initialized for Immutant
-    archive    Creates an Immutant archive from a project
-    deploy     Deploys a project to the current Immutant
-    run        Starts up the current Immutant, displaying its console output
-    env        Displays paths to the Immutant that the plugin is currently using
-    overlay    Overlays a feature set onto the current Immutant
-    init       Adds a sample immutant.init namespace to the current project
-    test       Runs a project's tests inside the current Immutant
-    version    Prints version info for the current Immutant
-    install    Downloads and installs an Immutant version
-
+    Manage the deployment lifecycle of an Immutant application.
+    
+    Subtasks available:
+    undeploy           Undeploys a project from the current Immutant
+    new                Creates a new project skeleton initialized for Immutant
+    archive            Creates an Immutant archive from a project
+    deploy             Deploys a project to the current Immutant
+    list-installs      Lists currently installed versions of Immutant
+    run                Starts up the current Immutant, displaying its console output
+    env                Displays paths to the Immutant that the plugin is currently using
+    overlay            Overlays a feature set onto the current Immutant
+    init               Adds a sample immutant.init namespace to the current project
+    test               Runs a project's tests inside the current Immutant
+    version            Prints version info for the current Immutant
+    install            Downloads and installs an Immutant version
+    list-deployments   Lists currently deployed applications along with the status of each
+    
     Run `lein help immutant $SUBTASK` for subtask details.
-
+    
+    Arguments: ([subtask] [project-or-nil subtask & args])
+    
 We'll only talk about the `install` and `run` tasks in this tutorial -
 we cover the application specific management tasks in the [deployment tutorial], 
 and cover the `overlay` task in the [overlay tutorial].
@@ -62,15 +69,14 @@ build. We generate one after every push to [our repo] if the test suite passes.
 The plugin provides an `install` subtask that can install a versioned release,
 the latest incremental release, or any prior incremental release.
 
-To install a versioned release, simply pass the version you want to install
-as an argument to `immutant install`:
+To install the latest versioned release, call `immutant install` with no arguments:
 
-     $ lein immutant install #{latest_release.version}
+     $ lein immutant install
     Downloading http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/#{latest_release.version}/immutant-dist-#{latest_release.version}-slim.zip
     done!                                                                           
     Extracting /a/nice/long/tmp/path/immutant-dist-#{latest_release.version}-slim.zip
-    Extracted /Users/tobias/.lein/immutant/releases/slim/immutant-#{latest_release.version}
-    Linking /Users/tobias/.lein/immutant/current to /Users/tobias/.lein/immutant/releases/immutant-#{latest_release.version}
+    Extracted /Users/tobias/.lein/immutant/releases/slim/immutant-#{latest_release.version}-slim
+    Linking /Users/tobias/.lein/immutant/current to /Users/tobias/.lein/immutant/releases/immutant-#{latest_release.version}-slim
 
 The install subtask will install a *slim* distribution by default, but
 will install the *full* distribution if passed the `--full`
@@ -82,14 +88,19 @@ Part of the install process links the most recently installed version to
 requiring you to set `$IMMUTANT_HOME`. If `$IMMUTANT_HOME` is set, it will
 override the `current` link. 
 
-Running it with no arguments will install the latest incremental build:
+Running it with `:latest` will install the latest incremental build:
 
-     $ lein immutant install 
+     $ lein immutant install :latest
      
-If you want to install a specific incremental build, specify the build number
-(available from our [builds page][incremental build]):
+If you want to install a specific version (either an incremental build
+or a release), specify the build number (available from our
+[builds page][incremental build]) for an incremental build:
 
      $ lein immutant install 705
+     
+or a version for a release:
+
+     $ lein immutant install #{latest_release.version}
     
 You can also have it install to a directory of your choosing. In this case, you must
 always specify a version (if you want the latest incremental build, specify 
@@ -124,10 +135,6 @@ You can kill the Immutant with Ctrl-C.
 
 If you've done all of the above, you're now ready to deploy an application. We
 cover that in our [deployment tutorial]. 
-
-Since Immutant is still in an alpha state, none of what we've
-said above is set in stone. If anything does change, We'll update this tutorial
-to keep it accurate. 
 
 If you have any feedback or questions, [get in touch]! 
 

@@ -2,7 +2,7 @@
 title: Deployment
 sequence: 1
 description: "Covers the creation and deployment of a basic application"
-date: 2013-03-14
+date: 2013-05-21
 ---
 
 This tutorial covers creating a basic [Ring] web application and deploying 
@@ -16,20 +16,26 @@ In our [installation tutorial][installing], we installed the [lein
 plugin]. Let's take another look at the tasks it provides:
 
     ~/immutant $ lein immutant
-    undeploy   Undeploys a project from the current Immutant
-    new        Creates a new project skeleton initialized for Immutant
-    archive    Creates an Immutant archive from a project
-    deploy     Deploys a project to the current Immutant
-    run        Starts up the current Immutant, displaying its console output
-    env        Displays paths to the Immutant that the plugin is currently using
-    overlay    Overlays a feature set onto the current Immutant
-    init       Adds a sample immutant.init namespace to the current project
-    test       Runs a project's tests inside the current Immutant
-    version    Prints version info for the current Immutant
-    install    Downloads and installs an Immutant version
-
+    Manage the deployment lifecycle of an Immutant application.
+    
+    Subtasks available:
+    undeploy           Undeploys a project from the current Immutant
+    new                Creates a new project skeleton initialized for Immutant
+    archive            Creates an Immutant archive from a project
+    deploy             Deploys a project to the current Immutant
+    list-installs      Lists currently installed versions of Immutant
+    run                Starts up the current Immutant, displaying its console output
+    env                Displays paths to the Immutant that the plugin is currently using
+    overlay            Overlays a feature set onto the current Immutant
+    init               Adds a sample immutant.init namespace to the current project
+    test               Runs a project's tests inside the current Immutant
+    version            Prints version info for the current Immutant
+    install            Downloads and installs an Immutant version
+    list-deployments   Lists currently deployed applications along with the status of each
+    
     Run `lein help immutant $SUBTASK` for subtask details.
-
+    
+    Arguments: ([subtask] [project-or-nil subtask & args]) 
 
 In this tutorial we'll cover the `new` and `deploy` tasks. To do so,
 we'll build a basic application that demonstrates the current web
@@ -197,9 +203,7 @@ application is undeployed.
 ## Wrapping up
 
 We hope you've enjoyed this quick run-through of deploying a web
-application to Immutant. Since Immutant is still in an alpha state,
-none of what I said above is set in stone. If anything does change,
-We'll edit this tutorial to keep it accurate. We've posted the [demo
+application to Immutant. We've posted the [demo
 application] we've built if you want to download it.
 
 If you have any feedback or questions, [get in touch]! 
