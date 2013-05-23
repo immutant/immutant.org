@@ -35,20 +35,19 @@ Now that you have the plugin installed, run `lein immutant` to see what tasks it
     Manage the deployment lifecycle of an Immutant application.
     
     Subtasks available:
-    undeploy           Undeploys a project from the current Immutant
-    new                Creates a new project skeleton initialized for Immutant
-    archive            Creates an Immutant archive from a project
-    deploy             Deploys a project to the current Immutant
-    list-installs      Lists currently installed versions of Immutant
-    run                Starts up the current Immutant, displaying its console output
-    env                Displays paths to the Immutant that the plugin is currently using
-    overlay            Overlays a feature set onto the current Immutant
-    init               Adds a sample immutant.init namespace to the current project
-    test               Runs a project's tests inside the current Immutant
-    version            Prints version info for the current Immutant
-    install            Downloads and installs an Immutant version
-    list-deployments   Lists currently deployed applications along with the status of each
-    
+    undeploy   Undeploys a project from the current Immutant
+    new        Creates a new project skeleton initialized for Immutant
+    archive    Creates an Immutant archive from a project
+    deploy     Deploys a project to the current Immutant
+    run        Starts up the current Immutant, displaying its console output
+    env        Displays paths to the Immutant that the plugin is currently using
+    overlay    Overlays a feature set onto the current Immutant
+    init       Adds a sample immutant.init namespace to the current project
+    test       Runs a project's tests inside the current Immutant
+    version    Prints version info for the current Immutant
+    install    Downloads and installs an Immutant version
+    list       Lists deployments or Immutant installs
+
     Run `lein help immutant $SUBTASK` for subtask details.
     
     Arguments: ([subtask] [project-or-nil subtask & args])
