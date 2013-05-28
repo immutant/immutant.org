@@ -2,7 +2,6 @@
 title: Immutant 1.0.0.beta1 Released
 author: The Immutant Team
 version: 1.0.0.beta1
-layout: release
 tags: [ releases ]
 ---
 
