@@ -86,10 +86,11 @@ Grab the public artifacts as a zip file:
 
 <img src="/images/releasing/artifacts.png" />
 
-Unzip that file, and run `namespaces/bin/push-to-clojars.rb` with a
-path to the `target/namespaces` dir in from the archive:
+Unzip that file, cd to `support/clojoars-deployer`, and run `lein run`
+with a path to the `target/namespaces` dir in from the archive:
 
-    ~/work/immutant/namespaces/bin/push-to-clojars.rb ~/Downloads/archive/namespaces/target/namespaces  
+    cd ~/work/immutant/support/clojars-deployer
+    lein run ~/Downloads/archive/namespaces/target/namespaces
 
 # Smoketest the artifacts from clojars
 
@@ -109,6 +110,11 @@ If you see any errors... well...
 > 'Tis a lesson you should heed,
 > If at first you don't succeed,
 > Try, try again
+
+# Promote the clojars artifacts
+
+Login to [clojars](http://clojars.org), and promote all eight of the
+deployed artifacts.
 
 # Release the project in JIRA
 
