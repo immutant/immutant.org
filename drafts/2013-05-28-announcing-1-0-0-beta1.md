@@ -5,10 +5,11 @@ version: 1.0.0.beta1
 tags: [ releases ]
 ---
 
-We're as happy as [can be](http://www.youtube.com/watch?v=jUBRKyAHoOw)
-to announce the very first beta release of Immutant:
-**_1.0.0.beta1_**. We don't expect to be in beta long; our plan is to
-have 1.0.0 out by the end of the summer after which we'll begin to
+We are almost as excited to announce our very first beta release of
+Immutant as
+[this guy is to see a train](http://www.youtube.com/watch?v=jUBRKyAHoOw).
+And like that train, we expect our beta cycle to be short; our plan is
+to have 1.0.0 out by the end of the summer, after which we'll begin to
 incorporate new features from JBoss [Wildfly](http://www.wildfly.org)
 for the next release. As always, view our road map
 [here](https://issues.jboss.org/browse/IMMUTANT).
