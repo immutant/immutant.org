@@ -10,8 +10,8 @@ We're as happy as [can be](http://www.youtube.com/watch?v=jUBRKyAHoOw)
 to announce the very first beta release of Immutant:
 **_1.0.0.beta1_**. We don't expect to be in beta long; our plan is to
 have 1.0.0 out by the end of the summer after which we'll begin to
-incorporate new features from AS Wildfly for the next release. As
-always, view our road map
+incorporate new features from JBoss [Wildfly](http://www.wildfly.org)
+for the next release. As always, view our road map
 [here](https://issues.jboss.org/browse/IMMUTANT).
 
 ## What is Immutant?
@@ -27,8 +27,17 @@ in real world applications.
 We haven't changed a whole lot since 0.10.0. We wanted to spruce up
 our docs and make sure we didn't have any glaring stability issues. We
 made a couple of minor enhancements to the jobs and caching
-namespaces regarding duration specs, e.g. =[15 :minutes]=, but nothing
-that isn't backwards compatible. See the complete list below.
+namespaces, but nothing that isn't backwards compatible.
+
+Cluster configuration should be simpler since we're now taking
+advantage of HornetQ's ability to use JGroups. We added a
+[Production Setup](http://staging.immutant.org/builds/LATEST/html-docs/production.html)
+chapter to our manual which we hope to evolve as more Immutants are
+put in production. Speaking of that, check out Damion's excellent
+writeup of his experiences
+[clustering Immutant and TorqueBox on Amazon's EC2](http://damionjunk.com/2013/05/20/awsimmutantclustering/).
+
+See the complete list of changes below.
 
 ## Get It
 
