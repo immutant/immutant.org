@@ -26,8 +26,8 @@ other files. But as the plugin has grown, we've realized that's not
 the best place for storing those files, since they aren't Leiningen
 specific. Therefore, we've moved the base directory to `~/.immutant`.
 
-In addition, we've reorganized layout of `~/.immutant/releases` to be
-a bit cleaner.
+In addition, we've reorganized the layout of `~/.immutant/releases` to
+be a bit cleaner.
 
 Since the new plugin will be looking in `~/.immutant`, it won't see
 the prior installs in `~/.lein/immutant`. You'll need to re-install
