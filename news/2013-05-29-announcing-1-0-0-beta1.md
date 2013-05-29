@@ -9,7 +9,7 @@ tags: [ releases ]
 
 We are almost as excited to announce our very first beta release of
 Immutant as
-[this guy is to see a train](http://www.youtube.com/watch?v=jUBRKyAHoOw).
+[this guy is to see a train](http://www.youtube.com/watch?v=6lutNECOZFw#t=7s).
 And like that train, we expect our beta cycle to be short; our plan is
 to have 1.0.0 out by the end of the summer, after which we'll begin to
 incorporate new features from JBoss [Wildfly](http://www.wildfly.org)
