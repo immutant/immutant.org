@@ -5,7 +5,7 @@ layout: news
 tags: [ lein, lein-immutant, installation ]
 ---
 
-As we [approach a 1.0.0 of Immutant], we've also been focusing on
+As we [approach a 1.0.0 of Immutant](../announcing-1-0-0-beta1/), we've also been focusing on
 getting our
 [Leiningen plugin](https://github.com/immutant/lein-immutant/) ready
 for a 1.0.0 release as well.
