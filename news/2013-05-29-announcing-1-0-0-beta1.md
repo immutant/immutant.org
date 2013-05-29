@@ -44,7 +44,9 @@ See the complete list of changes below.
 ## Get It
 
 The simplest way to install or upgrade to 1.0.0.beta1 is via our
-[Leiningen plugin](https://clojars.org/lein-immutant):
+[Leiningen plugin](https://clojars.org/lein-immutant) (though we
+recommend you
+[update your plugin version](../lein-immutant-1-0-0-beta1/) first):
 
     $ lein immutant install 1.0.0.beta1
 
