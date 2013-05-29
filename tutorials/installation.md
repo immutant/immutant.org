@@ -87,9 +87,9 @@ Part of the install process links the most recently installed version to
 requiring you to set `$IMMUTANT_HOME`. If `$IMMUTANT_HOME` is set, it will
 override the `current` link. 
 
-Running it with `:latest` will install the latest incremental build:
+Running it with `LATEST` will install the latest incremental build:
 
-     $ lein immutant install :latest
+     $ lein immutant install LATEST
      
 If you want to install a specific version (either an incremental build
 or a release), specify the build number (available from our
