@@ -29,31 +29,10 @@ specific. Therefore, we've moved the base directory to `~/.immutant`.
 In addition, we've reorganized layout of `~/.immutant/releases` to be
 a bit cleaner.
 
-### What happens then when I upgrade to 1.0.0.beta1 of the plugin?
-
 Since the new plugin will be looking in `~/.immutant`, it won't see
-the prior installs in `~/.lein/immutant`. We recommend you remove
-`~/.lein/immutant` and re-install any versions of Immutant that you
-need.
-
-If you would rather keep your existing base directory, you have two
-options:
-
-* The plugin now supports overriding the base directory, either by
-  setting an environment variable (`$LEIN_IMMUTANT_BASE_DIR`) or by
-  adding `:lein-immutant {:base-dir "/path"}` to your user profile in
-  `.lein/profiles.clj` or to your `project.clj`. Setting the base
-  directory in `project.clj` will override the setting in
-  `.lein/profiles.clj`. Using the environment variable will override
-  both. 
-* You can copy `~/.lein/immutant` to `~/.immutant`. However, the
-  `current` link is absolute, and will have to be manually corrected.
-
-If you do keep your old base directory, you will be unable to use
-`lein immutant install` to switch the `current` version between
-versions that were installed by an older plugin. If that's a feature
-that you use, we strongly urge you to let the plugin create and manage
-the new base directory.
+the prior installs in `~/.lein/immutant`. You'll need to re-install
+the Immutant versions you need, and can safely delete
+`~/.lein/immutant`.
 
 ## The plugin now installs the latest release by default
 
@@ -68,7 +47,7 @@ So, to install the latest stable release:
     
 If you want to install the latest incremental build:
 
-    lein immutant install :latest
+    lein immutant install LATEST
     
 You can still specify any stable release version or incremental build
 number to get an exact version.
@@ -95,6 +74,24 @@ all of the installed Immutant versions instead of deployments:
        
 You'll also now see this list after every `lein immutant install` invocation.
 
+## Overriding the base directory
+
+In addition to moving the base directory to `~/.immutant`, we've added
+the option to override its location, either per-project or globally.
+
+You can override it on a per-project basis by setting `:lein-immutant
+{:base-dir "/path"}` in your `project.clj`
+  
+You can override it globally two ways:
+
+* by setting `:lein-immutant {:base-dir "/path"}` in your user profile
+  in `.lein/profiles.clj`
+* by setting an environment variable: `$LEIN_IMMUTANT_BASE_DIR`
+
+Setting the base directory in `project.clj` will override the setting
+in `.lein/profiles.clj`. Using the environment variable will override
+both.
+  
 ## Get it
 
 If you're already using `lein-immutant` you probably already know how
