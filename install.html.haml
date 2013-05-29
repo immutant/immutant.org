@@ -43,7 +43,7 @@ title: Installation
       the `install` subtask.
 
       Releases installed via the plugin are installed by default under
-      `~/.lein/immutant/releases`, and `~/.lein/immutant/current` is
+      `~/.immutant/releases`, and `~/.immutant/current` is
       linked to that release. You can specify an alternative parent
       install directory by passing it as the third argument to
       `install`: 
@@ -51,7 +51,15 @@ title: Installation
           $ lein immutant install #{latest_release.version} /path/where/you/want/it 
 
       The plugin will install Immutant there, and link
-      `~/.lein/immutant/current` to that version.
+      `~/.immutant/current` to that version.
+
+      You can override the plugin base directory (`~/.immutant`) by
+      setting `$LEIN_IMMUTANT_BASE_DIR` or by adding `:lein-immutant
+      {:base-dir "/path"}` to your user profile in
+      `.lein/profiles.clj` or to your `project.clj`. Setting the base
+      directory in `project.clj` will override the setting in
+      `.lein/profiles.clj`. Using the environment variable will
+      override both.
 
     %h2 Installation via Zip Download
 

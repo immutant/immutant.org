@@ -2,7 +2,7 @@
 title: Overlay
 description: 'Mix TorqueBox and Immutant to run Ruby and Clojure apps together'
 sequence: 6
-date: 2012-09-25
+date: 2013-05-29
 ---
 
 The [Overlay] project makes it very easy to create a single JBoss app
@@ -19,7 +19,7 @@ Immutant may be used to overlay the latest [TorqueBox] as well:
 And voila, your Immutant is suddenly also a TorqueBox! Now we need to
 set up your environment for TorqueBox development.
 
-    $ export TORQUEBOX_HOME=$HOME/.lein/immutant/current
+    $ export TORQUEBOX_HOME=$HOME/.immutant/current
     $ export PATH=$TORQUEBOX_HOME/jruby/bin:$PATH
 
 The TorqueBox distribution provides its own JRuby with the TorqueBox

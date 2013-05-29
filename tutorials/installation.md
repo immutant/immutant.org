@@ -2,7 +2,7 @@
 title: 'Installation'
 sequence: 0
 description: 'An in-depth look at the installation process'
-date: 2013-05-21
+date: 2013-05-29
 ---
 
 This tutorial provides an in-depth look at the process for installing Immutant.
@@ -74,8 +74,8 @@ To install the latest versioned release, call `immutant install` with no argumen
     Downloading http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/#{latest_release.version}/immutant-dist-#{latest_release.version}-slim.zip
     done!                                                                           
     Extracting /a/nice/long/tmp/path/immutant-dist-#{latest_release.version}-slim.zip
-    Extracted /Users/tobias/.lein/immutant/releases/slim/immutant-#{latest_release.version}-slim
-    Linking /Users/tobias/.lein/immutant/current to /Users/tobias/.lein/immutant/releases/immutant-#{latest_release.version}-slim
+    Extracted /Users/tobias/.immutant/releases/slim/immutant-#{latest_release.version}-slim
+    Linking /Users/tobias/.immutant/current to /Users/tobias/.immutant/releases/immutant-#{latest_release.version}-slim
 
 The install subtask will install a *slim* distribution by default, but
 will install the *full* distribution if passed the `--full`
@@ -83,7 +83,7 @@ option. For more details on the difference between *slim* and *full*,
 see the [install](/install) page.
 
 Part of the install process links the most recently installed version to 
-`~/.lein/immutant/current` so the plugin can find the Immutant install without
+`~/.immutant/current` so the plugin can find the Immutant install without
 requiring you to set `$IMMUTANT_HOME`. If `$IMMUTANT_HOME` is set, it will
 override the `current` link. 
 
@@ -107,10 +107,17 @@ always specify a version (if you want the latest incremental build, specify
 
      $ lein immutant install latest /some/other/path
     
-`~/.lein/immutant/current` will then be linked to that location.
+`~/.immutant/current` will then be linked to that location.
 
 The `install` command also verifies the sha1 sum of the downloaded artifact, and
 will abort the installation if the sum is incorrect.
+
+You can override the plugin base directory (`~/.immutant`) by setting
+`$LEIN_IMMUTANT_BASE_DIR` or by adding `:lein-immutant {:base-dir
+"/path"}` to your user profile in `.lein/profiles.clj` or to your
+`project.clj`. Setting the base directory in `project.clj` will
+override the setting in `.lein/profiles.clj`. Using the environment
+variable will override both.
 
 ## Running Immutant
 
@@ -122,7 +129,7 @@ one to look for should be the last message, and will tell you the Immutant was p
 started:
 
      $ lein immutant run
-    Starting Immutant via /Users/tobias/.lein/immutant/current/jboss/bin/standalone.sh
+    Starting Immutant via /Users/tobias/.immutant/current/jboss/bin/standalone.sh
     ...
     (a plethora of log messages deleted)
     ...

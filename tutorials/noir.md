@@ -2,7 +2,7 @@
 title: Using Noir
 sequence: 7
 description: "Covers the creation and deployment of a basic Noir application"
-date: 2012-02-01
+date: 2013-05-29
 author: Doug Selph
 author_url: "https://github.com/dougselph"
 ---
@@ -69,7 +69,7 @@ application, this is not a problem.
 You can now start immutant and deploy your application:
 
     ~/noirtant $ lein immutant run
-    Starting Immutant via ~/.lein/immutant/current/jboss/bin/standalone.sh
+    Starting Immutant via ~/.immutant/current/jboss/bin/standalone.sh
     ... 
     (a plethora of log messages deleted)
     ...
@@ -80,14 +80,14 @@ You can now start immutant and deploy your application:
 Immutant will run in the foreground, so switch to another shell and run:
 
     ~/noirtant $ lein immutant deploy
-    Deployed noirtant to ~/.lein/immutant/current/jboss/standalone/deployments/noirtant.clj
+    Deployed noirtant to ~/.immutant/current/jboss/standalone/deployments/noirtant.clj
 
 You application can now be accessed [here][noirtant-deployed]. Neat, huh? (Golf claps, 
 everyone!) When you've had your fill of playing with noirtant, you can shut down your 
 immutant with CTRL-c or undeploy noirtant:
 
     ~/noirtant $ lein immutant undeploy
-    Undeployed noirtant from ~/.lein/immutant/current/jboss/standalone/deployments
+    Undeployed noirtant from ~/.immutant/current/jboss/standalone/deployments
 
 ## Wrapping up
 

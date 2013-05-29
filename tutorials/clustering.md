@@ -2,7 +2,7 @@
 title: Clustering
 sequence: 5
 description: "How your apps benefit when Immutants form a cluster"
-date: 2012-12-13
+date: 2013-05-29
 ---
 
 One of the primary benefits provided by the [JBoss AS7][as7]
@@ -83,7 +83,7 @@ experiment with the features listed above.
 To run two immutant instances on a single machine, fire up two shells and...
 
 In one shell, run:
-    cp -r ~/.lein/immutant/current/ /tmp/node2 
+    cp -r ~/.immutant/current/ /tmp/node2 
     lein immutant run --clustered
 
 In another shell, run:
