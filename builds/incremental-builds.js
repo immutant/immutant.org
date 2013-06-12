@@ -84,7 +84,7 @@ renderer = {
       row.find( 'td .number' ).show();
       row.find( 'td .number a' ).show();
       $( '.build-' + build.number + '.build-details td *' ).hide();
-      $( '.build-' + build.number + '.build-details' ).addClass( 'hidden' );
+      //$( '.build-' + build.number + '.build-details' ).addClass( 'hidden' );
     }
 
   },
