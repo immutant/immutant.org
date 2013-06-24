@@ -127,12 +127,12 @@ to a different interface, which we could specify using the `-b`
 option. 
 
 But rather than go through a platform-specific example of creating an
-IP alias (unless you're on a Mac, see above), I'm going to take
-advantage of another JBoss feature: the
-`jboss.socket.binding.port-offset` property will cause each default
-port number to be incremented by a specified amount.
+IP alias (unless you're on a Mac, see above), we can take advantage of
+another JBoss feature: the `jboss.socket.binding.port-offset` property
+will cause each default port number to be incremented by a specified
+amount.
 
-So for the second Immutant, I set the offset to 100, resulting in its
+So for the second Immutant, we set the offset to 100, resulting in its
 HTTP service, for example, listening on 8180 instead of the default
 8080, on which the first Immutant is listening.
 
@@ -148,42 +148,46 @@ to use what we learned there to creae a simple app:
     cd cluster-example
     
 Next, edit the Immutant application bootstrap file,
-`src/immutant/init.clj`, and replace its contents with:
-
+`src/immutant/init.clj`, and replace its contents with this:
 
 <pre class="syntax clojure">(ns immutant.init
-  (:require [immutant.messaging :as messaging]
-            [immutant.daemons :as daemon]))
+  (:require [immutant.cache     :as cache]
+            [immutant.messaging :as messaging]
+            [immutant.daemons   :as daemon]))
 
-;; Create a message queue
+;;; Create a message queue
 (messaging/start "/queue/msg")
-;; Define a consumer for our queue
+
+;;; Define a consumer for our queue
 (def listener (messaging/listen "/queue/msg" #(println "received:" %)))
 
-;; Controls the state of our daemon
+;;; Create a distributed cache to hold our counter value
+(def cache (cache/lookup-or-create "counters"))
+
+;;; Controls the state of our daemon
 (def done (atom false))
 
-;; Our daemon's start function
+;;; Our daemon's start function
 (defn start []
   (reset! done false)
-  (loop [i 0]
+  (while (not @done)
     (Thread/sleep 1000)
-    (when-not @done
+    (let [i (:value cache 1)]
       (println "sending:" i)
       (messaging/publish "/queue/msg" i)
-      (recur (inc i)))))
+      (cache/put cache :value (inc i)))))
 
-;; Our daemon's stop function
+;;; Our daemon's stop function
 (defn stop []
   (reset! done true))
 
-;; Register the daemon
+;;; Register the daemon
 (daemon/daemonize "counter" start stop)
 </pre>
 
-We've defined a message queue, a message listener, and a daemon
-service that, once started, publishes messages to the queue every
-second. 
+We've defined a message queue, a message listener, a distributed
+cache, and a daemon service that, once started, continuously publishes
+a cached value to the queue and increments it.
 
 Daemons require a name (for referencing as a JMX MBean), a start
 function to be invoked asynchronously, and a stop function that will
@@ -207,8 +211,11 @@ balancing of message consumers.
 
 Now kill the Immutant running the daemon. Watch the other one to see
 that the daemon will start there within seconds. There's your
-automatic HA service failover. Restart the killed Immutant to see him
-start to receive messages again. It's fun, right? :)
+automatic HA service failover. Because the cache is shared among any
+apps that reference it by name in the cluster, you'll see the second
+daemon pick up the count where the first daemon left off. Now restart
+the killed Immutant to see him start to receive messages again. It's
+fun, right? :)
 
 ## Domain Mode
 
