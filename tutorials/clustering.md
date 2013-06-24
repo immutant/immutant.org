@@ -83,10 +83,12 @@ experiment with the features listed above.
 To run two immutant instances on a single machine, fire up two shells and...
 
 In one shell, run:
+
     cp -r ~/.immutant/current/ /tmp/node2 
     lein immutant run --clustered
 
 In another shell, run:
+
     rm -rf /tmp/node2/jboss/standalone/data
     IMMUTANT_HOME=/tmp/node2 lein immutant run --clustered -Djboss.node.name=two -Djboss.socket.binding.port-offset=100
 
@@ -95,6 +97,7 @@ And BAM, you're a cluster!
 ### TL;DR for Mac users
 
 If you're on a Mac, the above may not work. Try IP aliases instead:
+
     for i in {1,2}; do sudo ifconfig en1 inet 192.168.6.20${i}/32 alias; done
     lein immutant run --clustered -b 192.168.6.201
     IMMUTANT_HOME=/tmp/node2 lein immutant run --clustered -Djboss.node.name=two -b 192.168.6.202
