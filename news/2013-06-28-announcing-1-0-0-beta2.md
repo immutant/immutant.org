@@ -11,9 +11,9 @@ tags: [ releases ]
 [lein-immutant]: https://github.com/immutant/lein-immutant
 
 We're as proud as
-[this kid's](http://www.youtube.com/watch?v=CQoE4bnpBCk) parents to
-release our second beta. We fixed a few bugs and added a few minor
-features, but most changes were external to Immutant proper. As
+[this kid's](http://www.youtube.com/watch?v=CQoE4bnpBCk) parents must
+be to release our second beta. We fixed a few bugs and added a few
+minor features, but most changes were external to Immutant proper. As
 always, view our road map
 [here](https://issues.jboss.org/browse/IMMUTANT).
 
