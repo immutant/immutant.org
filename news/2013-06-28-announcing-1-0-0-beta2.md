@@ -5,10 +5,11 @@ version: 1.0.0.beta2
 layout: release
 tags: [ releases ]
 ---
-
-We figured it was about time to release a second beta. We fixed a few
-bugs and added a few minor features, but most changes were external to
-Immutant proper. As always, view our road map
+We're as proud as
+[this kid's](http://www.youtube.com/watch?v=CQoE4bnpBCk) parents to
+release our second beta. We fixed a few bugs and added a few minor
+features, but most changes were external to Immutant proper. As
+always, view our road map
 [here](https://issues.jboss.org/browse/IMMUTANT).
 
 ## What is Immutant?
@@ -21,7 +22,7 @@ in real world applications.
 
 ## What's in this release?
 
-* Our slim build is even slimmer now!
+* Our slim build is even slimmer now (44mb - beta1 was 68mb)!
 * You can now make message listeners non-transactional by passing `:xa
   false` to `immutant.messaging/listen`. This may interest you if your
   handlers take longer than a minute or so and you don't require
@@ -43,7 +44,7 @@ lein-immutant, releasing both as *beta2* today, but we discovered a
 bug soon after releasing the plugin and had to bump it to *beta3*.
 
 So be sure and update your `~/.lein/profiles.clj` with
-`[lein-immutant "1.0.0.beta3"]`
+`[lein-immutant "1.0.0.beta3"]`.
 
 ## Get It
 
