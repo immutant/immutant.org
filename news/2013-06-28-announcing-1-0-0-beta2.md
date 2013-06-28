@@ -6,6 +6,10 @@ layout: release
 tags: [ releases ]
 ---
 
+[Fressian codec]: https://github.com/vitalreactor/immutant-fressian
+[fntest]: https://github.com/immutant/fntest
+[lein-immutant]: https://github.com/immutant/lein-immutant
+
 We figured it was about time to release a second beta. We fixed a few
 bugs and added a few minor features, but most changes were external to
 Immutant proper. As always, view our road map
@@ -27,16 +31,18 @@ in real world applications.
   handlers take longer than a minute or so and you don't require
   rollbacks if your handler tosses an exception.
 * We now allow messages and cache contents to be encoded to byte
-  arrays, mostly to support Ian Eslick's new Fressian codec.
+  arrays, mostly to support Ian Eslick's new [Fressian codec].
 
 See the complete list of changes below.
 
 ## A new plugin release
 
-We've also released a new lein-immutant plugin, primarily to show off
-a nice contribution to our fntest library from Paul Legato: the `test`
-task of the plugin will now test any Midje facts it finds in your
-project.
+We've also released a new [lein-immutant] plugin, primarily to show off
+a
+[nice contribution](https://github.com/immutant/fntest/commits?author=pjlegato)
+to our [fntest] library from Paul Legato: the `test` task of the
+plugin will now test any [Midje](https://github.com/marick/Midje)
+facts it finds in your project.
 
 We had intended to synchronize the versions of Immutant and
 lein-immutant, releasing both as *beta2* today, but we discovered a
