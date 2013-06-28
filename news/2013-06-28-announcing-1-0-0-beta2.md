@@ -6,13 +6,9 @@ layout: release
 tags: [ releases ]
 ---
 
-We are almost as excited to announce our very first beta release of
-Immutant as
-[this guy is to see a train](http://www.youtube.com/watch?v=6lutNECOZFw#t=7s).
-And like that train, we expect our beta cycle to be short; our plan is
-to have 1.0.0 out by the end of the summer, after which we'll begin to
-incorporate new features from JBoss [Wildfly](http://www.wildfly.org)
-for the next release. As always, view our road map
+We figured it was about time to release a second beta. We fixed a few
+bugs and added a few minor features, but most changes were external to
+Immutant proper. As always, view our road map
 [here](https://issues.jboss.org/browse/IMMUTANT).
 
 ## What is Immutant?
@@ -25,17 +21,29 @@ in real world applications.
 
 ## What's in this release?
 
-* smaller slim build
-* xa option
-* caching
-
-chat about fressian?
+* Our slim build is even slimmer now!
+* You can now make message listeners non-transactional by passing `:xa
+  false` to `immutant.messaging/listen`. This may interest you if your
+  handlers take longer than a minute or so and you don't require
+  rollbacks if your handler tosses an exception.
+* We now allow messages and cache contents to be encoded to byte
+  arrays, mostly to support Ian Eslick's new Fressian codec.
 
 See the complete list of changes below.
 
 ## A new plugin release
 
-We've also updated the lein-immutant plugin to 1.0.0.beta2 {{links and verbiage}}
+We've also released a new lein-immutant plugin, primarily to show off
+a nice contribution to our fntest library from Paul Legato: the `test`
+task of the plugin will now test any Midje facts it finds in your
+project.
+
+We had intended to synchronize the versions of Immutant and
+lein-immutant, releasing both as *beta2* today, but we discovered a
+bug soon after releasing the plugin and had to bump it to *beta3*.
+
+So be sure and update your `~/.lein/profiles.clj` with
+`[lein-immutant "1.0.0.beta3"]`
 
 ## Get It
 
