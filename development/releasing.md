@@ -16,7 +16,7 @@ Set up this repository as an additional remote for your workspace:
 Ensure that the tag you are attempting to release does not exist in the release repository,
 or maven will fail part way through the build
 
-    git push release :0.1.0
+    git push release :1.0.0
 
 Ensure that the `master` branch has the contents you wish to release.  Using the `-f`
 flag to force is allowed in this case, since the **immutant-release** repository is not
@@ -42,7 +42,7 @@ to ensure they all work together before publishing any to public repositories.
 
 After each pre-flight build, you will need to reset the release repository:
 
-    git push release :0.1.0
+    git push release :1.0.0
     git push release master:master -f
     
 When you are happy with the pre-flight build (in other words, it completes successfully), 
@@ -77,7 +77,7 @@ Verify that the artifacts you expect have been uploaded and deployed to
 
 ## Push the tag to the official repository
 
-    git push origin 0.1.0
+    git push origin 1.0.0
 
 # Push the public artifacts to clojars.org
 
@@ -96,7 +96,7 @@ with a path to the `target/namespaces` dir in from the archive:
 
 Shutdown any local JBoss instances and run the following:
 
-    ~/work/immutant/support/smoketest/bin/smoke 0.1.0
+    ~/work/immutant/support/smoketest/bin/smoke 1.0.0
 
 That will initialize a local maven repository beneath
 `smoketest/target/.m2` and download all required dependencies there
@@ -122,14 +122,9 @@ deployed artifacts.
 
 # Announce it
 
-## Post it on `immutant.org`
-
-## Notify `immutant-users@`
-
-## Notify `the-core@`
-
-## Notify `clojure@`
-
-## Tweet it.
-
-## Set the /topic in `#immutant` IRC channel using ChanServ (if you can).
+* Post it on `immutant.org`
+* Notify `immutant-users@`
+* Notify `the-core@`
+* Notify `clojure@`
+* Tweet.
+* Set the /topic in `#immutant` IRC channel using ChanServ (if you can).
