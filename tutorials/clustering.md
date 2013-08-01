@@ -29,21 +29,21 @@ configuration on your part.
 non-clustered, standalone Immutant, `:local` is the **only** supported
 mode. But when clustered, you have other options.
 
-* `:invalidated` -- This is the default clustered mode. It doesn't
-   actually share any data at all, so it's very "bandwidth friendly".
-   Whenever data is changed in a cache, other caches in the cluster
-   are notified that their copies are now stale and should be evicted
-   from memory.
+* `:distributed` -- This is the default clustered mode. It's what
+   enables Infinispan clusters to achieve "linear scalability". Cache
+   entries are copied to a fixed number of cluster nodes (default is
+   2) regardless of the cluster size. Distribution uses a consistent
+   hashing algorithm to determine which nodes will store a given
+   entry.
 * `:replicated` -- In this mode, entries added to any cache instance
    will be copied to all other cache instances in the cluster, and can
    then be retrieved locally from any instance.  Though simple, it's
    impractical for clusters of any significant size (>10), and its
    capacity is equal to the amount of RAM in its smallest peer.
-* `:distributed` -- This mode is what enables Infinispan clusters to
-   achieve "linear scalability". Cache entries are copied to a fixed
-   number of cluster nodes (default is 2) regardless of the cluster
-   size.  Distribution uses a consistent hashing algorithm to
-   determine which nodes will store a given entry.
+* `:invalidated` -- This mode doesn't actually share any data at all,
+   so it's very "bandwidth friendly". Whenever data is changed in a
+   cache, other caches in the cluster are notified that their copies
+   are now stale and should be evicted from memory.
 
 ### immutant.jobs
 
@@ -174,11 +174,11 @@ Next, edit the Immutant application bootstrap file,
 (defn start []
   (reset! done false)
   (while (not @done)
-    (Thread/sleep 1000)
     (let [i (:value cache 1)]
       (println "sending:" i)
       (messaging/publish "/queue/msg" i)
-      (cache/put cache :value (inc i)))))
+      (cache/put cache :value (inc i))
+      (Thread/sleep 1000))))
 
 ;;; Our daemon's stop function
 (defn stop []
