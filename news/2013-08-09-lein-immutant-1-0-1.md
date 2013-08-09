@@ -16,7 +16,7 @@ changes:
   `project-root/target/` instead. The exact location will depend on
   the profiles that are active. The archive command will output the
   full path to the archive.
-* The host used by the `install` and `overlay` tasks to download
+* The url used by the `install` and `overlay` tasks to download
   Immutant has been changed to use a
   [CDN](https://aws.amazon.com/cloudfront/). This should provide
   shorter download times, and allows us to track download counts to
