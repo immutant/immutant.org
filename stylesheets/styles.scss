@@ -54,7 +54,7 @@ body {
 }
 
 .gray-box {
-    @include border-radius(6px);
+    @include border-radius(3px);
     border: 1px solid #ccc;
     background-color: #f5f5f5;
 }
@@ -168,11 +168,11 @@ table.fancy {
 }
 
 code {
-    padding: 0;
+    padding: 0px 5px;
     color: #333;
-    background-color: #fff;
+    background-color: #f8f8f8;
     font-family: "Courier New", monospace;
-    border: 0;
+    border: 1px solid #ddd;
 }
 
 // sticky footer from: https://github.com/twitter/bootstrap/issues/306#issuecomment-2880409

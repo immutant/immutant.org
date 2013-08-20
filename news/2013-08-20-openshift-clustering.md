@@ -23,7 +23,7 @@ Here are the features we'll be demonstrating:
 If you haven't already, go [set up an OpenShift account] and update
 your `rhc` gem to the latest version. I used 1.12.4 for this article.
 Below you'll see references to *$namespace* -- this corresponds to
-your OpenShift domain name, set by running '`rhc setup`'.
+your OpenShift domain name, set by running `rhc setup`.
 
 *Note*: If this is the first time you've used OpenShift, you'll need
 to visit the [console] and accept the usage agreement before running
@@ -72,7 +72,7 @@ repository and pushing to OpenShift's.
     git pull -s recursive -X theirs upstream master
     git push
 
-While waiting for that to complete, run '`rhc tail demo`' in another
+While waiting for that to complete, run `rhc tail demo` in another
 shell to monitor your log. This time, the *Deployed
 "your-clojure-application.clj"* message is going to scroll off the
 screen as the cluster-demo app starts logging its output. Eventually,
@@ -118,8 +118,8 @@ see the definitive state of your gears:
 
     rhc show-app --gears
 
-This also gives you the SSH URL's for your two gears. Fire up two
-shells and ssh into each of your gears using those SSH URL's. Then
+This also gives you the SSH URLs for your two gears. Fire up two
+shells and ssh into each of your gears using those SSH URLs. Then
 tail the log on each:
 
     tail -f immutant/logs/server.log
@@ -135,7 +135,7 @@ This is our cache replication at work.
 
 ## Let's break stuff!
 
-And see how robust our cluster is!
+And see how robust our cluster is.
 
 ### High Availability Daemons and Jobs
 
