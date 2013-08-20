@@ -7,7 +7,7 @@ tags: [ openshift, tutorial, clustering, messaging, caching, daemons, scheduled-
 
 Lately I've been spending a lot of time on [OpenShift], building and
 testing a [cartridge] for Immutant that will properly form a cluster
-on multiple OpenShift [gears]. In this post, I'll go through the steps
+across multiple OpenShift [gears]. In this post, I'll go through the steps
 of deploying a simple application that demonstrates all of the
 Immutant clustering features running on the three small gears you get
 for free on OpenShift.
@@ -56,12 +56,15 @@ Now we'll put some meat on our bare-bones app!
 ## Push Me, Pull You 
 
 Typically, you will add the remote git repository for your real
-application to the local OpenShift repository you just created.
-Deployment of your app to OpenShift amounts to pulling from your real
-app and pushing to OpenShift. We're going to use
-<https://github.com/immutant/cluster-demo> as our "real" application.
+application to the local OpenShift repository you just created. We're
+going to use <https://github.com/immutant/cluster-demo> as our "real"
+application.
 
     git remote add upstream -m master git@github.com:immutant/cluster-demo.git
+
+Deployment of your app to OpenShift amounts to pulling from your real
+repository and pushing to OpenShift's.
+
     git pull -s recursive -X theirs upstream master
     git push
 
@@ -69,8 +72,7 @@ While waiting for that to complete, run `rhc tail demo` in another
 shell to monitor your log. This time, the *Deployed
 "your-clojure-application.clj"* message is going to scroll off the
 screen as the cluster-demo app starts logging its output. Eventually,
-the app should settle down into a steady state looking something like
-this:
+the app should settle into a steady state looking something like this:
 
 <img src="/images/news/demo-log.png"/>
 
@@ -169,13 +171,13 @@ Use an obnoxious path to distinguish your request from the health
 checks. Repeat the command a few times to observe the gears taking
 turns responding to your request. Now try it in a browser, and you'll
 see the same gear handling your request every time you reload. This is
-because HAProxy is configured to use cookie-based session affinity,
-which your browser is probably honoring. And `curl` doesn't, by
-default.
+because HAProxy is setting cookies in the response to enable session
+affinity, which your browser is probably sending back. And `curl`
+didn't.
 
-Speaking of session affinity, let's try our other web handler, the one
-that increments a counter in the user's web session:
-<http://demo-$namespace.rhcloud.com/count>
+Speaking of session affinity, let's break that while we're at it, by
+invoking our other web handler, the one that increments a counter in
+the user's web session: <http://demo-$namespace.rhcloud.com/count>
 
 You should see the counter increment each time you reload your
 browser. (You'll need to give `curl` a cookie store to see it respond
@@ -183,11 +185,11 @@ with anything other than "1 times")
 
 Pay attention to which gear is responding to the */count* request. Now
 stop that gear like you did before. When you reload your browser, you
-should see the other node return the expected value. This is the
+should see the other gear return the expected value. This is the
 automatic session replication provided by
-`immutant.web.session/servlet-store`. 
+`immutant.web.session/servlet-store`.
 
-Go ahead and restart the gear.
+Don't forget to restart that gear.
 
 ## The Hat Trick
 
@@ -200,30 +202,31 @@ When the third one finally comes up, there are a couple of things you
 may notice:
 
 - The health checks will disappear from the primary gear as HAProxy
-  will take it out of the rotation when 2 or more other gears are
-  available.
+  takes it out of the rotation when 2 or more other gears are
+  available. I'm not sure [why].
 - Each cache key will only show up in the **recv** log messages on 2
-  of the 3 gears. This is because Immutant caches use Infinispan's
-  `:distributed` replication mode, by default. This mode enables
-  Infinispan clusters to achieve "linear scalability" as entries are
-  copied to a fixed number of cluster nodes (2, by default) regardless
-  of the cluster size. Distribution uses a consistent hashing
-  algorithm to determine which nodes will store a given entry.
+  of the 3 gears. This is because Immutant caches default to
+  Infinispan's `:distributed` replication mode in a cluster. This
+  enables Infinispan clusters to achieve "linear scalability" as
+  entries are copied to a fixed number of cluster nodes (default 2)
+  regardless of the cluster size. Distribution uses a consistent
+  hashing algorithm to determine which nodes will store a given entry.
 
 ## Now what?
 
-Well, that was a lot to cover. I'm not sure many apps will use all
-these features, but I think it's nice to have a free playground on
-which to try some or all of them out, even with the resources as
-constrained as they are on a small gear.
+Well, that was a lot to cover. I doubt many apps will use all these
+features, but I think it's nice to have a free playground on which to
+try them out, even with the resources as constrained as they are on a
+small gear.
 
-Regardless, I'm pretty happy that Immutant is feature-complete on
-OpenShift now. :-)
+Regardless, I'm pretty happy that Immutant is finally feature-complete
+on OpenShift now. :-)
 
 As always, I had a lot of help getting things to this point. There is
 a lot of expertise on the OpenShift and JBoss teams, but the "three
-B's" in particular deserve special mention: Ben Browning, Bela Ban,
-and Bill DeCoste.
+B's" deserve special mention: [Ben](https://twitter.com/bbrowning),
+[Bela](http://belaban.blogspot.com/), and
+[Bill](http://www.billdecoste.net/).
 
 Thanks!
 
@@ -233,3 +236,4 @@ Thanks!
 [set up an OpenShift account]: https://www.openshift.com/get-started#cli
 [contained in a single file]: https://github.com/immutant/cluster-demo/blob/master/src/immutant/init.clj
 [HAProxy]: https://www.openshift.com/blogs/how-haproxy-scales-openshift-apps
+[why]: https://www.openshift.com/forums/openshift/why-doesnt-haproxy-put-the-local-gear-in-the-rotation
