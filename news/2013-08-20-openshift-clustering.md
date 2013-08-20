@@ -112,9 +112,9 @@ Now we're ready to form a cluster by adding a gear to our app:
 
     rhc scale-cartridge immutant -a demo 2
 
-Again, this will take a few minutes. If you're still monitoring your
-log, you'll eventually see the gears discover each other. You can run
-the following to see the state of your gears:
+Again, this will take a few minutes, and it may return an error even
+though the operation actually succeeded. You can run the following to
+see the definitive state of your gears:
 
     rhc show-app --gears
 
@@ -124,12 +124,14 @@ tail the log on each:
 
     tail -f immutant/logs/server.log
 
-When the dust settles, you should see both gears logging **recv**
-messages, one getting the even numbers and one getting the odd. This
-is your automatic load-balanced message distribution. Note also that
-the counters cache logged in the **recv** message is correct on both
-gears, even though it's only being updated by one. This is our cache
-replication at work.
+When the dust settles, you'll eventually see the gears discover each
+other, and you should see both gears logging **recv** messages, one
+getting the even numbers and one getting the odd. This is your
+automatic load-balanced message distribution. 
+
+Note also that the counters cache logged in the **recv** message is
+correct on both gears, even though it's only being updated by one.
+This is our cache replication at work.
 
 ## Let's break stuff!
 
