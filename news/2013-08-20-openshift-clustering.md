@@ -23,7 +23,11 @@ Here are the features we'll be demonstrating:
 If you haven't already, go [set up an OpenShift account] and update
 your `rhc` gem to the latest version. I used 1.12.4 for this article.
 Below you'll see references to *$namespace* -- this corresponds to
-your OpenShift domain name, set by running `rhc setup`.
+your OpenShift domain name, set by running '`rhc setup`'.
+
+*Note*: If this is the first time you've used OpenShift, you'll need
+to visit the [console] and accept the usage agreement before running
+the `rhc` command.
 
 ## Create a scaled OpenShift app
 
@@ -68,7 +72,7 @@ repository and pushing to OpenShift's.
     git pull -s recursive -X theirs upstream master
     git push
 
-While waiting for that to complete, run `rhc tail demo` in another
+While waiting for that to complete, run '`rhc tail demo`' in another
 shell to monitor your log. This time, the *Deployed
 "your-clojure-application.clj"* message is going to scroll off the
 screen as the cluster-demo app starts logging its output. Eventually,
@@ -203,7 +207,8 @@ may notice:
 
 - The health checks will disappear from the primary gear as HAProxy
   takes it out of the rotation when 2 or more other gears are
-  available. I'm not sure [why].
+  available, ostensibly to mitigate the [observer effect] of the
+  health checks.
 - Each cache key will only show up in the **recv** log messages on 2
   of the 3 gears. This is because Immutant caches default to
   Infinispan's `:distributed` replication mode in a cluster. This
@@ -222,9 +227,10 @@ small gear.
 Regardless, I'm pretty happy that Immutant is finally feature-complete
 on OpenShift now. :-)
 
-As always, I had a lot of help getting things to this point. There is
-a lot of expertise on the OpenShift and JBoss teams, but the "three
-B's" deserve special mention: [Ben](https://twitter.com/bbrowning),
+Of course, I had a lot of help getting things to this point. Many
+folks on the OpenShift and JBoss teams were generous with their
+expertise, but the "three B's" deserve special mention:
+[Ben](https://twitter.com/bbrowning),
 [Bela](http://belaban.blogspot.com/), and
 [Bill](http://www.billdecoste.net/).
 
@@ -236,4 +242,5 @@ Thanks!
 [set up an OpenShift account]: https://www.openshift.com/get-started#cli
 [contained in a single file]: https://github.com/immutant/cluster-demo/blob/master/src/immutant/init.clj
 [HAProxy]: https://www.openshift.com/blogs/how-haproxy-scales-openshift-apps
-[why]: https://www.openshift.com/forums/openshift/why-doesnt-haproxy-put-the-local-gear-in-the-rotation
+[observer effect]: http://en.wikipedia.org/wiki/Observer_effect_(information_technology)
+[console]: https://openshift.redhat.com/app/console
