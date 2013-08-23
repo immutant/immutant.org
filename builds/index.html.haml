@@ -20,8 +20,7 @@ layout: default
   &nbsp;
 
 :markdown
-  Starting with incremental build **750**,
-  there are two release distributions avaialable:
+  There are two release distributions avaialable:
 
   * *slim* - a smaller, lighter weight distribution that only
     includes the functionality needed to run Immutant Clojure
@@ -38,6 +37,25 @@ layout: default
   Older releases and builds only provide a *bin* distribution,
   which is analogous to the *full* distribution above.
 
+  ## Public Artifacts
+
+  If you need to depend on incremental public API artifacts in your
+  `project.clj`, you will need to use the correct version identifiler
+  and add two repositories:
+
+      (defproject some-project "1.2.3"
+        ...
+        :dependencies [[org.clojure/clojure "1.5.1"]
+                       [org.immutant/immutant "1.x.incremental.BUILD_NUM"]]
+        :repositories [["Immutant incremental BUILD_NUM"
+                        "http://downloads.immutant.org/incremental/immutant/BUILD_NUM/repo/"]
+                       ["JBoss Polyglot"
+                        "http://downloads.immutant.org/upstream/"]])
+
+  Where `BUILD_NUM` is the build number for the build you are using.
+  
+  Note: incremental public API artifacts are only published for build **978** and newer.
+
 <div id="build-currently-building"></div>
 
 %h2 Latest Incremental Build
@@ -49,9 +67,9 @@ layout: default
   * [http://immutant.org/builds/immutant-dist-full.zip](/builds/immutant-dist-full.zip)
 
   or installed via our [Leiningen plugin](/install/):
-
-      $ lein immutant install LATEST
   
+      $ lein immutant install LATEST
+
   It's documentation is available at:
 
   * [HTML Manual](/builds/LATEST/html-docs/index.html)
