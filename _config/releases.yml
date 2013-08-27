@@ -1,6 +1,8 @@
+- version: '1.0.1'
+  jira_version: 12322313
+  latest: true
 - version: '1.0.0'
   jira_version: 12322271
-  latest: true
 - version: '1.0.0.cr1'
   jira_version: 12322026
 - version: '1.0.0.beta2'
