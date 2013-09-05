@@ -1,13 +1,13 @@
 
 RewriteEngine on
 
-RewriteRule ^([0-9]+)/(.*)$                         http://repository-projectodd.forge.cloudbees.com/incremental/immutant/$1/$2 [P]
+RewriteRule ^([0-9]+)/(.*)$                         http://downloads.immutant.org/incremental/immutant/$1/$2 [P]
 
 RewriteRule ^(torquebox-immutant\.zip)$             http://projectodd.ci.cloudbees.com/job/overlay/lastSuccessfulBuild/artifact/target/$1 [P]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(LATEST/)?(.*)$                        http://repository-projectodd.forge.cloudbees.com/incremental/immutant/LATEST/$2 [P]
+RewriteRule ^(LATEST/)?(.*)$                        http://downloads.immutant.org/incremental/immutant/LATEST/$2 [P]
 
 
 SetEnvIfNoCase Request_URI immutant-dist-bin\.zip$ immutant-latest
