@@ -2,7 +2,7 @@
 title: Messaging
 sequence: 2
 description: "Simple creation and usage of distributed queues and topics"
-date: 2012-12-06
+date: 2013-09-06
 ---
 
 In this tutorial, we'll explore the [messaging] features available to
@@ -36,13 +36,15 @@ You can invoke `start` from anywhere in your application, e.g. the
 `src/immutant/init.clj` initialization file, as described in
 [the deployment tutorial][deploying].
 
+Note that you will need to call `start` for any destination you want
+to use, even if `start` has already been called in another
+coordinating application. Also note that `start` is idempotent -
+calling it more than once has no effect.
+
 While `start` has a complement, `stop`, you needn't call it
-directly. It will be invoked when your application is undeployed. And
-it's important to note that `start` is idempotent: if an endpoint has
-already been started, likely by a cooperating application, the call is
-effectively a no-op. Similarly, a call to `stop` will silently fail if
-the endpoint is in use by any other application. The last to leave
-will turn the lights out.
+directly. It will be invoked when your application is undeployed. A
+call to `stop` will silently fail if the endpoint is in use by any
+other application. The last to leave will turn the lights out.
 
 ## Only One Way to Produce Messages
 
