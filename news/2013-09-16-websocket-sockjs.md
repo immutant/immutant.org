@@ -16,53 +16,56 @@ going to use a relative newcomer to the Clojure space: [Vert.x].
 
 Vert.x is an asynchronous polyglot application platform built on top
 of Netty that has been around for a while, but just recently gained
-[Clojure support]. It includes it's own message passing system (the
-[EventBus]) which we can easily bridge to the Immutant [messaging]
+[Clojure support]. It includes its own message passing system (the
+[EventBus]) which we can easily bridge to the [Immutant messaging]
 system, and provides a [SockJS] implementation that allows browser
-clients to participate as peers in the EventBus over WebSockets or
-other fallback protocols {{more on fallback}}. SockJS and an EventBus
-that is bridged to the client abstracts away some of the complexity of
-managing dynamic updates to the browser, and is the primary reason
-we're using Vert.x over some of the alternatives mentioned above.
+clients to participate as peers in the EventBus over WebSockets,
+falling back to other protocols as the browser and network topology
+dictate. SockJS and an EventBus that is bridged to the client
+abstracts away some of the complexity of managing dynamic updates to
+the browser, and is the primary reason we're using Vert.x over some of
+the alternatives mentioned above.
 
 We're going to take a look at some code in a minute, but we need to
 cover some terminology first. In Immutant, messaging endpoints are
-built on top of JMS, so we use JMS terminology: endpoints are
-*destinations*, and can either be *topics* (broadcast), or *queues*
-(single-receiver) {{describe betterer}}. The Vert.x EventBus is not
-built on JMS, but provides similar abstractions: endpoints are known
-as *addresses*, and support broadcast or single-receiver semantics,
-which is specified by the message sender instead of the endpoint. In
-both systems, you can register *listeners* on endpoints to process
-incoming messages.
+built on top of
+[JMS](https://en.wikipedia.org/wiki/Java_Message_Service), so we use
+JMS terminology: endpoints are *destinations*, and can either be
+*queues* (point-to-point) or *topics* (publish-subscribe). The Vert.x
+EventBus is not built on JMS, but provides similar abstractions:
+endpoints are known as *addresses*, and support point-to-point or
+publish-subscribe semantics, which is specified by the message sender
+instead of the endpoint. In both systems, you can register *listeners*
+on endpoints to process incoming messages.
 
 ## Our application
 
 To demonstrate this integration, we'll be using a simple stream
 processing application called
 [Rivulet](https://github.com/tobias/rivulet-immutant-vertx). It has a
-[producer] that generates a stream of words to a destination
-(`topic.stream`), and a message-based
-[api](https://github.com/tobias/rivulet-immutant-vertx/blob/master/src/rivulet/control.clj)
+[producer] that generates a stream of words, each published to a
+destination (`topic.stream`), and a message-based
+[API](https://github.com/tobias/rivulet-immutant-vertx/blob/master/src/rivulet/control.clj)
 (listening for requests on a control destination (`topic.commands`))
 that registers regex filters against the stream. Each filter becomes a
 listener on the stream which publishes matches to a results
 destination (`topic.matches`) tagged with the `client-id` of the
 filter's owner. All of that uses existing Immutant features, and is
-really a stand-in for a potentially more complex process. Where the
-app gets interesting is how we communicate with a browser UI. Vert.x
-provides a [javascript EventBus client] that uses SockJS to allow the
-browser to participate in the EventBus as a peer. The Vert.x Clojure
-language module provides a [ClojureScript wrapper] around that
-javascript client, which we use in Rivulet's ClojureScript client
+really a stand-in for a potentially more complex process that would
+exist in a real application. Where the app gets interesting is how we
+communicate with a browser UI. Vert.x provides a
+[javascript EventBus client] that uses SockJS to allow the browser to
+participate in the EventBus as a peer. The Vert.x Clojure language
+module provides a [ClojureScript wrapper] around that javascript
+client, which we use in Rivulet's ClojureScript client
 implementation. This client communicates with a Vert.x instance
-embedded inside an Immutant daemon, which bridges EventBus addresses
+embedded inside an Immutant daemon[^1], which bridges EventBus addresses
 to Immutant messaging destinations.
 
 
 To get started,
 [clone the app](https://github.com/tobias/rivulet-immutant-vertx) and
-run it:[^1]
+run it:[^2]
 
     cd /path/to/rivulet-immutant-vertx
     lein do immutant deploy, immutant run
@@ -73,14 +76,14 @@ you add and remove filters, and view the raw stream.
 Now let's see some code! The functions for bridging Immutant
 messaging destinations to EventBus addresses are in the
 [bridge namespace], and fairly simple. They just register listeners
-that re-publish incoming messages to the correct destination or
-address:[^2]
+that re-publish incoming messages to the corresponding destination or
+address:[^3]
 
 <pre class="syntax clojure">(require '[immutant.messaging :as msg]
          '[vertx.eventbus :as eb])
          
 (defn dest->eventbus
-  "Sets up a bridge to copy messages from an Immutant messaging dest to a Vertx address.
+  "Sets up a bridge to copy messages from an Immutant messaging dest to a Vert.x address.
    If a selector string is provided, it will be applied to the
    listener, and only messages matching the selector will be copied."
   ([vertx dest address]
@@ -91,7 +94,7 @@ address:[^2]
                  :selector selector)))
 
 (defn eventbus->dest
-  "Sets up a bridge to copy messages from a Vertx address to an Immutant messaging dest."
+  "Sets up a bridge to copy messages from a Vert.x address to an Immutant messaging dest."
   [vertx address dest]
   (with-vertx vertx
     (eb/on-message address (partial msg/publish dest))))
@@ -99,8 +102,8 @@ address:[^2]
 </pre>
       
 The [bridge namespace] also provides a function to start up a SockJS
-server inside our vertx instance, and expose the EventBus bridge to
-the client:[^3]
+server inside our Vert.x instance, and expose the EventBus bridge to
+the client:[^4]
 
 <pre class="syntax clojure">(require '[vertx.http :as http]
          '[vertx.http.sockjs :as sockjs])
@@ -214,9 +217,18 @@ interaction to an Immutant application, and is certainly not the only
 way. If you have any questions, comments, or feedback, please 
 [get in touch](/community/).
 
-1. [^1] This assumes you have a recent Immutant [installed](/install/).
-2. [^2] Since we're using Vert.x in embedded mode, we have to bind to a particular vertx instance using [vertx.embed/with-vertx]. If we were using Vert.x as our container, this wouldn't be necessary.
-3. [^3] For this example, we're not securing the EventBus bridge at all. [Doing so] is probably a good idea.
+<hr>
+
+1. [^1] Vert.x provides its own [application container], but we're
+   using it embedded, which is an advanced usage.
+2. [^2] This assumes you have a recent Immutant
+   [installed](/install/).
+3. [^3] Since we're using Vert.x in embedded mode, we have to bind to
+   a particular Vert.x instance using
+   [vertx.embed/with-vertx](https://vertx.ci.cloudbees.com/job/vert.x-mod-lang-clojure/lastSuccessfulBuild/artifact/api/target/html-docs/vertx.embed.html#var-with-vertx). If
+   we were using Vert.x as our container, this wouldn't be necessary.
+4. [^4] For this example, we're not securing the EventBus bridge at
+   all. [Doing so](https://github.com/vert-x/mod-lang-clojure/blob/master/docs/core_manual_clojure.md#securing-the-bridge) is probably a good idea.
 
 [daemon]: /documentation/current/daemons.html
 [Aleph]: https://github.com/ztellman/aleph
@@ -226,7 +238,7 @@ way. If you have any questions, comments, or feedback, please
 [Vert.x]: http://vertx.io/
 [Clojure support]: https://github.com/vert-x/mod-lang-clojure
 [EventBus]: https://github.com/vert-x/mod-lang-clojure/blob/master/docs/core_manual_clojure.md#the-event-bus
-[messaging]: /documentation/current/messaging.html
+[Immutant messaging]: /documentation/current/messaging.html
 [SockJS]: http://sockjs.org
 [producer]: https://github.com/tobias/rivulet-immutant-vertx/blob/master/src/rivulet/producer.clj
 [javascript EventBus client]: https://github.com/eclipse/vert.x/blob/master/src/dist/client/vertxbus.js
@@ -235,3 +247,5 @@ way. If you have any questions, comments, or feedback, please
 [daemon namespace]: https://github.com/tobias/rivulet-immutant-vertx/blob/master/src/rivulet/daemon.clj
 [client-side ClojureScript]: https://github.com/tobias/rivulet-immutant-vertx/blob/master/src-cljs/rivulet/client.cljs
 [Enfocus]: https://github.com/ckirkendall/enfocus
+[application container]: http://vertx.io/manual.html#using-vertx-from-the-command-line
+
