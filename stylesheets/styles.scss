@@ -175,6 +175,14 @@ code {
     border: 1px solid #ddd;
 }
 
+li.footnote {
+  font-size: 0.9em;
+}
+
+sup {
+  font-size: 0.9em;
+}
+
 // sticky footer from: https://github.com/twitter/bootstrap/issues/306#issuecomment-2880409
 html, body {
     height: 100%;

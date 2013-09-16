@@ -7,6 +7,7 @@ require 'events_munger'
 require 'downloads'
 require 'documentation'
 require 'tutorials'
+require 'footnotes'
 
 Awestruct::Extensions::Pipeline.new do
   extension Awestruct::Extensions::DataDir.new
@@ -35,6 +36,8 @@ Awestruct::Extensions::Pipeline.new do
                                                 :layout=>'one-column')
 
   extension Awestruct::Extensions::TaggerAtomizer.new(:posts, '/news/tags' )
+
+  transformer Footnotes.new
   
   helper Awestruct::Extensions::GoogleAnalytics
   helper Awestruct::Extensions::Partial
