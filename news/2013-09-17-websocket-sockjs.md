@@ -88,10 +88,10 @@ interesting parts are where we interact with the EventBus:
 
 On the server side, we start up the SockJS EventBus bridge as an
 Immutant daemon in the
-[`demo.daemon` namespace](https://github.com/immutant/simple-immutant-vertx-demo/blob/master/src/demo/daemon.cljs),
+[`demo.daemon` namespace](https://github.com/immutant/simple-immutant-vertx-demo/blob/master/src/demo/daemon.clj),
 and is standard Immutant daemon management code.  The functions that
 actually do the work of setting up the bridge are in the
-[`demo.bridge` namespace](https://github.com/immutant/simple-immutant-vertx-demo/blob/master/src/demo/bridge.cljs):[^3]
+[`demo.bridge` namespace](https://github.com/immutant/simple-immutant-vertx-demo/blob/master/src/demo/bridge.clj):[^3]
 
 <pre class="syntax clojure">(ns demo.bridge
   (:require [vertx.embed :as vembed :refer [with-vertx]]
@@ -132,22 +132,23 @@ and any fallback protocols. And since Vert.x allows the browser client
 to be an equal peer in the EventBus, we were able to use a similar API
 on the server and client.
 
-However, it's not all roses - there are some definite drawbacks to this
-approach:
-
-  * Since Immutant doesn't support WebSockets natively, we can't share
-    the http port and upgrade connections to WebSockets on
-    request. This means that any WebSockets solution we run as a
-    daemon has to bind to its own port.
-  * We're adding complexity by bringing in another messaging system,
-    which is more the developer is required to understand.
-    
+However, it's not all roses - there is a drawback to this approach:
+since Immutant doesn't support WebSockets natively, we can't share the
+http port and upgrade connections to WebSockets on request. This means
+that any WebSockets solution we run as a daemon has to bind to its own
+port.
+      
 This has been an exploration of one way to add simple dynamic
-interaction to an Immutant application, and is certainly not the only
-way. Watch for a post in the future that presents a more complex
+interaction to an Immutant application, but is certainly not the only
+way. If you try this approach with another WebSockets server, let us
+know how it goes.
+
+Watch for a post in the future that presents a more complex
 application that bridges the Vert.x EventBus to [Immutant messaging]
-destinations. If you have any questions, comments, or feedback,
-please [get in touch](/community/).
+destinations.
+
+If you have any questions, comments, or feedback, please
+[get in touch](/community/).
 
 <hr>
 1. [^1] Vert.x provides its own [application container], but we're
