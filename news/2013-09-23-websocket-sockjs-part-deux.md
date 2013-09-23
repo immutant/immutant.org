@@ -53,9 +53,9 @@ addresses and destinations:
 
 (defn dest->eventbus
   "Sets up a bridge to copy messages from an Immutant messaging dest to a Vertx address."
-  ([vertx dest address]
-     (msg/listen dest #(with-vertx vertx
-                         (eb/publish address %)))))
+  [vertx dest address]
+  (msg/listen dest #(with-vertx vertx
+                      (eb/publish address %))))
 
 (defn eventbus->dest
   "Sets up a bridge to copy messages from a Vertx address to an Immutant messaging dest."
