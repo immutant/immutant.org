@@ -55,35 +55,50 @@ the SockJS WebSockets traffic, like so:
 ## Let's see some code! 
 
 First, let's take a look at the [ClojureScript client]. It's fairly
-standard [Enfocus] transformations, with EventBus calls mixed in. The
-interesting parts are where we interact with the EventBus:
+standard [Enfocus] transformations, with EventBus calls mixed in:
 
-<pre class="syntax clojure">(require '[vertx.client.eventbus :as eb])
-
-(def eb (atom nil))
+<pre class="syntax clojure">(ns demo.client
+  (:require [enfocus.core :as ef]
+            [enfocus.events :as events]
+            [vertx.client.eventbus :as eb]))
 
 (defn open-eventbus
   "Opens a connection to the remote EventBus endpoint."
-  [on-open]
-  (reset! eb (eb/eventbus "http://localhost:8081/eventbus"))
-  (eb/on-open @eb #(.log js/console "eventbus opened"))
-  (eb/on-open @eb on-open))
+  [& on-open]
+  (let [eb (eb/eventbus "http://localhost:8081/eventbus")]
+    (eb/on-open eb #(.log js/console "eventbus opened"))
+    (mapv #(eb/on-open eb (fn [] (% eb))) on-open)))
+
+(defn append-content
+  "Append the given content to the element specified by id"
+  [id content]
+  (ef/at id (ef/append (ef/html [:div content]))))
 
 (defn send-message
   "Sends a message to the request address."
-  [message]
-  (eb/publish @eb "demo.request" message))
+  [eb message]
+  (eb/publish eb "demo.request" message))
 
 (defn attach-listeners
   "Attaches listeners to both the the request and response addresses,
    displaying the received messages in the appropriate divs."
-  []
-  (eb/on-message @eb "demo.request" (partial append-content "#sent"))
-  (eb/on-message @eb "demo.response" (partial append-content "#rcvd")))
+  [eb]
+  (eb/on-message eb "demo.request" (partial append-content "#sent"))
+  (eb/on-message eb "demo.response" (partial append-content "#rcvd")))
 
+(defn attach-send-click
+  "Attaches handler to send a message when the send button is clicked."
+  [eb]
+  (ef/at "#send-message"
+         (events/listen :click
+                        #(send-message eb (ef/from "#message"
+                                                   (ef/get-prop :value))))))
 (defn init []
-  (open-eventbus attach-listeners)
-  (attach-send-click))
+  (open-eventbus
+   attach-listeners
+   attach-send-click))
+
+(set! (.-onload js/window) init)
 </pre>
 
 On the server side, we start up the SockJS EventBus bridge as an
