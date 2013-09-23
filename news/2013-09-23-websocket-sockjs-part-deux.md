@@ -35,37 +35,14 @@ come back in uppercase:
 
 ## Let's see some code! 
 
-Most of the application remains the same as it did before. We've added
-a few new functions, and a new namespace. Let's take a look at our new
-namespace,
-[`demo.processing`](https://github.com/immutant/simple-immutant-vertx-demo/blob/with-messaging/src/demo/processing.clj),
-first. It just listens to a destination, processing each message that
-comes in, and publishes the results to another destination. In this
-case, the processing is just an uppercasing:
-
-<pre class="syntax clojure">(ns demo.processing
-  (:require [immutant.messaging :as msg]))
-
-(defn- process
-  "Processes the incoming message. A stand-in for a potentially more complex process."
-  [m]
-  (.toUpperCase m))
-
-(defn start [{:keys [request-dest response-dest] :as destinations}]
-  (mapv msg/start (vals destinations))
-  (msg/listen request-dest
-              #(msg/publish response-dest (process %))))
-</pre>
-
-That provides something that can perform work for us, but how do we
-attach it to the requests coming from and the responses going back to
-the client UI? 
-
-To do that, we added functions to our
+Most of the application remains the same as it did before. But instead
+of just copying messages from the request address to the response
+address, we've now wired our
 [`demo.bridge` namespace](https://github.com/immutant/simple-immutant-vertx-demo/blob/with-messaging/src/demo/bridge.clj)
-that bridge EventBus addresses to Immutant messaging destinations, and
-vice-versa, and modified the `init-bridge` function to map the
-appropriate addresses and destinations:
+to the Immutant messaging system. We now have functions that bridge
+EventBus addresses to Immutant messaging destinations, and vice-versa,
+and have modified the `init-bridge` function to map the appropriate
+addresses and destinations:
 
 <pre class="syntax clojure">(ns demo.bridge
   (:require [vertx.embed :as vembed :refer [with-vertx]]
@@ -108,6 +85,35 @@ appropriate addresses and destinations:
      :server (start-sockjs-bridge vertx "localhost" 8081 "/eventbus")}))
 </pre>
 
+Now that `demo.bridge` no longer echos, but instead expects something
+on the other end of the `request-dest`, we need something listening on
+the other end to do the work. We've added this to the
+[`demo.init` namespace](https://github.com/immutant/simple-immutant-vertx-demo/blob/with-messaging/src/demo/init.clj),
+which is also where we define the request/response destination
+names. Our listener here just watches `queue.request`, uppercases each
+message, and publishes it to `topic.response`. Since we have bridged
+those same destinations in `demo.bridge`, we again have a completed
+circle from the client and back:
+
+<pre class="syntax clojure">(ns demo.init
+  (:require [demo.web :as web]
+            [demo.daemon :as daemon]
+            [immutant.messaging :as msg]))
+
+(def config {:response-dest "topic.response"
+             :request-dest "queue.request"
+             :process-fn (memfn toUpperCase)})
+
+(defn init []
+  (let [{:keys [request-dest response-dest process-fn]} config]
+    (msg/start request-dest)
+    (msg/start response-dest)
+    (msg/listen request-dest
+                #(msg/publish response-dest (process-fn %))))
+  (web/start)
+  (daemon/start config))
+</pre>
+
 ## Touch the UI from anywhere
 
 Now that we've bridged the EventBus to the Immutant messaging system,
@@ -133,7 +139,7 @@ You can also send structured messages:
 #&lt;HornetQTextMessage HornetQMessage[ID:e09bf794-2478-11e3-9deb-25745b71356d]:PERSISTENT&gt;
 </pre>
 
-And see them displayed in the client UI:
+And see them all displayed in the client UI:
 
 <img src="/images/news/sockjs3.png" alt="[repl UI activity]" class="bordered aligncenter"/>
 
