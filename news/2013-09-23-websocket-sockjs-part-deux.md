@@ -8,7 +8,7 @@ tags: [ daemons, vertx, websockets, sockjs, messaging ]
 This is a followup to our
 [post last week on WebSockets with Vert.x][prior]. If you haven't read
 it, you should do so now. In that post, we set up a simple echo
-service in Vert.x that bridged the [Vert.x] [EventBus] to the
+service in [Vert.x] that bridged the Vert.x [EventBus] to the
 browser. But that echo service wasn't very useful - there was no way
 to process incoming messages outside of the daemon, and no way to send
 messages down to the browser client from other parts of the
