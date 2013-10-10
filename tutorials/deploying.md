@@ -2,7 +2,7 @@
 title: Deployment
 sequence: 1
 description: "Covers the creation and deployment of a basic application"
-date: 2013-05-21
+date: 2013-10-10
 ---
 
 This tutorial covers creating a basic [Ring] web application and deploying 
@@ -20,13 +20,11 @@ plugin]. Let's take another look at the tasks it provides:
     
     Subtasks available:
     undeploy   Undeploys a project from the current Immutant
-    new        Creates a new project skeleton initialized for Immutant
     archive    Creates an Immutant archive from a project
     deploy     Deploys a project to the current Immutant
     run        Starts up the current Immutant, displaying its console output
     env        Displays paths to the Immutant that the plugin is currently using
     overlay    Overlays a feature set onto the current Immutant
-    init       Adds a sample immutant.init namespace to the current project
     test       Runs a project's tests inside the current Immutant
     version    Prints version info for the current Immutant
     install    Downloads and installs an Immutant version
@@ -36,22 +34,14 @@ plugin]. Let's take another look at the tasks it provides:
     
     Arguments: ([subtask] [project-or-nil subtask & args]) 
 
-In this tutorial we'll cover the `new` and `deploy` tasks. To do so,
-we'll build a basic application that demonstrates the current web
-features. To get started, let's create an Immutant project:
+In this tutorial we'll cover the basic project layout and the `deploy`
+task. To do so, we'll build a basic application that demonstrates the
+current web features. To get started, let's create a Leiningen project:
 
-    ~/immutant $ lein new immutant immutant-demo
-    Generating a project called immutant-demo based on the 'immutant' template.
+    ~/immutant $ lein new immutant-demo
+    Generating a project called immutant-demo based on the 'default' template.
     
-The `new` task creates a [Leiningen] project and gives it a sample
-Immutant bootstrap namespace (`src/immutant/init.clj`). Alternatively,
-you can use the `init` task to initialize a pre-existing [Leiningen]
-project:
-
-    ~/immutant $ lein new immutant-demo && cd immutant-demo && lein immutant init
-
-We'll come back to `src/immutant/init.clj` in a sec. Now, let's add a
-ring handler to our core namespace:
+Now, let's add a ring handler to our core namespace:
 
 <pre class="syntax clojure">(ns immutant-demo.core)
 
@@ -73,9 +63,7 @@ definitions, init scripts, etc). Anything you create within
 `src/immutant/init.clj` can instead be created anywhere in your
 application, of course - it just provides a convenient place to do so.
 
-The file has example code for configuring web endpoints and messaging
-services, but we're just going to deal with web endpoints in this
-article. Edit your `src/immutant/init.clj` so it looks like:
+Create a `src/immutant/init.clj` that looks like:
 
 <pre class="syntax clojure">(ns immutant.init
   (:use immutant-demo.core)

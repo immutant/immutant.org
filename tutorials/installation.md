@@ -2,7 +2,7 @@
 title: 'Installation'
 sequence: 0
 description: 'An in-depth look at the installation process'
-date: 2013-05-29
+date: 2013-10-10
 ---
 
 This tutorial provides an in-depth look at the process for installing Immutant.
@@ -36,13 +36,11 @@ Now that you have the plugin installed, run `lein immutant` to see what tasks it
     
     Subtasks available:
     undeploy   Undeploys a project from the current Immutant
-    new        Creates a new project skeleton initialized for Immutant
     archive    Creates an Immutant archive from a project
     deploy     Deploys a project to the current Immutant
     run        Starts up the current Immutant, displaying its console output
     env        Displays paths to the Immutant that the plugin is currently using
     overlay    Overlays a feature set onto the current Immutant
-    init       Adds a sample immutant.init namespace to the current project
     test       Runs a project's tests inside the current Immutant
     version    Prints version info for the current Immutant
     install    Downloads and installs an Immutant version

@@ -2,7 +2,7 @@
 title: Using Noir
 sequence: 7
 description: "Covers the creation and deployment of a basic Noir application"
-date: 2013-05-29
+date: 2013-10-10
 author: Doug Selph
 author_url: "https://github.com/dougselph"
 ---
@@ -40,12 +40,8 @@ shiny app, stop Jetty with CTRL-c.
 ## Configure your application to run in immutant
 
 You have a working noir application. Now let's make it work with Immutant.
-
-    ~/noirtant $ lein immutant init
-    Wrote sample src/immutant/init.clj
-
-This creates a sample 'immutant.init' namespace for you. You can
-simply replace its contents with this:
+Let's create an `immutant.init` namespace in `src/immutant/init.clj` that 
+looks like:
 
 <pre class="syntax clojure">(ns immutant.init
   (:require [immutant.messaging :as messaging]
