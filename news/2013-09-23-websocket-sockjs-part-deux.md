@@ -167,4 +167,4 @@ have any other questions, comments, or feedback, please
 [app]: https://github.com/immutant/simple-immutant-vertx-demo
 [branch]: https://github.com/immutant/simple-immutant-vertx-demo/tree/with-messaging
 [Immutant messaging]: /documentation/current/messaging.html
-[nREPL endpoint]: /documentation/current/interactive.html#sec-2
+[nREPL endpoint]: /documentation/current/development.html#interactive
