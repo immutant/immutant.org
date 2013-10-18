@@ -28,9 +28,9 @@ our Leiningen plugin. This release contains the following changes:
   install before applying the overlay, allowing you to roll back to
   the prior version.
   
-* On unix-y systems, the `unzip` command no longer needs to be
-  available to install Immutant and have executable permissions set on
-  the relevant shell scripts.
+* The `immutant install` task can now install a runnable Immutant
+  without requiring the `unzip` binary to be installed on non-Windows
+  systems.
 
 ## Get it
 
