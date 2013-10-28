@@ -148,7 +148,8 @@ a counter every couple of seconds.
 We log and increment the counter in the `counter.core/job` function.
 Note the job sets `:singleton false` so it'll run on all nodes in a
 cluster, introducing the potential for race conditions as multiple
-processes attempt to increment a shared counter.
+processes attempt to increment a shared counter. We'll deal with those
+using a transaction function.
 
 We naively assume any exception is due to the `transactor` not being
 around, so we log a warning, wait a bit, and retry. We do that in a
@@ -192,10 +193,10 @@ transactor to see the expected output once the counting commences.
 ## Cluster Time!
 
 Now the fun begins. I'm going to assume you don't have a spare server
-lying around, virtual or otherwise, but discoverable via multicast, on
-which you can install immutant and deploy the app, but if you did,
-you'd simply pass the `--clustered` option when you fire up the
-Immutants on both hosts:
+lying around, virtual or otherwise, that is discoverable via
+multicast, on which you can install immutant and deploy the app, but
+if you did, you'd simply pass the `--clustered` option when you fire
+up the Immutants on both hosts:
 
     $ lein immutant run --clustered
 
