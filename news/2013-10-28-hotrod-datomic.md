@@ -140,15 +140,15 @@ a counter every couple of seconds.
   []
   (try
     (db/init)
-    (job/schedule "counter" work, :every [2 :seconds], :singleton false)
+    (job/schedule "counter" job, :every [2 :seconds], :singleton false)
     (catch Exception e
       (println "Check the transactor, retrying in 10 seconds")
       (future (Thread/sleep 10000) (start)))))</pre>
 
-We log and increment the counter in the `work` function. Note the job
-sets `:singleton false` so it'll run on all nodes in a cluster,
-introducing the potential for race conditions as multiple processes
-attempt to increment a shared counter.
+We log and increment the counter in the `counter.core/job` function.
+Note the job sets `:singleton false` so it'll run on all nodes in a
+cluster, introducing the potential for race conditions as multiple
+processes attempt to increment a shared counter.
 
 We naively assume any exception is due to the `transactor` not being
 around, so we log a warning, wait a bit, and retry. We do that in a
@@ -168,7 +168,7 @@ take a closer look at the `init` function from [counter.db]:
                                  {:lang "clojure"
                                   :params '[db]
                                   :code '(let [v (:value (d/entity db :counter))]
-                                           (println "incrementing" v)
+                                           (println "inc" v)
                                            [{:db/id :counter
                                              :value (inc v)}])})}])))</pre>
 
