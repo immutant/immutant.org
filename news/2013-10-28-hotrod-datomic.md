@@ -85,10 +85,10 @@ stuff working.
 
 <div class="notice big">
 
-  <i><b>UPDATE 11/8/2013</b></i>: Datomic recently
-  [announced](http://blog.datomic.com/2013/11/datomic-pro-starter-edition.html)
-  a *Datomic Pro Starter Edition* featuring support for all storages,
-  including Infinispan, and a perpetual license.
+  <i><b>UPDATE 11/8/2013</b></i>: Datomic recently <a
+  href="http://blog.datomic.com/2013/11/datomic-pro-starter-edition.html">announced</a>
+  a <i>Datomic Pro Starter Edition</i> featuring support for all
+  storages, including Infinispan, and a perpetual license.
 
 </div>
 
