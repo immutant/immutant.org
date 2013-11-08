@@ -83,6 +83,15 @@ support is only included in Datomic Pro, so you'll need to
 thanks to [Stuart Halloway] for hooking me up with one to get this
 stuff working.
 
+<div class="notice big">
+
+  <i><b>UPDATE 11/8/2013</b></i>: Datomic recently
+  [announced](http://blog.datomic.com/2013/11/datomic-pro-starter-edition.html)
+  a *Datomic Pro Starter Edition* featuring support for all storages,
+  including Infinispan, and a perpetual license.
+
+</div>
+
 I've been testing successfully with version `0.8.4218`, available
 [here](http://downloads.datomic.com/pro.html). Once you download and
 unzip it, cd to its directory and install the peer library to your
