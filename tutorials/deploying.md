@@ -38,14 +38,16 @@ Now, let's add a ring handler to our core namespace:
 ## Configuring the application for Immutant
     
 An application can be bootstrapped when deployed to Immutant in a
-number of ways, one of which is the `immutant.init` namespace. It can
-be used to configure the Immutant services you want your application
-to consume. It provides a single place for you to define all the
-components required by your application, and saves you from having to
-keep external configuration files in sync (crontabs, message queue
-definitions, init scripts, etc). Anything you create within
-`src/immutant/init.clj` can instead be created anywhere in your
-application, of course - it just provides a convenient place to do so.
+number of ways, the simplest of which uses the `:ring` map in
+`project.clj`, as described in the [web tutorial]. Another option is
+the `immutant.init` namespace. It can be used to configure the
+Immutant services you want your application to consume. It provides a
+single place for you to define all the components required by your
+application, and saves you from having to keep external configuration
+files in sync (crontabs, message queue definitions, init scripts,
+etc). Anything you create within `src/immutant/init.clj` can instead
+be created anywhere in your application, of course - it just provides
+a convenient place to do so.
 
 Create a `src/immutant/init.clj` that looks like:
 
@@ -180,6 +182,7 @@ If you have any feedback or questions, [get in touch]!
 
 [Ring]: https://github.com/ring-clojure/ring
 [installing]: ../installation/
+[web tutorial]: ../web/
 [lein plugin]: https://github.com/immutant/lein-immutant/
 [Leiningen]: http://leiningen.org/
 [demo application]: https://github.com/immutant/immutant-basic-web-demo
