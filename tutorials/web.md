@@ -65,13 +65,14 @@ deploy on Immutant right out of the box:
 
     $ lein new caribou carrie
     $ cd carrie
+    $ lein caribou migrate resources/config/development.clj
     $ lein immutant deploy
     $ lein immutant run
 
-Note that we started Immutant after changing to our project's
-directory. This is due to Caribou relying on some relative paths, e.g.
-`app/`, in its configuration. This should be changed to an absolute
-path before deploying to a production Immutant.
+Note that we're running Immutant from our project directory. This is
+due to Caribou relying on some relative paths, e.g. `app/`, in its
+configuration. This is fine for development, but should be changed to
+an absolute path before deploying to a production Immutant.
 
 ## Pedestal
 
@@ -99,6 +100,20 @@ Now we can deploy the app:
 
 And visit it at <http://localhost:8080/peddy>
 
+## Interactive Development
+
+Regardless of which Clojure web framework you choose, there is much
+nerd joy to be had evolving your app at a REPL. Each app you deploy
+will have its own nREPL service when deployed with the `:dev` profile
+active (the default). And you can interact with all the Immutant
+services easily while your app is deployed and running, even writing
+and running tests that rely on those services, obviating the need for
+any tedious mocking frameworks or the annoying packaging and
+deployment steps typically required by Java app servers.
+
+Please leave your comments or questions below if we can further
+clarify running any of the above applications (or any others!) on
+Immutant.
 
 [deployment]: ../deploying/
 [lein-ring]: https://github.com/weavejester/lein-ring
@@ -107,4 +122,4 @@ And visit it at <http://localhost:8080/peddy>
 [Compojure]: https://github.com/weavejester/compojure
 [Luminus]: http://www.luminusweb.net/
 [Pedestal]: http://pedestal.io/
-[Caribou]: http://caribou.github.io/caribou/
+[Caribou]: http://let-caribou.in/
