@@ -5,41 +5,25 @@ description: "Covers the creation and deployment of a basic application"
 date: 2013-10-10
 ---
 
-This tutorial covers creating a basic [Ring] web application and deploying 
-to an Immutant. If you haven't read the [installation tutorial][installing], 
-go do so now, since you'll need Immutant and the lein-immutant plugin 
-installed. This tutorial assumes you are on a *nix system.
+This tutorial covers the creation and deployment of a basic
+[Leiningen] app to an Immutant. If you haven't read the
+[installation tutorial][installing], go do so now, since you'll need
+Immutant and the [lein-immutant plugin][lein plugin] installed. This
+tutorial assumes you are on a *nix system.
 
 ## Creating an Immutant Clojure application
 
 In our [installation tutorial][installing], we installed the [lein
-plugin]. Let's take another look at the tasks it provides:
+plugin]. Recall how to list all the subtasks it supports:
 
-    ~/immutant $ lein immutant
-    Manage the deployment lifecycle of an Immutant application.
-    
-    Subtasks available:
-    undeploy   Undeploys a project from the current Immutant
-    archive    Creates an Immutant archive from a project
-    deploy     Deploys a project to the current Immutant
-    run        Starts up the current Immutant, displaying its console output
-    env        Displays paths to the Immutant that the plugin is currently using
-    overlay    Overlays a feature set onto the current Immutant
-    test       Runs a project's tests inside the current Immutant
-    version    Prints version info for the current Immutant
-    install    Downloads and installs an Immutant version
-    list       Lists deployments or Immutant installs
-    
-    Run `lein help immutant $SUBTASK` for subtask details.
-    
-    Arguments: ([subtask] [project-or-nil subtask & args]) 
+    $ lein immutant
 
 In this tutorial we'll cover the basic project layout and the `deploy`
-task. To do so, we'll build a basic application that demonstrates the
-current web features. To get started, let's create a Leiningen project:
+subtask. To do so, we'll build a basic application that demonstrates
+some web features. To get started, let's create a Leiningen project:
 
-    ~/immutant $ lein new immutant-demo
-    Generating a project called immutant-demo based on the 'default' template.
+    $ lein new immutant-demo
+    $ cd immutant-demo
     
 Now, let's add a ring handler to our core namespace:
 
@@ -48,7 +32,7 @@ Now, let's add a ring handler to our core namespace:
 (defn ring-handler [request]
   {:status 200
     :headers {"Content-Type" "text/html"}
-    :body "Hello from Immutant!" })
+    :body "Hello from Immutant!\n" })
 </pre>
 
 ## Configuring the application for Immutant
@@ -69,7 +53,7 @@ Create a `src/immutant/init.clj` that looks like:
   (:use immutant-demo.core)
   (:require [immutant.web :as web]))
 
-(web/start #'ring-handler)
+(web/start ring-handler)
 </pre>
 
 We'll come back to what `web/start` is doing after we get the
@@ -80,8 +64,7 @@ application running.
 Before we can start up an Immutant, we need to tell it about our
 application. We do that by deploying:
 
-    ~/immutant/immutant-demo $ lein immutant deploy
-    Deployed immutant-demo to /Users/tobias/immutant/current/jboss/standalone/deployments/immutant-demo.clj
+    $ lein immutant deploy
 
 This writes a *deployment descriptor* to Immutant's deploy directory
 which points back to the application's root directory. Now the
@@ -95,7 +78,7 @@ displaying the console log.  You'll see lots of log messages that you
 can ignore - the one to look for should be the last message, and
 should tell you the app was deployed:
 
-    ~/immutant/immutant-demo $ lein immutant run
+    $ lein immutant run
     Starting Immutant via /Users/tobias/immutant/current/jboss/bin/standalone.sh
     ...
     (a plethora of log messages deleted)
@@ -105,7 +88,7 @@ should tell you the app was deployed:
 Now, let's verify that our app is really there. Immutant runs on port 8080 by default, so 
 let's hit it and see what happens:
 
-    ~ $ curl http://localhost:8080/immutant-demo/
+    $ curl http://localhost:8080/immutant-demo/
     Hello from Immutant!
 
 Yay!
@@ -134,7 +117,7 @@ can override this default by specifying a `:context-path` within an
 
 <pre class="syntax clojure">(defproject immutant-demo "1.0.0-SNAPSHOT"
   :description "A basic demo"
-  :dependencies [[org.clojure/clojure "1.3.0"]]
+  :dependencies [[org.clojure/clojure "1.5.1"]]
   :immutant {:context-path "/"})
 </pre>
 
@@ -147,7 +130,7 @@ project instead of globally, you can set the context path in the
 deployment descriptor via the `--context-path` option to the deploy
 command:
 
-    ~/immutant/immutant-demo $ lein immutant deploy --context-path /
+    $ lein immutant deploy --context-path /
 
 Which brings us back to `web/start`. `web/start` stands up a web
 endpoint for you, and takes one or two arguments: an optional
@@ -159,33 +142,33 @@ the handler function available at `/ham/biscuits`.  If no sub-context
 path is provided, it is assumed to be "/". Make sense?
 
 You can register as many web endpoints as you like within an
-application - they just each need an application unique sub-context
-path. If we add this to our `core.clj`:
+application - each requires an application-unique sub-context path. If
+we add this to our `core.clj`:
 
 <pre class="syntax clojure">(defn another-ring-handler [request]
   {:status 200
    :headers {"Content-Type" "text/html"}
-   :body "Pssst! Over here!"})
+   :body "Pssst! Over here!\n"})
 </pre>
 
 And this to our `init.clj`:
 
-<pre class="syntax clojure">(web/start "/biscuits" #'another-ring-handler)</pre>
+<pre class="syntax clojure">(web/start "/biscuits" another-ring-handler)</pre>
 
 Then fire an Immutant up again with `lein immutant run`, we can see
 they both work:
 
-    ~ $ curl http://localhost:8080
+    $ curl http://localhost:8080
     Hello from Immutant!
-    ~ $ curl http://localhost:8080/biscuits
+    $ curl http://localhost:8080/biscuits
     Pssst! Over here!
 
-`web/start` has a companion function for shutting down a web endpoint:
-`web/stop`. It takes an optional sub-context path for the endpoint,
-and can be called from anywhere. If no sub-context path is provided,
-"/" is assumed.  You aren't required to shut down your endpoints -
-Immutant will do that on your behalf when it is shut down or the
-application is undeployed.
+`web/start` has a complement function for shutting down a web
+endpoint: `web/stop`. It takes an optional sub-context path for the
+endpoint, and can be called from anywhere. If no sub-context path is
+provided, "/" is assumed. You aren't required to shut down your
+endpoints - Immutant will do that on your behalf when it is shut down
+or the application is undeployed.
 
 ## Wrapping up
 
@@ -201,8 +184,6 @@ If you have any feedback or questions, [get in touch]!
 [Leiningen]: http://leiningen.org/
 [demo application]: https://github.com/immutant/immutant-basic-web-demo
 [get in touch]: /community
-
-
 
 
 
