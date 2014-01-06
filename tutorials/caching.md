@@ -2,7 +2,7 @@
 title: Caching
 sequence: 4
 description: "In-memory memoization using a linearly-scalable data grid"
-date: 2012-12-06
+date: 2014-01-06
 ---
 
 In this tutorial, we'll explore some of Immutant's [caching] features.
@@ -25,19 +25,19 @@ itself, e.g. MVCC, to provide "sane data management", enabling fast
 reads of data that may have been put there by another -- possibly
 remote -- process.
 
-Caches are defined using the `immutant.cache/cache` function. Its only
+Caches are defined using the `immutant.cache/create` function. Its only
 required argument is a name. Creating two caches with the same name
 means each is backed by the same Infinispan cache.
 
 Options that determine clustering behavior and entry lifespan are
 provided as well.
 
-<pre class="syntax clojure">(use '[immutant.cache :only [cache]])
+<pre class="syntax clojure">(require '[immutant.cache :as cache])
 
 ;; Define a cache named 'bob' whose entries will automatically expire
 ;; if either a) 10 minutes elapses since it was written or b) 1 minute
 ;; elapses since it was last accessed
-(def c (cache "bob" :ttl 10, :idle 1, :units :minutes))
+(def c (cache/create "bob" :ttl 10, :idle 1, :units :minutes))
 </pre>
 
 ## Writing to a cache
