@@ -124,7 +124,9 @@ renderer = {
                  ul = $( '<ul/>' );
                  if (data.slim_dist_size > 0) {
                      ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/immutant-dist-slim.zip">Slim Build ZIP</a> (' + self.format_size(data.slim_dist_size) + ')</li>' ) );
-                     ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/immutant-dist-full.zip">Full Build ZIP</a> (' + self.format_size(data.full_dist_size) + ')</li>' ) );
+                     if (data.full_dist_size > 0) {
+                         ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/immutant-dist-full.zip">Full Build ZIP</a> (' + self.format_size(data.full_dist_size) + ')</li>' ) );
+                     }
                  } else {
                      ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/immutant-dist-bin.zip">Full Build ZIP</a> (' + self.format_size(data.dist_size) + ')</li>' ) );
                  }
@@ -143,9 +145,9 @@ renderer = {
             $( '<td class="binary"/>' ),
             $( '<td class="docs"/>' ),
             $( '<td class="git"/>' ),
-            $( '<td rowspan="2" class="matrix 1_3_0 matrix-unknown"/>' ),
             $( '<td rowspan="2" class="matrix 1_4_0 matrix-unknown"/>' ),
-            $( '<td rowspan="2" class="matrix 1_5_1 matrix-unknown"/>' )
+            $( '<td rowspan="2" class="matrix 1_5_1 matrix-unknown"/>' ),
+            $( '<td rowspan="2" class="matrix 1_6_0 matrix-unknown"/>' )
           );
 
     if ( self.build_sha1( build ) ) {
@@ -227,7 +229,7 @@ renderer = {
 };
 
 j = new Jenkins( renderer, 'http://projectodd.ci.cloudbees.com', 'immutant-incremental', 
-                 [['clojure_compat_version=1.3.0,label=m1.large', '1_3_0'],
-                  ['clojure_compat_version=1.4.0,label=m1.large', '1_4_0'],
-                  ['clojure_compat_version=1.5.1,label=m1.large', '1_5_1']] );
+                 [['clojure_compat_version=1.4.0,label=m1.large', '1_4_0'],
+                  ['clojure_compat_version=1.5.1,label=m1.large', '1_5_1'],
+                  ['clojure_compat_version=1.6.0-alpha2,label=m1.large', '1_6_0']] );
 
