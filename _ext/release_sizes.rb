@@ -25,7 +25,7 @@ class ReleaseSizes
     site.releases.each do |release|
       print "Calculating dist size for #{release.version}... "
       release.dist_size = get_size(release.urls.remote_dist_zip)
-      if release.dist_type == :bin
+      if release.dist_type == :bin || release.dist_type == :slim_only
         puts "(#{release.dist_size} mb)"
       else
         release.full_dist_size = get_size(release.urls.remote_full_zip)

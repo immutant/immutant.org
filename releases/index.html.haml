@@ -9,8 +9,8 @@ title: Releases
     our [builds page](/builds/).
 
 :markdown
-  Starting with release **0.9.0**,
-  there are two release distributions avaialable:
+  For releases between **0.9.0** and **1.0.2**,
+  there were two release distributions avaialable:
 
   * *slim* - a smaller, lighter weight distribution that only
     includes the functionality needed to run Immutant Clojure
@@ -22,6 +22,8 @@ title: Releases
 
   Older releases and builds only provide a single distribution
   which is analogous to the *full* distribution.
+
+  For **1.1.0** and newer, only the *slim* distribution is provided.
 
 %p
   %table.table.table-striped.table-bordered
@@ -40,9 +42,9 @@ title: Releases
         %td.date
           = announcement.date.strftime( '%d %B %Y' )
         %td.dist
-          - if release.dist_type == :bin
+          - if release.dist_type == :bin || release.dist_type == :slim_only
             %a{:href => release.urls.remote_dist_zip, :rel => latest_release?(release) ? 'download' : 'nofollow'}
-              == ZIP archive (#{release.dist_size}mb)
+              == #{release.dist_type == :slim_only ? "slim " : ""}ZIP archive (#{release.dist_size}mb)
           - else
             %ul
               %li

@@ -24,7 +24,7 @@ title: Installation
 
       You can determine the current version of the plugin by looking at
       its [page on clojars](http://clojars.org/lein-immutant). _**Note:**
-      the plugin requires Leiningen **2.0.0** or greater._
+      the plugin requires Leiningen **2.3.0** or greater._
 
       The plugin provides a number of subtasks, one of which is
       `install`. So installing Immutant is as easy as this:
@@ -39,8 +39,9 @@ title: Installation
       To obtain the latest incremental build, use `LATEST` for the version.
 
       The plugin will install the *slim* version by default. To
-      install the *full* distribution, pass the `--full` option to 
-      the `install` subtask.
+      install the *full* distribution (assuming the version you are
+      installing provides one), pass the `--full` option to the
+      `install` subtask.
 
       Releases installed via the plugin are installed by default under
       `~/.immutant/releases`, and `~/.immutant/current` is
@@ -50,7 +51,7 @@ title: Installation
       
           $ lein immutant install #{latest_release.version} /path/where/you/want/it 
 
-      The plugin will install Immutant there, and link
+      The plugin will install Immutant there, and but will *not* link
       `~/.immutant/current` to that version.
 
       You can override the plugin base directory (`~/.immutant`) by
@@ -75,21 +76,27 @@ title: Installation
 
           $ mkdir immutant-releases
           $ cd immutant-releases
-          $ unzip path/to/immutant-dist-{slim,full}.zip
-          $ export IMMUTANT_HOME=~/immutant-releases/immutant-#{latest_release.version}-{slim,full}/
+          $ unzip path/to/immutant-dist-slim.zip
+          $ export IMMUTANT_HOME=~/immutant-releases/immutant-#{latest_release.version}-slim/
 
 
   .span4
     %h3 The Distribution Variants
     :markdown
-      Starting with release **0.9.0** (and incremental build **750**),
-      there are two release distributions available:
+      For releases between **0.9.0** and **1.0.2**,
+      there were two release distributions avaialable:
 
       * *slim* - a smaller, lighter weight distribution that only
-         includes the functionality needed to run Immutant Clojure
-         applications, but not JavaEE applications. 
+        includes the functionality needed to run Immutant Clojure
+        applications, but not JavaEE applications.  
+    
       * *full* - the full JBossAS distribution with Immutant
-         included. If you need to run JavaEE applications alongside
-         Clojure apps in the same AS, this is the distribution for
-         you. 
+        included. If you need to run JavaEE applications alongside
+        Clojure apps in the same AS, this is the distribution for you.
+
+      Older releases and builds only provide a single distribution
+      which is analogous to the *full* distribution.
+
+      For **1.1.0** and newer, only the *slim* distribution is provided.
+         
 
