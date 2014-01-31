@@ -15,7 +15,7 @@ Features:
 * `--offset` and `--node-name`
 * auto-install
 * server
-
+* non-managed installs no longer linked to current
 
 Fixes:
 
