@@ -2,7 +2,7 @@
 title: Messaging
 sequence: 2
 description: "Simple creation and usage of distributed queues and topics"
-date: 2013-09-06
+date: 2014-02-03
 ---
 
 In this tutorial, we'll explore the [messaging] features available to
@@ -56,7 +56,8 @@ and the message content, which can be just about anything.  A number
 of optional key-value parameters may be passed as well.
 
 * `:encoding` may be either `:clojure` (the default), `:json` (useful
-  with non-clojure consumers) or `:text` (no encoding)
+  with non-clojure consumers), `:fressian` (an efficient binary
+  encoding) or `:text` (no encoding)
 * `:priority` may be an integer between 0-9, inclusive. Convenient
   keyword values `:low`, `:normal`, `:high` and `:critical` correspond
   to 0, 4, 7 and 9, respectively. 4 is the default.

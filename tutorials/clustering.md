@@ -2,7 +2,7 @@
 title: Clustering
 sequence: 5
 description: "How your apps benefit when Immutants form a cluster"
-date: 2013-05-29
+date: 2014-02-03
 ---
 
 One of the primary benefits provided by the [JBoss AS7][as7]
@@ -90,7 +90,7 @@ In one shell, run:
 In another shell, run:
 
     rm -rf /tmp/node2/jboss/standalone/data
-    IMMUTANT_HOME=/tmp/node2 lein immutant run --clustered -Djboss.node.name=two -Djboss.socket.binding.port-offset=100
+    IMMUTANT_HOME=/tmp/node2 lein immutant run --clustered --node-name two --offset 100
 
 And BAM, you're a cluster!
 
@@ -100,7 +100,7 @@ If you're on a Mac, the above may not work. Try IP aliases instead:
 
     for i in {1,2}; do sudo ifconfig en1 inet 192.168.6.20${i}/32 alias; done
     lein immutant run --clustered -b 192.168.6.201
-    IMMUTANT_HOME=/tmp/node2 lein immutant run --clustered -Djboss.node.name=two -b 192.168.6.202
+    IMMUTANT_HOME=/tmp/node2 lein immutant run --clustered --node-name two -b 192.168.6.202
 
 Note that IP aliases obviate the need for a port offset -- your web
 servers will be available at 192.168.6.201:8080 and 192.168.6.202:8080
@@ -121,7 +121,7 @@ end up with the same id, resulting in some nasty log messages.
 
 Each cluster node requires a unique name, which is usually derived
 from the hostname, but since our Immutants are on the same host, we
-set the `jboss.node.name` property on our second node to prevent a
+pass the `--node-name` option on our second node to prevent a
 conflict.
 
 JBoss listens for various types of connections on a few ports. One
@@ -131,9 +131,8 @@ option.
 
 But rather than go through a platform-specific example of creating an
 IP alias (unless you're on a Mac, see above), we can take advantage of
-another JBoss feature: the `jboss.socket.binding.port-offset` property
-will cause each default port number to be incremented by a specified
-amount.
+another JBoss feature: the `--offset` option will cause each default
+port number to be incremented by a specified amount.
 
 So for the second Immutant, we set the offset to 100, resulting in its
 HTTP service, for example, listening on 8180 instead of the default
