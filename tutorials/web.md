@@ -27,21 +27,22 @@ This results in a basic "hello world" app available at
 <http://localhost:3000/>. As you edit and save your project files,
 changes are automatically reflected when you refresh your browser.
 
-The Immutant experience is similar:
+The Immutant experience is similar: just use the [lein-immutant]
+plugin instead of [lein-ring]:
 
     $ lein new compojure compy
-    $ lein immutant deploy compy
-    $ lein immutant run
+    $ cd compy
+    $ lein immutant server
 
-The main difference is the *deploy* step. A single Immutant process
-may have multiple apps deployed to it, and each is distinguished by a
-context path matching its project name, by default:
-<http://localhost:8080/compy>. See the [deployment] tutorial for more
-details, including how to mount your app at the root context, should
-you so desire.
-
-By the way, the *run* step is only required if you don't already have
-Immutant running.
+The `server` subtask was introduced in version 1.2.0 of
+[lein-immutant]. It conveniently encapsulates the `install` (if
+necessary), `deploy` and `run` subtasks of the same plugin. The
+concept of application *deployment* is fundamental to Immutant. A
+single Immutant process may have multiple apps deployed to it, and
+each is distinguished by a context path matching its project name, by
+default: <http://localhost:8080/compy>. See the [deployment] tutorial
+for more details, including how to mount your app at the root context,
+should you so desire.
 
 Once deployed, changes to your project's source files are reflected
 whenever you reload your browser. Further, an nREPL service is
@@ -50,28 +51,52 @@ experience. The port it's bound to is logged and written to a
 well-known file in your project directory that most Clojure editors
 should recognize.
 
+You could kill the server at this point by typing Ctrl-c, but leave it
+up instead (you'll see why below), and open a new shell to explore a
+couple other frameworks.
+
 ## Other Ring-based Frameworks
 
 [Luminus] is a micro-framework based on a set of lightweight
-libraries including compojure, among others. And it's just as simple
-to deploy on Immutant:
+libraries including compojure, among others. 
 
-    $ lein new luminus lummy
-    $ lein immutant deploy lummy
+    $ cd ..
+    $ lein new luminus lumpy
 
-Similarly, [Caribou] is yet another Ring-based framework that will
-deploy on Immutant right out of the box:
+And [Caribou] is yet another Ring-based framework that will deploy on
+Immutant right out of the box:
 
+    $ cd ..
     $ lein new caribou carrie
     $ cd carrie
     $ lein caribou migrate resources/config/development.clj
-    $ lein immutant deploy
-    $ lein immutant run
 
-Note that we're running Immutant from our project directory. This is
-due to Caribou relying on some relative paths, e.g. `app/`, in its
-configuration. This is fine for development, but should be changed to
-an absolute path before deploying to a production Immutant.
+At this point you have a choice to make: if you didn't kill the
+Immutant running *compy* above, you can deploy *carrie* to the same
+instance:
+
+    $ lein immutant deploy
+
+Check the output in your *compy* shell to see *carrie* being deployed.
+
+Or if you did kill the *compy* server, you can run the `server` task
+again, but note that now both *compy* and *carrie* will be deployed,
+each with their own nREPL service and isolated classpath. You can use
+the `list` subtask to list your deployed apps, and the `undeploy` task
+to remove them.
+
+    $ lein immutant list
+    $ lein immutant undeploy compy
+    $ lein immutant server
+
+Note that we're running Immutant from our *carrie* project directory.
+This is due to Caribou relying on some relative paths, e.g. `app/`, in
+its configuration. This is fine for development, but should be changed
+to an absolute path before deploying to a production Immutant.
+
+Finally, note that Caribou sets the `[:immutant :context-path]` to `/`
+in its project.clj, so to test it, you'll need to visit
+<http://localhost:8080/>
 
 ## Pedestal
 
@@ -116,6 +141,7 @@ Immutant.
 
 [deployment]: ../deploying/
 [lein-ring]: https://github.com/weavejester/lein-ring
+[lein-immutant]: https://github.com/immutant/lein-immutant
 [Ring]: https://github.com/ring-clojure/ring
 [Leiningen]: https://github.com/technomancy/leiningen
 [Compojure]: https://github.com/weavejester/compojure
