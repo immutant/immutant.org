@@ -14,14 +14,14 @@ class Downloads
     return unless @enabled
 
     site.releases.each do |release|
-      if release.version == "1.1.0"
-        puts "################################################"
-        puts "HEY, DUMMY! YOU'RE STILL USING A STAGING RELEASE"
-        puts "################################################"
-        prefix = STAGING_REPO_PREFIX
-      else
-        prefix = REPO_PREFIX
-      end
+      # if release.version == "1.1.0"
+      #   puts "################################################"
+      #   puts "HEY, DUMMY! YOU'RE STILL USING A STAGING RELEASE"
+      #   puts "################################################"
+      #   prefix = STAGING_REPO_PREFIX
+      # else
+      prefix = REPO_PREFIX
+      #end
 
       docs_prefix = "#{prefix}/immutant-docs"
       
