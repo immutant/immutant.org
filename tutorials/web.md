@@ -2,7 +2,7 @@
 title: Web
 sequence: 1.5
 description: "Deploying web apps built with popular Clojure libraries"
-date: 2013-11-25
+date: 2014-02-03
 ---
 
 There are a number of popular Clojure web frameworks and libraries.
