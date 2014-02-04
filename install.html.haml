@@ -29,7 +29,7 @@ title: Installation
       The plugin provides a number of subtasks, one of which is
       `install`. So installing Immutant is as easy as this:
 
-          $ lein immutant install [--full] [VERSION]
+          $ lein immutant install [VERSION]
 
       Without a `VERSION` specified, the latest versioned release
       will be installed. 
@@ -37,11 +37,6 @@ title: Installation
       To obtain a specific version, you can specify an incremental build 
       number (ex: `123`) or a released version (ex: `#{latest_release.version}`).
       To obtain the latest incremental build, use `LATEST` for the version.
-
-      The plugin will install the *slim* version by default. To
-      install the *full* distribution (assuming the version you are
-      installing provides one), pass the `--full` option to the
-      `install` subtask.
 
       Releases installed via the plugin are installed by default under
       `~/.immutant/releases`, and `~/.immutant/current` is
@@ -65,11 +60,10 @@ title: Installation
     %h2 Installation via Zip Download
 
     :markdown 
-      You can manually download any of the same builds that
-      you can install via the plugin as either a *slim* or *full*
-      distribution. You can download incremental builds from the
-      [builds page](/builds/) and official releases from the [releases
-      page](/releases/).
+      You can manually download any of the same builds that you can
+      install via the plugin. You can download incremental builds from
+      the [builds page](/builds/) and official releases from the
+      [releases page](/releases/).
       
       Once you have the zip downloaded, expand it somewhere handy. If you want
       to use the Leiningen plugin with this build, you'll need to set `$IMMUTANT_HOME`:

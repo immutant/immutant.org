@@ -57,11 +57,6 @@ To install the latest versioned release, call `immutant install` with no argumen
     Extracted /Users/tobias/.immutant/releases/slim/immutant-#{latest_release.version}-slim
     Linking /Users/tobias/.immutant/current to /Users/tobias/.immutant/releases/immutant-#{latest_release.version}-slim
 
-The `install` subtask will install a *slim* distribution by default, but
-will install the *full* distribution if passed the `--full`
-option. For more details on the difference between *slim* and *full*,
-see the [install](/install) page.
-
 Part of the install process links the most recently installed version to 
 `~/.immutant/current` so the plugin can find the Immutant install without
 requiring you to set `$IMMUTANT_HOME`. If `$IMMUTANT_HOME` is set, it will
