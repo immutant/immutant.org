@@ -6,6 +6,10 @@ date: 2014-01-06
 ---
 
 In this tutorial, we'll explore some of Immutant's [caching] features.
+For detailed documentation, see the
+[caching chapter](/documentation/current/caching.html) of the
+[Immutant manual](/documentation/current/).
+
 [JBoss AS7][as7] -- and therefore, Immutant -- comes with the
 [Infinispan] data grid baked right in, obviating the need to manage a
 separate caching service like Memcached for your applications.
@@ -25,9 +29,14 @@ itself, e.g. MVCC, to provide "sane data management", enabling fast
 reads of data that may have been put there by another -- possibly
 remote -- process.
 
-Caches are defined using the `immutant.cache/create` function. Its only
-required argument is a name. Creating two caches with the same name
-means each is backed by the same Infinispan cache.
+Caches are defined using the
+[immutant.cache/create](/documentation/current/apidoc/immutant.cache.html#var-create)
+function. Its only required argument is a name. Creating two caches
+with the same name means each is backed by the same Infinispan cache,
+and the second call to `create` will cause the first to restart,
+losing all its non-durable entries. It's usually best to call
+[immutant.cache/lookup-or-create](/documentation/current/apidoc/immutant.cache.html#var-lookup-or-create)
+instead, as it will only create the cache if it doesn't already exist.
 
 Options that determine clustering behavior and entry lifespan are
 provided as well.
@@ -58,6 +67,8 @@ override the values specified when the cache was created.
 
 ;;; Override its time-to-live
 (cache/put c :a 1 {:ttl 1, :units :hours})
+;;; optional syntax...
+(cache/put c :a 1 {:ttl [1 :hour]})
 
 ;;; Add all the entries in the map to the cache
 (cache/put-all c {:b 2, :c 3})
@@ -82,7 +93,7 @@ Data is read from an Immutant cache the same way data is read from any
 standard Clojure map, i.e. using core Clojure functions.
 
 <pre class="syntax clojure">
-(def c (cache "baz" :seed {:a 1, :b {:c 3, :d 4}}))
+(def c (cache/create "baz" :seed {:a 1, :b {:c 3, :d 4}}))
 
 ;;; Use get to obtain associated values
 (get c :a)                              ;=> 1
