@@ -40,9 +40,12 @@ necessary), `deploy` and `run` subtasks of the same plugin. The
 concept of application *deployment* is fundamental to Immutant. A
 single Immutant process may have multiple apps deployed to it, and
 each is distinguished by a context path matching its project name, by
-default: <http://localhost:8080/compy>. See the [deployment] tutorial
-for more details, including how to mount your app at the root context,
-should you so desire.
+default: <http://localhost:8080/compy>. If you prefer to mount your
+app at the root context, add this to your project.clj:
+
+    :immutant {:context-path "/"}
+    
+See the [deployment] tutorial for more details.
 
 Once deployed, changes to your project's source files are reflected
 whenever you reload your browser. Further, an nREPL service is
