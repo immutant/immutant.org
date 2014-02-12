@@ -5,6 +5,13 @@ layout: news
 tags: [ tutorial, getting-started, scheduled-jobs ]
 ---
 
+<div class="notice big">
+
+  Note: this article is out of date. For more recent instructions on using
+  scheduled jobs, see the <a href="/tutorials/jobs/">tutorial</a>.
+
+</div>
+
 
 This article covers job schedulding in Immutant, and is part of our
 [getting started series of tutorials][getting-started]. 

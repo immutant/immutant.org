@@ -2,7 +2,7 @@
 title: Scheduling
 sequence: 3
 description: "Set up asynchronous jobs with a cron-style or at-style syntax"
-date: 2013-05-21
+date: 2014-02-12
 ---
 
 
@@ -110,7 +110,7 @@ Now let's add an at-style job to `src/immutant/init.clj`:
 
 <pre class="syntax clojure">(jobs/schedule "my-at-job"  
                 #(println "I was called via at!")
-                :every 1000)</pre>
+                :every [1 :second])</pre>
 
 Now, if we redeploy the running application (via `lein immutant deploy`), 
 you should see the following log output:
