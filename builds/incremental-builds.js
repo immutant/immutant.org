@@ -231,5 +231,5 @@ renderer = {
 j = new Jenkins( renderer, 'http://projectodd.ci.cloudbees.com', 'immutant-incremental', 
                  [['clojure_compat_version=1.4.0,label=m1.large', '1_4_0'],
                   ['clojure_compat_version=1.5.1,label=m1.large', '1_5_1'],
-                  ['clojure_compat_version=1.6.0-alpha2,label=m1.large', '1_6_0']] );
+                  ['clojure_compat_version=1.6.0-RC1,label=m1.large', '1_6_0']] );
 
