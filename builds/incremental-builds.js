@@ -1,4 +1,3 @@
-
 renderer = {
   add_build: function(build) {
     var self = this;
@@ -9,9 +8,9 @@ renderer = {
     $.each( row, function(i,r) {
       $( '#builds' ).append( row[i] );
     } );
-    
+
     if ( self.lastSuccessfulBuild && ( self.lastSuccessfulBuild.number == build.number ) ) {
-      $( '#latest-stable' ).append( row[0].clone() ); 
+      $( '#latest-stable' ).append( row[0].clone() );
     }
 
   },
@@ -65,7 +64,7 @@ renderer = {
     }
 
 
-    if ( label == '1_5_1' ) {
+    if ( label == '1_6_0' ) {
       self.populate_artifacts( build );
       self.update_artifacts( build );
     }
@@ -91,18 +90,18 @@ renderer = {
 
   populate_artifacts: function(build) {
       var self = this;
-      
+
       if ( build.result != 'SUCCESS' ) {
           return;
       }
-      
+
       // Docs
 
       docs_column = $( '.build-summary.build-' + build.number ).find( 'td.docs' );
       ul = $( '<ul/>' );
       ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/html-docs/index.html">Browse Manual</a></li>' ) );
       ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/html-docs/apidoc/index.html">Browse Clojure API</a></li>' ) );
-      // ul.append( $( '<li class="artifact newdocs"><a href="/builds/' + build.number + '/javadocs/">Java API Docs</a></li>' ) );    
+      // ul.append( $( '<li class="artifact newdocs"><a href="/builds/' + build.number + '/javadocs/">Java API Docs</a></li>' ) );
       docs_column.append( ul );
   },
 
@@ -151,8 +150,8 @@ renderer = {
           );
 
     if ( self.build_sha1( build ) ) {
-      row.find( '.build-info' ).append(          
-        $( '<span class="sha1"/>' ).append( 
+      row.find( '.build-info' ).append(
+        $( '<span class="sha1"/>' ).append(
           $('<a href="https://github.com/immutant/immutant/commits/' + self.build_sha1( build )+ '">' + self.build_sha1_short( build ) + '</a>' )
         )
       );
@@ -168,7 +167,7 @@ renderer = {
       );
     }
 
-    details_row = $( '<tr class="build-details build-' + build.number + '"/>' ).append( 
+    details_row = $( '<tr class="build-details build-' + build.number + '"/>' ).append(
       $( '<td class="first" colspan="7"/>' )
     );
 
@@ -228,8 +227,7 @@ renderer = {
 
 };
 
-j = new Jenkins( renderer, 'http://projectodd.ci.cloudbees.com', 'immutant-incremental', 
+j = new Jenkins( renderer, 'http://projectodd.ci.cloudbees.com', 'immutant-incremental',
                  [['clojure_compat_version=1.4.0,label=m1.large', '1_4_0'],
                   ['clojure_compat_version=1.5.1,label=m1.large', '1_5_1'],
                   ['clojure_compat_version=1.6.0,label=m1.large', '1_6_0']] );
-
