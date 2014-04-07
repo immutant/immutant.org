@@ -1,0 +1,64 @@
+---
+title: 2.x Incremental Builds
+layout: default
+---
+
+%script{:type=>'text/javascript', :src=>'/javascripts/jenkins.js'}
+%script{:type=>'text/javascript', :src=>'incremental-builds.js'}
+
+
+
+#intro
+  :markdown
+    <a href='http://cloudbees.com/'>  <img src='http://torquebox.org/images/cloudbees_logo.png' align='right'/></a>
+
+    Our incremental builds are performed by our [CI system](/development/#ci) any time the code changes.
+    The incremental builds are supported by a contribution from [CloudBees](http://cloudbees.com/).
+
+.clearfix{:style=>'clear:both; height: 0px;'}
+  &nbsp;
+
+:markdown
+  ## Public Artifacts
+
+  If you need to depend on incremental public API artifacts in your
+  `project.clj`, you will need to use the correct version identifier
+  and add a repository:
+
+      (defproject some-project "1.2.3"
+        ...
+        :dependencies [[org.clojure/clojure "1.6.0"]
+                       [org.immutant/immutant "2.x.incremental.BUILD_NUM"]]
+        :repositories [["Immutant incremental builds"
+                        "http://downloads.immutant.org/incremental/"]])
+
+  Where `BUILD_NUM` is the build number for the build you are using.
+
+
+<div id="build-currently-building"></div>
+
+%h2 Latest Incremental Build
+
+%table.downloads.incremental-builds#latest-stable
+  %tr.header
+    %th.build-info Build
+    %th.docs Documentation
+    %th.git Git
+    %th.matrix Status
+
+.spacer{:style=>'height: 2em;'}
+  &nbsp;
+
+%h2 Recent Incremental Builds
+
+%p
+  Previous builds are listed below.  A currently-running build is displayed in yellow. Aborted builds are displayed in grey.
+  Successful builds are green.  Failed builds are in red.  Failed builds <b>may produce artifacts</b>, but they should probably
+  not be trusted.
+
+%table.downloads.incremental-builds#builds
+  %tr.header
+    %th.build-info Build
+    %th.docs Documentation
+    %th.git Git
+    %th.matrix Status
