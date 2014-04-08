@@ -17,8 +17,8 @@ our Leiningen plugin. This release contains the following changes:
 * The `archive` subtask now takes a `--version` flag, which will cause
   the project version to be appended to the artifact name.
 * The `archive`, `deploy`, `server`, and `test` subtasks now trigger
-  execution of any `:prep-tasks` (which are, by default, 'javac' and
-  'compile').
+  execution of any `:prep-tasks` (which are, by default, `javac` and
+  `compile`).
 
 For the full list of changes, see [the milestone](https://github.com/immutant/lein-immutant/issues?milestone=15&state=closed).
 
