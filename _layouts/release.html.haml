@@ -7,7 +7,7 @@ change_frequency: monthly
 - release = release_for_version( page.version )
 
 .row
-  #main-column.span8 
+  #main-column.span8
     .post
       .byline
         .author
@@ -22,29 +22,29 @@ change_frequency: monthly
         ~ content
       .comments
         = page.disqus_comments
-  
+
   #sidebar-column.span4
     .post-navigation
       .previous
         - if page.previous_post
-          Previous: 
+          Previous:
           %a{:href => page.previous_post.url}= page.previous_post.title
       .next
         - if page.next_post
-          Next: 
+          Next:
           %a{:href => page.next_post.url}= page.next_post.title
     #release-block
       %hr
       :markdown
         __Version *#{release.version}* was released on
-        #{format_date( page.date )}__. 
-        You [browse the documentation](/documentation/#{release.version}/) or
+        #{format_date( page.date )}__.
+        You can [browse the documentation](/documentation/#{release.version}/) or
         install it via:
 
             $ lein immutant install #{version}
 
-        Don't have the `lein-immutant` plugin installed? 
-        [Learn how](/install/), or 
+        Don't have the `lein-immutant` plugin installed?
+        [Learn how](/install/), or
         [download the zip archive](#{release.urls.remote_dist_zip}).
       %hr
 
