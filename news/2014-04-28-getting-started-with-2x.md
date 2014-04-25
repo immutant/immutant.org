@@ -5,9 +5,10 @@ layout: news
 tags: [ thedeuce, getting-started, tutorial ]
 ---
 
-We're hard at work on [Immutant 2.0][the-deuce], and have a ways to go
-before we reach feature parity with 1.x. But if you are interested in
-playing with what we have now, then this article is for you!
+We're [hard at work](http://i.imgur.com/cSSB8Dx.jpg) on
+[Immutant 2.0][the-deuce], and have a ways to go before we reach
+feature parity with 1.x. But if you are interested in playing with
+what we have now, then this article is for you!
 
 ## Getting Immutant
 
@@ -58,8 +59,8 @@ the ground. We'll also cover using those same namespaces within a
 [WildFly] container, taking advantage of the clustering features the
 container provides.
 
-Once we most of our namespaces in semi-decent shape, we'll release our
-first alpha, probably in mid to late June.
+Once we have most of our namespaces in semi-decent shape, we'll
+release our first alpha, probably in mid to late June.
 
 As always, if you have any questions, comments, or other feedback, feel
 free to [get in touch](/community).
