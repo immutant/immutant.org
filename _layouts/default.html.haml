@@ -5,7 +5,7 @@ layout: base
 .navbar.navbar-fixed-top
   .navbar-inner
     .container
-      %a.brand{ :href=>'/' } 
+      %a.brand{ :href=>'/' }
         %img#logo{ :src=>'/images/logos/logo-horizontal-centered.png' }
 
       %a.btn.btn-navbar{'data-toggle'=>'collapse', 'data-target'=>'.nav-collapse'}
@@ -35,11 +35,13 @@ layout: base
                 %a{ :href=>'/documentation/current/' } Manual
               %li
                 %a{ :href=>'/documentation/current/apidoc/' } API Docs
-              %li.divider  
+              %li.divider
               %li
                 %a{ :href=>'/releases/' } Versioned Releases
               %li
-                %a{ :href=>'/builds/' } Incremental Builds
+                %a{ :href=>'/builds/' } 1.x Incremental Builds
+              %li
+                %a{ :href=>'/builds/2x/' } 2.x Incremental Builds
               %li
                 %a{ :href=>'https://issues.jboss.org/browse/IMMUTANT' } Issues
               %li
@@ -51,7 +53,7 @@ layout: base
   #main-content.container
     - unless page.inhibit_title
       .page-header
-        %h1 
+        %h1
           #{page.title}
 
     ~ content
@@ -76,5 +78,3 @@ layout: base
        } )
      }
    } )
-
-
