@@ -61,6 +61,9 @@ container provides.
 Once we most of our namespaces in semi-decent shape, we'll release our
 first alpha, probably in mid to late June.
 
+As always, if you have any questions, comments, or other feedback, feel
+free to [get in touch](/community).
+
 [builds]: http://immutant.org/builds/2x/
 [Undertow]: http://undertow.io/
 [the-deuce]: /news/2014/04/02/the-deuce/
