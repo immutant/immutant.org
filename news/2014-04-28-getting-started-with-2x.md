@@ -29,7 +29,7 @@ let's add those:
 
 replacing `BUILD_NUM` with the build number for the version you want
 to use. You can get the build number from our [builds] page - the
-latest build number is 57 as of this article.
+latest build number is 62 as of this article.
 
 *Note:* We're bringing in the artifacts piecemeal above, but we also provide
 an aggregate artifact that brings in all of the Immutant dependencies
@@ -43,7 +43,7 @@ libraries that you consume just like any other Clojure library.
 
 Along with the artifacts, each CI build publishes the API docs for all
 of the Immutant namespaces. You can see the docs for
-[a specific build][api] (build #57 in this case), or the
+[a specific build][api] (build #62 in this case), or the
 [latest build][latest-api].
 
 If you start playing with any of that API, be aware that it is
@@ -68,6 +68,6 @@ free to [get in touch](/community).
 [builds]: http://immutant.org/builds/2x/
 [Undertow]: http://undertow.io/
 [the-deuce]: /news/2014/04/02/the-deuce/
-[api]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/57/artifact/target/apidocs/index.html
+[api]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/62/artifact/target/apidocs/index.html
 [latest-api]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/index.html
 [WildFly]: http://wildfly.org/
