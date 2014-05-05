@@ -1,5 +1,5 @@
 ---
-title: Tangled in the Web of The Deuce
+title: Untangling the Web in The Deuce
 author: Jim Crossley
 layout: news
 tags: [ thedeuce, getting-started, tutorial, web ]
