@@ -14,7 +14,7 @@ websockets.
 
 ## The API
 
-The [API] for `immutant.web` is small, just two functions and a
+The API for [immutant.web] is small, just two functions and a
 convenient macro:
 
 * `run` - runs your handler in a specific environment, responding to
@@ -120,7 +120,7 @@ them within a single threaded call.
 
 ## Websockets
 
-Included in the `org.immutant/web` library is the `immutant.websocket`
+Also included in the `org.immutant/web` library is the [immutant.websocket]
 namespace.
 
 [immutant.web]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.web.html
