@@ -105,6 +105,12 @@ Or, if you assigned the result of the threaded call to say,
 
 <pre class="syntax clojure">(stop everything)</pre>
 
+And though the handlers you run will typically be Ring functions, you
+can also pass any valid implementation of `javax.servlet.Servlet` or
+`io.undertow.server.HttpHandler`. For an example of the former, one of
+our unit tests runs [this servlet] obtained from a very simple
+[Pedestal] service.
+
 ### Development Mode
 
 The `run-dmc` macro resulted from a desire to provide a no-fuss way to
@@ -128,3 +134,5 @@ namespace.
 [Undertow]: http://undertow.io/
 [Ring]: https://github.com/ring-clojure/ring/wiki
 [getting started]: /news/2014/04/28/getting-started-with-2x/
+[this servlet]: https://github.com/immutant/immutant/blob/thedeuce/web/dev-resources/testing/hello/service.clj#L26
+[Pedestal]: https://github.com/pedestal/pedestal
