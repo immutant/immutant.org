@@ -29,9 +29,10 @@ convenient macro:
 * `run-dmc` - runs your handler in *Development Mode* (the 'C' is silent)
 * `stop` - stops your handler[s]
 
-The following code fragments assume you've read through the
-[getting started] post and required the `immutant.web` namespace, e.g.
-at a REPL:
+The following code fragments were tested against
+[2.x.incremental.96](http://immutant.org/builds/2x/). You should read
+through the [getting started] post and require the `immutant.web`
+namespace at a REPL to follow along:
 
 <pre class="syntax clojure">(require '[immutant.web :refer :all])</pre>
 
@@ -51,12 +52,12 @@ To make the app available at <http://localhost:8080/>, do this:
 
 Which, if we make the default values explicit, is equivalent to this:
 
-<pre class="syntax clojure">(run app :host "localhost" :port 8080 :path "/")</pre>
-
-Or, since `run` takes options as either keyword arguments (kwargs) or
-an explicit map, this:
-
 <pre class="syntax clojure">(run app {:host "localhost" :port 8080 :path "/"})</pre>
+
+Or, since `run` takes options as either an explicit map or keyword
+arguments (kwargs), this:
+
+<pre class="syntax clojure">(run app :host "localhost" :port 8080 :path "/")</pre>
 
 The options passed to `run` determine the URL used to invoke your
 handler: `http://{host}:{port}{path}`
@@ -70,18 +71,18 @@ To stop the handler, do this:
 
 <pre class="syntax clojure">(stop)</pre>
 
-Which, of course, is equivalent to this:
-
-<pre class="syntax clojure">(stop :host "localhost" :port 8080 :path "/")</pre>
-
-Or, if you prefer an explicit map to kwargs, this:
+Which is equivalent to this:
 
 <pre class="syntax clojure">(stop {:host "localhost" :port 8080 :path "/"})</pre>
 
-Alternatively, you can save run's return value and pass it to stop
-when your application shuts down.
+Or, if you prefer kwargs, this:
 
-<pre class="syntax clojure">(def server (run {:port 4242 :path "/hello"} app))
+<pre class="syntax clojure">(stop :host "localhost" :port 8080 :path "/")</pre>
+
+Alternatively, you can save run's return value and pass it to stop to
+stop your handler.
+
+<pre class="syntax clojure">(def server (run app {:port 4242 :path "/hello"}))
 ...
 (stop server)
 </pre>
@@ -148,7 +149,7 @@ The `run-dmc` macro resulted from a desire to provide a no-fuss way to
 enjoy all the benefits of REPL-based development. Before calling
 `run`, `run-dmc` will first ensure that your Ring handler is
 var-quoted and wrapped in the `reload` and `stacktrace` middleware
-from the `ring-devel` library (which should be included among your
+from the `ring-devel` library (which must be included among your
 `[:profiles :dev :dependencies]` in `project.clj`). It'll then open
 your app in a browser.
 
@@ -182,8 +183,9 @@ it receives:
             [clojure.string :refer [upper-case]]))
 
 (defn create-websocket []
-  (web/run {:path "/websocket"}
-    (ws/create-handler {:on-message (fn [c m] (ws/send! c (upper-case m)))})))
+  (web/run
+    (ws/create-handler {:on-message (fn [c m] (ws/send! c (upper-case m)))})
+    {:path "/websocket"}))
 </pre>
 
 Another function, `immutant.websocket/create-servlet`, can be used to
