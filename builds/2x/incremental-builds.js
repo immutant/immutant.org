@@ -85,12 +85,8 @@ renderer = {
 
       // Docs
 
-      docs_column = $( '.build-summary.build-' + build.number ).find( 'td.docs' );
-      ul = $( '<ul/>' );
-      //ul.append( $( '<li class="artifact"><a href="/builds/' + build.number + '/html-docs/index.html">Browse Manual</a></li>' ) );
-      ul.append( $( '<li class="artifact"><a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/' + build.number + '/artifact/target/apidocs/index.html">Browse API</a></li>' ) );
-
-      docs_column.append( ul );
+      $( '.build-summary.build-' + build.number ).find( 'td.docs' ).
+          append('<a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/' + build.number + '/artifact/target/apidocs/index.html">Browse API</a>');
   },
 
 
@@ -103,8 +99,7 @@ renderer = {
     row = $( '<tr class="build-summary build-' + build.number + '"/>' ).append(
             $( '<td class="build-info first"/>' ).append(
               $( '<span class="number"><a href="' + build.url + '">' + build.number + '</a></span>' ),
-              $( '<span class="date">' + self.build_date( build ) + '</span>' ),
-              $( '<span class="time">' + self.build_time( build ) + '</span>' )
+              $( '<span class="date">' + self.build_date( build ) + " " + self.build_time( build ) + '</span>' )
             ),
             $( '<td class="docs"/>' ),
             $( '<td class="git"/>' ),
@@ -112,21 +107,11 @@ renderer = {
           );
 
     if ( self.build_sha1( build ) ) {
-      row.find( '.build-info' ).append(
-        $( '<span class="sha1"/>' ).append(
-          $('<a href="https://github.com/immutant/immutant/commits/' + self.build_sha1( build )+ '">' + self.build_sha1_short( build ) + '</a>' )
-        )
-      );
-      row.find( '.git').append(
-        $( '<ul/>' ).append(
-          $( '<li/>').append(
-            $( '<a href="https://github.com/immutant/immutant/commits/' + self.build_sha1( build ) + '">Commits</a>' )
-          ),
-          $( '<li/>').append(
-            $( '<a href="https://github.com/immutant/immutant/tree/' + self.build_sha1( build )+ '">Tree</a>' )
-          )
-        )
-      );
+      var sha = self.build_sha1(build)
+      row.find( '.git').append(self.build_sha1_short(build) + ': ',
+          $( '<a href="https://github.com/immutant/immutant/commits/' + sha + '">Commits</a>' ),
+          " / ",
+          $( '<a href="https://github.com/immutant/immutant/tree/' + sha + '">Tree</a>' ))
     }
 
     details_row = $( '<tr class="build-details build-' + build.number + '"/>' ).append(

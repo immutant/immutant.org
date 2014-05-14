@@ -13,10 +13,6 @@ table.incremental-builds {
         }
     }
 
-    a {
-        text-decoration: none;
-    }
-
     th.build-info {
         padding-left: 18px;
     }
@@ -113,10 +109,16 @@ table.incremental-builds {
         text-align: center;
     }
 
-    td.matrix {
-        border-left: 1px solid #777;
-        padding: 5px;
+    td.docs, td.git, td.matrix {
+      text-align: center;
+    }
 
+    td.docs, td.git {
+        font-weight: bold;
+    }
+
+    td.matrix {
+        padding: 5px;
         .status {
             font-size: 120%;
             font-weight: bold;
@@ -127,21 +129,4 @@ table.incremental-builds {
         list-style-type: circle;
     }
     color: #444;
-    a {
-        color: #444;
-    }
-
-    .binary {
-        width: 17%;
-    }
-    .docs {
-        width: 17%;
-    }
-    .git{
-        width: 10%;
-    }
-
-    .result {
-        width: 20%;
-    }
 }
