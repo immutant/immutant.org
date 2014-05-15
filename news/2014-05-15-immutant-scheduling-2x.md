@@ -122,25 +122,48 @@ the [immutant.scheduling.joda] namespace. This will extend
 `org.joda.time.DateTime` instances to the [AsTime] protocol, enabling
 them to be used as arguments to `at` and `until`, e.g.
 
-<pre class="syntax clojure">(require '[clj-time.core :as t])
+<pre class="syntax clojure">(require '[clj-time.core :refer [now plus hours])
 
 (schedule job
-  (-> (at (t/now))
+  (-> (at (now))
     (every 2 :hours)
-    (until (t/plus (t/now) (t/hours 8)))))</pre>
+    (until (plus (now) (hours 8)))))</pre>
 
-It also introduces another function, `schedule-seq`, which takes not a
-specification map but a sequence of `DateTime` instances, as would be
+It also provides the function, `schedule-seq`. Inspired by [chime-at],
+it takes not a specification map but a sequence of times, as might be
 returned from `clj-time.periodic/periodic-seq`, subject to the
 application of any of Clojure's core sequence-manipulation functions.
-For any two successive elements, the second is scheduled upon
-completion of the first, and they will all have the same id.
+
+When defining complex recurring schedules, this presents an
+interesting alternative to traditional cron specs. For example,
+consider a job that must run at 10am every weekday. Here's how we'd
+schedule that with a cron spec:
+
+<pre class="syntax clojure">(schedule job (cron "0 0 10 ? * MON-FRI"))</pre>
+
+And here's the same schedule using a lazy sequence:
+
+<pre class="syntax clojure">(require '[immutant.scheduling.joda :refer [schedule-seq]]
+         '[clj-time.core            :refer [today-at days]]
+         '[clj-time.periodic        :refer [periodic-seq]]
+         '[clj-time.predicates      :refer [weekday?]])
+
+(schedule-seq job
+  (->> (periodic-seq (today-at 10 0) (days 1))
+    (filter weekday?)))</pre>
+
+So each has trade-offs, of course. The cron spec is more concise, but
+also arguably more error-prone, e.g. try using `*` instead of `0` in
+the first two fields and wtf is that `?` for!?
+
+One very cool thing about the sequence is that I can test it without
+actually scheduling it. On the other hand, my cron spec test is going
+to take more than a week to run! ;)
 
 ## Try it out!
 
-We'd love to hear some feedback on this stuff. Find us on our
+As always, we'd love to incorporate your feedback. Find us on our
 [community] page and join the fun!
-
 
 [immutant.scheduling]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.scheduling.html
 [immutant.scheduling.joda]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.scheduling.joda.html
@@ -149,3 +172,4 @@ We'd love to hear some feedback on this stuff. Find us on our
 [getting started]: /news/2014/04/28/getting-started-with-2x/
 [community]: http://immutant.org/community/
 [clj-time]: https://github.com/clj-time/clj-time
+[chime-at]: https://github.com/james-henderson/chime#chime-at
