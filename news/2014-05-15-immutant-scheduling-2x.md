@@ -13,14 +13,13 @@ detailed look at the API with a few examples.
 ## The API
 
 At first glance, the API for [immutant.scheduling] appears bigger than
-it really is. There are only two essential functions:
+it really is, but there are only two essential functions:
 
 * `schedule` - for scheduling your jobs
 * `stop` - for canceling them
 
-All the other functions in the namespace are just syntactic sugar.
-We'll get to them later, but first let's take a closer look at
-`schedule`.
+The remainder of the namespace is syntactic sugar: functions that can
+be composed to create the specification of when your job should run.
 
 Your "job" will take the form of a plain ol' Clojure function taking
 no arguments. The `schedule` function takes your job and a
@@ -34,24 +33,26 @@ function gets called. It may contain any of the following keys:
 * `:limit` - limits the calls to a specific count
 * `:cron` - calls your function according to a [Quartz-style] cron spec
 
+For each key there is a corresponding "sugar function".
+
 Units for periods (`:in` and `:every`) are milliseconds, but can also
-be represented as a keyword or a vector of number/keyword pairs, e.g.
-`[1 :week, 4 :days, 2 :hours, 30 :minutes, 59 :seconds]`. Both
+be represented as a keyword or a vector of multiplier/keyword pairs,
+e.g. `[1 :week, 4 :days, 2 :hours, 30 :minutes, 59 :seconds]`. Both
 singular and plural keywords are valid.
 
-Date/Time values (`:at` and `:until`) can be a `java.util.Date`,
-millis-since-epoch, or a String in `HH:mm` format. The latter will be
-interpreted as the next occurence of "HH:mm:00" in the currently
-active timezone.
+Time values (`:at` and `:until`) can be a `java.util.Date`, a long
+representing milliseconds-since-epoch, or a String in `HH:mm` format.
+The latter will be interpreted as the next occurence of `HH:mm:00` in
+the currently active timezone.
 
 Two additional options may be passed in the spec map:
 
 * :id - a unique identifier for the scheduled job
 * :singleton - a boolean denoting the job's behavior in a cluster [true]
 
-In Immutant 1, a name for the job was a required argument. In Immutant
-2, the `:id` is optional: if not provided, a UUID will be generated.
-If `schedule` is called with an `:id` for a job that has already been
+In Immutant 1, a name for the job was required. In Immutant 2, the
+`:id` is optional, and if not provided, a UUID will be generated. If
+`schedule` is called with an `:id` for a job that has already been
 scheduled, the prior job will be replaced.
 
 The return value from `schedule` is a map of the options with any
@@ -61,11 +62,79 @@ This result can be passed to `stop` to cancel the job.
 ### Some Examples
 
 The following code fragments were tested against
-[2.x.incremental.115](http://immutant.org/builds/2x/). You should read
+[2.x.incremental.117](http://immutant.org/builds/2x/). You should read
 through the [getting started] post and require the `immutant.scheduling`
 namespace at a REPL to follow along:
 
 <pre class="syntax clojure">(require '[immutant.scheduling :refer :all])</pre>
+
+We'll need a job to schedule. Here's one!
+
+<pre class="syntax clojure">(defn job [] (prn 'fire!))</pre>
+
+Let's schedule it:
+
+<pre class="syntax clojure">(schedule job)</pre>
+
+That was pretty useless, actually. Without a spec, the job will be
+immediately called asynchronously on one of the Quartz scheduler's
+threads. Instead, let's have it run in 5 minutes:
+
+<pre class="syntax clojure">(schedule job (in 5 :minutes))</pre>
+
+And maybe run again every second after that:
+
+<pre class="syntax clojure">(schedule job
+  (-> (in 5 :minutes)
+    (every :second)))</pre>
+
+But no more than 60 times:
+
+<pre class="syntax clojure">(schedule job
+  (-> (in 5 :minutes)
+    (every :second)
+    (limit 60)))</pre>
+
+We could also anticipate getting stupid bored about halfway through,
+and schedule another job to cancel the first one:
+
+<pre class="syntax clojure">(let [it (schedule job
+           (-> (in 5 :minutes)
+             (every :second)
+             (limit 60)))]
+  (schedule #(stop it) (in 5 :minutes, 30 :seconds)))</pre>
+
+### It's Just Maps
+
+Ultimately, the spec passed to `schedule` is just a map, and the sugar
+functions are just assoc'ing keys corresponding to their names. The
+map can be passed either explicitly or via keyword arguments, so all
+of the following are equivalent:
+
+<pre class="syntax clojure">(schedule job (-> (in 5 :minutes) (every :day)))
+(schedule job {:in [5 :minutes], :every :day})
+(schedule job :in [5 :minutes], :every :day)</pre>
+
+### Supports Joda clj-time
+
+If you're using the [clj-time] library in your project, you can load
+the [immutant.scheduling.joda] namespace. This will extend
+`org.joda.time.DateTime` instances to the [AsTime] protocol, enabling
+them to be used as arguments to `at` and `until`, e.g.
+
+<pre class="syntax clojure">(require '[clj-time.core :as t])
+
+(schedule job
+  (-> (at (t/now))
+    (every 2 :hours)
+    (until (t/plus (t/now) (t/hours 8)))))</pre>
+
+It also introduces another function, `schedule-seq`, which takes not a
+specification map but a sequence of `DateTime` instances, as would be
+returned from `clj-time.periodic/periodic-seq`, subject to the
+application of any of Clojure's core sequence-manipulation functions.
+For any two successive elements, the second is scheduled upon
+completion of the first, and they will all have the same id.
 
 ## Try it out!
 
@@ -74,6 +143,9 @@ We'd love to hear some feedback on this stuff. Find us on our
 
 
 [immutant.scheduling]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.scheduling.html
+[immutant.scheduling.joda]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.scheduling.joda.html
+[AsTime]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.scheduling.coercions.html
 [Quartz-style]: http://quartz-scheduler.org/documentation/quartz-2.2.x/tutorials/tutorial-lesson-06
 [getting started]: /news/2014/04/28/getting-started-with-2x/
 [community]: http://immutant.org/community/
+[clj-time]: https://github.com/clj-time/clj-time
