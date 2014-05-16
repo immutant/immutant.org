@@ -63,7 +63,7 @@ This result can be passed to `stop` to cancel the job.
 ### Some Examples
 
 The following code fragments were tested against
-[2.x.incremental.117](http://immutant.org/builds/2x/). You should read
+[2.x.incremental.119](http://immutant.org/builds/2x/). You should read
 through the [getting started] post and require the `immutant.scheduling`
 namespace at a REPL to follow along:
 
@@ -109,7 +109,7 @@ and schedule another job to cancel the first one:
 Of course, you can bring your own job id's if you like:
 
 <pre class="syntax clojure">(schedule job (-> (id :purge) (every 30 :minutes)))
-(schedule job (id :purge) (every :hour))  ; reschedule
+(schedule job (-> (id :purge) (every :hour)))  ; reschedule
 (stop (id :purge))</pre>
 
 If a job is successfully canceled, `stop` returns true.
