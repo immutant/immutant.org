@@ -1,14 +1,21 @@
 ---
-title: Scheduling with The Deuce
+title: Schedule Some Time with The Deuce
 author: Jim Crossley
 layout: news
 tags: [ thedeuce, getting-started, tutorial, scheduling ]
 ---
 
-The "scheduled jobs" library in Immutant 2 has been renamed: what used
-to be `org.immutant/immutant-jobs` is now `org.immutant/scheduling`.
-It's still based on Quartz 2.2, though. In this post, we'll take a
-detailed look at the API with a few examples.
+<img src="/images/news/timeclock.jpg" alt="[timeclock]" class="alignright"/>
+
+In this installment of our series on
+[getting started with Immutant 2](/news/tags/thedeuce/), we'll take a
+detailed look at the API of our library for scheduling jobs, and show
+a few examples of usage.
+
+If you're coming from Immutant 1.x, you'll notice that the namespace
+has been renamed (what used to be `org.immutant/immutant-jobs` is now
+`org.immutant/scheduling`), and the API has changed a bit.  It's still
+based on Quartz 2.2, though.
 
 ## The API
 
@@ -28,7 +35,7 @@ function gets called. It may contain any of the following keys:
 
 * `:in` - a period after which your function will be called
 * `:at` - an instant in time after which your function will be called
-* `:every` - the period between calls 
+* `:every` - the period between calls
 * `:until` - stops the calls at a specific time
 * `:limit` - limits the calls to a specific count
 * `:cron` - calls your function according to a [Quartz-style] cron spec
@@ -172,8 +179,10 @@ to take more than a week to run! ;)
 
 ## Try it out!
 
-As always, we'd love to incorporate your feedback. Find us on our
+As always, we'd love to incorporate your feedback. Find us via our
 [community] page and join the fun!
+
+*Thanks to [Phil Hart](https://www.flickr.com/photos/radialmonster/431783164) for the image, used under [CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/2.0/)*
 
 [immutant.scheduling]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.scheduling.html
 [immutant.scheduling.joda]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.scheduling.joda.html
