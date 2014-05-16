@@ -31,6 +31,9 @@ replacing `BUILD_NUM` with the build number for the version you want
 to use. You can get the build number from our [builds] page - the
 latest build number is 62 as of this article.
 
+**Edit: build 62 has been garbage collected - be sure to grab the latest
+build from the [builds] page.**
+
 *Note:* We're bringing in the artifacts piecemeal above, but we also provide
 an aggregate artifact that brings in all of the Immutant dependencies
 in one shot if you'd rather use that: `org.immutant/immutant`.
