@@ -5,7 +5,7 @@ layout: news
 tags: [ thedeuce, getting-started, tutorial, scheduling ]
 ---
 
-<img src="/images/news/timeclock.jpg" alt="[timeclock]" class="alignright"/>
+<a href="https://flic.kr/p/Ea16j"><img src="/images/news/timeclock.jpg" alt="[timeclock]" class="alignright"/></a>
 
 In this installment of our series on
 [getting started with Immutant 2](/news/tags/thedeuce/), we'll take a
