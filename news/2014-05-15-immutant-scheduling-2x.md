@@ -19,7 +19,7 @@ it really is, but there are only two essential functions:
 * `stop` - for canceling them
 
 The remainder of the namespace is syntactic sugar: functions that can
-be composed to create the specification of when your job should run.
+be composed to create the specification for when your job should run.
 
 Your "job" will take the form of a plain ol' Clojure function taking
 no arguments. The `schedule` function takes your job and a
@@ -33,7 +33,8 @@ function gets called. It may contain any of the following keys:
 * `:limit` - limits the calls to a specific count
 * `:cron` - calls your function according to a [Quartz-style] cron spec
 
-For each key there is a corresponding "sugar function".
+For each key there is a corresponding "sugar function". We'll see
+those in the examples below.
 
 Units for periods (`:in` and `:every`) are milliseconds, but can also
 be represented as a keyword or a vector of multiplier/keyword pairs,
@@ -47,10 +48,10 @@ the currently active timezone.
 
 Two additional options may be passed in the spec map:
 
-* :id - a unique identifier for the scheduled job
-* :singleton - a boolean denoting the job's behavior in a cluster [true]
+* `:id` - a unique identifier for the scheduled job
+* `:singleton` - a boolean denoting the job's behavior in a cluster [true]
 
-In Immutant 1, a name for the job was required. In Immutant 2, the
+In Immutant 1.x, a name for the job was required. In Immutant 2, the
 `:id` is optional, and if not provided, a UUID will be generated. If
 `schedule` is called with an `:id` for a job that has already been
 scheduled, the prior job will be replaced.
@@ -70,15 +71,16 @@ namespace at a REPL to follow along:
 
 We'll need a job to schedule. Here's one!
 
-<pre class="syntax clojure">(defn job [] (prn 'fire!))</pre>
+<pre class="syntax clojure">(defn job []
+  (prn 'fire!))</pre>
 
 Let's schedule it:
 
 <pre class="syntax clojure">(schedule job)</pre>
 
-That was pretty useless, actually. Without a spec, the job will be
-immediately called asynchronously on one of the Quartz scheduler's
-threads. Instead, let's have it run in 5 minutes:
+That was pretty useless. Without a spec, the job will be immediately
+called asynchronously on one of the Quartz scheduler's threads.
+Instead, let's have it run in 5 minutes:
 
 <pre class="syntax clojure">(schedule job (in 5 :minutes))</pre>
 
@@ -103,6 +105,14 @@ and schedule another job to cancel the first one:
              (every :second)
              (limit 60)))]
   (schedule #(stop it) (in 5 :minutes, 30 :seconds)))</pre>
+
+Of course, you can bring your own job id's if you like:
+
+<pre class="syntax clojure">(schedule job (-> (id :purge) (every 30 :minutes)))
+(schedule job (id :purge) (every :hour))  ; reschedule
+(stop (id :purge))</pre>
+
+If a job is successfully canceled, `stop` returns true.
 
 ### It's Just Maps
 
@@ -132,12 +142,12 @@ them to be used as arguments to `at` and `until`, e.g.
 It also provides the function, `schedule-seq`. Inspired by [chime-at],
 it takes not a specification map but a sequence of times, as might be
 returned from `clj-time.periodic/periodic-seq`, subject to the
-application of any of Clojure's core sequence-manipulation functions.
+application of any of Clojure's core sequence-manipulating functions.
 
 When defining complex recurring schedules, this presents an
 interesting alternative to traditional cron specs. For example,
 consider a job that must run at 10am every weekday. Here's how we'd
-schedule that with a cron spec:
+schedule that with a [Quartz-style] cron spec:
 
 <pre class="syntax clojure">(schedule job (cron "0 0 10 ? * MON-FRI"))</pre>
 
@@ -153,8 +163,7 @@ And here's the same schedule using a lazy sequence:
     (filter weekday?)))</pre>
 
 So each has trade-offs, of course. The cron spec is more concise, but
-also arguably more error-prone, e.g. try using `*` instead of `0` in
-the first two fields and wtf is that `?` for!?
+also arguably more error-prone, e.g. what is that `?` for!?
 
 One very cool thing about the sequence is that I can test it without
 actually scheduling it. On the other hand, my cron spec test is going
