@@ -132,12 +132,13 @@ the [immutant.scheduling.joda] namespace. This will extend
 `org.joda.time.DateTime` instances to the [AsTime] protocol, enabling
 them to be used as arguments to `at` and `until`, e.g.
 
-<pre class="syntax clojure">(require '[clj-time.core :refer [now plus hours])
+<pre class="syntax clojure">(require '[clj-time.core :refer [today-at plus hours]])
 
-(schedule job
-  (-> (at (now))
-    (every 2 :hours)
-    (until (plus (now) (hours 8)))))</pre>
+(let [t (today-at 9 00)]
+  (schedule job
+    (-> (at t)
+      (every 2 :hours)
+      (until (plus t (hours 8))))))</pre>
 
 It also provides the function, `schedule-seq`. Inspired by [chime-at],
 it takes not a specification map but a sequence of times, as might be
