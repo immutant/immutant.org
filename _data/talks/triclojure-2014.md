@@ -1,5 +1,5 @@
 ---
-event: the TriClojure Meetup
+event: TriClojure
 event_date: 25 September, 2014
 event_url: http://www.meetup.com/TriClojure/
 location: Durham, North Carolina
