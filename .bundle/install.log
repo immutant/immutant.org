@@ -1,0 +1,231 @@
+# Logfile created on 2014-01-06 17:50:59 -0500 by logger.rb/31641
+I, [2014-01-06T17:50:59.789338 #8982]  INFO -- : 0:  sass (3.2.8) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/sass-3.2.8.gemspec
+I, [2014-01-06T17:51:01.613257 #8982]  INFO -- : 0:  bootstrap-sass (2.3.1.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/bootstrap-sass-2.3.1.0.gemspec
+I, [2014-01-06T17:51:03.937442 #8982]  INFO -- : 0:  chunky_png (1.2.8) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/chunky_png-1.2.8.gemspec
+I, [2014-01-06T17:51:05.185311 #8982]  INFO -- : 0:  fssm (0.2.10) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/fssm-0.2.10.gemspec
+I, [2014-01-06T17:51:09.182573 #8982]  INFO -- : 0:  compass (0.12.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-0.12.2.gemspec
+I, [2014-01-06T17:51:10.241673 #8982]  INFO -- : 0:  compass-960-plugin (0.10.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-960-plugin-0.10.4.gemspec
+I, [2014-01-06T17:51:11.459650 #8982]  INFO -- : 0:  git (1.2.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/git-1.2.5.gemspec
+I, [2014-01-06T17:51:12.605539 #8982]  INFO -- : 0:  tilt (1.3.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/tilt-1.3.7.gemspec
+I, [2014-01-06T17:51:14.300430 #8982]  INFO -- : 0:  haml (4.0.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/haml-4.0.2.gemspec
+I, [2014-01-06T17:51:16.827160 #8982]  INFO -- : 0:  json (1.7.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/json-1.7.7.gemspec
+I, [2014-01-06T17:51:18.312748 #8982]  INFO -- : 0:  listen (0.7.3) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/listen-0.7.3.gemspec
+I, [2014-01-06T17:51:26.066844 #8982]  INFO -- : 0:  nokogiri (1.5.9) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/nokogiri-1.5.9.gemspec
+I, [2014-01-06T17:51:29.349131 #8982]  INFO -- : 0:  rack (1.5.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rack-1.5.2.gemspec
+I, [2014-01-06T17:51:31.069879 #8982]  INFO -- : 0:  mime-types (1.23) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/mime-types-1.23.gemspec
+I, [2014-01-06T17:51:32.386962 #8982]  INFO -- : 0:  rest-client (1.6.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rest-client-1.6.7.gemspec
+I, [2014-01-06T17:51:33.441296 #8982]  INFO -- : 0:  ruby-s3cmd (0.1.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ruby-s3cmd-0.1.5.gemspec
+I, [2014-01-06T17:51:35.125875 #8982]  INFO -- : 0:  awestruct (0.5.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/awestruct-0.5.0.gemspec
+I, [2014-01-06T17:51:43.166677 #8982]  INFO -- : 0:  ffi (1.8.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ffi-1.8.1.gemspec
+I, [2014-01-06T17:51:49.960927 #8982]  INFO -- : 0:  libv8 (3.11.8.17) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/libv8-3.11.8.17-x86_64-linux.gemspec
+I, [2014-01-06T17:51:51.028712 #8982]  INFO -- : 0:  rb-inotify (0.9.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rb-inotify-0.9.0.gemspec
+I, [2014-01-06T17:51:54.162372 #8982]  INFO -- : 0:  redcarpet (2.2.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/redcarpet-2.2.2.gemspec
+I, [2014-01-06T17:51:55.693213 #8982]  INFO -- : 0:  ref (1.0.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ref-1.0.4.gemspec
+I, [2014-01-06T17:52:08.074065 #8982]  INFO -- : 0:  therubyracer (0.11.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/therubyracer-0.11.4.gemspec
+I, [2014-01-06T17:52:08.074507 #8982]  INFO -- : 0:  bundler (1.5.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0@global/specifications/bundler-1.5.1.gemspec
+I, [2014-01-31T11:40:10.745536 #2604]  INFO -- : 0:  sass (3.2.13) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/sass-3.2.13.gemspec
+I, [2014-01-31T11:40:10.746239 #2604]  INFO -- : 0:  bootstrap-sass (3.0.3.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/bootstrap-sass-3.0.3.0.gemspec
+I, [2014-01-31T11:40:10.746600 #2604]  INFO -- : 0:  chunky_png (1.2.9) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/chunky_png-1.2.9.gemspec
+I, [2014-01-31T11:40:10.746946 #2604]  INFO -- : 0:  fssm (0.2.10) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/fssm-0.2.10.gemspec
+I, [2014-01-31T11:40:10.747328 #2604]  INFO -- : 0:  compass (0.12.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-0.12.2.gemspec
+I, [2014-01-31T11:40:10.747671 #2604]  INFO -- : 0:  compass-960-plugin (0.10.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-960-plugin-0.10.4.gemspec
+I, [2014-01-31T11:40:10.748025 #2604]  INFO -- : 0:  git (1.2.6) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/git-1.2.6.gemspec
+I, [2014-01-31T11:40:10.748330 #2604]  INFO -- : 0:  tilt (2.0.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/tilt-2.0.0.gemspec
+I, [2014-01-31T11:40:10.748684 #2604]  INFO -- : 0:  haml (4.0.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/haml-4.0.4.gemspec
+I, [2014-01-31T11:40:10.749002 #2604]  INFO -- : 0:  json (1.8.1) from /home/tcrawley/.rvm/rubies/ruby-2.1.0/lib/ruby/gems/2.1.0/specifications/default/json-1.8.1.gemspec
+I, [2014-01-31T11:40:10.749259 #2604]  INFO -- : 0:  timers (1.1.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/timers-1.1.0.gemspec
+I, [2014-01-31T11:40:10.749498 #2604]  INFO -- : 0:  celluloid (0.15.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/celluloid-0.15.2.gemspec
+I, [2014-01-31T11:40:10.749820 #2604]  INFO -- : 0:  rb-fsevent (0.9.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rb-fsevent-0.9.4.gemspec
+I, [2014-01-31T11:40:10.750094 #2604]  INFO -- : 0:  ffi (1.8.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ffi-1.8.1.gemspec
+I, [2014-01-31T11:40:10.750303 #2604]  INFO -- : 0:  rb-inotify (0.9.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rb-inotify-0.9.0.gemspec
+I, [2014-01-31T11:40:10.750519 #2604]  INFO -- : 0:  listen (2.4.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/listen-2.4.0.gemspec
+I, [2014-01-31T11:40:10.750712 #2604]  INFO -- : 0:  nokogiri (1.5.11) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/nokogiri-1.5.11.gemspec
+I, [2014-01-31T11:40:10.750926 #2604]  INFO -- : 0:  rack (1.5.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rack-1.5.2.gemspec
+I, [2014-01-31T11:40:10.751133 #2604]  INFO -- : 0:  mime-types (2.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/mime-types-2.0.gemspec
+I, [2014-01-31T11:40:10.751339 #2604]  INFO -- : 0:  rest-client (1.6.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rest-client-1.6.7.gemspec
+I, [2014-01-31T11:40:10.751560 #2604]  INFO -- : 0:  ruby-s3cmd (0.1.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ruby-s3cmd-0.1.5.gemspec
+I, [2014-01-31T11:40:10.751765 #2604]  INFO -- : 0:  zurb-foundation (4.3.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/zurb-foundation-4.3.2.gemspec
+I, [2014-01-31T11:40:10.751973 #2604]  INFO -- : 0:  awestruct (0.5.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/awestruct-0.5.2.gemspec
+I, [2014-01-31T11:40:10.752186 #2604]  INFO -- : 0:  libv8 (3.11.8.17) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/libv8-3.11.8.17-x86_64-linux.gemspec
+I, [2014-01-31T11:40:10.752381 #2604]  INFO -- : 0:  redcarpet (2.2.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/redcarpet-2.2.2.gemspec
+I, [2014-01-31T11:40:10.752577 #2604]  INFO -- : 0:  ref (1.0.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ref-1.0.4.gemspec
+I, [2014-01-31T11:40:10.752774 #2604]  INFO -- : 0:  therubyracer (0.11.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/therubyracer-0.11.4.gemspec
+I, [2014-01-31T11:40:10.752977 #2604]  INFO -- : 0:  bundler (1.5.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0@global/specifications/bundler-1.5.1.gemspec
+I, [2014-01-31T11:41:26.351574 #2667]  INFO -- : 0:  asciidoctor (0.1.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/asciidoctor-0.1.4.gemspec
+I, [2014-01-31T11:41:26.351936 #2667]  INFO -- : 0:  sass (3.2.13) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/sass-3.2.13.gemspec
+I, [2014-01-31T11:41:26.352156 #2667]  INFO -- : 0:  bootstrap-sass (3.0.3.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/bootstrap-sass-3.0.3.0.gemspec
+I, [2014-01-31T11:41:26.352372 #2667]  INFO -- : 0:  chunky_png (1.2.9) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/chunky_png-1.2.9.gemspec
+I, [2014-01-31T11:41:26.352584 #2667]  INFO -- : 0:  fssm (0.2.10) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/fssm-0.2.10.gemspec
+I, [2014-01-31T11:41:26.352776 #2667]  INFO -- : 0:  compass (0.12.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-0.12.2.gemspec
+I, [2014-01-31T11:41:26.352974 #2667]  INFO -- : 0:  compass-960-plugin (0.10.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-960-plugin-0.10.4.gemspec
+I, [2014-01-31T11:41:26.353160 #2667]  INFO -- : 0:  git (1.2.6) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/git-1.2.6.gemspec
+I, [2014-01-31T11:41:26.353382 #2667]  INFO -- : 0:  tilt (2.0.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/tilt-2.0.0.gemspec
+I, [2014-01-31T11:41:26.353590 #2667]  INFO -- : 0:  haml (4.0.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/haml-4.0.4.gemspec
+I, [2014-01-31T11:41:26.353774 #2667]  INFO -- : 0:  json (1.8.1) from /home/tcrawley/.rvm/rubies/ruby-2.1.0/lib/ruby/gems/2.1.0/specifications/default/json-1.8.1.gemspec
+I, [2014-01-31T11:41:26.353971 #2667]  INFO -- : 0:  timers (1.1.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/timers-1.1.0.gemspec
+I, [2014-01-31T11:41:26.354173 #2667]  INFO -- : 0:  celluloid (0.15.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/celluloid-0.15.2.gemspec
+I, [2014-01-31T11:41:26.354366 #2667]  INFO -- : 0:  rb-fsevent (0.9.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rb-fsevent-0.9.4.gemspec
+I, [2014-01-31T11:41:26.354558 #2667]  INFO -- : 0:  ffi (1.8.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ffi-1.8.1.gemspec
+I, [2014-01-31T11:41:26.354756 #2667]  INFO -- : 0:  rb-inotify (0.9.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rb-inotify-0.9.0.gemspec
+I, [2014-01-31T11:41:26.354941 #2667]  INFO -- : 0:  listen (2.4.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/listen-2.4.0.gemspec
+I, [2014-01-31T11:41:26.355128 #2667]  INFO -- : 0:  nokogiri (1.5.11) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/nokogiri-1.5.11.gemspec
+I, [2014-01-31T11:41:26.355351 #2667]  INFO -- : 0:  rack (1.5.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rack-1.5.2.gemspec
+I, [2014-01-31T11:41:26.355543 #2667]  INFO -- : 0:  mime-types (2.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/mime-types-2.0.gemspec
+I, [2014-01-31T11:41:26.355724 #2667]  INFO -- : 0:  rest-client (1.6.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rest-client-1.6.7.gemspec
+I, [2014-01-31T11:41:26.355911 #2667]  INFO -- : 0:  ruby-s3cmd (0.1.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ruby-s3cmd-0.1.5.gemspec
+I, [2014-01-31T11:41:26.356093 #2667]  INFO -- : 0:  zurb-foundation (4.3.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/zurb-foundation-4.3.2.gemspec
+I, [2014-01-31T11:41:26.356277 #2667]  INFO -- : 0:  awestruct (0.5.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/awestruct-0.5.2.gemspec
+I, [2014-01-31T11:41:26.356492 #2667]  INFO -- : 0:  libv8 (3.11.8.17) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/libv8-3.11.8.17-x86_64-linux.gemspec
+I, [2014-01-31T11:41:26.356677 #2667]  INFO -- : 0:  redcarpet (2.2.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/redcarpet-2.2.2.gemspec
+I, [2014-01-31T11:41:26.356855 #2667]  INFO -- : 0:  ref (1.0.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ref-1.0.4.gemspec
+I, [2014-01-31T11:41:26.357061 #2667]  INFO -- : 0:  therubyracer (0.11.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/therubyracer-0.11.4.gemspec
+I, [2014-01-31T11:41:26.357258 #2667]  INFO -- : 0:  bundler (1.5.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0@global/specifications/bundler-1.5.1.gemspec
+I, [2014-01-31T11:42:05.121847 #2749]  INFO -- : 0:  asciidoctor (0.1.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/asciidoctor-0.1.4.gemspec
+I, [2014-01-31T11:42:05.122184 #2749]  INFO -- : 0:  sass (3.2.13) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/sass-3.2.13.gemspec
+I, [2014-01-31T11:42:05.122404 #2749]  INFO -- : 0:  bootstrap-sass (3.0.3.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/bootstrap-sass-3.0.3.0.gemspec
+I, [2014-01-31T11:42:05.122600 #2749]  INFO -- : 0:  chunky_png (1.2.9) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/chunky_png-1.2.9.gemspec
+I, [2014-01-31T11:42:05.122799 #2749]  INFO -- : 0:  fssm (0.2.10) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/fssm-0.2.10.gemspec
+I, [2014-01-31T11:42:05.123000 #2749]  INFO -- : 0:  compass (0.12.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-0.12.2.gemspec
+I, [2014-01-31T11:42:05.123190 #2749]  INFO -- : 0:  compass-960-plugin (0.10.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-960-plugin-0.10.4.gemspec
+I, [2014-01-31T11:42:05.123414 #2749]  INFO -- : 0:  git (1.2.6) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/git-1.2.6.gemspec
+I, [2014-01-31T11:42:05.123630 #2749]  INFO -- : 0:  tilt (2.0.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/tilt-2.0.0.gemspec
+I, [2014-01-31T11:42:05.123850 #2749]  INFO -- : 0:  haml (4.0.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/haml-4.0.4.gemspec
+I, [2014-01-31T11:42:05.124046 #2749]  INFO -- : 0:  json (1.8.1) from /home/tcrawley/.rvm/rubies/ruby-2.1.0/lib/ruby/gems/2.1.0/specifications/default/json-1.8.1.gemspec
+I, [2014-01-31T11:42:05.124248 #2749]  INFO -- : 0:  timers (1.1.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/timers-1.1.0.gemspec
+I, [2014-01-31T11:42:05.124438 #2749]  INFO -- : 0:  celluloid (0.15.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/celluloid-0.15.2.gemspec
+I, [2014-01-31T11:42:05.124645 #2749]  INFO -- : 0:  rb-fsevent (0.9.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rb-fsevent-0.9.4.gemspec
+I, [2014-01-31T11:42:05.124833 #2749]  INFO -- : 0:  ffi (1.8.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ffi-1.8.1.gemspec
+I, [2014-01-31T11:42:05.125040 #2749]  INFO -- : 0:  rb-inotify (0.9.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rb-inotify-0.9.0.gemspec
+I, [2014-01-31T11:42:05.125228 #2749]  INFO -- : 0:  listen (2.4.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/listen-2.4.0.gemspec
+I, [2014-01-31T11:42:05.125415 #2749]  INFO -- : 0:  nokogiri (1.5.11) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/nokogiri-1.5.11.gemspec
+I, [2014-01-31T11:42:05.125595 #2749]  INFO -- : 0:  rack (1.5.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rack-1.5.2.gemspec
+I, [2014-01-31T11:42:05.125778 #2749]  INFO -- : 0:  mime-types (2.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/mime-types-2.0.gemspec
+I, [2014-01-31T11:42:05.125974 #2749]  INFO -- : 0:  rest-client (1.6.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rest-client-1.6.7.gemspec
+I, [2014-01-31T11:42:05.126169 #2749]  INFO -- : 0:  ruby-s3cmd (0.1.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ruby-s3cmd-0.1.5.gemspec
+I, [2014-01-31T11:42:05.126355 #2749]  INFO -- : 0:  zurb-foundation (4.3.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/zurb-foundation-4.3.2.gemspec
+I, [2014-01-31T11:42:05.126544 #2749]  INFO -- : 0:  awestruct (0.5.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/awestruct-0.5.2.gemspec
+I, [2014-01-31T11:42:05.126732 #2749]  INFO -- : 0:  erubis (2.7.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/erubis-2.7.0.gemspec
+I, [2014-01-31T11:42:05.126932 #2749]  INFO -- : 0:  libv8 (3.11.8.17) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/libv8-3.11.8.17-x86_64-linux.gemspec
+I, [2014-01-31T11:42:05.127124 #2749]  INFO -- : 0:  redcarpet (2.2.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/redcarpet-2.2.2.gemspec
+I, [2014-01-31T11:42:05.127341 #2749]  INFO -- : 0:  ref (1.0.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ref-1.0.4.gemspec
+I, [2014-01-31T11:42:05.127561 #2749]  INFO -- : 0:  therubyracer (0.11.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/therubyracer-0.11.4.gemspec
+I, [2014-01-31T11:42:05.127767 #2749]  INFO -- : 0:  bundler (1.5.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0@global/specifications/bundler-1.5.1.gemspec
+I, [2014-01-31T11:44:06.895787 #2872]  INFO -- : 0:  asciidoctor (0.1.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/asciidoctor-0.1.4.gemspec
+I, [2014-01-31T11:44:08.904316 #2872]  INFO -- : 0:  sass (3.2.14) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/sass-3.2.14.gemspec
+I, [2014-01-31T11:44:11.059693 #2872]  INFO -- : 0:  bootstrap-sass (3.1.0.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/bootstrap-sass-3.1.0.0.gemspec
+I, [2014-01-31T11:44:11.060596 #2872]  INFO -- : 0:  chunky_png (1.2.9) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/chunky_png-1.2.9.gemspec
+I, [2014-01-31T11:44:11.060979 #2872]  INFO -- : 0:  fssm (0.2.10) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/fssm-0.2.10.gemspec
+I, [2014-01-31T11:44:11.061186 #2872]  INFO -- : 0:  compass (0.12.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-0.12.2.gemspec
+I, [2014-01-31T11:44:11.061395 #2872]  INFO -- : 0:  compass-960-plugin (0.10.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-960-plugin-0.10.4.gemspec
+I, [2014-01-31T11:44:12.636194 #2872]  INFO -- : 0:  tilt (1.4.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/tilt-1.4.1.gemspec
+I, [2014-01-31T11:44:14.622061 #2872]  INFO -- : 0:  haml (4.0.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/haml-4.0.5.gemspec
+I, [2014-01-31T11:44:14.622509 #2872]  INFO -- : 0:  rb-fsevent (0.9.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rb-fsevent-0.9.4.gemspec
+I, [2014-01-31T11:44:14.622802 #2872]  INFO -- : 0:  ffi (1.8.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ffi-1.8.1.gemspec
+I, [2014-01-31T11:44:14.623085 #2872]  INFO -- : 0:  rb-inotify (0.9.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rb-inotify-0.9.0.gemspec
+I, [2014-01-31T11:44:15.594721 #2872]  INFO -- : 0:  rb-kqueue (0.2.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rb-kqueue-0.2.0.gemspec
+I, [2014-01-31T11:44:17.072186 #2872]  INFO -- : 0:  listen (1.3.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/listen-1.3.1.gemspec
+I, [2014-01-31T11:44:18.686931 #2872]  INFO -- : 0:  mime-types (1.25) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/mime-types-1.25.gemspec
+I, [2014-01-31T11:44:28.264594 #2872]  INFO -- : 0:  nokogiri (1.5.10) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/nokogiri-1.5.10.gemspec
+I, [2014-01-31T11:44:28.265523 #2872]  INFO -- : 0:  rack (1.5.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rack-1.5.2.gemspec
+I, [2014-01-31T11:44:28.266131 #2872]  INFO -- : 0:  rest-client (1.6.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rest-client-1.6.7.gemspec
+I, [2014-01-31T11:44:28.266719 #2872]  INFO -- : 0:  ruby-s3cmd (0.1.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ruby-s3cmd-0.1.5.gemspec
+I, [2014-01-31T11:44:28.267340 #2872]  INFO -- : 0:  zurb-foundation (4.3.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/zurb-foundation-4.3.2.gemspec
+I, [2014-01-31T11:44:29.912611 #2872]  INFO -- : 0:  awestruct (0.5.4.rc3) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/awestruct-0.5.4.rc3.gemspec
+I, [2014-01-31T11:44:29.913588 #2872]  INFO -- : 0:  erubis (2.7.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/erubis-2.7.0.gemspec
+I, [2014-01-31T11:44:29.914266 #2872]  INFO -- : 0:  libv8 (3.11.8.17) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/libv8-3.11.8.17-x86_64-linux.gemspec
+I, [2014-01-31T11:44:29.914852 #2872]  INFO -- : 0:  redcarpet (2.2.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/redcarpet-2.2.2.gemspec
+I, [2014-01-31T11:44:29.915482 #2872]  INFO -- : 0:  ref (1.0.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ref-1.0.4.gemspec
+I, [2014-01-31T11:44:29.916139 #2872]  INFO -- : 0:  therubyracer (0.11.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/therubyracer-0.11.4.gemspec
+I, [2014-01-31T11:44:29.916687 #2872]  INFO -- : 0:  bundler (1.5.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0@global/specifications/bundler-1.5.1.gemspec
+I, [2014-01-31T12:25:33.629000 #8689]  INFO -- : 0:  sass (3.2.8) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/sass-3.2.8.gemspec
+I, [2014-01-31T12:25:35.901000 #8689]  INFO -- : 0:  bootstrap-sass (2.3.1.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/bootstrap-sass-2.3.1.0.gemspec
+I, [2014-01-31T12:25:39.454000 #8689]  INFO -- : 0:  chunky_png (1.2.8) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/chunky_png-1.2.8.gemspec
+I, [2014-01-31T12:25:40.964000 #8689]  INFO -- : 0:  fssm (0.2.10) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/fssm-0.2.10.gemspec
+I, [2014-01-31T12:25:48.467000 #8689]  INFO -- : 0:  compass (0.12.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-0.12.2.gemspec
+I, [2014-01-31T12:25:49.806000 #8689]  INFO -- : 0:  compass-960-plugin (0.10.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-960-plugin-0.10.4.gemspec
+I, [2014-01-31T12:25:51.188000 #8689]  INFO -- : 0:  git (1.2.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/git-1.2.5.gemspec
+I, [2014-01-31T12:25:53.231000 #8689]  INFO -- : 0:  tilt (1.3.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/tilt-1.3.7.gemspec
+I, [2014-01-31T12:25:55.809000 #8689]  INFO -- : 0:  haml (4.0.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/haml-4.0.2.gemspec
+I, [2014-01-31T12:25:57.900000 #8689]  INFO -- : 0:  json (1.7.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/json-1.7.7-java.gemspec
+I, [2014-01-31T12:25:59.640000 #8689]  INFO -- : 0:  listen (0.7.3) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/listen-0.7.3.gemspec
+I, [2014-01-31T12:26:06.512000 #8689]  INFO -- : 0:  nokogiri (1.5.9) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/nokogiri-1.5.9-java.gemspec
+I, [2014-01-31T12:26:09.254000 #8689]  INFO -- : 0:  rack (1.5.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rack-1.5.2.gemspec
+I, [2014-01-31T12:26:10.771000 #8689]  INFO -- : 0:  mime-types (1.23) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/mime-types-1.23.gemspec
+I, [2014-01-31T12:26:12.298000 #8689]  INFO -- : 0:  rest-client (1.6.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rest-client-1.6.7.gemspec
+I, [2014-01-31T12:26:13.528000 #8689]  INFO -- : 0:  ruby-s3cmd (0.1.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ruby-s3cmd-0.1.5.gemspec
+I, [2014-01-31T12:26:15.883000 #8689]  INFO -- : 0:  awestruct (0.5.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/awestruct-0.5.0.gemspec
+I, [2014-01-31T12:26:17.601000 #8689]  INFO -- : 0:  ffi (1.8.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ffi-1.8.1-java.gemspec
+E, [2014-01-31T12:26:46.893000 #8689] ERROR -- : Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    /home/tcrawley/.rvm/rubies/jruby-1.7.9/bin/jruby extconf.rb 
+NotImplementedError: C extension support is not enabled. Pass -Xcext.enabled=true to JRuby or set JRUBY_OPTS.
+
+   (root) at /home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/mkmf.rb:8
+  require at org/jruby/RubyKernel.java:1083
+   (root) at /home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/core_ext/kernel_require.rb:1
+   (root) at extconf.rb:1
+
+extconf failed, uncaught signal 1
+
+Gem files will remain installed in /home/tcrawley/.rvm/gems/ruby-2.1.0/gems/libv8-3.11.8.17 for inspection.
+Results logged to /home/tcrawley/.rvm/gems/ruby-2.1.0/extensions/universal-java-1.7/1.9/libv8-3.11.8.17/gem_make.out
+
+/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:89:in `run'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/ext_conf_builder.rb:37:in `build'  \norg/jruby/RubyIO.java:1182:in `open'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/ext_conf_builder.rb:17:in `build'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:161:in `build_extension'  \norg/jruby/RubyDir.java:476:in `chdir'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:160:in `build_extension'  \norg/jruby/ext/thread/Mutex.java:149:in `synchronize'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:159:in `build_extension'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:198:in `build_extensions'  \norg/jruby/RubyArray.java:1613:in `each'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:195:in `build_extensions'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/installer.rb:677:in `build_extensions'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/installer.rb:232:in `install'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/source/rubygems.rb:95:in `install'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/rubygems_integration.rb:118:in `preserve_paths'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/source/rubygems.rb:94:in `install'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:111:in `install_gem_from_spec'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/rubygems_integration.rb:150:in `with_build_args'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:110:in `install_gem_from_spec'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:295:in `install_sequentially'  \norg/jruby/RubyArray.java:1613:in `each'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/1.9/forwardable.rb:201:in `each'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:294:in `install_sequentially'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:97:in `run'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:15:in `install'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/cli.rb:257:in `install'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/vendor/thor/command.rb:27:in `run'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/vendor/thor/invocation.rb:120:in `invoke_command'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/vendor/thor.rb:363:in `dispatch'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/vendor/thor/base.rb:438:in `start'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/cli.rb:10:in `start'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/bin/bundle:22:in `(root)'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/friendly_errors.rb:5:in `with_friendly_errors'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/bin/bundle:22:in `(root)'  \norg/jruby/RubyKernel.java:1099:in `load'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/bin/bundle:19:in `(root)'
+I, [2014-01-31T12:27:41.716000 #9395]  INFO -- : 0:  sass (3.2.8) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/sass-3.2.8.gemspec
+I, [2014-01-31T12:27:41.726000 #9395]  INFO -- : 0:  bootstrap-sass (2.3.1.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/bootstrap-sass-2.3.1.0.gemspec
+I, [2014-01-31T12:27:41.732000 #9395]  INFO -- : 0:  chunky_png (1.2.8) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/chunky_png-1.2.8.gemspec
+I, [2014-01-31T12:27:41.738000 #9395]  INFO -- : 0:  fssm (0.2.10) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/fssm-0.2.10.gemspec
+I, [2014-01-31T12:27:41.743000 #9395]  INFO -- : 0:  compass (0.12.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-0.12.2.gemspec
+I, [2014-01-31T12:27:41.748000 #9395]  INFO -- : 0:  compass-960-plugin (0.10.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-960-plugin-0.10.4.gemspec
+I, [2014-01-31T12:27:41.753000 #9395]  INFO -- : 0:  git (1.2.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/git-1.2.5.gemspec
+I, [2014-01-31T12:27:41.757000 #9395]  INFO -- : 0:  tilt (1.3.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/tilt-1.3.7.gemspec
+I, [2014-01-31T12:27:41.763000 #9395]  INFO -- : 0:  haml (4.0.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/haml-4.0.2.gemspec
+I, [2014-01-31T12:27:41.769000 #9395]  INFO -- : 0:  json (1.7.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/json-1.7.7-java.gemspec
+I, [2014-01-31T12:27:41.774000 #9395]  INFO -- : 0:  listen (0.7.3) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/listen-0.7.3.gemspec
+I, [2014-01-31T12:27:41.780000 #9395]  INFO -- : 0:  nokogiri (1.5.9) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/nokogiri-1.5.9-java.gemspec
+I, [2014-01-31T12:27:41.786000 #9395]  INFO -- : 0:  rack (1.5.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rack-1.5.2.gemspec
+I, [2014-01-31T12:27:41.792000 #9395]  INFO -- : 0:  mime-types (1.23) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/mime-types-1.23.gemspec
+I, [2014-01-31T12:27:41.797000 #9395]  INFO -- : 0:  rest-client (1.6.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rest-client-1.6.7.gemspec
+I, [2014-01-31T12:27:41.803000 #9395]  INFO -- : 0:  ruby-s3cmd (0.1.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ruby-s3cmd-0.1.5.gemspec
+I, [2014-01-31T12:27:41.807000 #9395]  INFO -- : 0:  awestruct (0.5.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/awestruct-0.5.0.gemspec
+I, [2014-01-31T12:27:41.812000 #9395]  INFO -- : 0:  ffi (1.8.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ffi-1.8.1-java.gemspec
+E, [2014-01-31T12:27:54.796000 #9395] ERROR -- : Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    /home/tcrawley/.rvm/rubies/jruby-1.7.9/bin/jruby extconf.rb 
+NotImplementedError: C extension support is not enabled. Pass -Xcext.enabled=true to JRuby or set JRUBY_OPTS.
+
+   (root) at /home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/mkmf.rb:8
+  require at org/jruby/RubyKernel.java:1083
+   (root) at /home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/core_ext/kernel_require.rb:1
+   (root) at extconf.rb:1
+
+extconf failed, uncaught signal 1
+
+Gem files will remain installed in /home/tcrawley/.rvm/gems/ruby-2.1.0/gems/libv8-3.11.8.17 for inspection.
+Results logged to /home/tcrawley/.rvm/gems/ruby-2.1.0/extensions/universal-java-1.7/1.9/libv8-3.11.8.17/gem_make.out
+
+/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:89:in `run'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/ext_conf_builder.rb:37:in `build'  \norg/jruby/RubyIO.java:1182:in `open'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/ext_conf_builder.rb:17:in `build'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:161:in `build_extension'  \norg/jruby/RubyDir.java:476:in `chdir'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:160:in `build_extension'  \norg/jruby/ext/thread/Mutex.java:149:in `synchronize'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:159:in `build_extension'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:198:in `build_extensions'  \norg/jruby/RubyArray.java:1613:in `each'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/ext/builder.rb:195:in `build_extensions'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/installer.rb:677:in `build_extensions'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/shared/rubygems/installer.rb:232:in `install'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/source/rubygems.rb:95:in `install'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/rubygems_integration.rb:118:in `preserve_paths'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/source/rubygems.rb:94:in `install'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:111:in `install_gem_from_spec'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/rubygems_integration.rb:150:in `with_build_args'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:110:in `install_gem_from_spec'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:295:in `install_sequentially'  \norg/jruby/RubyArray.java:1613:in `each'  \n/home/tcrawley/.rvm/rubies/jruby-1.7.9/lib/ruby/1.9/forwardable.rb:201:in `each'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:294:in `install_sequentially'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:97:in `run'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/installer.rb:15:in `install'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/cli.rb:257:in `install'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/vendor/thor/command.rb:27:in `run'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/vendor/thor/invocation.rb:120:in `invoke_command'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/vendor/thor.rb:363:in `dispatch'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/vendor/thor/base.rb:438:in `start'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/cli.rb:10:in `start'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/bin/bundle:22:in `(root)'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/lib/bundler/friendly_errors.rb:5:in `with_friendly_errors'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/gems/bundler-1.5.1/bin/bundle:22:in `(root)'  \norg/jruby/RubyKernel.java:1099:in `load'  \n/home/tcrawley/.rvm/gems/ruby-2.1.0@global/bin/bundle:19:in `(root)'
+I, [2014-01-31T12:34:43.230856 #9735]  INFO -- : 0:  sass (3.2.8) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/sass-3.2.8.gemspec
+I, [2014-01-31T12:34:43.231180 #9735]  INFO -- : 0:  bootstrap-sass (2.3.1.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/bootstrap-sass-2.3.1.0.gemspec
+I, [2014-01-31T12:34:43.231413 #9735]  INFO -- : 0:  chunky_png (1.2.8) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/chunky_png-1.2.8.gemspec
+I, [2014-01-31T12:34:43.231602 #9735]  INFO -- : 0:  fssm (0.2.10) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/fssm-0.2.10.gemspec
+I, [2014-01-31T12:34:43.231789 #9735]  INFO -- : 0:  compass (0.12.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-0.12.2.gemspec
+I, [2014-01-31T12:34:43.231983 #9735]  INFO -- : 0:  compass-960-plugin (0.10.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/compass-960-plugin-0.10.4.gemspec
+I, [2014-01-31T12:34:43.232166 #9735]  INFO -- : 0:  git (1.2.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/git-1.2.5.gemspec
+I, [2014-01-31T12:34:43.232348 #9735]  INFO -- : 0:  tilt (1.3.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/tilt-1.3.7.gemspec
+I, [2014-01-31T12:34:43.232534 #9735]  INFO -- : 0:  haml (4.0.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/haml-4.0.2.gemspec
+I, [2014-01-31T12:34:45.754011 #9735]  INFO -- : 0:  json (1.7.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/json-1.7.7.gemspec
+I, [2014-01-31T12:34:45.755579 #9735]  INFO -- : 0:  listen (0.7.3) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/listen-0.7.3.gemspec
+I, [2014-01-31T12:34:54.680494 #9735]  INFO -- : 0:  nokogiri (1.5.9) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/nokogiri-1.5.9.gemspec
+I, [2014-01-31T12:34:54.681385 #9735]  INFO -- : 0:  rack (1.5.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rack-1.5.2.gemspec
+I, [2014-01-31T12:34:54.682026 #9735]  INFO -- : 0:  mime-types (1.23) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/mime-types-1.23.gemspec
+I, [2014-01-31T12:34:54.682628 #9735]  INFO -- : 0:  rest-client (1.6.7) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rest-client-1.6.7.gemspec
+I, [2014-01-31T12:34:54.683214 #9735]  INFO -- : 0:  ruby-s3cmd (0.1.5) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ruby-s3cmd-0.1.5.gemspec
+I, [2014-01-31T12:34:54.683872 #9735]  INFO -- : 0:  awestruct (0.5.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/awestruct-0.5.0.gemspec
+I, [2014-01-31T12:35:03.364661 #9735]  INFO -- : 0:  ffi (1.8.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ffi-1.8.1.gemspec
+I, [2014-01-31T12:35:13.163902 #9735]  INFO -- : 0:  libv8 (3.11.8.17) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/libv8-3.11.8.17-x86_64-linux.gemspec
+I, [2014-01-31T12:35:14.085835 #9735]  INFO -- : 0:  rb-inotify (0.9.0) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/rb-inotify-0.9.0.gemspec
+I, [2014-01-31T12:35:17.539425 #9735]  INFO -- : 0:  redcarpet (2.2.2) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/redcarpet-2.2.2.gemspec
+I, [2014-01-31T12:35:18.901939 #9735]  INFO -- : 0:  ref (1.0.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/ref-1.0.4.gemspec
+I, [2014-01-31T12:35:28.018332 #9735]  INFO -- : 0:  therubyracer (0.11.4) from /home/tcrawley/.rvm/gems/ruby-2.1.0/specifications/therubyracer-0.11.4.gemspec
+I, [2014-01-31T12:35:28.018921 #9735]  INFO -- : 0:  bundler (1.5.1) from /home/tcrawley/.rvm/gems/ruby-2.1.0@global/specifications/bundler-1.5.1.gemspec
