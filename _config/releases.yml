@@ -1,6 +1,9 @@
+- version: '1.1.2'
+  jira_version: 12324660
+  latest: true
+  dist_type: :slim_only
 - version: '1.1.1'
   jira_version: 12311821
-  latest: true
   dist_type: :slim_only
 - version: '1.1.0'
   jira_version: 12322504
