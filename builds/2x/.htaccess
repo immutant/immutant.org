@@ -1,0 +1,6 @@
+RewriteEngine on
+
+RewriteRule ^([0-9]+)/(.*)$ https://projectodd.ci.cloudbees.com/job/immutant2-incremental/$1/artifact/$2 [P]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(LATEST/)?(.*)$ https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/$2 [P]

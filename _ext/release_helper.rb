@@ -32,7 +32,14 @@ module ReleaseHelper
     end
     path
   end
-  
+
+  def api_doc_for_2x_version(version, group = nil, fn = nil)
+    path = "/builds/2x/#{version}/target/apidocs/"
+    path << (group ? "immutant.#{group}.html" : "index.html")
+    path << "#var-#{fn}" if fn
+    path
+  end
+
   def doc_chapter_for_version(version, chapter, target = nil)
       if version == 'LATEST'
         path = "/builds/LATEST/html-docs/#{chapter}.html"
