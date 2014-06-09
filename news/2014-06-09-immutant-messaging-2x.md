@@ -45,7 +45,7 @@ the following functions:
   registers a function to be called each time a message
   arrives at the destination
 
-If the destination is a queue, we can to synchronous messaging
+If the destination is a queue, we can do synchronous messaging
 ([request-response]):
 
 * [respond](#{api_doc_for_2x_version('LATEST', 'messaging', 'respond')}) -
@@ -67,8 +67,11 @@ The following code fragments were tested against
 follow the instructions in the [getting started] post to set up a
 project using Immutant 2.x, and add
 `[org.immutant/messaging "2.x.incremental.133"]` and
-`[cheshire "5.3.1"]` to the project dependencies. Then, fire up a
-REPL, and require the `immutant.messaging` namespace to follow along:
+`[cheshire "5.3.1"]` to the project dependencies (we'll be encoding
+some messages as JSON in our examples below, so we'll go ahead and add
+[cheshire](https://github.com/dakrone/cheshire) while we're at
+it). Then, fire up a REPL, and require the `immutant.messaging`
+namespace to follow along:
 
 <pre class="syntax clojure">(require '[immutant.messaging :refer :all])</pre>
 
@@ -128,8 +131,8 @@ calling `.close` on it:
 (.close listener)</pre>
 
 Now let's take a look at synchronous messaging. Let's create a new
-queue for this and register a responder that just increments the
-request:
+queue for this (you'll want to use a dedicated queue for each
+responder) and register a responder that just increments the request:
 
 <pre class="syntax clojure">(def sync-q (queue "sync"))
 
