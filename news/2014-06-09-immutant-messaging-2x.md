@@ -5,7 +5,7 @@ layout: news
 tags: [ thedeuce, getting-started, tutorial, messaging ]
 ---
 
-<a href="https://flic.kr/p/Ea16j"><img src="/images/news/mailboxes.jpg" alt="[mailboxes]" class="alignleft"/></a>
+<a href="https://flic.kr/p/6ZpegH"><img src="/images/news/mailboxes.jpg" alt="[mailboxes]" class="alignleft bordered"/></a>
 
 In this installment of our series on
 [getting started with Immutant 2](/news/tags/thedeuce/), we'll take a
