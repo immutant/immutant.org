@@ -167,3 +167,4 @@ As always, we'd love to incorporate your feedback. Find us via our
 [request-response]: https://en.wikipedia.org/wiki/Request-response
 [community]: http://immutant.org/community/
 [Future]: http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html
+[edn]: https://github.com/edn-format/edn
