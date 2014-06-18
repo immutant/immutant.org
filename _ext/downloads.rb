@@ -1,10 +1,9 @@
-
 class Downloads
   include ReleaseHelper
-  
-  STAGING_REPO_PREFIX = "http://repository-projectodd.forge.cloudbees.com/staging/org/immutant"
-  REPO_PREFIX         = "http://repository-projectodd.forge.cloudbees.com/release/org/immutant"
-  
+
+  STAGING_REPO_PREFIX = "http://downloads.immutant.org/staging/org/immutant"
+  REPO_PREFIX         = "http://downloads.immutant.org/release/org/immutant"
+
 
   def initialize(enabled=true)
     @enabled = enabled
@@ -24,7 +23,7 @@ class Downloads
       #end
 
       docs_prefix = "#{prefix}/immutant-docs"
-      
+
       release.urls ||= OpenStruct.new
       release.urls.docs ||= OpenStruct.new
       release.urls.docs.browse = "/documentation/#{release.version}/"
