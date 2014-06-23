@@ -110,6 +110,22 @@ tell you the Immutant was properly started:
     
 You can kill the Immutant with Ctrl-C.
 
+## Alternate Install via Zip Download
+
+You can manually download any of the same builds that you can install
+via the plugin. You can download incremental builds from the
+[builds page](/builds/) and official releases from the
+[releases page](/releases/).
+
+Once you have the zip downloaded, expand it somewhere handy. If you
+want to use the Leiningen plugin with this build, you'll need to set
+`$IMMUTANT_HOME`:
+
+    $ mkdir immutant-releases
+    $ cd immutant-releases
+    $ unzip path/to/immutant-dist-slim.zip
+    $ export IMMUTANT_HOME=~/immutant-releases/immutant-#{latest_release.version}-slim/
+
 ## Wrapping up
 
 If you've done all of the above, you're now ready to deploy an application. We
