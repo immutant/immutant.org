@@ -18,7 +18,7 @@ layout: default
           Author:
           = author( page )
       .body
-        = partial( 'version-2-warning.html' )
+        = partial( 'version-1-warning.html' )
         ~ content
       .comments
         = page.disqus_comments
@@ -27,6 +27,6 @@ layout: default
     .tutorial-nav
       %h3 All Tutorials
       %ul.nav.nav-tabs.nav-stacked
-        - site.tutorials.each do |t|
+        - site.tutorials1.each do |t|
           %li{:class => (t == page) ? 'current' : ''}
             %a{:href => t.output_path}= t.title
