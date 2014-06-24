@@ -95,7 +95,8 @@ other hosts using the `:virtual-host` option, which takes either a
 single hostname or multiple:
 
 <pre class="syntax clojure">(run app :virtual-host "yourapp.com")
-(run app :virtual-host ["app.io" "app.us"])</pre>
+(run app :virtual-host ["app.io" "app.us"])
+</pre>
 
 Multiple applications can run on the same `:host` and `:port` as long
 as each has a unique combination of `:virtual-host` and `:path`.
