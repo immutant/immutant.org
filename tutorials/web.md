@@ -12,7 +12,7 @@ Among other things, this resulted in
 (~35% more throughput than v1.1.1) and built-in support for
 websockets.
 
-## The namespaces
+## The Namespaces
 
 The primary namespace, [immutant.web], is comprised of just two
 functions and a convenient macro:
@@ -165,8 +165,8 @@ also pass any valid implementation of `javax.servlet.Servlet` or
 a very simple [Pedestal] service running on Immutant:
 
 <pre class="syntax clojure">(ns testing.hello.service
-  (:require [io.pedestal.service.http :as http]
-            [io.pedestal.service.http.route.definition :refer [defroutes]]
+  (:require [io.pedestal.http :as http]
+            [io.pedestal.http.route.definition :refer [defroutes]]
             [ring.util.response :refer [response]]
             [immutant.web :refer [run]]))
 
