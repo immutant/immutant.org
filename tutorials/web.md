@@ -12,17 +12,43 @@ Among other things, this resulted in
 (~35% more throughput than v1.1.1) and built-in support for
 websockets.
 
-## The Web API
+## The namespaces
 
-The API for [immutant.web] is small, just two functions and a
-convenient macro:
+The primary namespace, [immutant.web], is comprised of just two
+functions and a convenient macro:
 
 * `run` - runs your handler in a specific environment, responding to
   web requests matching a given host, port, path and virtual host. The
   handler may be either a Ring function, Servlet instance, or Undertow
-  HttpHandler.
+  HttpHandler
 * `run-dmc` - runs your handler in *Development Mode* (the 'C' is silent)
 * `stop` - stops your handler[s]
+
+The [immutant.web.middleware] namespace includes two Ring middleware
+functions:
+
+* `wrap-session` - enables session sharing among your Ring handler and
+  its websockets, as well as automatic session replication when your
+  app is deployed to a WildFly or EAP cluster.
+* `wrap-development` - included automatically by `run-dmc`, this
+  aggregates some middleware handy during development.
+
+[WebSockets] are created using the [immutant.web.websocket] namespace,
+which includes the following:
+
+* `Channel` - a protocol for WebSocket interaction.
+* `Handshake` - a protocol for obtaining attributes of the initial
+  upgrade request
+* `wrap-websocket` - middleware to attach websocket callback functions
+  to a Ring handler
+
+Finally, [immutant.web.undertow] exposes tuning options for Undertow,
+should your app require that level of configuration.
+
+## A sample REPL session
+
+Now, let's fire up a REPL and work through some of the features of the
+library.
 
 If you haven't already, you should read through the [installation]
 tutorial and require the `immutant.web` namespace at a REPL to follow
@@ -72,12 +98,12 @@ Which is equivalent to this:
 
 <pre class="syntax clojure">(stop {:host "localhost" :port 8080 :path "/"})</pre>
 
-Or, if you prefer kwargs, this:
+Or like `run`, if you prefer kwargs, this:
 
 <pre class="syntax clojure">(stop :host "localhost" :port 8080 :path "/")</pre>
 
-Alternatively, you can save run's return value and pass it to stop to
-stop your handler.
+Alternatively, you can save the return value from `run` and pass it to
+stop to stop your handler.
 
 <pre class="syntax clojure">(def server (run app {:port 4242 :path "/hello"}))
 ...
@@ -165,51 +191,114 @@ your app in a browser.
 Both `run` and `run-dmc` accept the same options. You can even mix
 them within a single threaded call.
 
-## The Websocket API
+### WebSockets
 
 Also included in the `org.immutant/web` library is the
-[immutant.websocket] namespace, which includes a `Channel` protocol
-and the `create-handler` function. It accepts a map of callback
-functions, invoked asynchronously during the lifecycle of a websocket.
+[immutant.web.websocket] namespace, which includes the
+`wrap-websocket` function that attaches a map of callback functions to
+your Ring handler. Though it looks like Ring middleware, it actually
+returns an `HttpHandler` instead of a function, so it must come last
+in your middleware chain.
+
 The valid websocket event keywords and their corresponding callback
-signatures are as follows:
+signatures are as follows, where channel is an instance of the
+`Channel` protocol, and handshake is an instance of `Handshake`:
 
 <pre class="syntax clojure">  :on-message (fn [channel message])
-  :on-open    (fn [channel])
+  :on-open    (fn [channel handshake])
   :on-close   (fn [channel {:keys [code reason]}])
   :on-error   (fn [channel throwable])
-  :fallback   (fn [request] (response ...))
 </pre>
 
 To create your websocket endpoint, pass the result from
-`create-handler` to `immutant.web/run`. Here's an example that
+`wrap-websocket` to `immutant.web/run`. Here's an example that
 asynchronously returns the upper-cased equivalent of whatever message
 it receives:
 
 <pre class="syntax clojure">(ns whatever
-  (:require [immutant.web :as web]
-            [immutant.websocket :as ws]
-            [clojure.string :refer [upper-case]]))
+  (:require [immutant.web             :as web]
+            [immutant.web.websocket   :as ws]
+            [ring.middleware.resource :refer [wrap-resource]]
+            [ring.util.response       :refer [redirect]]
+            [clojure.string           :refer [upper-case]]))
 
 (defn create-websocket []
   (web/run
-    (ws/create-handler {:on-message (fn [c m] (ws/send! c (upper-case m)))})
-    {:path "/websocket"}))
+    (-> (fn [{c :context}] (redirect (str c "/index.html")))
+      (wrap-resource "public")
+      (ws/wrap-websocket {:on-message (fn [c m] (ws/send! c (upper-case m)))}))
+    {:path "/ws"}))
 </pre>
 
-Another function, `immutant.websocket/create-servlet`, can be used to
-create a [JSR 356] Endpoint. The channel passed to the callbacks is an
-instance of `javax.websocket.Session`, extended to the
-`immutant.websocket.Channel` protocol.
+After running the above, a request to <http://localhost:8080/ws>
+should return a 302 redirect to <http://localhost:8080/ws/index.html>.
+Assuming the `wrap-resource` middleware can find `public/index.html`
+in your classpath (typically in your project's `resources/` dir), a
+`<script>` that attempts to open a WebSocket connection to
+<ws://localhost:8080/ws> should work, and an upper-cased version of
+any text the browser sends should be returned to it through that
+WebSocket.
 
+Note the `:path` argument applies to both the Ring handler and the
+WebSocket, distinguished only by the request protocol, e.g. `http://`
+vs `ws://`.
+
+#### The WebSocket Handshake
+
+Often, applications require access to data in the original upgrade
+request associated with a WebSocket connection, perhaps for user
+authentication or some such. That data is made available via the
+`immutant.web.websocket/Handshake` protocol, an instance of which is
+passed to the `:on-open` callback.
+
+In particular, you can access all the headers sent in the upgrade
+request, and if you're using the `wrap-session` middleware, you can
+even access any session data stored on behalf of the user by the Ring
+handler. Here's a contrived example in which the Ring handler stores a
+random id in the session that is then sent back to the user when he
+opens a WebSocket:
+
+<pre class="syntax clojure">(ns whatever
+  (:require [immutant.web             :as web]
+            [immutant.web.websocket   :as ws]
+            [immutant.web.middleware  :refer [wrap-session]]
+            [ring.util.response       :refer [response]]))
+
+(def callbacks {:on-open (fn [c h] (ws/send! c (:id (ws/session h))))}
+
+(defn share-session-with-websocket []
+  (web/run
+    (-> (fn [{{:keys [id] :or {id (str (rand))}} :session}]
+          (-> id response (assoc :session {:id id})))
+      (wrap-session)
+      (ws/wrap-websocket callbacks))
+    {:path "/ws"}))
+</pre>
+
+## Feature Demo
+
+We maintain a Leiningen project called the [Immutant Feature Demo]
+demonstrating all the Immutant namespaces, including examples of
+simple
+[Web](https://github.com/immutant/feature-demo/blob/thedeuce/src/demo/web.clj)
+and
+[WebSocket](https://github.com/immutant/feature-demo/blob/thedeuce/src/demo/websocket.clj)
+apps.
+
+You should be able to clone it somewhere, cd there, and `lein run`.
+
+Have fun!
 
 [immutant.web]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.web.html
-[immutant.websocket]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.websocket.html
+[immutant.web.middleware]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.web.middleware.html
+[immutant.web.websocket]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.web.websocket.html
+[immutant.web.undertow]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.web.undertow.html
 [Undertow]: http://undertow.io/
 [Ring]: https://github.com/ring-clojure/ring/wiki
 [installation]: /tutorials/installation/
 [Pedestal]: https://github.com/pedestal/pedestal
-[JSR 356]: https://jcp.org/en/jsr/detail?id=356
 [Compojure]: https://github.com/weavejester/compojure
 [Luminus]: http://www.luminusweb.net/
 [Caribou]: http://let-caribou.in/
+[WebSockets]: http://en.wikipedia.org/wiki/WebSocket
+[Immutant Feature Demo]: https://github.com/immutant/feature-demo
