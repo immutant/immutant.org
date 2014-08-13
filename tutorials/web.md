@@ -2,7 +2,7 @@
 title: Web
 sequence: 1.5
 description: "Deploying web apps built with popular Clojure libraries"
-date: 2014-06-23
+date: 2014-08-12
 ---
 
 The `org.immutant/web` library changed quite a bit from Immutant 1.x
