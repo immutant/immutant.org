@@ -2,7 +2,6 @@ renderer = {
   add_build: function(build) {
     var self = this;
     row = self.create_build_row( build );
-
     row[row.length-1].addClass( 'divide' );
 
     $.each( row, function(i,r) {
@@ -106,9 +105,9 @@ renderer = {
             $( '<td rowspan="2" class="matrix 1_6_0 matrix-unknown"/>' )
           );
 
-    if ( self.build_sha1( build ) ) {
-      var sha = self.build_sha1(build)
-      row.find( '.git').append(self.build_sha1_short(build) + ': ',
+    var sha = self.build_sha1(build)
+    if (sha) {
+      row.find('td.git').append(self.build_sha1_short(build) + ': ',
           $( '<a href="https://github.com/immutant/immutant/commits/' + sha + '">Commits</a>' ),
           " / ",
           $( '<a href="https://github.com/immutant/immutant/tree/' + sha + '">Tree</a>' ))
@@ -147,15 +146,23 @@ renderer = {
   },
 
   build_sha1: function(build) {
-    if ( build.actions && build.actions.length >= 3 && build.actions[2].lastBuiltRevision ) {
-      return build.actions[2].lastBuiltRevision.SHA1;
+    if ( build.actions && build.actions.length >= 3 ) {
+      var revision = build.actions[2].lastBuiltRevision
+      if (!revision) {
+          revision = build.actions[3].lastBuiltRevision
+      }
+
+      if (revision) {
+          return revision.SHA1;
+      }
     }
     return null;
   },
 
   build_sha1_short: function(build) {
-    if ( build.actions && build.actions.length >= 3 ) {
-      return build.actions[2].lastBuiltRevision.SHA1.substring(0,8);
+    var sha = this.build_sha1(build)
+    if (sha) {
+      return sha.substring(0,8);
     }
     return null;
   },
