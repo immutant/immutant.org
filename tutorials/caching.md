@@ -2,7 +2,7 @@
 title: Caching
 sequence: 4
 description: "In-memory memoization using a linearly-scalable data grid"
-date: 2014-08-22
+date: 2014-08-23
 ---
 
 Immutant caching is provided by the [Infinispan] data grid, the
@@ -20,7 +20,7 @@ Deuce" from 1.x, which we'll point out as we go along.
 ## Creation and Configuration
 
 Caches are created, started, and referenced using the
-`immutant.caching/cache` function. It accepts a number of optional
+[immutant.caching/cache] function. It accepts a number of optional
 configuration arguments, but the only required one is a name, since
 every cache must be uniquely named. If you pass the name of a cache
 that already exists, a reference to the existing cache will be
@@ -37,8 +37,8 @@ functions, but no `stop`. In 2.x, those have been replaced by `cache` and
 Infinispan is a veritable morass of enterprisey configuration.
 Immutant tries to strike a convention/configuration balance by
 representing the more common options as keywords passed to the `cache`
-function, while still supporting the more esoteric config via the
-`builder` function and Java interop.
+function, while still supporting the more esoteric config via
+`immutant.caching/builder` and Java interop.
 
 See the [immutant.caching/cache] apidoc for a list of its supported
 options, passed as either an explicit map or "kwargs" (keyword
@@ -125,8 +125,23 @@ Of course, plain ol' interop works, too:
 
 ### Removing
 
-Of course, cache entries can be explicitly deleted using Java interop,
-but they can also be subject to automatic expiration and eviction.
+Cache entries can be explicitly deleted using Java interop, but they
+can also be subject to automatic expiration and eviction.
+
+<pre class="syntax clojure">
+  ;; Removing a missing key is harmless
+  (.remove baz :missing)                  ;=> nil
+
+  ;; Removing an existing key returns its value
+  (.remove baz :b)                        ;=> 2
+
+  ;; If value is passed, both must match for remove to succeed
+  (.remove baz :c 2)                      ;=> false
+  (.remove baz :c 3)                      ;=> true
+
+  ;; Clear all entries
+  (.clear baz)
+</pre>
 
 #### Expiration
 
@@ -176,10 +191,94 @@ of `:lru` (Least Recently Used).
 
 ### Encoding
 
+Cache entries are not encoded by default, but may be decorated with a
+codec using the `with-codec` function. Provided codecs include `:edn`,
+`:json`, and `:fressian`, but the latter two require additional
+dependencies: `cheshire` and `org.clojure/data.fressian`,
+respectively.
+
+Encoding entries is typically necessary only when non-clojure clients
+are sharing your cache. And if you wish to store nil keys or values, a
+codec is required.
+
+<pre class="syntax clojure">
+  (def baz (cache "baz"))
+  (def encoded (with-codec baz :edn))
+
+  (.put encoded :a {:b 42})
+  (:a encoded)                          ;=> {:b 42}
+
+  ;; Access via non-encoded caches still possible
+  (get baz :a)                          ;=> nil
+  (get baz ":a")                        ;=> "{:b 42}"
+</pre>
+
 ### Memoizing
+
+In Immutant 1.x, the caching namespace included a `memo` function that
+enabled [memoization] backed by an Infinispan cache. This forced a
+transitive dependency on specific versions of [core.memoize] and
+[core.cache] that occasionally conflicted with other libraries.
+
+In *The Deuce*, we moved `memo` to its own namespace,
+[immutant.caching.core-memoize], along with a corresponding
+[immutant.caching.core-cache]. So if you wish to call `memo`, your app
+must declare a dependency on [core.memoize].
+
+Here's a contrived example showing how memoization incurs the expense
+of calling a slow function only once:
+
+<pre class="syntax clojure">
+  (defn slow-fn [& _]
+    (Thread/sleep 5000)
+    42)
+
+  ;; Other than the function to be memoized, arguments are the same as
+  ;; for the cache function.
+  (def memoized-fn (memo slow-fn "memo", :ttl [5 :minutes]))
+
+  ;; Invoking the memoized function fills the cache with the result
+  ;; from the slow function the first time it is called.
+  (memoized-fn 1 2 3)                     ;=> 42
+
+  ;; Subsequent invocations with the same arguments return the result
+  ;; from the cache, avoiding the overhead of the slow function
+</pre>
 
 ## Clustering
 
+Each Infinispan cache operates in one of four modes. Normally, *local*
+mode is your only option, but when your app is deployed to a cluster,
+you get three more: *invalidated*, *replicated*, and *distributed*.
+These modes define how peers collaborate to replicate your data
+throughout the cluster. Further, you can choose whether this
+collaboration occurs asynchronous to the write.
+
+In Immutant 1.x, there were two options, `:mode` and `:sync`, so to
+configure asynchronous distributed mode, for example, you would set
+`:mode :distributed, :sync false`. In *The Deuce*, we've eliminated the
+`:sync` option, so instead you'd set `:mode :dist-async`.
+
+* `:local` This is the only supported mode when Immutant runs
+  non-clustered.
+* `:dist-sync` `:dist-async` This mode enables Infinispan caches to
+  achieve "linear scalability". Cache entries are copied to a fixed
+  number of peers (2, by default) regardless of the cluster size.
+  Distribution uses a consistent hashing algorithm to determine which
+  nodes will store a given entry.
+* `:invalidation-sync` `:invalidation-async` No data is actually
+  shared among the cluster peers in this mode. Instead, notifications
+  are sent to all nodes when data changes, causing them to evict their
+  stale copies of the updated entry.
+* `:repl-sync` `:repl-async` In this mode, entries added to any peer
+  will be copied to all other peers in the cluster, and can then be
+  retrieved locally from any instance. This mode is probably
+  impractical for clusters of any significant size. Infinispan
+  recommends 10 as a reasonable upper bound on the number of
+  replicated nodes.
+
+The simplest way to take advantage of Infinispan's clustering
+capabilities is to deploy your app to a [WildFly] cluster.
 
 [ConcurrentMap]: http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentMap.html
 [Infinispan]: http://infinispan.org
@@ -188,3 +287,9 @@ of `:lru` (Least Recently Used).
 [immutant.caching/compare-and-swap!]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.caching.html#var-compare-and-swap.21
 [feature-demo]: https://github.com/immutant/feature-demo/blob/thedeuce/src/demo/caching.clj
 [:lirs]: http://en.wikipedia.org/wiki/LIRS_caching_algorithm
+[core.cache]: https://github.com/clojure/core.cache
+[core.memoize]: https://github.com/clojure/core.memoize
+[memoization]: http://en.wikipedia.org/wiki/Memoization
+[immutant.caching.core-memoize]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.caching.core-memoize.html
+[immutant.caching.core-cache]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.caching.core-cache.html
+[WildFly]: /tutorials/wildfly/
