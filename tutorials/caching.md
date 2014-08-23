@@ -259,8 +259,7 @@ configure asynchronous distributed mode, for example, you would set
 `:mode :distributed, :sync false`. In *The Deuce*, we've eliminated the
 `:sync` option, so instead you'd set `:mode :dist-async`.
 
-* `:local` This is the only supported mode when Immutant runs
-  non-clustered.
+* `:local` This is the only supported mode outside of a cluster
 * `:dist-sync` `:dist-async` This mode enables Infinispan caches to
   achieve "linear scalability". Cache entries are copied to a fixed
   number of peers (2, by default) regardless of the cluster size.
