@@ -1,7 +1,7 @@
 ---
 title: Web
 sequence: 1.5
-description: "Deploying web apps built with popular Clojure libraries"
+description: "Running Clojure web applications and WebSockets"
 date: 2014-08-12
 ---
 
@@ -19,8 +19,8 @@ functions and a convenient macro:
 
 * `run` - runs your handler in a specific environment, responding to
   web requests matching a given host, port, path and virtual host. The
-  handler may be either a Ring function, Servlet instance, or Undertow
-  HttpHandler
+  handler may be either a [Ring] function, Servlet instance, or
+  Undertow HttpHandler
 * `run-dmc` - runs your handler in *Development Mode* (the 'C' is silent)
 * `stop` - stops your handler[s]
 

@@ -1,7 +1,7 @@
 ---
 title: Caching
 sequence: 4
-description: "In-memory memoization using a linearly-scalable data grid"
+description: "Flexible caching and memoization using a linearly-scalable data grid"
 date: 2014-08-23
 ---
 
