@@ -8,6 +8,7 @@ require 'downloads'
 require 'documentation'
 require 'tutorials'
 require 'footnotes'
+require 'anchor_headings'
 
 Awestruct::Extensions::Pipeline.new do
   extension Awestruct::Extensions::DataDir.new
@@ -16,7 +17,7 @@ Awestruct::Extensions::Pipeline.new do
   extension Awestruct::Extensions::Atomizer.new(:events, '/events.atom')
 
   extension Downloads.new()
-  
+
   extension Awestruct::Extensions::Posts.new('/news')
   extension Awestruct::Extensions::Paginator.new(:posts, '/news/index', :per_page => 5)
   extension Awestruct::Extensions::Indexifier.new
@@ -25,7 +26,7 @@ Awestruct::Extensions::Pipeline.new do
   extension ReleaseSizes.new
 
   extension Tutorials.new
-  
+
   extension Awestruct::Extensions::Tagger.new(:posts,
                                               '/news/index',
                                               '/news/tags',
@@ -38,7 +39,8 @@ Awestruct::Extensions::Pipeline.new do
   extension Awestruct::Extensions::TaggerAtomizer.new(:posts, '/news/tags' )
 
   transformer Footnotes.new
-  
+  transformer AnchorHeadings.new(%r|/tutorials/|, %r|/news/|)
+
   helper Awestruct::Extensions::GoogleAnalytics
   helper Awestruct::Extensions::Partial
   helper ReleaseHelper
