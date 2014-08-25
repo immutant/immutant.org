@@ -6,7 +6,7 @@ date: 2014-08-25
 ---
 
 One of [the primary goals for The Deuce](/news/2014/04/02/the-deuce/)
-was the removal of the old, stanky-ass AS7 fork we lugged around in
+was the removal of the ancient AS7 fork we lugged around in
 Immutant 1.x. This eliminates the need to install and deploy your apps
 into a "container" to use the Immutant libraries.
 
@@ -48,11 +48,11 @@ install it, e.g.
 Immutant war files require a bit of special config: a couple of jars
 of the aforementioned "glue code", a properties file to trigger that
 code, a couple of tags in `web.xml`, and a
-`jboss-deployment-structure.xml` file to prevent classpath conflicts.
-You'll find the latter two files beneath `target/` after you run the
-war task in your project, along with an *uberjar* containing your app
-plus its dependencies, and finally a war file packaging it all up
-together:
+`jboss-deployment-structure.xml` to link the deployment to the
+necessary WildFly modules.  You'll find copies of the latter two files
+beneath `target/` after you run the war task in your project, along
+with an *uberjar* containing your app plus its dependencies, and
+finally a war file packaging it all up together:
 
     $ lein immutant war
 
@@ -77,11 +77,11 @@ the `immutant test` task.
 
     $ lein immutant test -j /srv/wildfly
 
-It will find all the tests (or [Midje] facts) in a project, fire up
-the [WildFly] instance installed at `/srv/wildfly`, deploy the project
-to it, connect to its REPL, run all the tests, undeploy the app,
-shutdown the WildFly process, and display the results, returning
-success only if all tests pass.
+It will find all the tests (or [Midje] facts, or [Expectations]
+expectations) in a project, fire up the [WildFly] instance installed
+at `/srv/wildfly`, deploy the project to it, connect to its REPL, run
+all the tests, undeploy the app, shutdown the WildFly process, and
+display the results, returning success only if all tests pass.
 
 Because it conveniently runs all your tests inside the app server, a
 successful run yields a high confidence that your code will run
@@ -141,3 +141,4 @@ You may use them as examples from which to create your own.
 [JBoss EAP]: http://www.jboss.org/products/eap/overview/
 [lein-immutant]: https://github.com/immutant/lein-immutant/tree/2x-dev
 [Midje]: https://github.com/marick/Midje
+[Expectations]: http://jayfields.com/expectations/
