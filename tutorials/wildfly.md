@@ -37,8 +37,9 @@ containers we'll initially support.
 The [lein-immutant] plugin was fundamental to developing apps for
 Immutant 1.x. In *The Deuce*, it's only required if you wish to deploy
 your Clojure apps to WildFly, and its formerly numerous tasks have
-been reduced to two: `war` and `test`. Add the latest version to the
-`:plugins` section of your `project.clj` to install it, e.g.
+been reduced to two: `immutant war` and `immutant test`. Add the
+latest version to the `:plugins` section of your `project.clj` to
+install it, e.g.
 
     :plugins [[lein-immutant "2.0.0-SNAPSHOT"]]
 
@@ -102,6 +103,38 @@ of each option:
 And for a brief listing of just the command line switches:
 
     $ lein help immutant test
+
+## Deploying to WildFly
+
+Once you have a war file, it's a simple matter of making it known to
+your WildFly server. The easiest way to do that is to copy it to a
+directory that is monitored by WildFly for artifacts to deploy.
+Assuming you installed WildFly in `/srv/wildfly`, that path is
+`/srv/wildfly/standalone/deployments`. For example:
+
+    $ lein immutant war
+    $ cp target/myapp.war /srv/wildfly/standalone/deployments
+
+Alternatively,
+
+    $ lein immutant war -o /srv/wildfly
+
+If not already running, fire up WildFly to see your deployed app:
+
+    $ /srv/wildfly/bin/standalone.sh
+
+The default server configuration does not include HornetQ, so to use
+the Immutant messaging library, you'll need to specify a different
+config:
+
+    $ /srv/wildfly/bin/standalone.sh -c standalone-full.xml
+
+And if you wish to use clustering, use the following config:
+
+    $ /srv/wildfly/bin/standalone.sh -c standalone-full-ha.xml
+
+All of the various config files reside in `standalone/configuration`.
+You may use them as examples from which to create your own.
 
 
 [WildFly]: http://wildfly.org
