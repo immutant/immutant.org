@@ -17,9 +17,9 @@ for all the applications deployed to it.
 And since each Immutant library automatically benefits in some way
 from being clustered, we wanted to *facilitate* app server deployment
 but not actually *require* it. Further, we didn't want to require any
-tweaking of the stock "vanilla" configuration provided by app server.
-This meant using the standard deployment protocol for all Java app
-servers: war files.
+tweaking of the stock "vanilla" configuration provided by the app
+server. This meant using the standard deployment protocol for all Java
+app servers: war files.
 
 Theoretically, this implies you could stick the Immutant jars in any
 ol' war file and deploy them to any ol' Java app server.
@@ -28,8 +28,83 @@ container requires some "glue code" that must be aware of the
 container's implementation.
 
 For this reason, Immutant intentionally uses the same services as
-[WildFly], the JBoss application server.
+[WildFly], the community-supported upstream project for the
+commercially-supported [JBoss EAP] product. And these are the
+containers we'll initially support.
+
+## The lein-immutant Plugin
+
+The [lein-immutant] plugin was fundamental to developing apps for
+Immutant 1.x. In *The Deuce*, it's only required if you wish to deploy
+your Clojure apps to WildFly, and its formerly numerous tasks have
+been reduced to two: `war` and `test`. Add the latest version to the
+`:plugins` section of your `project.clj` to install it, e.g.
+
+    :plugins [[lein-immutant "2.0.0-SNAPSHOT"]]
+
+### Creating a war file
+
+Immutant war files require a bit of special config: a couple of jars
+of the aforementioned "glue code", a properties file to trigger that
+code, a couple of tags in `web.xml`, and a
+`jboss-deployment-structure.xml` file to prevent classpath conflicts.
+You'll find the latter two files beneath `target/` after you run the
+war task in your project, along with an *uberjar* containing your app
+plus its dependencies, and finally a war file packaging it all up
+together:
+
+    $ lein immutant war
+
+The `immutant war` task provides a number of configuration options,
+all of which can be specified both in the `[:immutant :war]` path of
+`project.clj` and as command line arguments, with the latter taking
+precedence.
+
+For a detailed description of each option:
+
+    $ lein help immutant deployment
+
+For a brief listing of just the command line switches:
+
+    $ lein help immutant war
+
+### Running tests in-container
+
+Although you no longer need to run a container to test your
+applications' use of the Immutant libraries, it is still possible via
+the `immutant test` task.
+
+    $ lein immutant test -j /srv/wildfly
+
+It will find all the tests (or [Midje] facts) in a project, fire up
+the [WildFly] instance installed at `/srv/wildfly`, deploy the project
+to it, connect to its REPL, run all the tests, undeploy the app,
+shutdown the WildFly process, and display the results, returning
+success only if all tests pass.
+
+Because it conveniently runs all your tests inside the app server, a
+successful run yields a high confidence that your code will run
+correctly when it counts – in production, when deployed to the same
+app server. For this reason, it may also be useful to run it on your
+app's Continuous Integration host whenever any changes are committed.
+
+The server config and log output for the WildFly instance used for the
+test run can be found beneath your project's
+`target/isolated-wildfly/` directory.
+
+Similar to the `immutant war` task, configuration of the `immutant
+test` task may be specified in either the `[:immutant :test]` path of
+`project.clj` or as command line arguments. For a detailed description
+of each option:
+
+    $ lein help immutant testing
+
+And for a brief listing of just the command line switches:
+
+    $ lein help immutant test
 
 
 [WildFly]: http://wildfly.org
-
+[JBoss EAP]: http://www.jboss.org/products/eap/overview/
+[lein-immutant]: https://github.com/immutant/lein-immutant/tree/2x-dev
+[Midje]: https://github.com/marick/Midje
