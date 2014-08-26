@@ -1,7 +1,6 @@
-
 class Documentation
   include ReleaseHelper
-  
+
   def initialize(enabled=true)
     @enabled = enabled
   end
@@ -11,39 +10,46 @@ class Documentation
 
     @tmp_dir = site.tmp_dir
 
-    current_path = File.join( site.output_dir, 'documentation', 'current' )
-    
+    base_dir = File.join( site.output_dir, 'documentation' )
+    current_path = File.join( base_dir, 'current' )
+
     FileUtils.mkdir_p( site.output_dir )
     FileUtils.rm( current_path ) if File.exist?( current_path )
-    
-    (site.releases).each do |release|
-      doc_bundle_name = doc_bundle_name( release )
-      base_dir = File.join( site.output_dir, 'documentation' )
+
+    site.releases.each do |release|
       doc_root = File.join( base_dir, release.version )
-      
-      unless bundle_exists?( doc_bundle_name )
-        puts "Fetching doc bundle for #{release.version}"
-        dl( release.urls.docs.remote_html_zip )
-      end
-      
-      unless File.exist?( File.join( doc_root, "index.html" ) )
-        puts "Unzipping doc bundle for #{release.version}"
-        begin
-          unzip( bundle_path( doc_bundle_name ), base_dir )
-          FileUtils.mv( File.join( base_dir, 'html'), doc_root )
-          FileUtils.rm_rf( File.join( base_dir, 'META-INF' ) )
-        rescue Exception => e
+
+      if is_1x_release?(release)
+        doc_bundle_name = doc_bundle_name( release )
+
+        unless bundle_exists?( doc_bundle_name )
+          puts "Fetching doc bundle for #{release.version}"
+          dl( release.urls.docs.remote_html_zip )
+        end
+
+        unless File.exist?( File.join( doc_root, "index.html" ) )
+          puts "Unzipping doc bundle for #{release.version}"
+          begin
+            unzip( bundle_path( doc_bundle_name ), base_dir )
+            FileUtils.mv( File.join( base_dir, 'html'), doc_root )
+            FileUtils.rm_rf( File.join( base_dir, 'META-INF' ) )
+          rescue Exception => e
           puts "ERROR: failed to unzip docs for #{release.version}: " + e.to_s
+          end
+        end
+      else
+        puts "Copying docs for #{release.version}"
+        FileUtils.mkdir_p(doc_root)
+        FileUtils.cp_r(File.join("_2x_docs", release.version, "apidoc"), doc_root)
+      end
+
+      if latest_release?(site, release)
+        puts "Linking documentation/current to #{release.version}"
+        FileUtils.cd(base_dir) do |dir|
+          FileUtils.ln_s( release.version, 'current' )
         end
       end
 
-      if File.exist?( File.join( doc_root, "index.html" ) ) && release == site.releases.first
-        #puts "Linking documentation/current to #{release.version}"
-        FileUtils.cd( File.join( site.output_dir, 'documentation' ) ) do |dir|
-          FileUtils.ln_s( release.version, 'current' ) 
-        end
-      end
-      
     end
   end
 
@@ -62,5 +68,5 @@ class Documentation
   def dl(url, dir = @tmp_dir)
     `wget --quiet -P #{dir} #{url}`
   end
-  
+
 end

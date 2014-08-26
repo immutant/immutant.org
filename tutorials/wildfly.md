@@ -2,7 +2,7 @@
 title: WildFly
 sequence: 5
 description: "Deploying your app to WildFly"
-date: 2014-08-25
+date: 2014-08-26
 ---
 
 One of [the primary goals for The Deuce](/news/2014/04/02/the-deuce/)
@@ -61,7 +61,7 @@ And if you want clustering...
     $ wildfly-8.1.0.Final/bin/standalone.sh -c standalone-full-ha.xml
 
 You can create your own, of course, too.
-    
+
 ## The lein-immutant plugin
 
 The [lein-immutant] plugin was fundamental to developing apps for
@@ -71,7 +71,7 @@ been reduced to two: `immutant war` and `immutant test`. Add the
 latest version to the `:plugins` section of your `project.clj` to
 install it, e.g.
 
-    :plugins [[lein-immutant "2.0.0-alpha1"]]
+    :plugins [[lein-immutant "#{site.latest_2x_plugin_version}"]]
 
 ### Creating a war file
 

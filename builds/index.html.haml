@@ -14,12 +14,12 @@ layout: default
     <a href='http://cloudbees.com/'>  <img src='http://torquebox.org/images/cloudbees_logo.png' align='right'/></a>
 
     Our incremental builds are performed by our [CI system](/development/#ci) any time the code changes.
-    The incremental builds are supported by a contribution from [CloudBees](http://cloudbees.com/).  
- 
+    The incremental builds are supported by a contribution from [CloudBees](http://cloudbees.com/).
+
 .clearfix{:style=>'clear:both; height: 0px;'}
   &nbsp;
 
-:markdown 
+:markdown
   For incremental builds, only the *slim* distribution is
   avaiable. *slim* is a small, lightweight distribution that only
   includes the functionality needed to run Immutant Clojure
@@ -41,7 +41,7 @@ layout: default
                         "http://downloads.immutant.org/upstream/"]])
 
   Where `BUILD_NUM` is the build number for the build you are using.
-  
+
   Note: incremental public API artifacts are only published for build **978** and newer.
 
 <div id="build-currently-building"></div>
@@ -53,8 +53,8 @@ layout: default
 
   * [http://immutant.org/builds/immutant-dist-slim.zip](/builds/immutant-dist-slim.zip)
 
-  or installed via our [Leiningen plugin](/install/):
-  
+  or installed via our [Leiningen plugin](/tutorials-1x/installation/):
+
       $ lein immutant install LATEST
 
   Its documentation is available at:
@@ -93,5 +93,3 @@ layout: default
     %th.matrix Clojure 1.4.0
     %th.matrix Clojure 1.5.1
     %th.matrix Clojure 1.6.0
-
-  

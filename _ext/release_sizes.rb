@@ -2,6 +2,7 @@ require 'net/http'
 require 'uri'
 
 class ReleaseSizes
+  include ReleaseHelper
 
   def initialize()
   end
@@ -20,9 +21,9 @@ class ReleaseSizes
       end
     end
   end
-  
+
   def execute(site)
-    site.releases.each do |release|
+    site.releases.select {|v| is_1x_release?(v)}.each do |release|
       print "Calculating dist size for #{release.version}... "
       release.dist_size = get_size(release.urls.remote_dist_zip)
       if release.dist_type == :bin || release.dist_type == :slim_only

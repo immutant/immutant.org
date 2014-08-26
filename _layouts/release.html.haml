@@ -38,14 +38,20 @@ change_frequency: monthly
       :markdown
         __Version *#{release.version}* was released on
         #{format_date( page.date )}__.
-        You can [browse the documentation](/documentation/#{release.version}/) or
-        install it via:
+      - if is_1x_release?(release)
+        :markdown
+          You can [browse the documentation](/documentation/#{release.version}/) or
+          install it via:
 
-            $ lein immutant install #{version}
+              $ lein immutant install #{version}
 
-        Don't have the `lein-immutant` plugin installed?
-        [Learn how](/install/), or
-        [download the zip archive](#{release.urls.remote_dist_zip}).
+          Don't have the `lein-immutant` plugin installed?
+          [Learn how](/tutorials/installation/), or
+          [download the zip archive](#{release.urls.remote_dist_zip}).
+      - else
+        :markdown
+          You can [browse the documentation](/documentation/#{release.version}/apidoc/) and
+          install according to the [Installation tutorial](/tutorials/installation/).
       %hr
 
     .tags

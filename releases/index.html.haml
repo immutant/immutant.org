@@ -8,13 +8,51 @@ title: Releases
     Official, versioned releases are listed here. You can see a list of incremental builds on
     our [builds page](/builds/).
 
+%h2 2.x Releases
+
+:markdown
+  To install a 2.x release, see the [Installation tutorial](/tutorials/installation/).
+
+%p
+  %table.table.table-striped.table-bordered
+    %tr
+      %th Version
+      %th Release Date
+      %th Documentation
+      %th Changelog
+      %th Git Tree
+    - site.releases.select {|r| is_2x_release?(r)}.each do |release|
+      - announcement = announcement_for_version(release.version)
+      %tr
+        %td.version
+          %a{:href => announcement.url}= release.version
+        %td.date
+          = announcement.date.strftime( '%d %B %Y' )
+        %td
+          - rel = latest_release?(release) ? 'documentation' : 'nofollow'
+          %ul
+            %li
+              %a{:href=>"/tutorials/", :rel=>rel} Tutorials
+            %li
+              %a{:href=>release.urls.docs.apidocs, :rel=>rel} Clojure API Docs
+        %td
+          %ul
+            %li
+              %a{:href=>release.urls.jira} JIRA Issues
+            %li
+              %a{:href=>release.urls.github.log} Git Log
+        %td
+          %a{:href=>release.urls.github.tree} Browse
+
+%h2 1.x Releases
+
 :markdown
   For releases between **0.9.0** and **1.0.2**,
   there were two release distributions avaialable:
 
   * *slim* - a smaller, lighter weight distribution that only
     includes the functionality needed to run Immutant Clojure
-    applications, but not JavaEE applications. 
+    applications, but not JavaEE applications.
   * *full* - the full JBossAS distribution with Immutant
     included. If you need to run JavaEE applications alongside
     Clojure apps in the same AS, this is the distribution for
@@ -34,7 +72,7 @@ title: Releases
       %th Documentation
       %th Changelog
       %th Git Tree
-    - site.releases.each do |release|
+    - site.releases.select {|r| is_1x_release?(r)}.each do |release|
       - announcement = announcement_for_version(release.version)
       %tr
         %td.version
@@ -73,4 +111,3 @@ title: Releases
               %a{:href=>release.urls.github.log} Git Log
         %td
           %a{:href=>release.urls.github.tree} Browse
-

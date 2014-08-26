@@ -2,7 +2,7 @@
 title: 'Installation'
 sequence: 0
 description: "Using the Immutant libraries in your application"
-date: 2014-06-23
+date: 2014-08-26
 ---
 
 Installation of Immutant 1.x was atypical of most Clojure libraries,
@@ -15,10 +15,10 @@ same way you would any other Clojure library. For example:
 
 <pre class="syntax clojure">(defproject some-project "1.2.3"
   ...
-  :dependencies [[org.immutant/web "2.0.0"]
-                 [org.immutant/caching "2.0.0"]
-                 [org.immutant/messaging "2.0.0"]
-                 [org.immutant/scheduling "2.0.0"]])
+  :dependencies [[org.immutant/web "#{latest_2x_release.version}"]
+                 [org.immutant/caching "#{latest_2x_release.version}"]
+                 [org.immutant/messaging "#{latest_2x_release.version}"]
+                 [org.immutant/scheduling "#{latest_2x_release.version}"]])
 </pre>
 
 We're bringing in the artifacts piecemeal above, but we also provide
@@ -26,15 +26,17 @@ an aggregate that brings them all in transitively:
 
 <pre class="syntax clojure">(defproject some-project "1.2.3"
   ...
-  :dependencies [[org.immutant/immutant "2.0.0"]])
+  :dependencies [[org.immutant/immutant "#{latest_2x_release.version}"]])
 </pre>
 
-<div class="notice big">
-Immutant 2.0.0 has not been officially released yet, but incremental
-builds are publicly available for you to try.
-</div>
+The API docs for the latest release are always available at:
+
+* [http://immutant.org/documentation/current/apidoc/](/documentation/current/apidoc/)
 
 ## Incremental Builds
+
+If you need cutting-edge features/fixes that aren't in the latest
+release, you can use an incremental build.
 
 Our CI server publishes an [incremental release][builds] for each
 successful build. In order to use an incremental build, you'll need to

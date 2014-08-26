@@ -8,12 +8,36 @@ module ReleaseHelper
     site.posts.find { |p| p.version == version }
   end
 
-  def latest_release
-    site.releases.first
+  def is_1x_release?(release)
+    !is_2x_release?(release)
   end
 
-  def latest_release?(release)
-    release == latest_release
+  def is_2x_release?(release)
+    release.version.start_with?("2")
+  end
+
+  def latest_release(site_map=nil)
+    (site_map ? site_map : site).releases.first
+  end
+
+  def latest_1x_release(site_map=nil)
+    (site_map ? site_map : site).releases.detect {|r| is_1x_release?(r)}
+  end
+
+  def latest_2x_release(site_map=nil)
+    (site_map ? site_map : site).releases.detect {|r| is_2x_release?(r)}
+  end
+
+  def latest_release?(site_map=nil, release)
+    release == latest_release(site_map)
+  end
+
+  def latest_1x_release?(site_map=nil, release)
+    release == latest_1x_release(site_map)
+  end
+
+  def latest_2x_release?(site_map=nil, release)
+    release == latest_2x_release(site_map)
   end
 
   def api_doc_for_version(version, group, fn = nil)

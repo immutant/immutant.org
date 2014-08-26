@@ -2,17 +2,33 @@
   .tabbable
     %ul.nav.nav-tabs
       %li.bold.active
-        %a{:href=>'#stable-release', 'data-toggle'=>'tab'}Latest Release
+        %a{:href=>'#stable-2x-release', 'data-toggle'=>'tab'}Latest 2.x Release
+      %li.bold
+        %a{:href=>'#stable-1x-release', 'data-toggle'=>'tab'}Latest 1.x Release
       %li.bold
         %a{:href=>'#incremental-release', 'data-toggle'=>'tab'}Latest Incremental Build
     .tab-content
-      #stable-release.tab-pane.active
-        - version = latest_release.version
+      #stable-2x-release.tab-pane.active
+        - version = latest_2x_release.version
         - announcement = announcement_for_version( version )
 
         :markdown
           __Version *#{version}* was released on
-          #{announcement && format_date( announcement.date )}__. 
+          #{announcement && format_date( announcement.date )}__.
+          You can [read the announcement](#{announcement && announcement.url})
+          or [browse the documentation](/documentation/#{version}/apidoc/).
+
+        .install-command
+          :markdown
+            For usage, see the [Installation tutorial](/tutorials/installation/).
+
+      #stable-1x-release.tab-pane
+        - version = latest_1x_release.version
+        - announcement = announcement_for_version( version )
+
+        :markdown
+          __Version *#{version}* was released on
+          #{announcement && format_date( announcement.date )}__.
           You can [read the announcement](#{announcement && announcement.url})
           or [browse the documentation](/documentation/#{version}/).
 
@@ -22,26 +38,18 @@
 
                 $ lein immutant install #{version}
 
-            Don't have the `lein-immutant` plugin installed? 
-            [Learn how](/install/), or 
-            [download the zip archive](#{latest_release.urls.remote_dist_zip}).
+            Don't have the `lein-immutant` plugin installed?
+            [Learn how](/install-1x/), or
+            [download the zip archive](#{latest_1x_release.urls.remote_dist_zip}).
 
 
       #incremental-release.tab-pane
         :markdown
-          Every push to our [git repository](https://github.com/immutant/immutant) 
-          generates a build on our [CI server](https://projectodd.ci.cloudbees.com/job/immutant-incremental/).
-          You can view the results of those builds on our [builds page](/builds/),
-          and can install the latest successful build via:
 
-              $ lein immutant install LATEST
-
-          Don't have the `lein-immutant` plugin installed? 
-          [Learn how](/install/), or [download the zip archive](/builds/immutant-dist-slim.zip).
-          
-          You can also [browse the documentation](/builds/LATEST/html-docs/index.html) for the 
-          latest incremental build.
-
-
-          
-  
+          Every push to our [git
+          repository](https://github.com/immutant/immutant) generates
+          a build on our [CI
+          server](https://projectodd.ci.cloudbees.com/job/immutant-incremental/).
+          You can view the results of those builds on our
+          [2.x](/builds/2x/) or [1.x](/builds/) incremental build
+          pages.

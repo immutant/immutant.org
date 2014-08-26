@@ -30,16 +30,19 @@ layout: base
               %b.caret
             %ul.dropdown-menu
               %li
-                %a{ :href=>'/documentation/current/' } 1.x Manual
-              %li
-                %a{ :href=>'/documentation/current/apidoc/' } 1.x API Docs
-              %li.divider
-              %li
-                %a{ :href=>'/releases/' } Versioned Releases
-              %li
-                %a{ :href=>'/builds/' } 1.x Incremental Builds
+                %a{ :href=>"/documentation/current/apidoc/" } 2.x API Docs
               %li
                 %a{ :href=>'/builds/2x/' } 2.x Incremental Builds
+              %li.divider
+              %li
+                %a{ :href=>"/documentation/#{latest_1x_release.version}/" } 1.x Manual
+              %li
+                %a{ :href=>"/documentation/#{latest_1x_release.version}/apidoc/" } 1.x API Docs
+              %li
+                %a{ :href=>'/builds/' } 1.x Incremental Builds
+              %li.divider
+              %li
+                %a{ :href=>'/releases/' } All Versioned Releases
               %li
                 %a{ :href=>'https://issues.jboss.org/browse/IMMUTANT' } Issues
               %li

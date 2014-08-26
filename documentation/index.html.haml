@@ -5,28 +5,36 @@ title: Documentation
 
 #intro
   :markdown
-    We provide documentation for each versioned release and each [1.x](/builds/) and [2.x incremental build](/builds/2x/).
+    We provide documentation for each versioned release and each [1.x](/builds/) and [2.x](/builds/2x/) incremental build.
 
 :markdown
+  ## Latest 2.x Release (#{latest_2x_release.version})
+
+  The documentation for 2.x releases takes the form of API docs and tutorials.
+
+  The API docs and tutorials for the latest 2.x release (currently
+  #{latest_2x_release.version}) are available at:
+
+  * [http://immutant.org/documentation/current/apidoc/](/documentation/current/apidoc/) - Clojure API docs
+  * [http://immutant.org/tutorials/](/tutorials/) - Tutorials
+
   ## Latest 2.x Incremental Build
 
-  There is no official 2.x release yet. All successful incremental
-  builds are published, but you must
-  [configure a repository](/tutorials/installation/)
-  to obtain them.
+  All successful incremental builds are published, but you must
+  [configure a repository](/tutorials/installation/) to obtain them.
 
-  * [2.x API docs](https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/index.html)
+  * [2.x Incremental API docs](https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/index.html)
 
   You can access the documentation for prior incremental builds on the
   [2.x builds page](/builds/2x/).
 
-  ## Latest 1.x Release (#{latest_release.version})
+  ## Latest 1.x Release (#{latest_1x_release.version})
 
-  The documentation for the latest release (currently #{latest_release.version}) is always 
+  The documentation for the latest 1.x release (currently #{latest_1x_release.version}) is
   available at:
 
-  * [http://immutant.org/documentation/current/](/documentation/current/) - Manual
-  * [http://immutant.org/documentation/current/apidoc/](/documentation/current/apidoc/) - Clojure API docs
+  * [http://immutant.org/documentation/#{latest_1x_release.version}/](/documentation/#{latest_1x_release.version}/) - Manual
+  * [http://immutant.org/documentation/#{latest_1x_release.version}/apidoc/](/documentation/#{latest_1x_release.version}/) - Clojure API docs
 
   You can access the documentation for prior releaes on our [releases page](/releases/).
 
@@ -43,9 +51,5 @@ title: Documentation
 
   ## Documentation Issues
 
-  If you find any issues with our documentation or have any questions about it, please 
-  [let us know](/community/). 
-
-  The manual is written in [org-mode](http://orgmode.org/), and you can find the source in 
-  our [git repository](https://github.com/immutant/immutant/tree/master/docs/src/org)
-  if you are inclined to provide a patch.
+  If you find any issues with our documentation or have any questions about it, please
+  [let us know](/community/).
