@@ -1,7 +1,7 @@
 ---
 title: First Alpha of "The Deuce" Released
 author: The Immutant Team
-version: 1.1.4
+version: 2.0.0-alpha1
 layout: release
 tags: [ releases ]
 ---
