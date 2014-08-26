@@ -151,20 +151,7 @@ Alternatively,
 
 If not already running, fire up WildFly to see your deployed app:
 
-    $ /srv/wildfly/bin/standalone.sh
-
-The default server configuration does not include HornetQ, so to use
-the Immutant messaging library, you'll need to specify a different
-config:
-
     $ /srv/wildfly/bin/standalone.sh -c standalone-full.xml
-
-And if you wish to use clustering, use the following config:
-
-    $ /srv/wildfly/bin/standalone.sh -c standalone-full-ha.xml
-
-All of the various config files reside in `standalone/configuration`.
-You may use them as examples from which to create your own.
 
 
 [WildFly]: http://wildfly.org
