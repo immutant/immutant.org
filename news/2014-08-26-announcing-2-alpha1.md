@@ -1,5 +1,5 @@
 ---
-title: First Alpha of "The Deuce" Released
+title: First Alpha of Immutant 2.x ("The Deuce") Released
 author: The Immutant Team
 version: 2.0.0-alpha1
 layout: release
@@ -40,6 +40,13 @@ For a working example, check out our [Feature Demo] application!
 There is no longer any "installation" step as there was in 1.x. Simply
 add the relevant dependency to your project as shown on [Clojars].
 
+## What's next?
+
+For the first release, we focused on the API and on usage outside of a
+container. For the next alpha, we plan on focusing on making
+in-container behavior more robust. Take a look at our [current issues]
+if you want to follow along.
+
 ## Get In Touch
 
 If you have any questions, issues, or other feedback about Immutant,
@@ -57,3 +64,4 @@ you can always find us on [#immutant on freenode](/community/) or
 [HornetQ]: http://hornetq.org
 [Undertow]: http://undertow.io
 [Quartz]: http://quartz-scheduler.org/
+[current issues]: https://issues.jboss.org/browse/IMMUTANT
