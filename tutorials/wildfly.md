@@ -32,7 +32,37 @@ For this reason, Immutant intentionally uses the same services as
 commercially-supported [JBoss EAP] product. And these are the
 containers we'll initially support.
 
-## The lein-immutant Plugin
+## WildFly
+
+There are lots of resources for installing and administering WildFly,
+and frankly, we love being able to refer you to those rather than
+write them ourselves. :)
+
+Thankfully, installing WildFly is trivial:
+
+    $ wget http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.zip
+    $ unzip wildfly-8.1.0.Final.zip
+
+Downloading and unpacking it somewhere are all there is to it. Running
+it is easy, too:
+
+    $ wildfly-8.1.0.Final/bin/standalone.sh
+
+Pass it `-h` to see what options it supports. The main one you'll use
+is `-c` which refers to one of its config files beneath
+`standalone/configuration`. The default config doesn't include
+HornetQ, for example, so to use `immutant.messaging`, you'll need to
+start WildFly as follows:
+
+    $ wildfly-8.1.0.Final/bin/standalone.sh -c standalone-full.xml
+
+And if you want clustering...
+
+    $ wildfly-8.1.0.Final/bin/standalone.sh -c standalone-full-ha.xml
+
+You can create your own, of course, too.
+    
+## The lein-immutant plugin
 
 The [lein-immutant] plugin was fundamental to developing apps for
 Immutant 1.x. In *The Deuce*, it's only required if you wish to deploy
@@ -41,7 +71,7 @@ been reduced to two: `immutant war` and `immutant test`. Add the
 latest version to the `:plugins` section of your `project.clj` to
 install it, e.g.
 
-    :plugins [[lein-immutant "2.0.0-SNAPSHOT"]]
+    :plugins [[lein-immutant "2.0.0-alpha1"]]
 
 ### Creating a war file
 
