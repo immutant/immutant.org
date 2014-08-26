@@ -1,5 +1,5 @@
 ---
-title: First Alpha of Immutant 2.x ("The Deuce") Released
+title: Immutant 2 (The Deuce) Alpha Released
 author: The Immutant Team
 version: 2.0.0-alpha1
 layout: release
@@ -26,9 +26,9 @@ in real world applications.
 
 ## How to try it
 
-If you're familiar with Immutant 1.x, you should take a look at our...
-ahem... for lack of a better term... [migration guide]. It's our
-attempt at keeping track of what we changed in the Clojure namespaces.
+If you're already familiar with Immutant 1.x, you should take a look
+at our [migration guide]. It's our attempt at keeping track of what we
+changed in the Clojure namespaces.
 
 The [tutorials] are another good source of information, along with the
 [apidoc].
