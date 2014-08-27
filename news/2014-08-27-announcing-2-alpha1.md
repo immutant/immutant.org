@@ -31,10 +31,10 @@ in real world applications.
 
 A few highlights of *The Deuce* compared to the previous 1.x series:
 
-* Undertow web server -- much faster, with WebSocket support
-* Released under an Apache License rather than LPGL
-* Completely functional "embedded" in your app, i.e. no app server required
-* May be deployed to latest WildFly for extra clustering features
+* It uses the [Undertow] web server -- it's much faster, with WebSocket support
+* The source is licensed under the Apache Software License rather than LPGL
+* It's completely functional "embedded" in your app, i.e. no app server required
+* It may be deployed to latest [WildFly] for extra clustering features
 
 ## How to try it
 
