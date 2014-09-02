@@ -153,6 +153,21 @@ If not already running, fire up WildFly to see your deployed app:
 
     $ /srv/wildfly/bin/standalone.sh -c standalone-full.xml
 
+## Running Ring Handlers in WildFly
+
+When running inside WildFly, the `:host` and `:port` options to
+`immutant.web/run` are silently ignored since your handlers are
+mounted on WildFly's internal Undertow server, bound to whatever
+host/port it's been configured for.
+
+Also, the URL for your handler will include a context path
+corresponding to the base name of your deployed war file. This context
+path will prefix whatever `:path` option you specified. To override
+this and set your context path to "/" instead, name your war file
+`ROOT.war`:
+
+    $ lein immutant war -o /srv/wildfly -n ROOT
+
 
 [WildFly]: http://wildfly.org
 [JBoss EAP]: http://www.jboss.org/products/eap/overview/
