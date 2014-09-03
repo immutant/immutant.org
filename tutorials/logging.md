@@ -14,6 +14,11 @@ If the default logging configuration doesn't meet your needs, you can
 provide an alternate logback configuration, or replace logback with
 some other slf4j provider.
 
+## Using clojure.tools.logging
+
+If your application uses [clojure.tools.logging], it will
+automatically detect the slf4j system and just work.
+
 ## The default logback configuration
 
 By default, logback is configured to log at `INFO` and below to the
@@ -26,7 +31,7 @@ console, with some of the chattier libraries we bring in configured at
     23:58:53.450 INFO  [org.projectodd.wunderboss.web.Web] (main) Registered web context /
 
 The [default configuration] is only applied when logback is available
-and no custom config is provided.
+and you don't provide an overriding configuration in your application.
 
 ## Overriding the default configuration
 
@@ -34,8 +39,8 @@ If you want a different format for your log messages, want to send
 them to a file, or configure any of the other [myriad options], you
 can either provide a [logback.xml] file on the classpath of your app
 (in `resources/` should work), or set the `logback.configurationFile`
-to the path to the file, or to the resource name if you're using
-something other than `logback.xml`.
+system property to the path to the file, or to the resource name if
+you're using something other than `logback.xml`.
 
 When defining a custom configuration, it may be useful to use the
 [default configuration] as a starting point.
@@ -101,11 +106,6 @@ slf4j, see the [slf4j manual].
 In order to use an alternate logging implementation inside WildFly,
 you'll need to exclude the logging subsystem as we do [above] for
 overriding the configuration.
-
-## Using clojure.tools.logging
-
-If your application uses [clojure.tools.logging], it will
-automatically detect the slf4j system and just work.
 
 [slf4j]: http://slf4j.org/
 [logback]: http://logback.qos.ch/
