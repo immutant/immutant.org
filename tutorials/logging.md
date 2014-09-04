@@ -1,27 +1,37 @@
 ---
 title: 'Logging'
 sequence: 6
-description: 'Altering the logging configuration for your application'
-date: 2014-09-03
+description: 'Details about how logging with Immutant works, along with how to change it'
+date: 2014-09-04
 ---
 
-By default, Immutant uses [slf4j] and [logback] for logging. Any log
-messages that Immutant itself generates will be handled by logback, as
-will anything your app logs via [clojure.tools.logging] or to
-stderr/stdout.
+Logging with Java is a many-headed beast, and the behavior and
+configuration of logging for an Immutant-based application depends on
+how you run it. When an application is used outside of a [WildFly]
+container, using and configuring logging is fairly
+straightforward. Inside of WildFly, there are a few hoops you'll have
+to jump through if you can't use the default logging configuration.
+
+## Logging when outside of WildFly
+
+When used outside of WildFly, Immutant uses [SLF4J] and [Logback] for
+logging by default. Any log messages that Immutant itself generates
+will be handled by Logback, as will anything your app logs via
+[clojure.tools.logging] \(or [Timbre], if you configure it to use
+clojure.tools.logging).
+
+You can adjust the root logging level at runtime by calling
+[immutant.util/set-log-level!]. Note that this will only work if
+Logback is actually being used, and not replaced with another
+implementation as we discuss below.
 
 If the default logging configuration doesn't meet your needs, you can
-provide an alternate logback configuration, or replace logback with
-some other slf4j provider.
+provide an alternate Logback configuration, or replace Logback with
+some other SLF4J provider.
 
-## Using clojure.tools.logging
+### The default Logback configuration
 
-If your application uses [clojure.tools.logging], it will
-automatically detect the slf4j system and just work.
-
-## The default logback configuration
-
-By default, logback is configured to log at `INFO` and below to the
+By default, Logback is configured to log at `INFO` and below to the
 console, with some of the chattier libraries we bring in configured at
 `WARN` and below. The output looks like:
 
@@ -30,10 +40,10 @@ console, with some of the chattier libraries we bring in configured at
     23:58:53.313 ERROR [my-app.core] (main) an error message
     23:58:53.450 INFO  [org.projectodd.wunderboss.web.Web] (main) Registered web context /
 
-The [default configuration] is only applied when logback is available
+The [default configuration] is only applied when Logback is available
 and you don't provide an overriding configuration in your application.
 
-## Overriding the default configuration
+### Overriding the default configuration
 
 If you want a different format for your log messages, want to send
 them to a file, or configure any of the other [myriad options], you
@@ -46,20 +56,66 @@ When defining a custom configuration, it may be useful to use the
 [default configuration] as a starting point.
 
 **Note**: If you're using 2.0.0-alpha1 and provide your own configuration,
-you'll see warnings from logback about finding multiple `logback.xml`
+you'll see warnings from Logback about finding multiple `logback.xml`
 files. You can ignore the warning, or update to the latest [incremental
 build] to make it go away.
 
-### Overriding the default configuration inside WildFly
+### Replacing Logback
 
-In order to use a custom `logback.xml` with an application deployed to
-[WildFly], you'll need to do a little more work.
+If you want to use a logging implementation other than Logback, you'll
+need to exclude Logback and bring in your preferred implementation
+along with the related SLF4J bridge. For example, to use [Log4j], you
+can modify your `:dependencies` like so:
 
-First, you'll need to prevent your app from using the built-in logging
-subsystem. To do that, you'll need to modify the
-`jboss-deployment-structure.xml` file that gets placed in the war's
-`WEB-INF/` directory. You'll need to modify the stock version - to get
-it, run:
+<pre class="syntax clojure">
+  :dependencies [...
+                 [org.immutant/immutant "2.x.incremental.284"
+                   :exclusions [ch.qos.logback/logback-classic]]
+                 [org.apache.logging.log4j/log4j-core "2.0.2"]
+                 [org.apache.logging.log4j/log4j-slf4j-impl "2.0.2"]]
+</pre>
+
+For more information on using other logging implementations with
+SLF4J, see the [SLF4J manual].
+
+## Logging when inside WildFly
+
+When used inside of WildFly, [jboss-logging] is activated and replaces
+Logback as the logging implementation. The default configuration for
+it produces output that is very similar to the default Logback output
+above, and it is written to the console and to
+`$WILDFLY_HOME/standalone/log/server.log`. Any log messages that
+Immutant itself generates will be handled by jboss-logging, as will
+anything your app logs via [clojure.tools.logging] \(or [Timbre], if
+you configure it to use clojure.tools.logging) or writes to
+stdout/stderr.
+
+If you need to alter the default logging configuration, you have three options:
+
+* Modify the logging configuration in WildFly's `standalone-*.xml` files.
+* Disable the logging subsystem, which re-enables Logback, and provide
+  a custom `logback.xml`.
+* Disable the logging subsystem *and* Logback, and bring in a
+  different SLF4J logging implementation.
+
+### Modifying the WildFly logging configuration
+
+WildFly provides a very sophisticated logging system that nobody
+completely understands. It's possible to configure hierarchical,
+categorized log message routing, complex file rotation, syslog
+integration, SMTP notifications, SNMP traps, JMS, JMX and much more.
+Obviously, most of that is far beyond the scope of this
+document. Instead, we refer you to the WildFly
+[logging documentation].
+
+### Disabling the logging subsystem in WildFly
+
+In order disable the logging subsystem in WildFly, you'll need
+to do a little bit of work.
+
+First, you'll need to modify the `jboss-deployment-structure.xml` file
+that gets placed in the war's `WEB-INF/` directory. You'll need to
+modify the stock version - to get it, run:
 
     lein immutant war
 
@@ -72,49 +128,38 @@ application. Then, add the following to it:
       <subsystem name="logging" />
     </exclude-subsystems>
 
-You'll also need to put your `logback.xml` in `war-resources/WEB-INF/lib/`.
-
-Finally, in order for your custom resources to be included in the war
+Second, in order for your custom resources to be included in the war
 file, you'll need to add the following to your `project.clj`:
 
 <pre class="syntax clojure">
   :immutant {:war {:resource-paths ["war-resources"]}}
 </pre>
 
-Then, regenerate your war file, and you should be good to go.
+Once you disable the logging subsystem, you can now provide a custom
+`logback.xml` as we discussed above, with one difference - the
+`logback.xml` needs to be in `WEB-INF/lib/` in the war file instead of
+simply on the application's classpath. So, you'll also need to put your
+`logback.xml` in `war-resources/WEB-INF/lib/`.
 
-## Replacing logback
+You can also still provide an alternate SLF4J implementation as we did
+above, but any configuration for it (`log4j.xml`, etc.), will need to
+be in `WEB-INF/lib` as well.
 
-If you want to use a logging implementation other than logback, you'll
-need to exclude logback and bring in your preferred implementation
-along with the related slf4j bridge. For example, to use [log4j], you
-can modify your `:dependencies` like so:
+Now, regenerate your war file, and you should be good to go. For more
+information on running your application in WildFly, see our
+[WildFly tutorial].
 
-<pre class="syntax clojure">
-  :dependencies [...
-                 [org.immutant/immutant "2.x.incremental.284"
-                   :exclusions [ch.qos.logback/logback-classic]]
-                 [org.apache.logging.log4j/log4j-core "2.0.2"]
-                 [org.apache.logging.log4j/log4j-slf4j-impl "2.0.2"]]
-</pre>
-
-For more information on using other logging implementations with
-slf4j, see the [slf4j manual].
-
-### Replacing logback inside WildFly
-
-In order to use an alternate logging implementation inside WildFly,
-you'll need to exclude the logging subsystem as we do [above] for
-overriding the configuration.
-
-[slf4j]: http://slf4j.org/
-[logback]: http://logback.qos.ch/
+[SLF4J]: http://slf4j.org/
+[Logback]: http://logback.qos.ch/
 [clojure.tools.logging]: https://github.com/clojure/tools.logging
+[Timbre]: https://github.com/ptaoussanis/timbre
+[immutant.util/set-log-level!]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.util.html#var-set-log-level.21
 [myriad options]: http://logback.qos.ch/manual/index.html
 [logback.xml]: http://logback.qos.ch/manual/configuration.html
 [default configuration]: https://github.com/projectodd/wunderboss/blob/master/modules/core/src/main/resources/logback-default.xml
 [incremental build]: /builds/2x/
+[logging documentation]: https://docs.jboss.org/author/display/WFLY8/Logging+Configuration
 [WildFly]: http://wildfly.org/
-[log4j]: http://logging.apache.org/log4j/2.x/
-[slf4j manual]: http://www.slf4j.org/manual.html#swapping
-[above]: #Overriding_the_default_configuration_inside_WildFly
+[Log4j]: http://logging.apache.org/log4j/2.x/
+[SLF4J manual]: http://www.slf4j.org/manual.html#swapping
+[WildFly tutorial]: /tutorials/wildfly/

@@ -2,7 +2,7 @@
 title: WildFly
 sequence: 5
 description: "Deploying your app to WildFly"
-date: 2014-08-26
+date: 2014-09-04
 ---
 
 One of [the primary goals for The Deuce](/news/2014/04/02/the-deuce/)
@@ -168,9 +168,14 @@ this and set your context path to "/" instead, name your war file
 
     $ lein immutant war -o /srv/wildfly -n ROOT
 
+## Logging in WildFly
+
+To learn about how logging works when inside WildFly, along with how
+to change the default configuration, see our [logging tutorial].
 
 [WildFly]: http://wildfly.org
 [JBoss EAP]: http://www.jboss.org/products/eap/overview/
 [lein-immutant]: https://github.com/immutant/lein-immutant/tree/2x-dev
 [Midje]: https://github.com/marick/Midje
 [Expectations]: http://jayfields.com/expectations/
+[logging tutorial]: /tutorials/logging/
