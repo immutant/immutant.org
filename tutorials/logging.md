@@ -113,7 +113,7 @@ In order disable the logging subsystem in WildFly, you'll need
 to do a little bit of work.
 
 First, you'll need to modify the `jboss-deployment-structure.xml` file
-that gets placed in the war's `WEB-INF/` directory. Tto get it, run:
+that gets placed in the war's `WEB-INF/` directory. To get it, run:
 
     lein immutant war
 
