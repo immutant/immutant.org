@@ -45,12 +45,12 @@ and you don't provide an overriding configuration in your application.
 
 ### Overriding the default configuration
 
-If you want a different format for your log messages, want to send
+If you want a different format for your log messages, or perhaps send
 them to a file, or configure any of the other [myriad options], you
 can either provide a [logback.xml] file on the classpath of your app
-(in `resources/` should work), or set the `logback.configurationFile`
-system property to the path to the file, or to the resource name if
-you're using something other than `logback.xml`.
+(e.g. inside `resources/`), or set the `logback.configurationFile`
+system property to the path of the file or resource if you're using
+something other than `logback.xml`.
 
 When defining a custom configuration, it may be useful to use the
 [default configuration] as a starting point.
@@ -100,13 +100,12 @@ If you need to alter the default logging configuration, you have three options:
 
 ### Modifying the WildFly logging configuration
 
-WildFly provides a very sophisticated logging system that nobody
-completely understands. It's possible to configure hierarchical,
-categorized log message routing, complex file rotation, syslog
-integration, SMTP notifications, SNMP traps, JMS, JMX and much more.
-Obviously, most of that is far beyond the scope of this
-document. Instead, we refer you to the WildFly
-[logging documentation].
+[WildFly provides a very sophisticated logging system that nobody completely understands][tweet].
+It's possible to configure hierarchical, categorized log message
+routing, complex file rotation, syslog integration, SMTP
+notifications, SNMP traps, JMS, JMX and much more. Obviously, most of
+that is far beyond the scope of this document. Instead, we refer you
+to the WildFly [logging documentation].
 
 ### Disabling the logging subsystem in WildFly
 
@@ -114,8 +113,7 @@ In order disable the logging subsystem in WildFly, you'll need
 to do a little bit of work.
 
 First, you'll need to modify the `jboss-deployment-structure.xml` file
-that gets placed in the war's `WEB-INF/` directory. You'll need to
-modify the stock version - to get it, run:
+that gets placed in the war's `WEB-INF/` directory. Tto get it, run:
 
     lein immutant war
 
@@ -136,9 +134,9 @@ file, you'll need to add the following to your `project.clj`:
 </pre>
 
 Once you disable the logging subsystem, you can now provide a custom
-`logback.xml` as we discussed above, with one difference - the
-`logback.xml` needs to be in `WEB-INF/lib/` in the war file instead of
-simply on the application's classpath. So, you'll also need to put your
+`logback.xml` as we discussed above, with one important difference -
+the `logback.xml` must reside in the war file instead of simply on the
+application's classpath. Therefore, you'll need to put your
 `logback.xml` in `war-resources/WEB-INF/lib/`.
 
 You can also still provide an alternate SLF4J implementation as we did
@@ -163,3 +161,5 @@ information on running your application in WildFly, see our
 [Log4j]: http://logging.apache.org/log4j/2.x/
 [SLF4J manual]: http://www.slf4j.org/manual.html#swapping
 [WildFly tutorial]: /tutorials/wildfly/
+[jboss-logging]: https://github.com/jboss-logging/jboss-logging
+[tweet]: https://twitter.com/intent/tweet?text=%22WildFly+provides+a+very+sophisticated+logging+system+that+nobody+completely+understands%22
