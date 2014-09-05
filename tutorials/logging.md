@@ -7,7 +7,7 @@ date: 2014-09-04
 
 Logging with Java is a many-headed beast, and the behavior and
 configuration of logging for an Immutant-based application depends on
-how you run it. When an application is used outside of a [WildFly]
+how you run it. When an application is launched outside of a [WildFly]
 container, using and configuring logging is fairly
 straightforward. Inside of WildFly, there are a few hoops you'll have
 to jump through if you can't use the default logging configuration.
@@ -17,11 +17,11 @@ to jump through if you can't use the default logging configuration.
 When used outside of WildFly, Immutant uses [SLF4J] and [Logback] for
 logging by default. Any log messages that Immutant itself generates
 will be handled by Logback, as will anything your app logs via
-[clojure.tools.logging] \(or [Timbre], if you configure it to use
+[clojure.tools.logging] \(or [Timbre], if you configure it to delegate to
 clojure.tools.logging).
 
 You can adjust the root logging level at runtime by calling
-[immutant.util/set-log-level!]. Note that this will only work if
+[immutant.util/set-log-level!]. **Note**: this will only work if
 Logback is actually being used, and not replaced with another
 implementation as we discuss below.
 
@@ -80,14 +80,14 @@ SLF4J, see the [SLF4J manual].
 
 ## Logging when inside WildFly
 
-When used inside of WildFly, [jboss-logging] is activated and replaces
+When used inside of WildFly, jboss-logging is activated and replaces
 Logback as the logging implementation. The default configuration for
 it produces output that is very similar to the default Logback output
 above, and it is written to the console and to
 `$WILDFLY_HOME/standalone/log/server.log`. Any log messages that
 Immutant itself generates will be handled by jboss-logging, as will
 anything your app logs via [clojure.tools.logging] \(or [Timbre], if
-you configure it to use clojure.tools.logging) or writes to
+you configure it to delegate to clojure.tools.logging) or writes to
 stdout/stderr.
 
 If you need to alter the default logging configuration, you have three options:
@@ -100,12 +100,13 @@ If you need to alter the default logging configuration, you have three options:
 
 ### Modifying the WildFly logging configuration
 
-[WildFly provides a very sophisticated logging system that nobody completely understands][tweet].
-It's possible to configure hierarchical, categorized log message
-routing, complex file rotation, syslog integration, SMTP
-notifications, SNMP traps, JMS, JMX and much more. Obviously, most of
-that is far beyond the scope of this document. Instead, we refer you
-to the WildFly [logging documentation].
+WildFly provides a very sophisticated logging system that nobody
+completely understands. It's possible to configure hierarchical,
+categorized log message routing, complex file rotation, syslog
+integration, SMTP notifications, SNMP traps, JMS, JMX and much
+more. Obviously, most of that is far beyond the scope of this
+document. Instead, we refer you to the WildFly
+[logging documentation].
 
 ### Disabling the logging subsystem in WildFly
 
@@ -136,7 +137,7 @@ file, you'll need to add the following to your `project.clj`:
 Once you disable the logging subsystem, you can now provide a custom
 `logback.xml` as we discussed above, with one important difference -
 the `logback.xml` must reside in the war file instead of simply on the
-application's classpath. Therefore, you'll need to put your
+application's classpath. Therefore, you'll also need to put your
 `logback.xml` in `war-resources/WEB-INF/lib/`.
 
 You can also still provide an alternate SLF4J implementation as we did
@@ -161,5 +162,3 @@ information on running your application in WildFly, see our
 [Log4j]: http://logging.apache.org/log4j/2.x/
 [SLF4J manual]: http://www.slf4j.org/manual.html#swapping
 [WildFly tutorial]: /tutorials/wildfly/
-[jboss-logging]: https://github.com/jboss-logging/jboss-logging
-[tweet]: https://twitter.com/intent/tweet?text=%22WildFly+provides+a+very+sophisticated+logging+system+that+nobody+completely+understands%22
