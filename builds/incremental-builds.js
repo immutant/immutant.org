@@ -6,10 +6,12 @@ renderer = {
     row[row.length-1].addClass( 'divide' );
 
     $.each( row, function(i,r) {
+      $('#builds tr.load').hide();
       $( '#builds' ).append( row[i] );
     } );
 
     if ( self.lastSuccessfulBuild && ( self.lastSuccessfulBuild.number == build.number ) ) {
+      $('#latest-stable tr.load').hide();
       $( '#latest-stable' ).append( row[0].clone() );
     }
 
