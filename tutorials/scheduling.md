@@ -4,6 +4,7 @@ sequence: 3
 description: "Schedule asynchronous jobs"
 date: 2014-06-23
 ---
+
 If you're coming from Immutant 1.x, you'll notice that the namespace
 and artifact have been renamed (what used to be `immutant.jobs` and
 `org.immutant/immutant-jobs` is now `immutant.scheduling` and
