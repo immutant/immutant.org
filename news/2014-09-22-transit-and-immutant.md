@@ -28,7 +28,7 @@ optimized JSON readers that most platforms provide.
 
 immutant-transit provides an Immutant [codec] for Transit that allows
 for transparent encoding and decoding of Transit data when using
-Immutant's messaging and caching functionality. Without it, you would
+Immutant's [messaging] and [caching] functionality. Without it, you would
 need to set up the encode/decode logic yourself.
 
 ## Usage
@@ -37,14 +37,18 @@ need to set up the encode/decode logic yourself.
  you'll need to use an [incremental build] \(#298 or newer).**
 
 First, we need to add `org.immutant/immutant-transit` to our
-application's dependencies (this will transitively bring in
-`com.cognitect/transit-clj` 0.8.255):
+application's dependencies:
 
 <pre class="syntax clojure">
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.immutant/immutant "2.x.incremental.298"]
-                 [org.immutant/immutant-transit "0.2.1"]]
+                 [org.immutant/immutant-transit "0.2.2"]]
 </pre>
+
+If you don't have `com.cognitect/transit-clj` in your dependencies,
+immutant-transit will transitively bring in version 0.8.259. We've
+tested against 0.8.255 and 0.8.259, so if you're running another
+version and are seeing issues, [let us know].
 
 Now, we need to register the Transit codec with Immutant:
 
@@ -67,7 +71,7 @@ encoding is used:
   (immutant.messaging/publish some-queue {:a :message} :encoding :transit)
 
   (def transit-cache (immutant.caching/with-codec some-cache :transit))
-  (.put transit-cache a-key a-value)
+  (immutant.caching/compare-and-swap! transit-cache a-key a-function)
 </pre>
 
 If you need to change the underlying format that Transit uses, or need
@@ -104,11 +108,9 @@ make releases independent of Immutant proper that track changes to
 Transit. Once Transit matures a bit, we'll likely roll this in to
 Immutant itself.
 
-## Adding other serializations
-
 If you are interested in adding a codec of your own, take a look at
-the [immutant-transit source] and at the [immutant.codecs namespace][codec] to
-see how it's done.
+the [immutant-transit source] and at the
+[immutant.codecs namespace][codec] to see how it's done.
 
 ## Get In Touch
 
@@ -123,7 +125,10 @@ you can always find us on [#immutant on freenode](/community/) or
 [immutant-transit]: https://github.com/immutant/immutant-transit
 [Transit format]: https://github.com/cognitect/transit-format
 [codec]: https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.codecs.html
+[messaging]: /tutorials/messaging/
+[caching]: /tutorials/caching/
+[let us know]: https://github.com/immutant/immutant-transit/issues
 [incremental build]: /builds/2x/
-[register-transit-codec]: https://github.com/immutant/immutant-transit/blob/0.2.1/src/immutant/codecs/transit.clj#L55
+[register-transit-codec]: https://github.com/immutant/immutant-transit/blob/0.2.2/src/immutant/codecs/transit.clj#L55
 [example project]: https://github.com/immutant/immutant-transit/tree/master/example-app
-[immutant-transit source]: https://github.com/immutant/immutant-transit/blob/0.2.1/src/immutant/codecs/transit.clj
+[immutant-transit source]: https://github.com/immutant/immutant-transit/blob/0.2.2/src/immutant/codecs/transit.clj
