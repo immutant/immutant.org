@@ -11,7 +11,7 @@ title: Releases
 %h2 2.x Releases
 
 :markdown
-  To install a 2.x release, see the [Installation tutorial](/tutorials/installation/).
+  To install a 2.x release, see the Installation guide for the release.
 
 %p
   %table.table.table-striped.table-bordered
@@ -30,11 +30,7 @@ title: Releases
           = announcement.date.strftime( '%d %B %Y' )
         %td
           - rel = latest_release?(release) ? 'documentation' : 'nofollow'
-          %ul
-            %li
-              %a{:href=>"/tutorials/", :rel=>rel} Tutorials
-            %li
-              %a{:href=>release.urls.docs.apidocs, :rel=>rel} Clojure API Docs
+          %a{:href=>release.urls.docs.apidocs, :rel=>rel} API Docs & Guides
         %td
           %ul
             %li

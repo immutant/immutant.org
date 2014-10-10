@@ -87,7 +87,7 @@ renderer = {
       // Docs
 
       $( '.build-summary.build-' + build.number ).find( 'td.docs' ).
-          append('<a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/' + build.number + '/artifact/target/apidocs/index.html">Browse API</a>');
+          append('<a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/' + build.number + '/artifact/target/apidocs/index.html">Browse API' + (build.number > 311 ? ' & Guides' : '') + '</a>');
   },
 
 
