@@ -17,9 +17,10 @@ feedback on alpha1 and our incremental releases.
 
 Immutant is an integrated suite of [Clojure](http://clojure.org)
 libraries backed by [Undertow] for web, [HornetQ] for messaging,
-[Infinispan] for caching, and [Quartz] for scheduling. Applications
-built with Immutant can optionally be deployed to a [WildFly] cluster
-for enhanced features. Its fundamental goal is to reduce the inherent
+[Infinispan] for caching, [Quartz] for scheduling, and [Narayana] for
+transactions. Applications built with Immutant can optionally be
+deployed to a [WildFly] cluster for enhanced features. Its fundamental
+goal is to reduce the inherent
 [incidental complexity](http://en.wikipedia.org/wiki/Accidental_complexity)
 in real world applications.
 
@@ -32,11 +33,25 @@ A few highlights of *The Deuce* compared to the previous 1.x series:
 
 ## What's changed in this release?
 
-* XA {{more here}}
-* SSL stuffs {{more here}}
+* Though not strictly part of the release, we've significantly
+  rearranged our documentation. The "tutorials" are now called
+  "guides", and we publish them right along with the [apidoc]. This
+  gives us a "one-stop doc shop" with better, cross-referenced
+  content.
+* We've introduced an `org.immutant/transactions` library to provide
+  support for XA distributed transactions, a feature we had in
+  Immutant 1.x, but only recently made available in The Deuce, both
+  within WildFly and out of the container as well. The API is similar,
+  with a few minor namespace changes, and all Immutant caches and
+  messaging destinations are XA capable.
+* We're now exposing flexible SSL configuration options through our
+  `immutant.web.undertow` namespace, allowing you to set up an HTTPS
+  listener with some valid combination of SSLContext, KeyStore,
+  TrustStore, KeyManagers, or TrustManagers.
 * We've made a large, breaking change to our messaging API. Namely,
   we've removed the `connection` and `session` abstractions, and
-  replaced them with a single one: `context`. {{more here}}
+  replaced them with a single one: `context`. This is somewhat
+  motivated by our implementation using the new JMS 2.0 api's.
 * [Datomic] can now be used with an Immutant application when inside
   of WildFly without having to modify the WildFly configuration or add
   any exclusions. Unfortunately, you still cannot use Datomic with an
@@ -46,8 +61,6 @@ A few highlights of *The Deuce* compared to the previous 1.x series:
 * HornetQ is now configured via standard configuration files instead
   of via static Java code, allowing you to alter that configuration if
   need be. See the [messaging guide] for details.
-* We've integrated the content of as tutorials in to the [apidoc] for
-  each release, and have renamed them 'guides'.
 
 We've also released a new version of the [lein-immutant] plugin
 (2.0.0-alpha2). You'll need to upgrade to that release if you will use
@@ -117,6 +130,7 @@ you can always find us on [#immutant on freenode](/community/) or
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-499'>IMMUTANT-499</a>] -         Consider renaming :client-id on context to :subscription-name</li>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-500'>IMMUTANT-500</a>] -         Throw if listen, queue, or topic is given a non-remote context</li>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-501'>IMMUTANT-501</a>] -         Running the standalone JAR with default &quot;/&quot; context path requires extra slash for inner routes</li>
+<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-502'>IMMUTANT-502</a>] -         Rename caching/compare-and-swap! to swap-in!</li>
 </ul>
 
 
@@ -132,3 +146,4 @@ you can always find us on [#immutant on freenode](/community/) or
 [Quartz]: http://quartz-scheduler.org/
 [current issues]: https://issues.jboss.org/browse/IMMUTANT
 [IMMUTANT-497]: https://issues.jboss.org/browse/IMMUTANT-497
+[Narayana]: http://www.jboss.org/narayana
