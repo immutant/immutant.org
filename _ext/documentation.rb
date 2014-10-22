@@ -40,7 +40,15 @@ class Documentation
       else
         puts "Copying docs for #{release.version}"
         FileUtils.mkdir_p(doc_root)
-        FileUtils.cp_r(File.join("_2x_docs", release.version, "apidoc"), doc_root)
+        docs_for_version = File.join("_2x_docs", release.version, "apidoc")
+        if File.exists?(docs_for_version)
+          FileUtils.cp_r(docs_for_version, doc_root)
+        else
+          puts "#############################################"
+          puts "WARNING: no docs found for #{release.version}"
+          puts "#############################################"
+        end
+
       end
 
       if latest_release?(site, release)
