@@ -144,3 +144,5 @@ you can always find us on [#immutant on freenode](/community/) or
 [current issues]: https://issues.jboss.org/browse/IMMUTANT
 [IMMUTANT-497]: https://issues.jboss.org/browse/IMMUTANT-497
 [Narayana]: http://www.jboss.org/narayana
+[Datomic]: http://www.datomic.com/
+[lein-immutant]: https://github.com/immutant/lein-immutant/
