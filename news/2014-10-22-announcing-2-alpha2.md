@@ -6,8 +6,9 @@ layout: release
 tags: [ releases ]
 ---
 
-We're as excited as {{whatevs}} to
-announce our second alpha release of *The Deuce*, Immutant
+We're as happy as
+[a cat getting vacuumed](https://www.youtube.com/watch?v=mrlkXEDGpIc)
+to announce our second alpha release of *The Deuce*, Immutant
 **2.0.0-alpha2**.
 
 Big, special thanks to all our early adopters who provided invaluable
@@ -86,12 +87,8 @@ add the relevant dependency to your project as shown on [Clojars].
 
 ## What's next?
 
-{{ What is next? fix this }}
-
-For the first release, we focused on the API and on usage outside of a
-container. For the next alpha, we plan on focusing on making
-in-container behavior more robust. Take a look at our [current issues]
-if you want to follow along.
+We expect to release a beta fairly soon, once we ensure that
+everything works well with the upcoming WildFly 9 release.
 
 ## Get In Touch
 
