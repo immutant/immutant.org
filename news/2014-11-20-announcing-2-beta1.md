@@ -6,12 +6,16 @@ layout: release
 tags: [ releases ]
 ---
 
-We're as happy as {{something}}
-to announce our second alpha release of *The Deuce*, Immutant
-**2.0.0-beta1**.
+We're as happy as {{something}} to announce *The Deuce's* transition
+from "alpha" to "beta": Immutant **2.0.0-beta1**. At this point, we
+feel pretty good about the stability of the API, the performance, and
+the compatibility with both WildFly 8 and the forthcoming WildFly 9.
 
-Big, special thanks to all our early adopters who provided invaluable
-feedback on alpha and our incremental releases.
+We expect a final release shortly after WF 9 is official. We would
+appreciate all interested parties to try out this release and submit
+whatever issues you find. And again, big thanks to all our early
+adopters who provided invaluable feedback on the alpha and incremental
+releases.
 
 ## What is Immutant?
 
@@ -24,19 +28,27 @@ goal is to reduce the inherent
 [incidental complexity](http://en.wikipedia.org/wiki/Accidental_complexity)
 in real world applications.
 
-A few highlights of *The Deuce* compared to the previous 1.x series:
-
-* It uses the [Undertow] web server -- it's much faster, with WebSocket support
-* The source is licensed under the Apache Software License rather than LPGL
-* It's completely functional "embedded" in your app, i.e. no app server required
-* It may be deployed to latest [WildFly] for extra clustering features
-
 ## What's changed in this release?
 
-Bug fixes, plus:
+Bug fixes and docs, of course, plus:
 
-* ispan listeners
-* :dispatch?
+* Infinispan provides a robust notifications API, invoking callback
+  functions in response to various types of events occurring within a
+  cache's lifecycle. Unfortunately, this API is exposed exclusively
+  through Java annotations, which can be awkward in more dynamic JVM
+  languages like Clojure. So we introduced
+  `immutant.caching/add-listener!` as a means to engage the
+  notifications API using keywords instead of annotations.
+* By default, Immutant's embedded [Undertow] web server dispatches
+  requests across a pool of worker threads, but this can adversely
+  impact performance for compute-bound handlers. So we introduced a
+  `:dispatch?` option for `immutant.web/run` that, when false, avoids
+  the context switch by invoking the handler on the IO thread
+  accepting the request.
+* Configuration of the cookie identifying session data is now
+  supported by the `immutant.web.middleware/wrap-session` function.
+* Boolean options to all functions should be consistently suffixed
+  with `?` now.
 
 For a full list of changes, see the issue list below.
 
