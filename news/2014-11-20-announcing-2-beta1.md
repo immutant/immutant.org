@@ -6,10 +6,12 @@ layout: release
 tags: [ releases ]
 ---
 
-We're as happy as {{something}} to announce *The Deuce's* transition
-from "alpha" to "beta": Immutant **2.0.0-beta1**. At this point, we
-feel pretty good about the stability of the API, the performance, and
-the compatibility with both WildFly 8 and the forthcoming WildFly 9.
+We're as happy as
+[two nuns getting their accordion punk on](https://www.youtube.com/watch?v=q0P0EvJOfRQ)
+to announce *The Deuce's* transition from "alpha" to "beta": Immutant
+**2.0.0-beta1**. At this point, we feel pretty good about the
+stability of the API, the performance, and the compatibility with both
+WildFly 8 and the forthcoming WildFly 9.
 
 We expect a final release shortly after WF 9 is official. We would
 appreciate all interested parties to try out this release and submit
