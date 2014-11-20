@@ -101,7 +101,6 @@ you can always find us on [#immutant on freenode](/community/) or
 [Clojars]: https://clojars.org/org.immutant/immutant
 [apidoc]: /documentation/2.0.0-beta1/apidoc/
 [migration guide]: /documentation/2.0.0-beta1/apidoc/guide-migration.html
-[messaging guide]: /documentation/2.0.0-beta1/apidoc/guide-messaging.html
 [WildFly]: http://wildfly.org/
 [Feature Demo]: https://github.com/immutant/feature-demo
 [Infinispan]: http://infinispan.org
@@ -109,7 +108,4 @@ you can always find us on [#immutant on freenode](/community/) or
 [Undertow]: http://undertow.io
 [Quartz]: http://quartz-scheduler.org/
 [current issues]: https://issues.jboss.org/browse/IMMUTANT
-[IMMUTANT-497]: https://issues.jboss.org/browse/IMMUTANT-497
 [Narayana]: http://www.jboss.org/narayana
-[Datomic]: http://www.datomic.com/
-[lein-immutant]: https://github.com/immutant/lein-immutant/
