@@ -7,7 +7,7 @@ tags: [ releases ]
 ---
 
 We're as happy as
-[two nuns getting their accordion punk on](https://www.youtube.com/watch?v=q0P0EvJOfRQ)
+[two punk accordion clapping nuns](https://www.youtube.com/watch?v=q0P0EvJOfRQ)
 to announce *The Deuce's* transition from "alpha" to "beta": Immutant
 **2.0.0-beta1**. At this point, we feel pretty good about the
 stability of the API, the performance, and the compatibility with both
