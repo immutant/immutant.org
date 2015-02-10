@@ -83,7 +83,7 @@
   :on-close   (fn [channel {:keys [code reason]}])
   :on-error   (fn [channel throwable])
   :on-message (fn [channel message])
-</code></pre><p>The <code>:on-message</code> handler is only relevant to WebSockets, as are the <code>:code</code> and <code>:reason</code> keys passed to <code>:on-close</code>: they will be nil for HTTP streams.</p><h3 id="h5307">HTTP Streams</h3><p>Creating chunked responses are straightforward, as the following Ring handler demonstrates:</p>
+</code></pre><p>The <code>:on-message</code> handler is only relevant to WebSockets, as are the <code>:code</code> and <code>:reason</code> keys passed to <code>:on-close</code>: they will be nil for HTTP streams.</p><h3 id="h5307">HTTP Streams</h3><p>Creating chunked responses is straightforward, as the following Ring handler demonstrates:</p>
 <pre><code class="clojure">(require &#39;[immutant.web.async :as async])
 
 (defn app [request]
