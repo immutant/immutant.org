@@ -57,7 +57,8 @@ For a working example, check out our [Feature Demo] application!
 ## Get It
 
 There is no longer any "installation" step as there was in 1.x. Simply
-add the relevant dependency to your project as shown on [Clojars].
+add the relevant dependency to your project as shown on [Clojars]. See
+the [installation guide] for more details.
 
 ## Get In Touch
 
@@ -82,6 +83,7 @@ you can always find us on [#immutant on freenode](/community/) or
 [Clojars]: https://clojars.org/org.immutant/immutant
 [apidoc]: /documentation/2.0.0-beta2/apidoc/
 [migration guide]: /documentation/2.0.0-beta2/apidoc/guide-migration.html
+[installation guide]: /documentation/2.0.0-beta2/apidoc/guide-installation.html
 [WildFly]: http://wildfly.org/
 [Feature Demo]: https://github.com/immutant/feature-demo
 [Infinispan]: http://infinispan.org
