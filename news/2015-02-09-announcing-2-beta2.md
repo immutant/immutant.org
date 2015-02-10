@@ -12,11 +12,11 @@ point, we feel pretty good about the stability of the API, the
 performance, and the compatibility with both WildFly 8 and the
 forthcoming WildFly 9.
 
-We expect a final release shortly after WF 9 is official. We would
-appreciate all interested parties to try out this release and submit
-whatever issues you find. And again, big thanks to all our early
-adopters who provided invaluable feedback on the alpha and incremental
-releases.
+We expect a final release before spring (in the Northern
+Hemisphere). We would appreciate all interested parties to try out
+this release and submit whatever issues you find. And again, big
+thanks to all our early adopters who provided invaluable feedback on
+the alpha, beta, and incremental releases.
 
 ## What is Immutant?
 
@@ -58,12 +58,6 @@ For a working example, check out our [Feature Demo] application!
 
 There is no longer any "installation" step as there was in 1.x. Simply
 add the relevant dependency to your project as shown on [Clojars].
-
-## What's next?
-
-We expect to have a fairly short beta cycle, with a final release once
-we ensure that everything works well with the upcoming WildFly 9
-release.
 
 ## Get In Touch
 
