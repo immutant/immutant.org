@@ -36,7 +36,7 @@ with web clients asynchronously, either via an [HTTP stream], over a
 [WebSocket], or using [Server-Sent Events]. As part of this change,
 the `immutant.web.websocket` namespace has been removed, but
 `wrap-websocket` still exists, and has been moved to
-[immutant.web.middleware]. For more details, see the [Web Guide].
+[immutant.web.middleware]. For more details, see the [web guide].
 
 In conjunction with this new API, we've submitted changes to [Sente]
 that will allow you to use its next release with Immutant.
@@ -96,3 +96,10 @@ you can always find us on [#immutant on freenode](/community/) or
 [Quartz]: http://quartz-scheduler.org/
 [current issues]: https://issues.jboss.org/browse/IMMUTANT
 [Narayana]: http://www.jboss.org/narayana
+[new API]: /documentation/2.0.0-beta2/apidoc/immutant.web.async.html
+[Sente]: https://github.com/ptaoussanis/sente
+[WebSocket]: http://en.wikipedia.org/wiki/WebSocket
+[Server-Sent Events]: http://www.w3.org/TR/eventsource/
+[HTTP stream]: http://en.wikipedia.org/wiki/Chunked_transfer_encoding
+[immutant.web.middleware]: /documentation/2.0.0-beta2/apidoc/immutant.web.middleware.html
+[web guide]: /documentation/2.0.0-beta2/apidoc/guide-web.html
