@@ -13,7 +13,6 @@ Jenkins.prototype = {
     var self = this;
     $.ajax( {
       url: self.job_url('api/json?depth=1' ),
-      //jsonp: 'jsonp',
       dataType: 'json',
       type: 'GET',
       context: self,
@@ -33,7 +32,6 @@ Jenkins.prototype = {
     $.each( self.matrix, function(i, matrix_leg ) {
       $.ajax( {
         url: self.job_url(  matrix_leg[0] + '/api/json?depth=1' ),
-        //jsonp: 'jsonp',
         dataType: 'json',
         type: 'GET',
         context: self,

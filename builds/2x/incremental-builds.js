@@ -182,5 +182,5 @@ renderer = {
 
 };
 
-j = new Jenkins( renderer, 'http://projectodd.ci.cloudbees.com', 'immutant2-incremental',
+j = new Jenkins( renderer, '/builds/build-info', 'immutant2-incremental',
                  [['', '1_6_0']] );
