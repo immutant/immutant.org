@@ -4,7 +4,7 @@ RewriteRule ^([0-9]+)/(.*)$                         http://downloads.immutant.or
 
 RewriteRule ^(torquebox-immutant\.zip)$             http://projectodd.ci.cloudbees.com/job/overlay/lastSuccessfulBuild/artifact/target/$1 [P]
 
-RewriteRule ^build-info/(.*)$                       http://projectodd.ci.cloudbees.com/$1 [P]
+RewriteRule ^build-info/(.*)$                       https://projectodd.ci.cloudbees.com/$1 [P]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
