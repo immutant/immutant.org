@@ -16,7 +16,6 @@ Jenkins.prototype = {
       dataType: 'json',
       type: 'GET',
       context: self,
-      async: false,
       success: self.handle_job_jsonp,
     } );
   },
@@ -35,7 +34,6 @@ Jenkins.prototype = {
         dataType: 'json',
         type: 'GET',
         context: self,
-        async: false,
         success: self.handle_matrix_leg_jsonp,
       } );
     } );
