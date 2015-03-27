@@ -2,3 +2,4 @@ ErrorDocument 404 /404.html
 
 RewriteEngine on
 
+Header set Access-Control-Allow-Origin "*"
