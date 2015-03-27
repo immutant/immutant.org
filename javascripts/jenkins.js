@@ -1,4 +1,3 @@
-
 function Jenkins(renderer, url, job, matrix) {
   this.renderer = renderer;
   this.url = url;
@@ -12,10 +11,10 @@ function Jenkins(renderer, url, job, matrix) {
 Jenkins.prototype = {
   initialize: function() {
     var self = this;
-    $.ajax( { 
-      url: self.job_url('/api/json?depth=1' ),
-      jsonp: 'jsonp',
-      dataType: 'jsonp',
+    $.ajax( {
+      url: self.job_url('api/json?depth=1' ),
+      //jsonp: 'jsonp',
+      dataType: 'json',
       type: 'GET',
       context: self,
       async: false,
@@ -32,10 +31,10 @@ Jenkins.prototype = {
     } );
 
     $.each( self.matrix, function(i, matrix_leg ) {
-      $.ajax( { 
-        url: self.job_url( '/' + matrix_leg[0] + '/api/json?depth=1' ),
-        jsonp: 'jsonp',
-        dataType: 'jsonp',
+      $.ajax( {
+        url: self.job_url(  matrix_leg[0] + '/api/json?depth=1' ),
+        //jsonp: 'jsonp',
+        dataType: 'json',
         type: 'GET',
         context: self,
         async: false,
@@ -61,7 +60,7 @@ Jenkins.prototype = {
 
   locate_artifact: function(build, filename) {
     result = null;
-    $.each( build.artifacts, function(i, artifact) { 
+    $.each( build.artifacts, function(i, artifact) {
       if ( artifact.relativePath == filename ) {
         result = artifact;
         return false;
