@@ -6,18 +6,12 @@ layout: release
 tags: [ releases ]
 ---
 
-{{this section needs a rewrite}}
 We're {{something something}} to
-announce *The Deuce's* official release: Immutant **2.0.0**. At this
-point, we feel pretty good about the stability of the API, the
-performance, and the compatibility with both WildFly 8 and the
-forthcoming WildFly 9.
+announce *The Deuce's* official release: Immutant **2.0.0**!
 
-We expect a final release before spring (in the Northern
-Hemisphere). We would appreciate all interested parties to try out
-this release and submit whatever issues you find. And again, big
-thanks to all our early adopters who provided invaluable feedback on
-the alpha, beta, and incremental releases.
+We want to thank of our early adopters who provided invaluable
+feedback on the alpha, beta, and incremental releases - we couldn't
+have done this without you.
 
 ## What is Immutant?
 
@@ -32,7 +26,28 @@ in real world applications.
 
 ## What's changed in this release?
 
-{{stuff}}
+We have quite a few fixes in this release, as well as changes to a few
+things in the API that we wanted to get right before 2.0.0. The
+notable API changes are:
+
+* The concurrency for queue [listeners] now defaults to the number of
+  cores to provide better messaging throughput out of the box (it was
+  1). The default for topic listeners remains at 1.
+* The `:subscription-name` option to [immutant.messaging/context] has
+  been renamed to `:client-id` to remove confusion with the
+  `:subscription-name` option to [immutant.messaging/subscribe]. Both
+  are only used for durable topic subscribers.
+* [immutant.messaging.pipeline/pipeline] error handlers now get passed
+  the decoded message instead of the `Message` object, and there is
+  now a [immutant.messaging.pipeline/retry] function to ease
+  retrying messages from the error handler.
+* You can now set the headers and status of an async HTTP channel
+  response when calling [immutant.web.async/send!]. You can also now
+  provide any valid Ring body type in addition to `String` and
+  `byte[]` to `send!`.
+* The `:on-complete` option to `immutant.web.async/send!` has been
+  replaced with two separate callback options: `:on-success` and
+  `:on-error`.
 
 For a full list of changes, see the issue list below.
 
@@ -73,6 +88,7 @@ you can always find us on [#immutant on freenode](/community/) or
 
 <ul>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-261'>IMMUTANT-261</a>] -         add cluster tests</li>
+<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-360'>IMMUTANT-360</a>] -         Consider defaulting listener :concurrency based on the number of cores</li>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-514'>IMMUTANT-514</a>] -         Notes for improving the migration guide</li>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-525'>IMMUTANT-525</a>] -         wrap-resource from ring 1.3.2 breaks requests to / in WildFly</li>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-527'>IMMUTANT-527</a>] -         Session cookie attributes ignored in-container</li>
@@ -88,10 +104,18 @@ you can always find us on [#immutant on freenode](/community/) or
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-538'>IMMUTANT-538</a>] -         Review guides before release</li>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-539'>IMMUTANT-539</a>] -         Multiple schedulers with different options cannot be created</li>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-540'>IMMUTANT-540</a>] -         Expose internal quartz scheduler</li>
-<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-543'>IMMUTANT-543</a>] -         :on-close callback for web.async channel not firing when client disappears </li>
+<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-543'>IMMUTANT-543</a>] -         :on-close callback for web.async channel not firing when client disappears</li>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-544'>IMMUTANT-544</a>] -         Throw when immutant.messaging.hornetq/set-address-settings is called in-container</li>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-545'>IMMUTANT-545</a>] -         Rename msg/context&#39;s :subscription-name back to :client-id</li>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-546'>IMMUTANT-546</a>] -         Calling immutant.scheduling/stop with no args throws NPE</li>
+<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-547'>IMMUTANT-547</a>] -         Allow setting status and headers from async/send!</li>
+<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-548'>IMMUTANT-548</a>] -         Transactions don&#39;t work from an uberjar</li>
+<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-549'>IMMUTANT-549</a>] -         Allow sending ring bodies to channels</li>
+<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-550'>IMMUTANT-550</a>] -         Replace :on-complete with :on-success &amp; :on-error for async/send!</li>
+<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-553'>IMMUTANT-553</a>] -         Don&#39;t create a transaction manager at compile time</li>
+<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-554'>IMMUTANT-554</a>] -         Concurrent ws requests can cause a channel to be used for multiple clients in-container</li>
+<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-555'>IMMUTANT-555</a>] -         pipeline error-handlers should be passed the decoded mesage</li>
+<li>[<a href='https://issues.jboss.org/browse/IMMUTANT-556'>IMMUTANT-556</a>] -         pipeline error-handlers should be able to retry a message and still deliver to the caller&#39;s future</li>
 </ul>
 
 [Clojars]: https://clojars.org/org.immutant/immutant
@@ -106,10 +130,10 @@ you can always find us on [#immutant on freenode](/community/) or
 [Quartz]: http://quartz-scheduler.org/
 [current issues]: https://issues.jboss.org/browse/IMMUTANT
 [Narayana]: http://www.jboss.org/narayana
-[new API]: /documentation/2.0.0/apidoc/immutant.web.async.html
-[Sente]: https://github.com/ptaoussanis/sente
-[WebSocket]: http://en.wikipedia.org/wiki/WebSocket
-[Server-Sent Events]: http://www.w3.org/TR/eventsource/
-[HTTP stream]: http://en.wikipedia.org/wiki/Chunked_transfer_encoding
-[immutant.web.middleware]: /documentation/2.0.0/apidoc/immutant.web.middleware.html
-[web guide]: /documentation/2.0.0/apidoc/guide-web.html
+[listeners]: /documentation/2.0.0/apidoc/immutant.messaging.html#var-listen
+[immutant.messaging/context]: /documentation/2.0.0/apidoc/immutant.messaging.html#var-context
+[immutant.messaging/subscribe]: /documentation/2.0.0/apidoc/immutant.messaging.html#var-subscribe
+[immutant.messaging.pipeline/pipeline]: /documentation/2.0.0/apidoc/immutant.messaging.pipeline.html#var-pipeline
+[immutant.messaging.pipeline/retry]: /documentation/2.0.0/apidoc/immutant.messaging.pipeline.html#var-retry
+[immutant.web.async/send!]: /documentation/2.0.0/apidoc/immutant.web.async.html#var-send.21
+[lein-immutant]: https://github.com/immutant/lein-immutant/
