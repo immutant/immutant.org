@@ -12,9 +12,10 @@ to announce *The Deuce's* very last (we hope!) beta release: Immutant
 **2.0.0-beta3**! We intend to release our final **2.0.0** next Monday
 during [Clojure/West](http://clojurewest.org/).
 
-We want to thank of our early adopters who provided invaluable
-feedback on the alpha, beta, and incremental releases - we couldn't
-have done this without you.
+We would appreciate all interested parties to try out this release and
+submit whatever issues you find ASAP. And, as always, big thanks to
+all our early adopters who provided invaluable feedback on the alpha,
+beta, and incremental releases.  have done this without you.
 
 ## What is Immutant?
 
@@ -51,6 +52,9 @@ notable API changes are:
 * The `:on-complete` option to `immutant.web.async/send!` has been
   replaced with two separate callback options: `:on-success` and
   `:on-error`.
+* [immutant.transactions/manager] is now a function instead of a
+  value. If you were using the manager directly, you'll now need to
+  invoke it.
 
 For a full list of changes, see the issue list below.
 
@@ -122,9 +126,9 @@ you can always find us on [#immutant on freenode](/community/) or
 </ul>
 
 [Clojars]: https://clojars.org/org.immutant/immutant
-[apidoc]: /documentation/2.0.0/apidoc/
-[migration guide]: /documentation/2.0.0/apidoc/guide-migration.html
-[installation guide]: /documentation/2.0.0/apidoc/guide-installation.html
+[apidoc]: /documentation/2.0.0-beta3/apidoc/
+[migration guide]: /documentation/2.0.0-beta3/apidoc/guide-migration.html
+[installation guide]: /documentation/2.0.0-beta3/apidoc/guide-installation.html
 [WildFly]: http://wildfly.org/
 [Feature Demo]: https://github.com/immutant/feature-demo
 [Infinispan]: http://infinispan.org
@@ -133,10 +137,11 @@ you can always find us on [#immutant on freenode](/community/) or
 [Quartz]: http://quartz-scheduler.org/
 [current issues]: https://issues.jboss.org/browse/IMMUTANT
 [Narayana]: http://www.jboss.org/narayana
-[listeners]: /documentation/2.0.0/apidoc/immutant.messaging.html#var-listen
-[immutant.messaging/context]: /documentation/2.0.0/apidoc/immutant.messaging.html#var-context
-[immutant.messaging/subscribe]: /documentation/2.0.0/apidoc/immutant.messaging.html#var-subscribe
-[immutant.messaging.pipeline/pipeline]: /documentation/2.0.0/apidoc/immutant.messaging.pipeline.html#var-pipeline
-[immutant.messaging.pipeline/retry]: /documentation/2.0.0/apidoc/immutant.messaging.pipeline.html#var-retry
-[immutant.web.async/send!]: /documentation/2.0.0/apidoc/immutant.web.async.html#var-send.21
+[listeners]: /documentation/2.0.0-beta3/apidoc/immutant.messaging.html#var-listen
+[immutant.messaging/context]: /documentation/2.0.0-beta3/apidoc/immutant.messaging.html#var-context
+[immutant.messaging/subscribe]: /documentation/2.0.0-beta3/apidoc/immutant.messaging.html#var-subscribe
+[immutant.messaging.pipeline/pipeline]: /documentation/2.0.0-beta3/apidoc/immutant.messaging.pipeline.html#var-pipeline
+[immutant.messaging.pipeline/retry]: /documentation/2.0.0-beta3/apidoc/immutant.messaging.pipeline.html#var-retry
+[immutant.web.async/send!]: /documentation/2.0.0-beta3/apidoc/immutant.web.async.html#var-send.21
+[immutant.transactions/manager]: /documentation/2.0.0-beta3/apidoc/immutant.transactions.html#var-manager
 [lein-immutant]: https://github.com/immutant/lein-immutant/
