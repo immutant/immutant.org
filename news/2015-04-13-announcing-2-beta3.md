@@ -1,13 +1,14 @@
 ---
-title: Immutant 2 (The Deuce) Final Released
+title: Immutant 2 (The Deuce) Beta3 Released
 author: The Immutant Team
-version: 2.0.0
+version: 2.0.0-beta3
 layout: release
 tags: [ releases ]
 ---
 
-We're {{something something}} to
-announce *The Deuce's* official release: Immutant **2.0.0**!
+We're {{something something}} to announce *The Deuce's* last beta
+release: Immutant **2.0.0-beta3**! We intend to release **2.0.0** next
+Monday during [Clojure/West](http://clojurewest.org/).
 
 We want to thank of our early adopters who provided invaluable
 feedback on the alpha, beta, and incremental releases - we couldn't
@@ -53,8 +54,8 @@ For a full list of changes, see the issue list below.
 
 ## lein-immutant 2.0.0
 
-We've also moved [lein-immutant] out of beta. The only changes
-in 2.0.0 over 2.0.0-beta1 are:
+We've moved [lein-immutant] out of beta. The only changes in 2.0.0
+over 2.0.0-beta1 are:
 
 * `lein immutant war` now properly honors a `:main` that points to a
   fully-qualified function in addition to a namespace
@@ -84,7 +85,7 @@ you can always find us on [#immutant on freenode](/community/) or
 [our mailing lists](/community/mailing_lists).
 
 
-## Issues resolved in 2.0.0
+## Issues resolved in 2.0.0-beta3
 
 <ul>
 <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-261'>IMMUTANT-261</a>] -         add cluster tests</li>
