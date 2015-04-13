@@ -15,7 +15,7 @@ during [Clojure/West](http://clojurewest.org/).
 We would appreciate all interested parties to try out this release and
 submit whatever issues you find ASAP. And, as always, big thanks to
 all our early adopters who provided invaluable feedback on the alpha,
-beta, and incremental releases.  have done this without you.
+beta, and incremental releases.
 
 ## What is Immutant?
 
