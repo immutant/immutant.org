@@ -6,9 +6,11 @@ layout: release
 tags: [ releases ]
 ---
 
-We're {{something something}} to announce *The Deuce's* last beta
-release: Immutant **2.0.0-beta3**! We intend to release **2.0.0** next
-Monday during [Clojure/West](http://clojurewest.org/).
+We're
+[as excited as this puppy](https://www.youtube.com/watch?v=rncPvrUCvBE)
+to announce *The Deuce's* very last (we hope!) beta release: Immutant
+**2.0.0-beta3**! We intend to release our final **2.0.0** next Monday
+during [Clojure/West](http://clojurewest.org/).
 
 We want to thank of our early adopters who provided invaluable
 feedback on the alpha, beta, and incremental releases - we couldn't
