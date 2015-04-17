@@ -36,8 +36,11 @@ in real world applications.
 ## How to try it
 
 The guides included in the [apidoc] are the best source of
-information, and for a working example, check out our [Feature Demo]
-application!
+information, and our [Feature Demo] application provides working code
+samples demonstrating all the Immutant namespaces. Its `README`
+includes simple instructions for getting started at a REPL or command
+line, packaging and various deployment options, e.g. a standalone
+"uberjar", a [WildFly] cluster, Heroku and OpenShift.
 
 If you're already familiar with Immutant 1.x, you should take a look
 at our [migration guide]. It's our attempt at keeping track of what we
