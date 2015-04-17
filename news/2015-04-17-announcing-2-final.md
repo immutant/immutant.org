@@ -37,7 +37,7 @@ in real world applications.
 
 The only change in this release since [beta3] is a fix for a [race
 condition] in scheduling that generally only manifests on slow
-systesms.
+systems.
 
 ## How to try it
 
