@@ -33,6 +33,12 @@ goal is to reduce the inherent
 [incidental complexity](http://en.wikipedia.org/wiki/Accidental_complexity)
 in real world applications.
 
+## What's changed in this release?
+
+The only change in this release since [beta3] is a fix for a [race
+condition] in scheduling that generally only manifests on slow
+systesms.
+
 ## How to try it
 
 There is no longer any "installation" step as there was in 1.x. Simply
@@ -55,7 +61,6 @@ If you have any questions, issues, or other feedback about Immutant,
 you can always find us on [#immutant on freenode](/community/) or
 [our mailing lists](/community/mailing_lists).
 
-
 [Clojars]: https://clojars.org/org.immutant/immutant
 [apidoc]: /documentation/2.0.0/apidoc/
 [migration guide]: /documentation/2.0.0/apidoc/guide-migration.html
@@ -66,13 +71,6 @@ you can always find us on [#immutant on freenode](/community/) or
 [HornetQ]: http://hornetq.org
 [Undertow]: http://undertow.io
 [Quartz]: http://quartz-scheduler.org/
-[current issues]: https://issues.jboss.org/browse/IMMUTANT
 [Narayana]: http://www.jboss.org/narayana
-[listeners]: /documentation/2.0.0/apidoc/immutant.messaging.html#var-listen
-[immutant.messaging/context]: /documentation/2.0.0/apidoc/immutant.messaging.html#var-context
-[immutant.messaging/subscribe]: /documentation/2.0.0/apidoc/immutant.messaging.html#var-subscribe
-[immutant.messaging.pipeline/pipeline]: /documentation/2.0.0/apidoc/immutant.messaging.pipeline.html#var-pipeline
-[immutant.messaging.pipeline/retry]: /documentation/2.0.0/apidoc/immutant.messaging.pipeline.html#var-retry
-[immutant.web.async/send!]: /documentation/2.0.0/apidoc/immutant.web.async.html#var-send.21
-[immutant.transactions/manager]: /documentation/2.0.0/apidoc/immutant.transactions.html#var-manager
-[lein-immutant]: https://github.com/immutant/lein-immutant/
+[beta3]: /news/2015/04/13/announcing-2-beta3/
+[race condition]: https://issues.jboss.org/browse/IMMUTANT-557
