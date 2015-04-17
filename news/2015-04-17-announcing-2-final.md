@@ -1,5 +1,5 @@
 ---
-title: Immutant 2 (The Deuce) Final (FINALLY) Released
+title: Immutant 2.0.0 Released (FINALLY!)
 author: The Immutant Team
 version: 2.0.0
 layout: release
@@ -35,6 +35,10 @@ in real world applications.
 
 ## How to try it
 
+There is no longer any "installation" step as there was in 1.x. Simply
+add the relevant dependency to your project as shown on [Clojars]. See
+the [installation guide] for more details.
+
 The guides included in the [apidoc] are the best source of
 information, and our [Feature Demo] application provides working code
 samples demonstrating all the Immutant namespaces. Its `README`
@@ -42,15 +46,8 @@ includes simple instructions for getting started at a REPL or command
 line, packaging and various deployment options, e.g. a standalone
 "uberjar", a [WildFly] cluster, Heroku and OpenShift.
 
-If you're already familiar with Immutant 1.x, you should take a look
-at our [migration guide]. It's our attempt at keeping track of what we
-changed in the Clojure namespaces.
-
-## Get It
-
-There is no longer any "installation" step as there was in 1.x. Simply
-add the relevant dependency to your project as shown on [Clojars]. See
-the [installation guide] for more details.
+If you're already familiar with Immutant 1.x, you should probably take
+a look at our [migration guide].
 
 ## Get In Touch
 
