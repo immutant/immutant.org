@@ -9,7 +9,7 @@ tags: [ boot, wildfly ]
 and [Micha Niskin] \(if you're not familiar with it, Alan & Micha gave
 a great [intro at Clojure/West]).
 
-To support the (possibly empty) set of Immutant 2.x users that use
+To support the (probably enormous) set of Immutant 2.x users that use
 Boot *and* [deploy to WildFly], we've ported the functionality of our
 [lein-immutant] plugin to Boot, and have released the cleverly-named
 [boot-immutant].
@@ -19,8 +19,8 @@ which are analogous to the `immutant war` and `immutant test` tasks
 from lein-immutant, respectively.
 
 We consider the current release ([0.3.0]) beta quality. If you're in
-the exclusive set would find this plugin useful, give it a try and let
-us know if you run in to any issues, either through the
+the set of users that would find this plugin useful, give it a try
+and let us know if you run in to any issues, either through the
 [usual channels] or by filing an [issue].
 
 [Boot]: http://boot-clj.com/
