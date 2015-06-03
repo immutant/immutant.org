@@ -12,9 +12,9 @@ of both projects.
 Immutant is built on an abstraction layer called [WunderBoss] in order
 to share much of the implementation with our sibling project,
 [TorqueBox]. An additional advantage of this layer is it allows us (in
-theory) to easily switch out the underlying messaging
-implementation while keeping the same . With the release of Artemis 1.0.0, we've now taken the
-opportunity to test that theory.
+theory) to easily switch out the underlying messaging implementation
+while keeping the same Clojure API. With the release of Artemis 1.0.0,
+we've now taken the opportunity to test that theory.
 
 ## wunderboss-artemis
 
