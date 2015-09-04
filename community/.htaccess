@@ -1,2 +1,0 @@
-RewriteEngine on
-Redirect 301 mailing_lists/index.html http://immutant.org/community/
