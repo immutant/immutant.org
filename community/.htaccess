@@ -1,0 +1,2 @@
+RewriteEngine on
+Redirect 301 mailing_lists/index.html community/index.html
