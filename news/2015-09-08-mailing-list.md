@@ -1,12 +1,12 @@
 ---
-title: Mailing List Moving To Google Groups
+title: Mailing List Moved To Google Groups
 author: The Immutant Team
 layout: news
 tags: [ ]
 ---
 
 Due to issues with hosting our own mailing lists, we've decided to let
-someone else manage that so we can spend more time doing things that
+someone else manage them so we can spend more time doing things that
 actually matter. Therefore, effective today,
 `immutant-user@immutant.org` is now `immutant@groups.google.com`, and
 we're retiring `immutant-dev@immutant.org`, since it was rarely used.
