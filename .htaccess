@@ -2,6 +2,6 @@ ErrorDocument 404 /404.html
 
 RewriteEngine on
 
-Redirect 301 /community/mailing_lists http://immutant.org/community/
-Redirect 301 /community/mailing_lists/ http://immutant.org/community/
-Redirect 301 /community/mailing_lists/index.html http://immutant.org/community/
+Redirect 301 /community/mailing_lists            http://immutant.org/community/#mailing-lists
+Redirect 301 /community/mailing_lists/           http://immutant.org/community/#mailing-lists
+Redirect 301 /community/mailing_lists/index.html http://immutant.org/community/#mailing-lists

@@ -54,8 +54,8 @@ we've figured that out for you as well:
 
 If you have any questions, issues, or other feedback about Datomic
 with Immutant, you can always find us on
-[#immutant on freenode](/community/) or
-[our mailing lists](/community/mailing_lists).
+[#immutant on freenode](/community/#irc) or
+[our mailing list](/community/#mailing-lists).
 
 [covered]: /news/2015/08/03/datomic/
 [Datomic]: http://www.datomic.com/
