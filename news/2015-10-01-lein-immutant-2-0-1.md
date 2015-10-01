@@ -5,17 +5,18 @@ layout: news
 tags: [ lein, lein-immutant, boot, boot-immutant, installation ]
 ---
 
+This announcement only pertains to those who deploy their applications
+to [WildFly] or [EAP].
+
 We just released version [2.0.1] and of [lein-immutant] and version
 [0.4.0] of [boot-immutant]. Both releases fix an [issue] where "dev"
-wars were no longer deployable if they used [Immutant 2.1.0].
+wars were no longer deployable if they used [Immutant 2.1.
 
-`lein-immutant` and `boot-immutant` are plugins that package your
-application as a WAR file for deployment to [WildFly] or [EAP] and to
-facilitate testing against the same application servers, for
-[Leiningen] and [Boot], respectively. If you don't deploy Immutant
-applications as WAR files to WildFly or EAP, you can happily ignore
-this announcement.
-
+`lein-immutant` and `boot-immutant` are plugins, for [Leiningen] and
+[Boot] respectively, that are required for your application to run on
+[WildFly] or [EAP]. Specifically, they provide tasks for packaging
+your app as a WAR file and testing it "inside" the container.
+             
 If you have any questions, issues, or other feedback, you can always
 find us on [#immutant on freenode or or mailing list](/community/) or
 you can file an issue on the appropriate project.
