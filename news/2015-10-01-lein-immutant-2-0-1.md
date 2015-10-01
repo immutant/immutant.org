@@ -18,7 +18,7 @@ wars were no longer deployable if they used [Immutant 2.1.0].
 your app as a WAR file and testing it "inside" the container.
              
 If you have any questions, issues, or other feedback, you can always
-find us on [#immutant on freenode or or mailing list](/community/) or
+find us on [#immutant on freenode or our mailing list](/community/) or
 you can file an issue on the appropriate project.
 
 [2.0.1]: https://clojars.org/lein-immutant
