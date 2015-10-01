@@ -1,5 +1,5 @@
 ---
-title: lein-immutant 2.0.1/boot-immutant 0.4.0 Released
+title: New versions of Leiningen and Boot plugins
 author: The Immutant Team
 layout: news
 tags: [ lein, lein-immutant, boot, boot-immutant, installation ]
@@ -14,7 +14,8 @@ wars were no longer deployable if they used [Immutant 2.1.0].
 `lein-immutant` and `boot-immutant` are plugins that allow generation
 of WAR files for use in [WildFly]/[EAP] and to ease testing against
 the same application servers, for [Leiningen] and [Boot],
-respectively.
+respectively. If you don't deploy Immutant applications as WAR files
+to WildFly or EAP, you can happily ignore this announcement.
 
 ## Get in touch
 
