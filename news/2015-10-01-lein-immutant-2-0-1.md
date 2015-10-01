@@ -10,7 +10,7 @@ to [WildFly] or [EAP].
 
 We just released version [2.0.1] and of [lein-immutant] and version
 [0.4.0] of [boot-immutant]. Both releases fix an [issue] where "dev"
-wars were no longer deployable if they used [Immutant 2.1.
+wars were no longer deployable if they used [Immutant 2.1.0].
 
 `lein-immutant` and `boot-immutant` are plugins, for [Leiningen] and
 [Boot] respectively, that are required for your application to run on
