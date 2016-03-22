@@ -8,7 +8,7 @@ tags: [ boot, wildfly ]
 Last year, we [released] a [Boot] plugin for building Immutant WAR
 archives for deploying to the [WildFly] application server. This
 initial version was basically a port of the [lein-immutant] plugin,
-and didn't really behave as a proper Boot plugin should (mainly
+and didn't really behave as a proper Boot plugin should (mainly by
 writing outside of and ignoring files in the fileset).
 
 This made it difficult to use the plugin for anything other than a
@@ -24,7 +24,7 @@ and actually create the war:
 
 (deftask build-war []
   (comp
-    (tuber :as-jars true)
+    (uber :as-jars true)
     (aot :all true)
     (gird :init-fn 'my-app.core/init)
     (war)
@@ -37,21 +37,19 @@ The `test-in-container` task will take an Immutant WAR, spin up a
 WildFly container, deploy the WAR, run your tests, and shut it
 down. To build on the above example:
 
-<pre class="syntax clojure">(deftask build-dev-war []
+<pre class="syntax clojure">(deftask run-tests []
   (comp
-    (gird :dev true :init-fn 'my-app.core/init)
-    (war)
-    (target)))
+    (build-dev-war)
+    (test-in-container)))
 </pre>
 
-For me details on the `test-in-container` task, see the
+For more details on the `test-in-container` task, see the
 [testing guide].
 
-See the [README] for installation instructions.
-
-If you're a Boot + Immutant + WildFly user, please give it a try and
-let us know if you run in to any issues, either through the
-[usual channels] or by filing an [issue].
+If you're a Boot + Immutant + WildFly user, please see the [README]
+for installation instructions, give it a try and let us know if you
+run in to any issues, either through the [usual channels] or by filing
+an [issue].
 
 [released]: /news/2015/05/20/boot-immutant/
 [Boot]: http://boot-clj.com/
