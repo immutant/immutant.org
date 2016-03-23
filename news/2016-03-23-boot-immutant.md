@@ -7,7 +7,7 @@ tags: [ boot, wildfly ]
 
 Last year, we [released] a [Boot] plugin for building Immutant WAR
 archives for deploying to the [WildFly] application server. This
-initial version was basically a port of the [lein-immutant] plugin,
+initial version was basically a port of the [lein-immutant] plugin
 and didn't really behave as a proper Boot plugin should (mainly by
 writing outside of and ignoring files in the fileset).
 
