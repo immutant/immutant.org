@@ -1,3 +1,5 @@
+- version: '2.1.7'
+  jira_version: 12333255
 - version: '2.1.6'
   jira_version: 12330937
 - version: '2.1.5'
