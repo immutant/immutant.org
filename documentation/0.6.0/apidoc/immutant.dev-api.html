@@ -1,0 +1,144 @@
+<html>
+  <head>
+    <title>immutant.dev - Immutant Clojure API API documentation</title>
+    <link href="static/favicon.png" rel="icon" />
+    <link href="static/favicon.png" rel="shortcut icon" />
+    <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/wiki.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/internal.css" rel="stylesheet" />
+    <style>.menuWrapper{height: 36px;}</style>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" href="http://www.wikispaces.com/_/2009051601/s/internal_ie.css" type="text/css" />
+    <![endif]-->
+  </head>
+<!--
+This document was auto-generated from the source by the clojure autodoc system.
+To report errors or ask questions about the overall documentation structure, formatting,
+etc., contact Tom Faulhaber (google mail name: tomfaulhaber).
+For errors in the documentation of a particular namespace, contact the author of that
+namespace.
+-->
+  <body>
+    <div id="AllContentContainer">
+      <div id="Header">
+	<!-- <a href="index.html" id="Logo"><img src="static/immutant-icon.gif" width="100" height="100" alt="Immutant" /></a> -->
+	<h1><a title="page header title" id="page-header" href="index.html">Immutant Clojure API</a> - v0.6.0</h1>
+      </div>
+      <div id="leftcolumn"><div style="text-align: center;"></div>
+<div class="menu">
+  <div class="WikiCustomNav WikiElement wiki">
+    <span class="toc-header"><span id="project-name">Immutant Clojure API</span> <span id="version"></span></span><br />
+    <ul>
+      <li><a class="wiki_link" href="index.html">Overview</a></li>
+      <li><a class="wiki_link" href="api-index.html">API Index</a></li>
+    </ul>
+    <div class="NamespaceTOC">
+      <span class="toc-header">Namespaces</span>
+      <ul id="left-sidebar-list">
+        <li><a href="immutant.cache-api.html" class="wiki_link">immutant.cache</a></li><li><a href="immutant.messaging-api.html" class="wiki_link">immutant.messaging</a></li><li><a href="immutant.jobs-api.html" class="wiki_link">immutant.jobs</a></li><li><a href="immutant.daemons-api.html" class="wiki_link">immutant.daemons</a></li><li><a href="immutant.web-api.html" class="wiki_link">immutant.web</a></li><li><a href="immutant.xa-api.html" class="wiki_link">immutant.xa</a></li><li><a href="immutant.runtime-api.html" class="wiki_link">immutant.runtime</a></li><li><a href="immutant.repl-api.html" class="wiki_link">immutant.repl</a></li><li><a href="immutant.hooks-api.html" class="wiki_link">immutant.hooks</a></li><li><a href="immutant.dev-api.html" class="wiki_link">immutant.dev</a></li>
+      </ul>
+    </div>
+    
+    <a href="http://immutant.org" class="wiki_link">Immutant Home</a>
+    <a href="../index.html" class="wiki_link">Immutant Manual</a>
+
+  </div>
+</div>
+</div>
+      <div id="rightcolumn">
+	<div id="Content">
+	  <div class="contentBox"><div class="innerContentBox">
+              <div id="content_view" class="wiki wikiPage">
+                <div id="right-sidebar"><div id="toc">
+  <h1 class="nopad">Table of Contents</h1>
+  <div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.dev">immutant.dev</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.dev/add-dependencies!">add-dependencies!</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.dev/current-project">current-project</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.dev/reload-project!">reload-project!</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.dev/remove-lib">remove-lib</a>
+    </div>
+    <br />
+  </div>
+</div>
+</div>
+                <div id="content-tag">
+<p></p>
+<h2 class="namespace-header" id="immutant.dev">immutant.dev</h2>
+<pre id="namespace-docstr">Functions useful for repl based development inside an Immutant container. They
+shouldn't be used in production.</pre>
+
+
+<br />
+
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.dev/add-dependencies!">add-dependencies!</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (add-dependencies! &amp; deps)
+</pre>
+  <pre id="var-docstr">Adds the given dependencies into the currently active project's dependency set
+and resets the application's class loader to provide the paths and dependencies from that
+project (via reload-project!). Each dep can either be a lein coordinate ('[foo-bar "0.1.0"])
+or a path (as a String) to be added to :source-paths. Returns the project map. This should
+never be used in production. (beta)</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/26992ceb72fcf4eace14e8defb2680388d143c92/./modules/core/src/main/clojure/immutant/dev.clj#L133" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.dev/current-project">current-project</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (current-project)
+</pre>
+  <pre id="var-docstr">Returns the map representing the currently active leiningen project.
+This will be the last project reloaded by reload-project!, or the map read
+from project.clj when the application was deployed reload-project! has yet
+ to be called.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/26992ceb72fcf4eace14e8defb2680388d143c92/./modules/core/src/main/clojure/immutant/dev.clj#L88" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.dev/reload-project!">reload-project!</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (reload-project!)
+       (reload-project! project)
+</pre>
+  <pre id="var-docstr">Resets the application's class loader to provide the paths and dependencies in the
+from the given project. If no project is provided, the project.clj for the appplication
+is loaded from disk. If used under clojure &gt; 1.3.0, this will also make any new data
+readers from the dependencies available. Returns the project map. This should never
+be used in production. (beta)</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/26992ceb72fcf4eace14e8defb2680388d143c92/./modules/core/src/main/clojure/immutant/dev.clj#L114" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.dev/remove-lib">remove-lib</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (remove-lib lib)
+</pre>
+  <pre id="var-docstr">Borrowed from tools.namespace</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/26992ceb72fcf4eace14e8defb2680388d143c92/./modules/core/src/main/clojure/immutant/dev.clj#L145" id="var-source">Source</a>
+</div>
+
+
+</div>
+              </div>
+            </div>
+          </div>
+	</div>
+	<div id="foot">
+	  <div style="text-align: center;" id="copyright">Copyright 2011-2012 Red Hat, Inc.</div>
+	</div>
+      </div>
+      <div id="DesignedBy">Based on a site design by <a title="Visit Tom Hickey's website." href="http://www.tomhickey.com">Tom Hickey</a>.<br />
+      <a href="http://tomfaulhaber.github.com/autodoc/">Clojure auto-documentation system</a> by Tom Faulhaber.</div>
+    </div>
+    <!-- /AllContentContainer -->
+  </body>
+
+</html>

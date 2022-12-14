@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | Caching
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            Tutorial: Caching
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="tutorial article">
+              <div class="byline">
+                <div class="date">
+                  Last updated:
+                  <span class="date">
+                    Saturday, August 23, 2014
+                  </span>
+                </div>
+                <div class="author">
+                  Author:
+                  The Immutant Team
+                </div>
+              </div>
+              <div class="body">
+                <div class="notice big">
+                  <strong>Note:</strong> This tutorial covers Immutant 2.0.0.alpha1.
+                  The Immutant 1.x tutorials are still
+                  available <a href="/tutorials-1x/" rel="nofollow">here</a>, and the 2.0.0.alpha2
+                  (and up) tutorials are now part of the <a
+                  href="/documentation/">documentation</a> as 'Guides'.
+                </div>
+                <p>Immutant caching is provided by the <a href="http://infinispan.org">Infinispan</a> data grid, the
+                distributed features of which are available when deployed to a WildFly
+                or EAP cluster. But even in &quot;local mode&quot;, i.e. not in a cluster but
+                locally embedded within your app, Infinispan caches offer features
+                such as eviction, expiration, persistence, and transactions that
+                aren&#39;t available in typical <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentMap.html">ConcurrentMap</a> implementations.</p>
+                
+                <p>This tutorial will explore the <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.caching.html">immutant.caching</a> namespace, which
+                provides access to Infinispan, whether your app is deployed to a
+                WildFly/EAP cluster or not. The API has changed quite a bit in &quot;The
+                Deuce&quot; from 1.x, which we&#39;ll point out as we go along.</p>
+                
+                <h2 id="Creation_and_Configuration" onclick="window.location = '#Creation_and_Configuration'">Creation and Configuration</h2>
+                
+                <p>Caches are created, started, and referenced using the
+                <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.caching.html#var-cache">immutant.caching/cache</a> function. It accepts a number of optional
+                configuration arguments, but the only required one is a name, since
+                every cache must be uniquely named. If you pass the name of a cache
+                that already exists, a reference to the existing cache will be
+                returned, effectively ignoring any additional config options you might
+                pass. So two Immutant cache instances with the same name will be
+                backed by the same Infinispan cache.</p>
+                
+                <p>If you wish to reconfigure an existing cache, you must stop it first
+                by calling <code>immutant.caching/stop</code>. This is a significant change from
+                1.x, which included <code>create</code>, <code>lookup</code>, and <code>lookup-or-create</code>
+                functions, but no <code>stop</code>. In 2.x, those have been replaced by <code>cache</code> and
+                <code>stop</code>.</p>
+                
+                <p>Infinispan is a veritable morass of enterprisey configuration.
+                Immutant tries to strike a convention/configuration balance by
+                representing the more common options as keywords passed to the <code>cache</code>
+                function, while still supporting the more esoteric config via
+                <code>immutant.caching/builder</code> and Java interop.</p>
+                
+                <p>See the <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.caching.html#var-cache">immutant.caching/cache</a> apidoc for a list of its supported
+                options, passed as either an explicit map or &quot;kwargs&quot; (keyword
+                arguments).</p>
+                
+                <h2 id="Example_Usage" onclick="window.location = '#Example_Usage'">Example Usage</h2>
+                
+                <p>The following examples are taken from the Immutant
+                <a href="https://github.com/immutant/feature-demo/blob/thedeuce/src/demo/caching.clj">Feature Demo</a> which you can clone and run locally at a
+                REPL if you&#39;re a &quot;follow along&quot; type.</p>
+                
+                <p>Caches are inherently mutable. In 1.x, we provided a <code>Mutable</code>
+                protocol, the functions of which merely invoked the corresponding
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentMap.html">ConcurrentMap</a> methods implemented by the Infinispan caches. In <em>The
+                Deuce</em>, <code>Mutable</code> has been removed, as we felt it offered little value
+                over the simple Java interop Clojure provides anyway.</p>
+                
+                <h3 id="Reading" onclick="window.location = '#Reading'">Reading</h3>
+                
+                <p>Because they implement <code>java.util.Map</code>, Clojure&#39;s core functions are
+                all you need to read data from an Immutant cache.</p>
+                
+                <pre class="syntax clojure">&#x000A;  (def bar (immutant.caching/cache "bar"))&#x000A;  (.putAll bar {:a 1, :b {:c 3, :d 4}})&#x000A;&#x000A;  ;; Use get to obtain associated values&#x000A;  (get bar :a)                            ;=> 1&#x000A;  (get bar :x)                            ;=> nil&#x000A;  (get bar :x 42)                         ;=> 42&#x000A;&#x000A;  ;; Symbols look up their value&#x000A;  (:a bar)                                ;=> 1&#x000A;  (:x bar 42)                             ;=> 42&#x000A;&#x000A;  ;; Nested structures work as you would expect&#x000A;  (get-in bar [:b :c])                    ;=> 3&#x000A;&#x000A;  ;; Use find to return entries&#x000A;  (find bar :a)                           ;=> [:a 1]&#x000A;&#x000A;  ;; Use contains? to check membership&#x000A;  (contains? bar :a)                      ;=> true&#x000A;  (contains? bar :x)                      ;=> false</pre>
+                
+                <h3 id="Writing" onclick="window.location = '#Writing'">Writing</h3>
+                
+                <p>In addition to Java interop, <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.caching.html#var-compare-and-swap.21">immutant.caching/compare-and-swap!</a> may
+                be used to cache entries atomically, providing a consistent view of
+                the cache to callers. Internally, it uses the <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentMap.html">ConcurrentMap</a> methods,
+                <code>replace</code> to swap values with existing entries, and <code>putIfAbsent</code> when
+                the entry doesn&#39;t exist.</p>
+                
+                <pre class="syntax clojure">&#x000A;  (def foo (cache "foo"))&#x000A;&#x000A;  (compare-and-swap! foo :a (fnil inc 0))         ;=> 1&#x000A;  (compare-and-swap! foo :b (constantly "foo"))   ;=> "foo"&#x000A;  (compare-and-swap! foo :a inc)                  ;=> 2</pre>
+                
+                <p>Of course, plain ol&#39; interop works, too:</p>
+                
+                <pre class="syntax clojure">&#x000A;  ;; Put an entry in the cache&#x000A;  (.put foo :a 1)&#x000A;&#x000A;  ;; Add all the entries in the map to the cache&#x000A;  (.putAll foo {:b 2, :c 3})&#x000A;&#x000A;  ;; Put it in only if key is not already present&#x000A;  (.putIfAbsent foo :b 6)               ;=> 2&#x000A;  (.putIfAbsent foo :d 4)               ;=> nil&#x000A;&#x000A;  ;; Put it in only if key is already present&#x000A;  (.replace foo :e 5)                   ;=> nil&#x000A;  (.replace foo :b 6)                   ;=> 2&#x000A;&#x000A;  ;; Replace for specific key and value (compare-and-set)&#x000A;  (.replace foo :b 2 0)                 ;=> false&#x000A;  (.replace foo :b 6 0)                 ;=> true</pre>
+                
+                <h3 id="Removing" onclick="window.location = '#Removing'">Removing</h3>
+                
+                <p>Cache entries can be explicitly deleted using Java interop, but they
+                can also be subject to automatic expiration and eviction.</p>
+                
+                <pre class="syntax clojure">&#x000A;  ;; Removing a missing key is harmless&#x000A;  (.remove baz :missing)                  ;=> nil&#x000A;&#x000A;  ;; Removing an existing key returns its value&#x000A;  (.remove baz :b)                        ;=> 2&#x000A;&#x000A;  ;; If value is passed, both must match for remove to succeed&#x000A;  (.remove baz :c 2)                      ;=> false&#x000A;  (.remove baz :c 3)                      ;=> true&#x000A;&#x000A;  ;; Clear all entries&#x000A;  (.clear baz)</pre>
+                
+                <h4 id="Expiration" onclick="window.location = '#Expiration'">Expiration</h4>
+                
+                <p>By default, cached entries never expire, but you can trigger
+                expiration by passing the <code>:ttl</code> (time-to-live) and/or <code>:idle</code> options
+                to the <code>cache</code> function. Their units are milliseconds, but can also be
+                represented as a keyword or a vector of multiplier/keyword pairs, e.g.
+                <code>[1 :week, 4 :days, 2 :hours, 30 :minutes, 59 :seconds]</code>. Both
+                singular and plural keywords are valid.</p>
+                
+                <p>If <code>:ttl</code> is specified, entries will be automatically deleted after
+                that amount of time elapses, starting from when the entry was added.
+                Effectively, this is the entry&#39;s &quot;maximum lifespan&quot;. If <code>:idle</code> is
+                specified, the entry is deleted after the time elapses, but the
+                &quot;timer&quot; is reset each time the entry is accessed. If both are
+                specified, whichever elapses first &quot;wins&quot; and triggers expiration.</p>
+                
+                <p>It&#39;s possible to vary the <code>:ttl</code> and <code>:idle</code> times among entries in a
+                single cache using the <code>with-expiration</code> function:</p>
+                
+                <pre class="syntax clojure">&#x000A;  (def baz (cache "baz", :ttl [5 :minutes], :idle [1 :minute]))&#x000A;  (.putAll baz {:a 1 :b 2 :c 3})&#x000A;  (let [c (with-expiration baz :ttl [1 :hour] :idle [20 :minutes])]&#x000A;    (compare-and-swap! c :a dec)</pre>
+                
+                <h4 id="Eviction" onclick="window.location = '#Eviction'">Eviction</h4>
+                
+                <p>To avoid memory exhaustion, you can include the <code>:max-entries</code> option
+                to <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.caching.html#var-cache">immutant.caching/cache</a> as well as the <code>:eviction</code> policy to
+                determine which entries to evict. And if the <code>:persist</code> option is set,
+                evicted entries are not deleted but rather flushed to disk so that the
+                entries in memory are always a finite subset of those on disk.</p>
+                
+                <p>The default eviction policy is <a href="http://en.wikipedia.org/wiki/LIRS_caching_algorithm">:lirs</a>, which is an optimized version
+                of <code>:lru</code> (Least Recently Used).</p>
+                
+                <pre class="syntax clojure">&#x000A;  (def baz (cache "baz", :max-entries 3))&#x000A;  (.putAll baz {:a 1 :b 2 :c 3})&#x000A;  (:a baz)                              ;=> 1&#x000A;  (select-keys baz [:b :c])             ;=> {:c 3, :b 2}&#x000A;  (.put baz :d 4)&#x000A;  (:a baz)                              ;=> nil</pre>
+                
+                <h3 id="Encoding" onclick="window.location = '#Encoding'">Encoding</h3>
+                
+                <p>Cache entries are not encoded by default, but may be decorated with a
+                codec using the <code>with-codec</code> function. Provided codecs include <code>:edn</code>,
+                <code>:json</code>, and <code>:fressian</code>, but the latter two require additional
+                dependencies: <code>cheshire</code> and <code>org.clojure/data.fressian</code>,
+                respectively.</p>
+                
+                <p>Encoding entries is typically necessary only when non-clojure clients
+                are sharing your cache. And if you wish to store nil keys or values, a
+                codec is required.</p>
+                
+                <pre class="syntax clojure">&#x000A;  (def baz (cache "baz"))&#x000A;  (def encoded (with-codec baz :edn))&#x000A;&#x000A;  (.put encoded :a {:b 42})&#x000A;  (:a encoded)                          ;=> {:b 42}&#x000A;&#x000A;  ;; Access via non-encoded caches still possible&#x000A;  (get baz :a)                          ;=> nil&#x000A;  (get baz ":a")                        ;=> "{:b 42}"</pre>
+                
+                <h3 id="Memoizing" onclick="window.location = '#Memoizing'">Memoizing</h3>
+                
+                <p>In Immutant 1.x, the caching namespace included a <code>memo</code> function that
+                enabled <a href="http://en.wikipedia.org/wiki/Memoization">memoization</a> backed by an Infinispan cache. This forced a
+                transitive dependency on specific versions of <a href="https://github.com/clojure/core.memoize">core.memoize</a> and
+                <a href="https://github.com/clojure/core.cache">core.cache</a> that occasionally conflicted with other libraries.</p>
+                
+                <p>In <em>The Deuce</em>, we moved <code>memo</code> to its own namespace,
+                <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.caching.core-memoize.html">immutant.caching.core-memoize</a>, along with a corresponding
+                <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.caching.core-cache.html">immutant.caching.core-cache</a>. So if you wish to call <code>memo</code>, your app
+                must declare a dependency on <a href="https://github.com/clojure/core.memoize">core.memoize</a>.</p>
+                
+                <p>Here&#39;s a contrived example showing how memoization incurs the expense
+                of calling a slow function only once:</p>
+                
+                <pre class="syntax clojure">&#x000A;  (defn slow-fn [& _]&#x000A;    (Thread/sleep 5000)&#x000A;    42)&#x000A;&#x000A;  ;; Other than the function to be memoized, arguments are the same as&#x000A;  ;; for the cache function.&#x000A;  (def memoized-fn (memo slow-fn "memo", :ttl [5 :minutes]))&#x000A;&#x000A;  ;; Invoking the memoized function fills the cache with the result&#x000A;  ;; from the slow function the first time it is called.&#x000A;  (memoized-fn 1 2 3)                     ;=> 42&#x000A;&#x000A;  ;; Subsequent invocations with the same arguments return the result&#x000A;  ;; from the cache, avoiding the overhead of the slow function</pre>
+                
+                <h2 id="Clustering" onclick="window.location = '#Clustering'">Clustering</h2>
+                
+                <p>Each Infinispan cache operates in one of four modes. Normally, <em>local</em>
+                mode is your only option, but when your app is deployed to a cluster,
+                you get three more: <em>invalidated</em>, <em>replicated</em>, and <em>distributed</em>.
+                These modes define how peers collaborate to replicate your data
+                throughout the cluster. Further, you can choose whether this
+                collaboration occurs asynchronous to the write.</p>
+                
+                <p>In Immutant 1.x, there were two options, <code>:mode</code> and <code>:sync</code>, so to
+                configure asynchronous distributed mode, for example, you would set
+                <code>:mode :distributed, :sync false</code>. In <em>The Deuce</em>, we&#39;ve eliminated the
+                <code>:sync</code> option, so instead you&#39;d set <code>:mode :dist-async</code>.</p>
+                
+                <ul>
+                <li><code>:local</code> This is the only supported mode outside of a cluster</li>
+                <li><code>:dist-sync</code> <code>:dist-async</code> This mode enables Infinispan caches to
+                achieve &quot;linear scalability&quot;. Cache entries are copied to a fixed
+                number of peers (2, by default) regardless of the cluster size.
+                Distribution uses a consistent hashing algorithm to determine which
+                nodes will store a given entry.</li>
+                <li><code>:invalidation-sync</code> <code>:invalidation-async</code> No data is actually
+                shared among the cluster peers in this mode. Instead, notifications
+                are sent to all nodes when data changes, causing them to evict their
+                stale copies of the updated entry.</li>
+                <li><code>:repl-sync</code> <code>:repl-async</code> In this mode, entries added to any peer
+                will be copied to all other peers in the cluster, and can then be
+                retrieved locally from any instance. This mode is probably
+                impractical for clusters of any significant size. Infinispan
+                recommends 10 as a reasonable upper bound on the number of
+                replicated nodes.</li>
+                </ul>
+                
+                <p>The simplest way to take advantage of Infinispan&#39;s clustering
+                capabilities is to deploy your app to a <a href="/tutorials/wildfly/">WildFly</a> cluster.</p>
+              </div>
+              <div class="comments">
+                
+                            <div id="disqus_thread"></div>
+                            <script type="text/javascript">
+                            var disqus_shortname = 'immutant';
+                            var disqus_url = "http://immutant.org/tutorials/caching/";
+                            var disqus_developer = null;
+                            var disqus_identifier = null;
+                            (function() {
+                              var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
+                              dsq.src = "http://immutant.disqus.com/embed.js";
+                              (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq);
+                            })();
+                            </script>
+                            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=immutant">comments powered by Disqus.</a></noscript>
+              </div>
+            </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tutorial-nav">
+              <h3 id="All_Tutorials" onclick="window.location = '#All_Tutorials'">All Tutorials</h3>
+              <ul class="nav nav-tabs nav-stacked">
+                <li class="">
+                  <a href="/tutorials/installation/index.html">Installation</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/web/index.html">Web</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/messaging/index.html">Messaging</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/scheduling/index.html">Scheduling</a>
+                </li>
+                <li class="current">
+                  <a href="/tutorials/caching/index.html">Caching</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/wildfly/index.html">WildFly</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/logging/index.html">Logging</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

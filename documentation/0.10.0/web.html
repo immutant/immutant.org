@@ -1,0 +1,744 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Immutant Web</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Immutant Web" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2013-04-26 08:04:52 EDT" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="initialization.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="jobs.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 5. Immutant Web</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="web.html#sec-1">5.1. Introduction</a></li>
+<li><a href="web.html#web-context-path">5.2. Context Path</a>
+<ul>
+<li><a href="web.html#sec-2-1">5.2.1. The Top-Level Context Path</a></li>
+<li><a href="web.html#sec-2-2">5.2.2. The Sub-Context Path</a></li>
+</ul>
+</li>
+<li><a href="web.html#web-virtual-host">5.3. Virtual Host</a></li>
+<li><a href="web.html#sec-4">5.4. Registering Handlers</a></li>
+<li><a href="web.html#sec-5">5.5. Deregistering Handlers</a></li>
+<li><a href="web.html#web-context-path-example">5.6. Context/Sub-Context Path Example</a></li>
+<li><a href="web.html#sec-7">5.7. Sessions</a>
+<ul>
+<li><a href="web.html#web-session-options">5.7.1. Setting session timeout and cookie attributes</a></li>
+<li><a href="web.html#sec-7-2">5.7.2. Duplicate session cookies</a></li>
+</ul>
+</li>
+<li><a href="web.html#sec-8">5.8. Locating dirs within the application root</a>
+<ul>
+<li><a href="web.html#sec-8-1">5.8.1. An example</a></li>
+</ul>
+</li>
+<li><a href="web.html#sec-9">5.9. Serving static resources</a></li>
+<li><a href="web.html#sec-10">5.10. Mounting Servlets instead of Ring handlers</a>
+<ul>
+<li><a href="web.html#sec-10-1">5.10.1. Pedestal</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">5.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  Immutant allows applications to respond to web requests, typically
+  via <a href="https://github.com/mmcgrana/ring">Ring</a> handlers, but standard Java Servlets are supported, too.
+  Each application can dynamically register any number of handlers,
+  each with a unique context path. This allows you to have multiple
+  Ring webapps that share the same deployment lifecycle.
+</p>
+<p>
+  Immutant provides a session implementation that provides automatic data
+  sharing across nodes in a cluster.
+</p>
+<p>
+  In this chapter, the term <i>application</i> refers to the full deployment itself,
+  and <i>webapp</i> refers to a particular web application based around a single 
+  Ring handler as its entry point. For most applications, the two will be the
+  same thing.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-web-context-path">
+<h2 id="web-context-path"><a id="sec-2" name="sec-2"></a><span class="section-number-2">5.2.</span> Context Path</h2>
+<div class="outline-text-2" id="text-web-context-path">
+
+
+<p>
+  The <b>context path</b> is a prefix on the path portion of a url that is used as
+  a mechanism to route requests to the proper webapp when more than
+  one webapp is being served by the same 'container'. If you are running only
+  one webapp in a container (which is the typical strategy when deploying
+  Clojure webapp via <a href="http://jetty.codehaus.org/jetty/">Jetty</a>), the context path is the <i>root</i> context - <code>/</code>.
+</p>
+<p>
+  A properly constructed webapp needs no knowledge of the context path it is
+  mounted under - the container is responsible for routing requests to the webapp
+  and providing the webapp specific fragment of the url's path to it. This
+  allows the webapp to be moved between contexts (or mounted at multiple
+  contexts at once) without any modification to the webapp code itself.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-1">
+<h3 id="sec-2-1"><span class="section-number-3">5.2.1.</span> The Top-Level Context Path</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   Every application deployed has a context path assigned on its behalf. Since
+   handlers can be registered dynamically from anywhere during the lifecycle of
+   the application, we reserve a context path for every application, whether that
+   application registers web handlers or not.
+</p>
+<p>
+   If no context path is provided, a default context path based on the name of
+   the deployment is used. For example: an application deployed using a
+   descriptor named <code>some-app.clj</code> will be given the context path
+   <code>/some-app</code>. An application deployed using an archive named
+   <code>some-other-app.ima</code> will be given the context path <code>/some-other-app</code>.
+   See <a href="./deployment.html">Deployment</a> for the details of deploying Clojure applications.
+</p>
+<p>
+   You can override the default context path via the <code>:context-path</code> key in
+   either in the deployment descriptor or the <code>:immutant</code> section of the 
+   application's <code>project.clj</code> (see <a href="./initialization.html">Initialization</a> for the details on setting 
+   configuration values).
+</p>
+<p>
+   This context path is considered the <b>top-level</b> context path - you have the
+   option to bind a handler to a <b>sub-context</b> path that will be nested within
+   the top-level path. The full context is stripped from the url's path before
+   the request is processed, and the context and remaining path info are made
+   available as part of the request map via the <code>:context</code> and <code>:path-info</code> 
+   keys, respectively.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-2">
+<h3 id="sec-2-2"><span class="section-number-3">5.2.2.</span> The Sub-Context Path</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<p>
+   When you register a handler with Immutant, you can optionally provide a
+   sub-context path for which the handler will be responsible. This sub-context
+   path is appended to the top-level context path for purposes of routing
+   requests to the handler, and allows you to have multiple webapps within
+   a single application.
+</p>
+<p>
+   See below for an <a href="#web-context-path-example">example</a> demonstrating how the context path, sub-context path,
+   and path info all work together.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-web-virtual-host">
+<h2 id="web-virtual-host"><a id="sec-3" name="sec-3"></a><span class="section-number-2">5.3.</span> Virtual Host</h2>
+<div class="outline-text-2" id="text-web-virtual-host">
+
+
+<p>
+  In addition to segmenting applications by context path, you can also segment
+  by <b>virtual host</b>. To specify the virtual host (or hosts) for an application,
+  set the <code>:virtual-host</code> key in either in the deployment descriptor or the 
+  <code>:immutant</code> section of the application's <code>project.clj</code> (see <a href="./initialization.html">Initialization</a> 
+  for the details on setting configuration values). <code>:virtual-host</code> must be
+  a string specifying a single host or a vector of strings specifying multiple
+  hosts. Two applications with different virtual hosts can use the same 
+  context path without collision.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-4">
+<h2 id="sec-4"><span class="section-number-2">5.4.</span> Registering Handlers</h2>
+<div class="outline-text-2" id="text-4">
+
+
+<p>
+  To register a Ring handler, you simply call the <a href="./apidoc/immutant.web.html#var-start">immutant.web/start</a>, which
+  takes one or two arguments, plus some options:
+</p>
+<ul>
+<li><code>sub-context-path</code> - the sub-context path within the application's context
+    path where the handler should be attached. Optional - if omitted,
+    "/" is assumed. Only one handler can be attached to any given 
+    sub-context path - providing an already attached sub-context will
+    replace the previously registered handler.
+</li>
+<li><code>handler</code> - the Ring handler to invoke when requests come in on the
+    sub context path.
+</li>
+</ul>
+
+
+<p>
+  The options are a subset of those provided by the popular <a href="https://github.com/weavejester/ring-server">ring-server</a>:  
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="center"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="center" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">:init</td><td class="center">nil</td><td class="left">A function called immediately after the handler is mounted</td></tr>
+<tr><td class="left">:destroy</td><td class="center">nil</td><td class="left">A function called immediately after the handler is stopped</td></tr>
+<tr><td class="left">:stacktraces?</td><td class="center">true in :dev</td><td class="left">Display stacktraces in browser when exception is thrown</td></tr>
+<tr><td class="left">:auto-reload?</td><td class="center">true in :dev</td><td class="left">Automatically reload source files</td></tr>
+<tr><td class="left">:reload-paths</td><td class="center">all dirs on CP</td><td class="left">A seq of src paths to monitor for changes</td></tr>
+</tbody>
+</table>
+
+
+<p>
+  Auto-reloading is enabled by default in development mode, which is
+  determined by the presence of the <code>:dev</code> profile among the active
+  ones in your Leiningen project. The <a href="https://github.com/immutant/lein-immutant">lein-immutant</a> plugin activates
+  <code>:dev</code> by default when you deploy your app, but you can override
+  this using the <code>with-profile</code> higher-order task. You can also set
+  the environment variable, <code>LEIN_NO_DEV</code>, to disable these defaults,
+  regardless of whether <code>:dev</code> is active.
+</p>
+<p>
+  Let's take a look at <code>start</code> in use. For the following example, assume
+  the application has a top-level context path of <code>/my-app</code>:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> my.ns
+  (<span class="org-builtin">:require</span> [immutant.web <span class="org-builtin">:as</span> web]))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">handle requests at the root sub-context (/).</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">this handler will receive any request that the app</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">receives at /my-app/* *except* for anything captured by another</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">sub-context.</span>
+(web/start my-root-handler)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">handle requests at the /somewhere sub-context.</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">this handler will receive any request that the app</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">receives at /my-app/somewhere/*.</span>
+(web/start <span class="org-string">"/somewhere"</span> my-other-handler)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">If you want to see your changes immediately while in a REPL, be</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">sure to pass a var-quoted handler. You only need to explicitly</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">set :auto-reload? when not in development mode.</span>
+(web/start #'your-handler <span class="org-builtin">:auto-reload?</span> true)
+</pre>
+
+
+<p>
+  You can deregister a registered handler at any time. Immutant will deregister
+  any remaining handlers for you when your application is undeployed.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-5">
+<h2 id="sec-5"><span class="section-number-2">5.5.</span> Deregistering Handlers</h2>
+<div class="outline-text-2" id="text-5">
+
+
+<p>
+  You can deregister a Ring handler via the <a href="./apidoc/immutant.web.html#var-stop">immutant.web/stop</a> function,
+  which takes zero or one arguments:
+</p>
+<ul>
+<li><code>sub-context-path</code> - the sub-context path within the application's context
+    path where the handler was attached. Optional - if omitted, "/" is assumed.
+</li>
+</ul>
+
+
+<p>
+  An example of using <code>stop</code>:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> my.ns
+  (<span class="org-builtin">:require</span> [immutant.web <span class="org-builtin">:as</span> web]))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">deregisters the handler attached to the root sub-context (/)</span>
+(web/stop)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">deregisters the handler attached to the /somewhere sub-context</span>
+(web/stop <span class="org-string">"/somewhere"</span>)
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-web-context-path-example">
+<h2 id="web-context-path-example"><a id="sec-6" name="sec-6"></a><span class="section-number-2">5.6.</span> Context/Sub-Context Path Example</h2>
+<div class="outline-text-2" id="text-web-context-path-example">
+
+
+<p>
+  Now that we've introduced registering ring handlers, we can give an example
+  that makes it clear how the context and sub-context paths work, and how 
+  the path info gets set.
+</p>
+<p>
+  First, we'll set the context path for the entire application in our 
+  <code>project.clj</code>:
+</p>
+
+
+
+<pre class="src src-clojure">(defproject someapp <span class="org-string">"0.1.0-SNAPSHOT"</span>
+  <span class="org-builtin">:dependencies</span> [[org.clojure/clojure <span class="org-string">"1.4.0"</span>]]
+
+  <span class="org-builtin">:immutant</span> {<span class="org-builtin">:init</span> someapp.core/start
+             <span class="org-builtin">:context-path</span> <span class="org-string">"/foo"</span>})
+</pre>
+
+
+<p>
+   Now we'll register two ring handlers with different sub-contexts, both
+   of which will be available under the parent context we set in <code>project.clj</code>:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> someapp.core
+  (<span class="org-builtin">:require</span> [immutant.web <span class="org-builtin">:as</span> web]))
+
+(<span class="org-keyword">defn</span> <span class="org-function-name">make-handler</span>  [sub-context]
+  (<span class="org-builtin">fn</span> [{<span class="org-builtin">:keys</span> [context path-info] <span class="org-builtin">:as</span> request}]
+    {<span class="org-builtin">:status</span> 200
+     <span class="org-builtin">:content-type</span> <span class="org-string">"text/plain"</span>
+     <span class="org-builtin">:body</span> (<span class="org-builtin">pr-str</span> {<span class="org-builtin">:mounted-sub-context</span> sub-context
+                    <span class="org-builtin">:request-context</span> context
+                    <span class="org-builtin">:request-path-info</span> path-info})}))
+
+(<span class="org-keyword">defn</span> <span class="org-function-name">start</span> []
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">responds to /foo/</span>
+  (web/start <span class="org-string">"/"</span> (make-handler <span class="org-string">"/"</span>))
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">responds to /foo/bar/</span>
+  (web/start <span class="org-string">"/bar"</span> (make-handler <span class="org-string">"/bar"</span>)))
+</pre>
+
+
+<p>
+   When we deploy the app to Immutant, we can see how it sets the <code>:context</code> and 
+   <code>:path-info</code> keys in the request map:
+</p>
+
+
+
+<pre class="src src-sh">$ curl http://localhost:8080/foo/baz
+{:mounted-sub-context <span class="org-string">"/"</span>, :request-context <span class="org-string">"/foo"</span>, :request-path-info <span class="org-string">"/baz"</span>}
+$ curl http://localhost:8080/foo/baz/sheep
+{:mounted-sub-context <span class="org-string">"/"</span>, :request-context <span class="org-string">"/foo"</span>, :request-path-info <span class="org-string">"/baz/sheep"</span>}
+$ curl http://localhost:8080/foo/bar/baz
+{:mounted-sub-context <span class="org-string">"/bar"</span>, :request-context <span class="org-string">"/foo/bar"</span>, :request-path-info <span class="org-string">"/baz"</span>}
+$ curl http://localhost:8080/foo/bar/baz/sheep
+{:mounted-sub-context <span class="org-string">"/bar"</span>, :request-context <span class="org-string">"/foo/bar"</span>, :request-path-info <span class="org-string">"/baz/sheep"</span>}
+$ curl http://localhost:8080/foo/bar
+{:mounted-sub-context <span class="org-string">"/bar"</span>, :request-context <span class="org-string">"/foo/bar"</span>, :request-path-info <span class="org-string">"/"</span>}
+$ curl http://localhost:8080/foo/
+{:mounted-sub-context <span class="org-string">"/"</span>, :request-context <span class="org-string">"/foo"</span>, :request-path-info <span class="org-string">"/"</span>}
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-7">
+<h2 id="sec-7"><span class="section-number-2">5.7.</span> Sessions</h2>
+<div class="outline-text-2" id="text-7">
+
+
+<p>
+  Immutant provides a session store that can be used with the <a href="https://github.com/mmcgrana/ring/blob/master/ring-core/src/ring/middleware/session.clj">Ring session middleware</a> (and any other middleware that uses
+  <code>ring.middleware.session</code>, like <a href="https://github.com/brentonashworth/sandbar">Sandbar</a>). The Immutant session store
+  uses the session provided by the underlying JBoss AS7 servlet
+  container, which automatically replicates session data across a
+  cluster. You create the store by calling
+  <a href="./apidoc/immutant.web.session.html#var-servlet-store">immutant.web.session/servlet-store</a>, and use it by passing it as the
+  <code>:store</code> option to <code>ring.middleware.session/wrap-session</code>:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> my.ns
+  (<span class="org-builtin">:require</span> [ring.middleware.session <span class="org-builtin">:as</span> ring-session]
+            [immutant.web <span class="org-builtin">:as</span> web]
+            [immutant.web.session <span class="org-builtin">:as</span> immutant-session]))
+
+(web/start
+ (ring-session/wrap-session
+  #'my-handler
+  {<span class="org-builtin">:store</span> (immutant-session/servlet-store)}))
+</pre>
+
+
+<p>
+  <b>Note:</b> since this store is managed by the servlet container, the
+  session cookie (<code>JSESSIONID</code> by default) is itself managed at the
+  servlet level. Any options other than <code>:store</code> passed to
+  <code>ring.middleware.session/wrap-session</code> (<code>:cookie-attrs</code>,
+  <code>:cookie-name</code>, or <code>:root</code>) won't affect the actual cookie used to
+  store the session id client-side. To set the cookie name or
+  attributes, see <a href="#web-session-options">session options</a>.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-web-session-options">
+<h3 id="web-session-options"><a id="sec-7-1" name="sec-7-1"></a><span class="section-number-3">5.7.1.</span> Setting session timeout and cookie attributes</h3>
+<div class="outline-text-3" id="text-web-session-options">
+
+
+<p>   
+   By default, sessions using the <a href="./apidoc/immutant.web.session.html#var-servlet-store">servlet-store</a> time out after 30
+   minutes. To alter that for an application, call
+   <a href="./apidoc/immutant.web.session.html#var-set-session-timeout!">immutant.web.session/set-session-timeout!</a> and pass it a new minute
+   value:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> my.ns
+  (<span class="org-builtin">:require</span> [immutant.web.session <span class="org-builtin">:as</span> immutant-session]))
+
+(immutant-session/set-session-timeout! 1440) <span class="org-comment-delimiter">;; </span><span class="org-comment">1 day</span>
+</pre>
+
+
+<p>
+   You can also override the attributes used for the session cookie
+   via <a href="./apidoc/immutant.web.session.html#var-set-session-cookie-attributes!">immutant.web.session/set-session-cookie-attributes!</a>, giving it
+   the following keyword arguments:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="left"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Attribute</th><th class="left" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">:cookie-name</td><td class="left">"JSESSIONID"</td><td class="left">The name used for the cookie.</td></tr>
+<tr><td class="left">:domain</td><td class="left"><i>none</i></td><td class="left">The domain name where the cookie is valid.</td></tr>
+<tr><td class="left">:http-only</td><td class="left"><code>false</code></td><td class="left">Should the cookie be used only for http?</td></tr>
+<tr><td class="left">:max-age</td><td class="left"><code>=-1=</code> <i>(never expire)</i></td><td class="left">The amount of time the cookie should be retained by the client, in seconds.</td></tr>
+<tr><td class="left">:path</td><td class="left"><i>the context path</i></td><td class="left">The path where the cookie is valid.</td></tr>
+<tr><td class="left">:secure</td><td class="left"><code>false</code></td><td class="left">Should the cookie be used only for secure connections?</td></tr>
+</tbody>
+</table>
+
+
+
+<p>
+   This function can be called multiple times, and will only alter the
+   attributes passed to it:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> my.ns
+  (<span class="org-builtin">:require</span> [immutant.web.session <span class="org-builtin">:as</span> immutant-session]))
+
+(immutant-session/set-session-cookie-attributes!
+ <span class="org-builtin">:cookie-name</span> <span class="org-string">"my-session"</span>)
+
+(immutant-session/set-session-cookie-attributes!
+ <span class="org-builtin">:http-only</span> true
+ <span class="org-builtin">:max-age</span>   86400)
+
+</pre>
+
+
+<p>
+   Changes made by either of these functions apply to all of the web
+   endpoints deployed within application, since they all share the
+   same session.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-7-2">
+<h3 id="sec-7-2"><span class="section-number-3">5.7.2.</span> Duplicate session cookies</h3>
+<div class="outline-text-3" id="text-7-2">
+
+
+<p>
+   Since sessions using the <a href="./apidoc/immutant.web.session.html#var-servlet-store">servlet-store</a> are managed at the container
+   level, the cookie used to convey the session id to the client is
+   managed outside of Ring. However, Ring is unaware of this
+   management, and will attempt to send its own cookie (named
+   "ring-session" by default). This can cause to cookies with the same
+   value (the session id) but different names ("JSESSIONID" and
+   "ring-session") to be sent to the client. This situation is
+   harmless, other than the extra few bytes needed for each request.
+</p>
+<p>
+   You can prevent this by ensuring Ring's <code>:cookie-name</code> is the same
+   name used by the session container. Immutant will detect this case,
+   and prevent the cookie duplication. 
+</p>
+<p>
+   There are three options for achieving this cookie name parity:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> my.ns
+  (<span class="org-builtin">:require</span> [ring.middleware.session <span class="org-builtin">:as</span> ring-session]
+            [immutant.web <span class="org-builtin">:as</span> web]
+            [immutant.web.session <span class="org-builtin">:as</span> immutant-session]))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">option 1: pass the default "JSESSIONID" name to Ring's wrap-session</span>
+(web/start
+ (ring-session/wrap-session
+  #'my-handler
+  {<span class="org-builtin">:store</span>       (immutant-session/servlet-store)
+   <span class="org-builtin">:cookie-name</span> <span class="org-string">"JSESSIONID"</span>}))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">option 2: set the container's cookie name to Ring's default of "ring-session"</span>
+(immutant-session/set-session-cookie-attributes!
+ <span class="org-builtin">:cookie-name</span> <span class="org-string">"ring-session"</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">option 3: use a non-default cookie name</span>
+(web/start
+ (ring-session/wrap-session
+  #'my-handler
+  {<span class="org-builtin">:store</span>       (immutant-session/servlet-store)
+   <span class="org-builtin">:cookie-name</span> <span class="org-string">"session-schmession"</span>}))
+
+(immutant-session/set-session-cookie-attributes!
+ <span class="org-builtin">:cookie-name</span> <span class="org-string">"session-schmession"</span>)
+</pre>
+
+
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-8">
+<h2 id="sec-8"><span class="section-number-2">5.8.</span> Locating dirs within the application root</h2>
+<div class="outline-text-2" id="text-8">
+
+
+<p>
+  When a web server is embedded within an application, it's fine to
+  make assumptions about relative paths because the current working
+  directory for both the app and the web server is the same. 
+</p>
+<p>
+  But this is not the case for Immutant, or any app server, because
+  multiple applications may be deployed on it simultaneously. The app
+  server is a single process, with a single current working directory,
+  and an application should not assume that the server's current
+  directory matches its root.
+</p>
+<p>
+  But certain libraries require actual filesystem paths to directories
+  at runtime, so you need to be able to determine the path to the 
+  application root. You can do so via the <a href="./apidoc/immutant.util.html#var-app-relative">immutant.util/app-relative</a> 
+  function.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-8-1">
+<h3 id="sec-8-1"><span class="section-number-3">5.8.1.</span> An example</h3>
+<div class="outline-text-3" id="text-8-1">
+
+
+<p>
+  This won't work on Immutant because "src" is a relative path, and it
+  will resolve relative to the server's working directory, not the
+  application's:
+</p>
+
+
+
+<pre class="src src-clojure">(noir.server/load-views <span class="org-string">"src/my_project_name/views"</span>)
+</pre>
+
+
+<p>  
+  But this <b>will</b> work on Immutant, because it returns an absolute path:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.util <span class="org-builtin">:as</span> util])
+(noir.server/load-views (util/app-relative <span class="org-string">"src/my_project_name/views"</span>))
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-9">
+<h2 id="sec-9"><span class="section-number-2">5.9.</span> Serving static resources</h2>
+<div class="outline-text-2" id="text-9">
+
+
+<p>
+  Web applications often need to serve static resources such as
+  images, stylesheets, or javascript files. Ideally, you would use
+  <a href="https://github.com/ring-clojure/ring/wiki/Static-Resources">Ring middleware</a> to accomplish this, but prior to Ring 1.2, those
+  functions do not support applications mounted at a context path
+  other than the root. So until 1.2 is released, you can use
+  <a href="./apidoc/immutant.web.html#var-wrap-resource">immutant.web/wrap-resource</a>, which is a drop-in replacement for
+  <a href="http://mmcgrana.github.com/ring/ring.middleware.resource.html#var-wrap-resource">http://mmcgrana.github.com/ring/ring.middleware.resource.html#var-wrap-resource</a>.
+</p>
+<p>
+  The recommended approach is to store your resources beneath
+  <code>resources/public/</code> and then reference that path when adding the
+  middleware: 
+</p>
+
+
+
+<pre class="src src-clojure">(immutant.web/wrap-resource app <span class="org-string">"public"</span>)
+</pre>
+
+
+<p>
+  This works because the <code>resources/</code> directory is automatically added
+  to the application's effective class path at deployment.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-10">
+<h2 id="sec-10"><span class="section-number-2">5.10.</span> Mounting Servlets instead of Ring handlers</h2>
+<div class="outline-text-2" id="text-10">
+
+
+<p>
+  Though mounting a Ring handler at a particular [sub] context path
+  will suffice for the majority of Clojure web apps, some may find it
+  too limiting and require the full capabilities of the Java Servlet
+  API. Of course, like any servlet container, you can always wrap your
+  servlets up into a war file and deploy it to Immutant. But you don't
+  have to. You can mount any servlet to a context path via the
+  <a href="./apidoc/immutant.web.html#var-start-servlet">immutant.web/start-servlet</a> function.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-10-1">
+<h3 id="sec-10-1"><span class="section-number-3">5.10.1.</span> Pedestal</h3>
+<div class="outline-text-3" id="text-10-1">
+
+
+<p>
+   <a href="http://pedestal.io">Pedestal</a> is a brand-new Clojure web framework for building rich
+   client applications requiring asynchronous processing, server-sent
+   events, response streaming, etc. As such, its entry-point is not a
+   simple Ring handler but a special servlet comprised of a stack of
+   "interceptors". So to mount a Pedestal servlet when your Leiningen
+   project is deployed to Immutant, you might put the following in
+   your <code>immutant.init</code> namespace:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> immutant.init
+  (<span class="org-builtin">:require</span> [immutant.web             <span class="org-builtin">:as</span> web]
+            [io.pedestal.service.http <span class="org-builtin">:as</span> http]
+            [hello.service            <span class="org-builtin">:as</span> service]))
+
+(web/start-servlet <span class="org-string">"/"</span> (<span class="org-builtin">::http/servlet</span> (http/create-servlet service/service)))
+</pre>
+
+
+<p>   
+   The <code>io.pedestal.service.http/create-servlet</code> function returns a
+   map of many things, including the actual Servlet instance
+   associated with the keyword, <code>:io.pedestal.service.http/servlet</code>.
+</p>
+<p>
+   During development, you might alternatively mount the <code>dev/service</code>
+   var similarly at a REPL after including <code>:immutant {:nrepl-port    7888}</code> in your <code>project.clj</code> and deploying it to a running Immutant
+   instance.
+</p>
+<p>
+   NOTE: As of this writing, Pedestal route tables are not
+   context-aware, so unless you deploy them to the root context, you
+   must hard-code the context path in your routes.
+</p></div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="initialization.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="jobs.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 0.10.0</div>
+</div>
+
+
+</body></html>

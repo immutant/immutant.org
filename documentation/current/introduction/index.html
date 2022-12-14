@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="content-type">
+<title>Eclipse Ceylon: Quick introduction</title>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+<link href="https://plus.google.com/102481741611133754149" rel="publisher">
+<link href="/stylesheets/themes/paraiso-dark.css" rel="stylesheet">
+<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet">
+<link href="/stylesheets/print.css" media="print" rel="stylesheet">
+<!--[if lt IE 8]>
+      <link href="/stylesheets/ie.css" media="screen, projection" rel="stylesheet" />
+    <![endif]--><link href="/blog/blog.atom" rel="alternate" type="application/atom+xml">
+<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro%7CPT+Sans%7CPT+Sans:700%7CInconsolata%7CInconsolata:700%7CArvo" rel="stylesheet" type="text/css">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script><script src="/js/jquery-ui-1.8.22.custom.min.js"></script><script src="/js/common.js"></script><script src="/js/rainbow.min.js"></script><script src="/js/language/ceylon.js"></script><script src="/js/language/java.js"></script><script src="/js/language/javascript.js"></script><script src="/js/language/html.js"></script><script src="/js/language/shell.js"></script><script>
+     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    
+                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    
+                        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    
+                        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+     
+    ga('create', 'UA-24748553-1', 'auto');
+    ga('send', 'pageview');
+    
+    </script>
+</head>
+<body class="bp">
+    <div class="docspage" id="container">
+      <div class="header-bar">
+        <!-- /cannot use a partial as it loses the page.tab context :( -->
+        <div id="header">
+          <a href="/" id="header-logo">
+            <h1 id="ceylon">
+              Ceylon
+            </h1>
+          </a>
+          <div id="header-tagline">
+            <p id="say_more_more_clearly">
+              Say more, more clearly
+            </p>
+          </div>
+          <div id="menu">
+            <ul id="menu-core">
+<li id="notselected">
+                <a href="/">HOME</a>
+              </li>
+              <li id="selected">
+                <a href="/documentation/current">LEARN</a>
+              </li>
+              <li id="notselected">
+                <a href="/download">DOWNLOAD</a>
+              </li>
+              <li id="notselected">
+                <a href="/community">COMMUNITY</a>
+              </li>
+              <li id="notselected">
+                <a href="/code">CODE</a>
+              </li>
+              <li id="notselected">
+                <a href="/blog">BLOG</a>
+              </li>
+            </ul>
+</div>
+        </div>
+      </div>
+      <div id="primary-content">
+        <div id="sidebar">
+          <div class="point-dark-top">
+             
+          </div>
+          <div class="sidebar-dark">
+            <h3 id="quick_introduction"><a href="/documentation/1.3/introduction">Quick introduction</a></h3>
+            
+            <h3 id="tour_of_ceylon"><a href="/documentation/1.3/tour">Tour of Ceylon</a></h3>
+            
+            <h3 id="ceylon_walkthrough"><a href="/documentation/1.3/walkthrough">Ceylon Walkthrough</a></h3>
+            
+            <h3 id="examples"><a href="/documentation/1.3/examples">Examples</a></h3>
+            
+            <!--  ### [Tutorial videos](/documentation/1.3/videos) -->
+            
+            
+            <h3 id="language_specification"><a href="/documentation/1.3/spec">Language specification</a></h3>
+            
+            <h3 id="reference"><a href="/documentation/1.3/reference">Reference</a></h3>
+            
+            <h3 id="language_module_api"><a href="https://modules.ceylon-lang.org/repo/1/ceylon/language/1.3.3/module-doc/index.html">Language module API</a></h3>
+            
+            <h3 id="faqs"><a href="/documentation/1.3/faq">FAQs</a></h3>
+            
+            <h3 id="roadmap"><a href="/documentation/1.3/roadmap">Roadmap</a></h3>
+            
+            <h3 id="ceylon_ide_for_intellij"><a href="/documentation/1.3/ide/intellij">Ceylon IDE for IntelliJ</a></h3>
+            
+            <h3 id="ceylon_ide_for_eclipse"><a href="/documentation/1.3/ide/eclipse">Ceylon IDE for Eclipse</a></h3>
+            
+            <h3 id="vertx"><a href="http://vertx.io/docs/vertx-core/ceylon/">Vert.x</a></h3>
+          </div>
+          <div class="point-dark-end">
+             
+          </div>
+        </div>
+        <div id="banner">
+          <div id="text">
+            Learn
+          </div>
+        </div>
+        <div id="core-page">
+          <h1 id="quick_introduction-2">Quick introduction</h1>
+          
+          <p id="its_impossible_to_get_to...">It's impossible to get to the essence of a programming language by looking
+          at a list of its features. What really <em>makes</em> the language is how all the
+          little bits work together. And that's impossible to appreciate without
+          actually writing code. In this section we're going to try to quickly show
+          you enough of Ceylon to get you interested enough to actually try it out.
+          This is <em>not</em> a comprehensive feature list!</p>
+          
+          <h2 id="support_for_java_and_javascript_virtual_machines">Support for Java and JavaScript virtual machines</h2>
+          
+          <p id="write_your_code_in_ceylon...">Write your code in Ceylon, and have it run on the JVM, on Node.js, or in a
+          web browser. Some modules are platform-dependent, but the language itself
+          is equally at home on Java and JavaScript virtual machines.</p>
+          
+          <p id="ceylon_modules_may_be_deployed...">Ceylon modules may be deployed on Ceylon's own JVM-based module runtime,
+          on any OSGi container, on the
+          <a href="http://nodejs.org/api/modules.html">Node.js module system</a>, on
+          <a href="http://vertx.io/docs/vertx-core/ceylon/">Vert.x</a>, or in
+          a browser using <a href="http://requirejs.org/">require.js</a>.</p>
+          
+          <p id="when_cross_platform_execution_is...">When cross-platform execution is not a priority, Ceylon is designed to
+          <a href="#interoperation_with_native_java_and_javascript">interoperate</a>
+          smoothly and elegantly with native Java and JavaScript code and libraries,
+          and even with Maven and OSGi. Thus, Ceylon programs have access to not one
+          but two huge ecosystems of reusable building blocks.</p>
+          
+          <h2 id="choice_of_ides">Choice of IDEs</h2>
+          
+          <p id="ceylon_benefits_from_a_completely...">Ceylon benefits from a completely fully-featured IDE as a plugin for the
+          two leading Java development environments:</p>
+          
+          <ul>
+<li>the <a href="../ide/eclipse/features">Eclipse platform</a>, and</li>
+          <li>
+<a href="../ide/intellij/features">IntelliJ IDEA</a> or Android Studio.</li>
+          </ul>
+<p id="a_major_benefit_of_ceylons...">A major benefit of Ceylon's extremely strong static type system is that it
+          enables extremely powerful tooling. You'll need an IDE to take full advantage
+          of this. Fortunately, whether you're an Eclipse user or an IntelliJ fanboy,
+          you'll feel right at home.</p>
+          
+          <h2 id="a_familiar_readable_syntax">A familiar, readable syntax</h2>
+          
+          <p id="ceylons_syntax_is_ultimately_derived...">Ceylon's syntax is ultimately derived from C. So if you're a C, Java, or C#
+          programmer, you'll immediately feel right at home. Indeed, one of the goals
+          of the language is for most code to be immediately readable to people who
+          <em>aren't</em> Ceylon programmers, and who <em>haven't</em> studied the syntax of the
+          language.</p>
+          
+          <p id="heres_what_it_looks_like...">Here's what it looks like to define and call a simple function:</p>
+          
+          <!-- try-pre:
+              class Point(x, y) { shared Float x; shared Float y; }
+          
+          -->
+          
+          
+          <!-- try-post:
+          
+              print(dist);
+          -->
+          
+          
+          <!-- implicit-id:point: class Point() { shared Float x = 0.0; shared Float y = 0.0; } -->
+          
+          
+          <!-- cat-id:point -->
+          
+          
+          <!-- cat: void m() { -->
+          
+          
+          <pre data-language="ceylon"><code>function distance(Point from, Point to) {
+    return ((from.x-to.x)^2 + (from.y-to.y)^2)^0.5;
+}
+
+value dist = distance(Point(0.0, 0.0), Point(2.0, 3.0));
+</code></pre>
+          
+          <!-- cat: } -->
+          
+          
+          <p id="heres_how_we_create_and...">Here's how we create and iterate a sequence:</p>
+          
+          <!-- cat: void m() { -->
+          
+          
+          <pre data-language="ceylon"><code>String[] names = ["Tom", "Dick", "Harry"];
+for (name in names) {
+    print("Hello, ``name``!");
+}
+</code></pre>
+          
+          <!-- cat: } -->
+          
+          
+          <p id="if_these_code_examples_look...">If these code examples look boring to you, well, that's kinda the idea -
+          they're boring because you understood them immediately!</p>
+          
+          <p id="heres_a_simple_class">Here's a simple class:</p>
+          
+          <!-- try-post:
+          
+              value counter = Counter();
+              print(counter.currentValue);
+              counter.increment();
+              print(counter.currentValue);
+          -->
+          
+          
+          <pre data-language="ceylon"><code>class Counter(count=0) {
+    variable Integer count;
+    shared Integer currentValue {
+        return count;
+    }
+    shared void increment() {
+        count++;
+    }
+}
+</code></pre>
+          
+          <p id="if_thats_a_little_too...">If that's a little <em>too</em> boring, you're allowed to write it more compactly
+          using fat arrows instead of brace-delimited blocks:</p>
+          
+          <!-- try-post:
+          
+              value counter = Counter();
+              print(counter.currentValue);
+              counter.increment();
+              print(counter.currentValue);
+          -->
+          
+          
+          <pre data-language="ceylon"><code>class Counter(count=0) {
+    variable Integer count;
+    shared Integer currentValue =&gt; count;
+    shared void increment() =&gt; count++;
+}
+</code></pre>
+          
+          <h2 id="declarative_syntax_for_treelike_structures">Declarative syntax for treelike structures</h2>
+          
+          <p id="hierarchical_structures_are_so_common...">Hierarchical structures are so common in computing that we have dedicated
+          languages like XML for dealing with them. But when we want to have procedural
+          code that interacts with hierarchical structures, the "impedence mismatch"
+          between XML and our programming language causes all sorts of problems. So
+          Ceylon has a special built-in "declarative" syntax for defining hierarchical
+          structures. This is especially useful for creating user interfaces:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>Table table = Table {
+    title = "Squares";
+    rows = 5;
+    Border {
+        padding = 2;
+        weight = 1;
+    };
+    Column {
+        heading = "x";
+        width = 10;
+        String content(Integer row) {
+            return row.string;
+        }
+    },
+    Column {
+        heading = "x^2";
+        width=10;
+        String content(Integer row) {
+            return (row^2).string;
+        }
+    }
+};
+</code></pre>
+          
+          <p id="but_its_much_more_generally...">But it's much more generally useful, forming a great foundation for
+          expressing everything from build scripts to test suites:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>Suite tests = Suite {
+    Test { 
+        "sqrt() function";
+        void run() {
+            assert(sqrt(1)==1);
+            assert(sqrt(4)==2);
+            assert(sqrt(9)==3);
+        }
+    },
+    Test {
+        "sqr() function";
+        void run() {
+            assert(sqr(1)==1);
+            assert(sqr(2)==4);
+            assert(sqr(3)==9);
+        }
+    }
+};
+</code></pre>
+          
+          <p id="any_framework_that_combines_java...">Any framework that combines Java and XML requires special purpose-built
+          tooling to achieve type-checking and authoring assistance. Ceylon frameworks
+          that make use of Ceylon's built-in support for expressing treelike structures
+          get this, and more, for free.</p>
+          
+          <h2 id="principal_typing_union_types_and_intersection_types">Principal typing, union types, and intersection types</h2>
+          
+          <p id="ceylons_conventional_looking_syntax_hides...">Ceylon's conventional-looking syntax hides a powerful type system that is
+          able to express things that other static type systems simply can't. All
+          types in Ceylon can, at least in principle, be expressed within the type
+          system itself. There are no primitive types, arrays, or anything similar.
+          Even <code>Null</code> is a class. Even <code>Tuple</code> is a class.</p>
+          
+          <p id="the_type_system_is_based...">The type system is based on analysis of "best" or <em>principal</em> types. For
+          every expression, a unique, most specific type may be determined, without
+          the need to analyze the rest of the expression in which it appears. And all
+          types used internally by the compiler are <em>denotable</em> — that is, they
+          can be expressed within the language itself. What this means in practice is
+          that the compiler always produces errors that humans can understand, even
+          when working with complex generic types. The Ceylon compiler <em>never</em> produces
+          error messages involving mystifying non-denotable types like Java's
+          <code>List&lt;capture#3-of ?&gt;</code>.</p>
+          
+          <p id="an_integral_part_of_this...">An integral part of this system of denotable principal types is first-class
+          support for union and intersection types. A <em>union type</em> is a type which
+          accepts instances of any one of a list of types:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>Person | Organization personOrOrganization = ... ;
+</code></pre>
+          
+          <p id="an_intersection_type_is_a...">An <em>intersection type</em> is a type which accepts instances of all of a list
+          of types:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>Printable &amp; Sized &amp; Persistent printableSizedPersistent = ... ;
+</code></pre>
+          
+          <p id="union_and_intersection_types_are...">Union and intersection types are often useful as a convenience in ordinary
+          code. (Once you start using Ceylon, you'll be amazed just how often!) More
+          importantly, they help make things that are complex and magical in other
+          languages—especially generic type argument inference—simple and
+          straightforward in Ceylon.</p>
+          
+          <p id="for_example_consider_the_following">For example, consider the following:</p>
+          
+          <!-- try-post:
+          
+              print(stuff);
+              print(joinedStuff);
+          -->
+          
+          
+          <pre data-language="ceylon"><code>value stuff = { "hello", "world", 1.0, -1 };
+value joinedStuff = concatenate({"hello", "world"}, {1.0, 2.0}, {});
+</code></pre>
+          
+          <p id="the_compiler_automatically_infers_the...">The compiler automatically infers the types:</p>
+          
+          <ul>
+<li>
+<code>Iterable&lt;String|Float|Integer&gt;</code> for <code>stuff</code>, and</li>
+          <li>
+<code>Sequential&lt;String|Float&gt;</code> for <code>joinedStuff</code>.</li>
+          </ul>
+<p id="these_are_the_correct_principal...">These are the correct principal types of the expressions. We didn't need
+          to explictly specify any types anywhere.</p>
+          
+          <p id="weve_worked_hard_to_keep...">We've worked hard to keep the type system <a href="/blog/2012/01/18/type-system-manifesto">quite simple at its core</a>.
+          This makes the language easier to learn, and helps control the number of
+          buggy or unintuitive corner cases. And a highly regular type system also
+          makes it easier to write generic code.</p>
+          
+          <h2 id="mixin_inheritance">Mixin inheritance</h2>
+          
+          <p id="like_java_ceylon_has_classes...">Like Java, Ceylon has classes and interfaces. A class may inherit a single
+          superclass, and an arbitrary number of interfaces. An interface may inherit
+          an arbitrary number of other interfaces, but may not extend a class other
+          than <code>Object</code>. And interfaces can't have fields, but may define concrete
+          members. Thus, Ceylon supports a restricted kind of multiple inheritance,
+          called <em>mixin inheritance</em>.</p>
+          
+          <!-- try-post:
+          
+          empty.printIt();
+          -->
+          
+          
+          <pre data-language="ceylon"><code>interface Sized {
+    shared formal Integer size;
+    shared Boolean empty =&gt; size==0;
+    string =&gt; empty then "EMPTY" else "SIZE: ``size``";
+}
+
+interface Printable {
+    shared void printIt() =&gt; print(this);
+}
+
+object empty satisfies Sized &amp; Printable {
+    size =&gt; 0;
+}
+</code></pre>
+          
+          <p id="what_really_distinguishes_interfaces_from...">What really distinguishes interfaces from classes in Ceylon is that
+          interfaces are <em>stateless</em>. That is, an interface may not directly hold
+          a reference to another object, it may not have initialization logic, and
+          it may not be directly instantiated. Thus, Ceylon neatly avoids the need
+          to perform any kind of "linearization" of supertypes.</p>
+          
+          <h2 id="polymorphic_attributes">Polymorphic attributes</h2>
+          
+          <p id="ceylon_doesnt_have_fields_at...">Ceylon doesn't have fields, at least not in the traditional sense.
+          Instead, <em>attributes</em> are polymorphic, and may be refined by a subclass,
+          just like methods in other object-oriented languages.</p>
+          
+          <p id="an_attribute_might_be_a...">An attribute might be a reference to an object:</p>
+          
+          <!-- try-pre:
+              String firstName = "John";
+              String lastName = "Doe";
+          
+          -->
+          
+          
+          <!-- try-post:
+          
+              print(name);
+          -->
+          
+          
+          <!-- cat: String firstName = "John"; -->
+          
+          
+          <!-- cat: String lastName = "Doe"; -->
+          
+          
+          <pre data-language="ceylon"><code>String name = firstName + " " + lastName;
+</code></pre>
+          
+          <p id="it_might_be_a_getter">It might be a getter:</p>
+          
+          <!-- try-pre:
+              String firstName = "John";
+              String lastName = "Doe";
+          
+          -->
+          
+          
+          <!-- try-post:
+          
+              print(name);
+          -->
+          
+          
+          <!-- cat: String firstName = "John"; -->
+          
+          
+          <!-- cat: String lastName = "Doe"; -->
+          
+          
+          <pre data-language="ceylon"><code>String name {
+    return firstName + " " + lastName;
+}
+</code></pre>
+          
+          <p id="or_it_might_be_a...">Or it might be a getter/setter pair:</p>
+          
+          <!-- try-pre:
+              variable String fullName = "John Doe";
+          
+          -->
+          
+          
+          <!-- try-post:
+          
+              print(name);
+              name = "Pietje Pluk";
+              print(name);
+          -->
+          
+          
+          <!-- cat: variable String fullName = "John Doe"; -->
+          
+          
+          <pre data-language="ceylon"><code>String name {
+    return fullName;
+}
+
+assign name {
+    fullName = name;
+}
+</code></pre>
+          
+          <p id="in_ceylon_we_dont_need...">In Ceylon, we don't need to write trival getters or setters which merely
+          mediate access to a field. The state of a class is always
+          <a href="../tour/classes/#abstracting_state_using_attributes">completely abstracted</a>
+          from clients of the class: we can change a reference attribute to a
+          getter/setter pair without breaking clients.</p>
+          
+          <h2 id="typesafe_null_and_flow_sensitive_typing">Typesafe null and flow-sensitive typing</h2>
+          
+          <p id="theres_no_nullpointerexception_in_ceylon...">There's no <code>NullPointerException</code> in Ceylon, nor anything similar. Ceylon
+          requires us to be explicit when we declare a value that might be null, or
+          a function that might return null. For example, if <code>name</code> might be null,
+          we must declare it like this:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>String? name = ...
+</code></pre>
+          
+          <p id="which_is_actually_just_an...">Which is actually just an abbreviation for:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>String | Null name = ...
+</code></pre>
+          
+          <p id="an_attribute_of_type_string...">An attribute of type <code>String?</code> might refer:</p>
+          
+          <ul>
+<li>to an actual string, the <code>String</code> half of the union type, or</li>
+          <li>the value <code>null</code>, the only instance of the class <code>Null</code>.</li>
+          </ul>
+<p id="so_ceylon_wont_let_us...">So Ceylon won't let us do anything useful with a value of type <code>String?</code>
+          without first checking that it isn't null using the special <code>if (exists ...)</code>
+          construct.</p>
+          
+          <!-- try-post:
+          
+              hello(null);
+              hello("John Doe");
+          -->
+          
+          
+          <pre data-language="ceylon"><code>void hello(String? name) {
+    if (exists name) {
+        //name is of type String here
+        print("Hello, ``name``!");
+    }
+    else {
+        print("Hello, world!");
+    }
+}
+</code></pre>
+          
+          <p id="similarly_theres_no_classcastexception_in...">Similarly, there's no <code>ClassCastException</code> in Ceylon. Instead, the
+          <code>if (is ...)</code> and <code>case (is ...)</code> constructs test and narrow the type of
+          a value in a single step. Indeed, the code above is really just a clearer
+          way of writing the following:</p>
+          
+          <!-- try-post:
+          
+              hello(null);
+              hello("John Doe");
+          -->
+          
+          
+          <pre data-language="ceylon"><code>void hello(String? name) {
+    if (is String name) {
+        //name is of type String here
+        print("Hello, ``name``!");
+    }
+    else {
+        print("Hello, world!");
+    }
+}
+</code></pre>
+          
+          <p id="the_ability_to_narrow_the...">The ability to narrow the type of a value using conditions like <code>is</code> and
+          <code>exists</code> is called <em>flow-sensitive typing</em>. Another scenario where
+          flow-sensitive typing comes into play is assertions:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>if ('/' in string) {
+    value bits = string.split('/'.equals); // bits has type {String+}
+    value first = bits.first;              // so first is not null
+    value second = bits.rest.first;        // but second _could_ be null
+    //assert that second is in 
+    //fact _not_ null, since we happen to
+    //know that the string contains a /
+    assert (exists second);
+    value firstLength = first.size;   //first is not null
+    value secondLength = second.size; //second is not null
+    ...
+}
+</code></pre>
+          
+          <h2 id="enumerated_subtypes">Enumerated subtypes</h2>
+          
+          <p id="in_object_oriented_programming_its...">In object-oriented programming, it's usually considered bad practice to
+          write long <code>switch</code> statements that handle all subtypes of a type. It
+          makes the code less extensible. Adding a new subtype to the system causes
+          the <code>switch</code> statements to break. So in object-oriented code, we usually
+          try to refactor constructs like this to use an abstract method of the
+          supertype that is refined as appropriate by subtypes.</p>
+          
+          <p id="however_theres_a_class_of...">However, there's a class of problems where this kind of refactoring isn't
+          appropriate. In most object-oriented languages, these problems are usually
+          solved using the "visitor" pattern. Unfortunately, a visitor class actually
+          winds up more verbose than a <code>switch</code>, and no more extensible. There is, on
+          the other hand, one major advantage of the visitor pattern: the compiler
+          produces an error if we add a new subtype and forget to handle it in one
+          of our visitors.</p>
+          
+          <p id="ceylon_gives_us_the_best...">Ceylon gives us the best of both worlds. We can specify an <em>enumerated list
+          of subtypes</em> when we define a supertype:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>abstract class Node() of Leaf | Branch {}
+</code></pre>
+          
+          <p id="and_we_can_write_a...">And we can write a <code>switch</code> statement that handles all the enumerated subtypes:</p>
+          
+          <!-- try:
+              abstract class Node() of Leaf | Branch {}
+              class Leaf() extends Node() {}
+              class Branch() extends Node() {}
+          
+              Node node = Leaf() ;
+              switch (node)
+              case (is Leaf) { print("Leaf"); }
+              case (is Branch) { print("Branch"); }
+          -->
+          
+          
+          <pre data-language="ceylon"><code>Node node = ... ;
+switch (node)
+case (is Leaf) { 
+    //node is of type Leaf here
+    print(node.leafValue); 
+}
+case (is Branch) {
+    //node is of type Branch here
+    doSomething(node.leftNode);
+    doSomething(node.rightNode);
+}
+</code></pre>
+          
+          <p id="now_if_we_were_to...">Now, if we were to add a new subtype of <code>Node</code>, we would be forced to add the
+          new subtype to the <code>of</code> clause of the declaration of <code>Node</code>, and the compiler
+          would produce an error at every <code>switch</code> statement which doesn't handle the
+          new subtype.</p>
+          
+          <h2 id="type_aliases_and_type_inference">Type aliases and type inference</h2>
+          
+          <p id="fully_explicit_type_declarations_very...">Fully-explicit type declarations very often make difficult code much easier to
+          understand, and they're an invaluable aid to understanding the API of a library
+          or framework. But there are plenty of occasions where the repetition of a verbose
+          generic type just detracts from the readability of the code. We've observed that:</p>
+          
+          <ol>
+<li>explicit type annotations are of much less value for local declarations, and</li>
+          <li>repetition of a parameterized type with the same type arguments is common
+          and extremely noisy in Java.</li>
+          </ol>
+<p id="ceylon_addresses_the_first_problem...">Ceylon addresses the first problem by allowing type inference for local
+          declarations. For example:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>value names = LinkedList { "Tom", "Dick", "Harry" };
+</code></pre>
+          
+          <br><!-- try: --><pre data-language="ceylon"><code>function sqrt(Float x) =&gt; x^0.5;
+</code></pre>
+          
+          <br><!-- try: --><pre data-language="ceylon"><code>for (item in order.items) { ... }
+</code></pre>
+          
+          <p id="on_the_other_hand_for...">On the other hand, for declarations which are accessible outside the compilation
+          unit in which they are defined, Ceylon requires an explicit type annotation. We
+          think this makes the code more readable, not less, and it makes the compiler more
+          efficient and less vulnerable to stack overflows.</p>
+          
+          <p id="type_inference_works_somewhat_better...">Type inference works somewhat better in Ceylon than in other languages with
+          subtyping, because Ceylon has union and intersection types. Consider a map with
+          a heterogeneous key type:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>value numbers = HashMap { "one"-&gt;1.0, "zero"-&gt;0.0, 1-&gt;1.0, 0-&gt;0.0 };
+</code></pre>
+          
+          <p id="the_inferred_type_of_numbers...">The inferred type of <code>numbers</code> is <code>HashMap&lt;String|Integer,Float&gt;</code>.</p>
+          
+          <p id="ceylon_addresses_the_second_problem...">Ceylon addresses the second problem via <em>type aliases</em>, which are very similar
+          to a <code>typedef</code> in C. A type alias can act as an abbreviation for a generic type
+          together with its type arguments:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>interface Strings =&gt; List&lt;String&gt;;
+</code></pre>
+          
+          <p id="we_encourage_the_use_of...">We encourage the use of both these language features where - <em>and only where</em> -
+          they make the code more readable.</p>
+          
+          <h2 id="higher_order_functions">Higher-order functions</h2>
+          
+          <p id="like_most_programming_languages_ceylon...">Like most programming languages, Ceylon lets you pass a function to another
+          function.</p>
+          
+          <p id="a_function_which_operates_on...">A function which operates on other functions is called a <em>higher-order function</em>.
+          For example:</p>
+          
+          <!-- try: -->
+          
+          
+          <!-- id:repeat -->
+          
+          
+          <pre data-language="ceylon"><code>void repeat(Integer times, 
+        void iterate(Integer i)) {
+    for (i in 1..times) {
+        iterate(i);
+    }
+} 
+</code></pre>
+          
+          <p id="when_invoking_a_higher_order...">When invoking a higher-order function, we can either pass a reference to a named
+          function:</p>
+          
+          <!-- try-pre:
+              void repeat(Integer times, 
+                      void iterate(Integer i)) {
+                  for (i in 1..times) {
+                      iterate(i);
+                  }
+              } 
+          
+          -->
+          
+          
+          <!-- cat-id:repeat -->
+          
+          
+          <!-- cat: void m() { -->
+          
+          
+          <pre data-language="ceylon"><code>void printSqr(Integer i) {
+    print(i^2);
+}
+
+repeat(5, printSqr);
+</code></pre>
+          
+          <!-- cat: } -->
+          
+          
+          <p id="or_we_can_specify_the...">Or we can specify the argument function inline, either like this:</p>
+          
+          <!-- try-pre:
+              void repeat(Integer times, 
+                      void iterate(Integer i)) {
+                  for (i in 1..times) {
+                      iterate(i);
+                  }
+              } 
+          
+          -->
+          
+          
+          <!-- cat-id:repeat -->
+          
+          
+          <!-- cat: void m() { -->
+          
+          
+          <pre data-language="ceylon"><code>repeat(5, (i) =&gt; print(i^2));
+</code></pre>
+          
+          <!-- cat: } -->
+          
+          
+          <p id="or_using_a_named_argument...">Or, using a named argument invocation, like this:</p>
+          
+          <!-- try-pre:
+              void repeat(Integer times, 
+                      void iterate(Integer i)) {
+                  for (i in 1..times) {
+                      iterate(i);
+                  }
+              } 
+          
+          -->
+          
+          
+          <!-- cat-id:repeat -->
+          
+          
+          <!-- cat: void m() { -->
+          
+          
+          <pre data-language="ceylon"><code>repeat {
+    times = 5;
+    void iterate(Integer i) {
+        print(i^2);
+    }
+};
+</code></pre>
+          
+          <!-- cat: } -->
+          
+          
+          <p id="its_even_possible_to_pass...">It's even possible to pass a member method or attribute reference to a
+          higher-order function:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>value names = { "Gavin", "Stef", "Tom", "Tako" };
+value uppercaseNames = names.map(String.uppercased);
+</code></pre>
+          
+          <p id="unlike_other_statically_typed_languages...">Unlike other statically-typed languages with higher-order functions, Ceylon
+          has a single function type, the interface <code>Callable</code>. There's no need to
+          adapt a function to a single-method interface type, nor is there a menagerie
+          of function types <code>F</code>, <code>F1</code>, <code>F2</code>, etc, with some arbitrary limit of 24
+          parameters or whatever. Nor are Ceylon's function types defined primitively.</p>
+          
+          <p id="instead_callable_accepts_a_tuple...">Instead, <code>Callable</code> accepts a tuple type argument that captures the parameter
+          types of the function. Of course, there's also a single class <code>Tuple</code> that
+          abstracts over all tuple types! This means that it's possible to write
+          higher-order functions that abstract over functions with parameter lists of
+          differing lengths.</p>
+          
+          <h2 id="tuples">Tuples</h2>
+          
+          <p id="a_tuple_is_a_kind...">A <em>tuple</em> is a kind of linked list, where the static type of the list
+          encodes the static type of each element of the list, for example:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>[Float,Float,Float,String] origin = [0.0, 0.0, 0.0, "origin"];
+</code></pre>
+          
+          <p id="we_can_access_the_elements...">We can access the elements of the list without needing to typecast:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>[Float,Float,Float,String] xyzWithLabel = ... ;
+
+[Float,Float] xy = [xyzWithLabel[0], xyzWithLabel[1]];
+String label = xyzWithLabel[3];
+</code></pre>
+          
+          <p id="tuples_are_useful_as_a...">Tuples are useful as a convenience, and they really come into play if you
+          want to take advantage of Ceylon's support for typesafe metaprogramming. For
+          example, you can take a tuple, and "spread" it across the parameters of a
+          function.</p>
+          
+          <p id="suppose_we_have_a_nice...">Suppose we have a nice function for formatting dates:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>String formatDate(String format, 
+                  Integer day, 
+                  Integer|String month, 
+                  Integer year) { ... }
+</code></pre>
+          
+          <p id="and_we_have_a_date...">And we have a date, held in a tuple:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>[Integer,String,Integer] date = [25, "March", 2013];
+</code></pre>
+          
+          <p id="then_we_can_print_the...">Then we can print the date like this:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>print(formatDate("dd MMMMM yyyy", *date));
+</code></pre>
+          
+          <p id="of_course_ceylons_support_for...">Of course, Ceylon's support for tuples is just some syntax sugar over the
+          perfectly ordinary generic class <code>Tuple</code>.</p>
+          
+          <h2 id="comprehensions">Comprehensions</h2>
+          
+          <p id="filtering_and_transforming_streams_of...">Filtering and transforming streams of values is one of the main things
+          computers are good at. Therefore, Ceylon provides a special syntax which makes
+          these operations especially convenient. Anywhere you could provide a list of
+          expressions (for example, a sequence instantiation, or a "vararg"), Ceylon
+          lets you write a comprehension instead. For example, the following expression
+          instantiates a sequence of names:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>[ for (p in people) p.firstName + " " + p.lastName ]
+</code></pre>
+          
+          <p id="this_expression_gives_us_a...">This expression gives us a sequence of adults:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>[ for (p in people) if (p.age&gt;=18) p ]
+</code></pre>
+          
+          <p id="this_expression_produces_a_map...">This expression produces a <code>Map</code> of name to <code>Person</code>:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>HashMap { for (p in people) p.firstName + " " + p.lastName -&gt; p }
+</code></pre>
+          
+          <p id="this_expression_creates_a_set...">This expression creates a set of employers:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>HashSet { for (p in people) for (j in p.jobs) j.organization }
+</code></pre>
+          
+          <p id="here_were_using_a_comprehension...">Here, we're using a comprehension as a function argument to format and print
+          the names:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>print(", ".join { for (p in people) p.firstName + " " + p.lastName });
+</code></pre>
+          
+          <h2 id="simplified_generics_with_fully_reified_types">Simplified generics with fully-reified types</h2>
+          
+          <p id="ceylons_type_system_is_more...">Ceylon's type system is more powerful than Java's, but it's also simpler.
+          The Ceylon compiler never even uses any kind of "non-denotable" type to reason
+          about your code. And there's no wildcard capture, implicit constraints on type
+          arguments, nor "raw" types. Compared to other languages, generics-related error
+          messages are much more understandable to humans.</p>
+          
+          <p id="furthermore_ceylons_type_system_is...">Furthermore, Ceylon's type system is <em>fully reified</em> at runtime. In particular,
+          generic type arguments are reified, eliminating many frustrations that result
+          from type argument erasure in Java. For example, Ceylon lets us write
+          <code>if (is Map&lt;String,Object&gt; map)</code>.</p>
+          
+          <p id="finally_theres_a_cleaner_more...">Finally, there's a cleaner, more regular syntax for generic type constraints.
+          The syntax for declaring type constraints on a type parameter looks very similar
+          to a class or interface declaration.</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>shared Value sum&lt;Value&gt;({Value+} values) 
+        given Value satisfies Summable&lt;Value&gt; { ... }
+</code></pre>
+          
+          <h2 id="declaration_site_and_use_site_variance">Declaration-site and use-site variance</h2>
+          
+          <p id="ceylon_supports_two_approaches_to...">Ceylon supports two approaches to <em>variance</em> of generic types:</p>
+          
+          <ul>
+<li>
+<em>declaration-site variance</em>, which is used throughout the Ceylon language module
+          and SDK, and is considered the idiomatic approach, and</li>
+          <li>
+<em>use-site variance</em>, which is used mainly for interoperating with Java's generic
+          types.</li>
+          </ul>
+<p id="with_use_site_variance_a...">With use-site variance, a type <em>argument</em> is marked covariant (<code>out</code>) or
+          contravariant (<code>in</code>). Thus, this type is contravariant in its first argument,
+          and covariant in its second argument:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>Map&lt;in String, out Number&lt;out Anything&gt;&gt;
+</code></pre>
+          
+          <p id="in_java_this_type_would...">(In Java, this type would be written <code>Map&lt;? super String, ? extends Number&lt;? extends Object&gt;&gt;</code>.)</p>
+          
+          <p id="with_declaration_site_variance_the...">With declaration-site variance, the system we strongly prefer in Ceylon, a
+          type <em>parameter</em> may be marked as covariant or contravariant by the class or
+          interface that declares the type parameter. Consider:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>shared interface Dictionary&lt;in Key, out Item&gt; {
+     shared formal Item? get(Key key);
+}
+</code></pre>
+          
+          <p id="given_this_declaration_of_dictionary">Given this declaration of <code>Dictionary</code>:</p>
+          
+          <ul>
+<li>a <code>Dictionary&lt;String,Integer&gt;</code> is also a <code>Dictionary&lt;String,Object&gt;</code>, since <code>get()</code>
+          produces an <code>Integer</code>, which is also an <code>Object</code>, and</li>
+          <li>a <code>Dictionary&lt;List&lt;Character&gt;,Integer&gt;</code> is also a <code>Dictionary&lt;String,Integer&gt;</code>,
+          since <code>get()</code> accepts any key which is an <code>List&lt;Character&gt;</code>, and every <code>String</code>
+          is a <code>List&lt;Character&gt;</code>.</li>
+          </ul>
+<p id="so_code_which_uses_the...">So code which uses the <code>Dictionary</code> interface doesn't have to worry about variance.</p>
+          
+          <h2 id="operator_polymorphism">Operator polymorphism</h2>
+          
+          <p id="ceylon_features_a_rich_set...">Ceylon features a rich set of operators, including most of the operators supported
+          by C and Java. True operator overloading is not supported. Sorry, you can't define
+          the pope operator <code>&lt;+|:-)</code> in Ceylon. And you can't redefine <code>*</code> to mean something
+          that has nothing to do with numeric multiplication. However, each operator predefined
+          by the language is defined to act upon a certain class or interface type, allowing
+          application of the operator to any class which extends or satisfies that type. We
+          call this approach <em>operator polymorphism</em>.</p>
+          
+          <p id="for_example_the_ceylon_language...">For example, the Ceylon language module defines the interface <code>Summable</code>.</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>shared interface Summable&lt;Other&gt; of Other
+        given Other satisfies Summable&lt;Other&gt; {
+    shared formal Other plus(Other that);
+}
+</code></pre>
+          
+          <p id="and_the__operation_is...">And the <code>+</code> operation is defined for values which are assignable to <code>Summable</code>.
+          The following expression:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>x+y
+</code></pre>
+          
+          <p id="is_merely_an_abbreviation_of">Is merely an abbreviation of:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>x.plus(y)
+</code></pre>
+          
+          <p id="likewise__is_defined_in...">Likewise, <code>&lt;</code> is defined in terms of the interface <code>Comparable</code>, <code>*</code> in terms of
+          the interface <code>Numeric</code>, and so on.</p>
+          
+          <h2 id="typesafe_metaprogramming_and_annotations">Typesafe metaprogramming and annotations</h2>
+          
+          <p id="ceylon_provides_sophisticated_support_for...">Ceylon provides sophisticated support for meta-programming, including a unique
+          typesafe metamodel. Generic code may invoke members reflectively without the
+          need for unsafe typecasts and string passing.</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>Class&lt;Person,[Name]&gt; personClass = `Person`;
+Person gavin = personClass(Name("Gavin", "King"));
+</code></pre>
+          
+          <p id="ceylon_supports_program_element_annotations...">Ceylon supports program element annotations, with a streamlined syntax. Indeed,
+          annotations are even used for language modifiers like <code>abstract</code> and <code>shared</code> -
+          which are not keywords in Ceylon - and for embedding API documentation for the
+          documentation compiler:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>"The user login action"
+by ("Trompon the Elephant")
+throws (`class DatabaseException`,
+        "if database access fails")
+see (`function LogoutAction.logout`)
+scope (session)
+action { description="Log In"; url="/login"; }
+shared deprecated
+void login(Request request, Response response) {
+    ...
+}
+</code></pre>
+          
+          <p id="well_that_was_a_bit...">Well, that was a bit of an extreme example!</p>
+          
+          <h2 id="modularity">Modularity</h2>
+          
+          <p id="ceylon_features_language_level_package...">Ceylon features language-level package and module constructs, along with language-level
+          access control via the <code>shared</code> annotation which can be used to express block-local,
+          package-private, module-private, and public visibility for program elements. There's
+          no equivalent to Java's <code>protected</code>. Dependencies between modules are specified in
+          the module descriptor:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>"This module is just a silly example. You'll 
+ find some proper modules in the community 
+ repository [Ceylon Herd][Herd].
+
+ [Herd]: https://herd.ceylon-lang.org
+
+ Happy Herding!"
+module org.jboss.example "1.0.0" {         
+    import ceylon.math "1.1.0";
+    import ceylon.file "1.1.1";
+}
+</code></pre>
+          
+          <p id="for_execution_on_the_java...">For execution on the Java Virtual Machine, the Ceylon compiler directly produces
+          <code>.car</code> module archives in module repositories. You're never exposed to unpackaged
+          <code>.class</code> files. The <code>.car</code> archives come with built-in metadata for the Ceylon
+          module runtime, for OSGi containers, and for Maven.</p>
+          
+          <p id="at_runtime_modules_are_loaded...">At runtime, modules are loaded according to a peer-to-peer classloader architecture,
+          based upon the same module runtime that is used at the very core of JBoss AS 7.
+          Alternatively, Ceylon modules are compatible with OSGi, and with Vert.x.</p>
+          
+          <p id="for_execution_on_javascript_virtual...">For execution on JavaScript Virtual Machines, the Ceylon compiler produces CommonJS
+          modules, which are compatible with <code>node.js</code> and <code>require.js</code>.</p>
+          
+          <p id="ceylon_herd_is_a_community..."><a href="https://herd.ceylon-lang.org">Ceylon Herd</a> is a community module repository for
+          sharing open source modules.</p>
+          
+          <h2 id="interoperation_with_native_java_and_javascript">Interoperation with native Java and JavaScript</h2>
+          
+          <p id="code_written_in_ceylon_interoperates...">Code written in Ceylon interoperates elegantly with native code written for the
+          platform. For example, we can make use of Java's collections, which are exposed
+          to Ceylon code in the module <code>java.base</code>:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>import java.util { HashMap }
+
+value javaHashMap = HashMap&lt;String,Integer&gt;();
+javaHashMap.put("zero", 0);
+javaHashMap.put("one", 1);
+javaHashMap.put("two", 2);
+print(javaHashMap.values());
+</code></pre>
+          
+          <p id="notice_that_basic_types_like...">Notice that basic types like <code>String</code> and <code>Integer</code> may be passed completely
+          transparently between the two languages.</p>
+          
+          <p id="we_can_even_call_untyped...">We can even call untyped native JavaScript APIs, inside a <code>dynamic</code> block:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>dynamic {
+    dynamic req = XMLHttpRequest();
+    req.onreadystatechange = void () {
+        if (req.readyState==4) {
+            document.getElementById("greeting")
+                    .innerHTML = req.status==200
+                            then req.responseText
+                            else "error";
+        }
+    };
+    req.open("GET", "/sayHello", true);
+    req.send();
+}
+</code></pre>
+          
+          <p id="try_it">Try it!</p>
+          
+          <pre data-language="ceylon"><code>dynamic { alert("Hello, World!"); }
+</code></pre>
+          
+          <p id="its_even_possible_for_a...">It's even possible for a cross-platform module to interoperate with native
+          Java <em>and</em> JavaScript code, via use of the <code>native</code> annotation.</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>native void hello();
+
+native("jvm") void hello()
+    =&gt; System.out.println("hello");
+
+native("js") void hello() {
+    dynamic {
+        console.log("hello");
+    }
+}
+</code></pre>
+          
+          <h2 id="a_real_specification">A real specification</h2>
+          
+          <p id="the_ceylon_language_is_defined...">The Ceylon language is defined by an exhaustive, but highly readable,
+          160-page <a href="../spec">specification</a>. The specification predates the compiler,
+          and functions as its foundation.</p>
+          
+          <h2 id="take_the_tour">Take the Tour</h2>
+          
+          <p id="were_done_with_the_introduction...">We're done with the introduction. Take the <a href="../tour">tour of Ceylon</a>
+          for a full in-depth tutorial.</p>
+        </div>
+      </div>
+      <div class="footer-bar">
+        <div id="footer">
+          <div id="footer-core">
+            <div id="sponsor">
+              <a href="http://www.eclipse.org" title="Eclipse Ceylon is an Eclipse Project"><img src="/images/Eclipse2014_RGB.svg" width="150px"></a>
+              <span>
+                Eclipse Ceylon is an <a href="http://www.eclipse.org">Eclipse Project</a>.
+              </span>
+            </div>
+            <div id="copyright">
+              <p id="copyright_©_2010_2019_red...">Copyright © 2010-2019,
+              Red Hat, Inc. or third-party contributors —
+              Ceylon is a trademark of the <a href="http://www.eclipse.org">Eclipse Foundation</a> —
+              <a href="https://eclipse.org/legal/termsofuse.php">Terms of use</a> —
+              <a href="https://eclipse.org/legal/privacy.php">Privacy policy</a> —
+              <a href="http://www.eclipse.org/legal/copyright.php">Copyright agent</a> —
+              <a href="http://www.eclipse.org/legal">Legal</a>.</p>
+              <p id="site_generated_on_october_14...">Site generated on October 14, 2019 at 14:12</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+<script type="text/javascript">
+              var disqus_shortname = 'ceylonlang';
+              (function () {
+                var s = document.createElement('script'); s.async = true;
+                s.src = "//disqus.com/forums/ceylonlang/count.js";
+                (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+              }());
+              </script>
+</html>

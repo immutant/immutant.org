@@ -1,0 +1,553 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Interactive Development</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Interactive Development" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2013-05-28 10:11:16 EDT" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="daemons.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="jboss.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 11. Interactive Development</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="interactive.html#sec-1">11.1. Introduction</a>
+<ul>
+<li><a href="interactive.html#interactive-binding">11.1.1. Binding To An Interface</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-2">11.2. nREPL</a>
+<ul>
+<li><a href="interactive.html#sec-2-1">11.2.1. Starting nREPL</a>
+<ul>
+<li><a href="interactive.html#sec-2-1-1">11.2.1.1. Starting nREPL Via :nrepl-port</a></li>
+<li><a href="interactive.html#sec-2-1-2">11.2.1.2. Starting nREPL Programatically</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-2-2">11.2.2. Connecting to nREPL</a>
+<ul>
+<li><a href="interactive.html#interactive-nrepl-emacs">11.2.2.1. Connecting via Emacs</a></li>
+<li><a href="interactive.html#sec-2-2-2">11.2.2.2. Connecting via reply</a></li>
+<li><a href="interactive.html#sec-2-2-3">11.2.2.3. Connecting via Counterclockwise</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-2-3">11.2.3. Shutting Down nREPL</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-3">11.3. Swank</a>
+<ul>
+<li><a href="interactive.html#sec-3-1">11.3.1. Starting Swank</a>
+<ul>
+<li><a href="interactive.html#sec-3-1-1">11.3.1.1. Starting Swank Via :swank-port</a></li>
+<li><a href="interactive.html#sec-3-1-2">11.3.1.2. Starting Swank Programatically</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-3-2">11.3.2. Connecting to Swank</a>
+<ul>
+<li><a href="interactive.html#sec-3-2-1">11.3.2.1. Connecting via Emacs</a></li>
+<li><a href="interactive.html#sec-3-2-2">11.3.2.2. Connecting via Vim</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-3-3">11.3.3. Shutting Down Swank</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-4">11.4. Reloading application dependencies</a></li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">11.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  Immutant provides two methods for connecting to an application's runtime
+  with a REPL: Swank (for emacs &amp; possibly vim if you are feeling adventurous)
+  and nREPL (for any nREPL client).
+</p>
+<p>
+  Each REPL service runs on a unique port, allowing you to have REPLs into
+  multiple applications within the same Immutant, or multiple REPLs within the
+  same application.
+</p>
+<p>
+  REPL services can be started at application deploy time, or dynamically from
+  application code. REPLs started dynamically can be also be shutdown
+  dynamically. REPLs started at deploy time and any dynamically started REPLs
+  that are not shut down by the application will be shut down when the
+  application is undeployed.
+</p>
+<p>
+  See <a href="./initialization.html#initialization-configuration">initialization configuration</a>
+  for a list of configuration options (like <code>:swank-port</code> and <code>:nrepl-port</code>)
+  and how to apply them.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-interactive-binding">
+<h3 id="interactive-binding"><a id="sec-1-1" name="sec-1-1"></a><span class="section-number-3">11.1.1.</span> Binding To An Interface</h3>
+<div class="outline-text-3" id="text-interactive-binding">
+
+
+<p>
+   AS7 is setup to use multiple network interfaces, and allows you to specify
+   different interfaces for your server: <i>public</i>, <i>management</i>, and <i>unsecure</i>.
+   By default, these interfaces are all the same - <code>127.0.0.1</code>. But you can
+   specify different addresses for each named interface, aiding in the security
+   setup of your management ports.
+</p>
+<p>
+   By default, the repl services started by Immutant bind to the <i>management</i>
+   interface.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">11.2.</span> nREPL</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  <a href="https://github.com/clojure/tools.nrepl">nREPL</a> is a client/server protocol that provides a Clojure REPL
+  across a network. It has several clients that support it.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-1">
+<h3 id="sec-2-1"><span class="section-number-3">11.2.1.</span> Starting nREPL</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   You can start a nREPL service using one (or both) of two methods:
+   specifying an <code>:nrepl-port</code> option in your configuration, or by
+   calling <a href="./apidoc/immutant.repl.html#var-start-nrepl">immutant.repl/start-nrepl</a> from application code.
+</p>
+
+</div>
+
+<div class="outline-4" id="outline-container-2-1-1">
+<h4 id="sec-2-1-1"><span class="section-number-4">11.2.1.1.</span> Starting nREPL Via :nrepl-port</h4>
+<div class="outline-text-4" id="text-2-1-1">
+
+
+<p>
+    To have Immutant start a nREPL service on your behalf, you can specify
+    an open port for it to bind to using the <code>:nrepl-port</code> configuration
+    option. When using this option, Immutant will automatically
+    <a href="#interactive-binding">bind to the management interface</a>.
+</p>
+<p>
+    Immutant will write the nREPL port to a file beneath your
+    project's <code>target/</code> directory called <code>repl-port</code>, following
+    Leiningen's convention. Many nREPL clients will use this file to
+    establish a connection. Setting <code>:nrepl-port</code> to 0 will cause the
+    OS to return an unused port, avoiding potential conflicts. You can
+    set this in your <code>~/.lein/profiles.clj</code> file to start an nREPL
+    service for each application you deploy:
+</p>
+
+
+
+<pre class="src src-clojure">{<span class="org-builtin">:user</span> {<span class="org-builtin">:plugins</span> [[lein-immutant <span class="org-string">"0.18.1"</span>]]
+        <span class="org-builtin">:immutant</span> {<span class="org-builtin">:nrepl-port</span> 0}}}
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-2-1-2">
+<h4 id="sec-2-1-2"><span class="section-number-4">11.2.1.2.</span> Starting nREPL Programatically</h4>
+<div class="outline-text-4" id="text-2-1-2">
+
+
+<p>
+    You can also start a nREPL service from your own code, which is useful
+    if you need to start it in response to a runtime event or bind to an
+    interface other than the <a href="#interactive-binding">management interface</a>. To do so, simply
+    call <a href="./apidoc/immutant.repl.html#var-start-nrepl">immutant.repl/start-nrepl</a>. nREPL allows you to have multiple
+    services in the same runtime, so you need to save the return value of
+    <code>start-nrepl</code> if you want to shut down the nREPL service yourself:
+</p>
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">bind to the given port on the management interface, and</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">save the service handle for later</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">nrepl</span> (immutant.repl/start-nrepl 4242))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">bind to the given port and interface</span>
+(immutant.repl/start-nrepl <span class="org-string">"127.0.0.1"</span> 4242)
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-2">
+<h3 id="sec-2-2"><span class="section-number-3">11.2.2.</span> Connecting to nREPL</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+
+</div>
+
+<div class="outline-4" id="outline-container-interactive-nrepl-emacs">
+<h4 id="interactive-nrepl-emacs"><a id="sec-2-2-1" name="sec-2-2-1"></a><span class="section-number-4">11.2.2.1.</span> Connecting via Emacs</h4>
+<div class="outline-text-4" id="text-interactive-nrepl-emacs">
+
+
+<p>
+    To connect to nREPL from Emacs, first install <a href="https://github.com/kingtim/nrepl.el">nrepl.el</a>, then connect
+    to your running nREPL via the <code>nrepl</code> function (<code>M-x nrepl RET</code>). 
+    It will prompt you for the host and port.
+</p>
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-2-2-2">
+<h4 id="sec-2-2-2"><span class="section-number-4">11.2.2.2.</span> Connecting via reply</h4>
+<div class="outline-text-4" id="text-2-2-2">
+
+
+<p>
+    <a href="https://github.com/trptcolin/reply/">reply</a> is an enhanced REPL for Clojure, and supports connecting to an
+    nREPL service. Currently, the simplest way to install <code>reply</code> is to
+    clone the git repository and follow the <a href="https://github.com/trptcolin/reply/#readme">intructions in its README</a>.
+</p>
+<p>
+    Once you have <code>reply</code> installed, you can connect to your remote nREPL:
+</p>
+
+
+
+<pre class="src src-sh"><span class="org-comment-delimiter"># </span><span class="org-comment">connect to an nREPL bound to port 4242 on localhost</span>
+$ reply --skip-default-init --attach 4242 
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">connect to an nREPL bound to port 4242 on 10.0.0.10</span>
+$ reply --skip-default-init --attach 10.0.0.10:4242 
+</pre>
+
+
+<p>
+    Note that we are passing the <code>--skip-default-init</code> option above. <code>reply</code>
+    attempts to load some libraries that won't exist in the application's
+    runtime within Immutant, and also creates handy <code>quit</code> &amp; <code>exit</code> functions
+    that map to <code>System/exit</code>, which will shutdown the entire application server.
+    Passing the <code>--skip-default-init</code> option prevents <code>reply</code> from attempting
+    to load those missing libraries and prevents the definition of <code>quit</code> and
+    <code>exit</code>.
+</p>
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-2-2-3">
+<h4 id="sec-2-2-3"><span class="section-number-4">11.2.2.3.</span> Connecting via Counterclockwise</h4>
+<div class="outline-text-4" id="text-2-2-3">
+
+
+<p>
+    <a href="http://code.google.com/p/counterclockwise/">Counterclockwise</a> is an Eclipse plugin for Clojure development. You can
+    use it to connect to your Immutant nREPL session via <i>Window</i> -&gt; 
+    <i>Connect to REPL</i>. It will prompt you for an ip address and port to 
+    connect to.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-3">
+<h3 id="sec-2-3"><span class="section-number-3">11.2.3.</span> Shutting Down nREPL</h3>
+<div class="outline-text-3" id="text-2-3">
+
+
+<p>
+   Immutant will automatically shutdown any nREPL services for you when your
+   application is undeployed, but if you need to do so before undeploy you
+   can do so using the <a href="./apidoc/immutant.repl.html#var-stop-nrepl">immutant.repl/stop-nrepl</a> function. You'll need to
+   pass it the service handle returned by the <code>start-nrepl</code> call:
+</p>
+
+
+
+<pre class="src src-clojure">(clojure.repl/stop-nrepl nrepl)
+</pre>
+
+
+<p>
+   Since you need the service handle to stop an nREPL service, you can only
+   manually stop nREPL's you start yourself. If you start an nREPL service
+   via the <code>:nrepl-port</code> configuration option, your only recourse is to
+   allow Immutant to shut it down for you on undeploy.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-3">
+<h2 id="sec-3"><span class="section-number-2">11.3.</span> Swank</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  Swank is the server protocol for <a href="http://www.common-lisp.net/project/slime/">SLIME (The Superior Lisp Interactive Mode for Emacs)</a>, and Clojure Swank &amp; SLIME support are
+  provided by <a href="https://github.com/technomancy/swank-clojure">swank-clojure</a> &amp; <a href="https://github.com/technomancy/clojure-mode">clojure-mode</a>, respectively. 
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-3-1">
+<h3 id="sec-3-1"><span class="section-number-3">11.3.1.</span> Starting Swank</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+<p>
+   You can start a Swank service using one (or both) of two methods:
+   specifying a <code>:swank-port</code> option in your configuration, or by
+   calling <a href="./apidoc/immutant.repl.html#var-start-swank">immutant.repl/start-swank</a> from application code. No matter
+   which method you use, there can only be one Swank service running
+   for an application.
+</p>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-1-1">
+<h4 id="sec-3-1-1"><span class="section-number-4">11.3.1.1.</span> Starting Swank Via :swank-port</h4>
+<div class="outline-text-4" id="text-3-1-1">
+
+
+<p>
+    To have Immutant start a Swank service on your behalf, you can specify
+    an open port for it to bind to using the <code>:swank-port</code> configuration
+    option. When using this option, Immutant will automatically
+    <a href="#interactive-binding">bind to the management interface</a>.
+</p>
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-1-2">
+<h4 id="sec-3-1-2"><span class="section-number-4">11.3.1.2.</span> Starting Swank Programatically</h4>
+<div class="outline-text-4" id="text-3-1-2">
+
+
+<p>
+    You can also start a Swank service from your own code, which is useful
+    if you need to start it in response to a runtime event or bind to an
+    interface other than the <a href="#interactive-binding">management interface</a>. To do so, simply
+    call <a href="./apidoc/immutant.repl.html#var-start-swank">immutant.repl/start-swank</a>:
+</p>
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">bind to the given port on the management interface</span>
+(clojure.repl/start-swank 4242)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">bind to the given port and interface</span>
+(clojure.repl/start-swank <span class="org-string">"127.0.0.1"</span> 4242)
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-3-2">
+<h3 id="sec-3-2"><span class="section-number-3">11.3.2.</span> Connecting to Swank</h3>
+<div class="outline-text-3" id="text-3-2">
+
+
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-1">
+<h4 id="sec-3-2-1"><span class="section-number-4">11.3.2.1.</span> Connecting via Emacs</h4>
+<div class="outline-text-4" id="text-3-2-1">
+
+
+<p>
+    Installing SLIME under emacs to work with Clojure can be a painful and
+    confusing process if done manually. The easiest way to do it is to follow
+    the <a href="https://github.com/technomancy/swank-clojure">clojure-jack-in instructions</a> from <code>swank-clojure</code>, and "jack in" to
+    any Leiningen project. This will trigger <code>clojure-mode</code> to download and
+    install a version of SLIME that is compatible with <code>swank-clojure</code>.
+    Once you have jacked in at least once, you can then connect to the Swank
+    service within your Immutant application via the <code>slime-connect</code> emacs
+    function (<code>M-x slime-connect RET</code>).
+</p>
+<p>
+    Note that <code>swank-clojure</code> is now deprecated in favor of <a href="#interactive-nrepl-emacs">nrepl.el</a>.
+</p>
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-2">
+<h4 id="sec-3-2-2"><span class="section-number-4">11.3.2.2.</span> Connecting via Vim</h4>
+<div class="outline-text-4" id="text-3-2-2">
+
+
+<p>
+    You can connect to Swank from vim with <a href="http://www.vim.org/scripts/script.php?script_id=2531">SLIMV</a>. See the SLIMV installation
+    instructions for more details.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-3-3">
+<h3 id="sec-3-3"><span class="section-number-3">11.3.3.</span> Shutting Down Swank</h3>
+<div class="outline-text-3" id="text-3-3">
+
+
+<p>
+   Immutant will automatically shutdown the Swank service for you when your
+   application is undeployed, but if you need to do so before undeploy you
+   can do so using the <a href="./apidoc/immutant.repl.html#var-stop-swank">immutant.repl/stop-swank</a> function:
+</p>
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">no arg needed since only one Swank server can exist for the application</span>
+(clojure.repl/stop-swank)
+</pre>
+
+
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-4">
+<h2 id="sec-4"><span class="section-number-2">11.4.</span> Reloading application dependencies</h2>
+<div class="outline-text-2" id="text-4">
+
+
+<p>  
+  Immutant provides tools to aid interactive repl-based development via
+  the <a href="./apidoc/immutant.dev.html">immutant.dev</a> namespace. Currently, it provides three functions for 
+  reloading, updating, and viewing your application's dependencies in container:
+</p>
+<ul>
+<li><a href="./apidoc/immutant.dev.html#var-reload-project!">immutant.dev/reload-project!</a> Resets the application's class loader
+    to provide the paths and dependencies in the from the given
+    project. If no project is provided, the <code>project.clj</code> for the
+    appplication is loaded from disk. If used under clojure &gt; 1.3.0,
+    this will also make any new data readers from the dependencies
+    available.  Returns the project map.
+</li>
+<li><a href="./apidoc/immutant.dev.html#var-add-dependencies!">immutant.dev/add-dependencies!</a> Adds the given dependencies into
+    the currently active project's dependency set and resets the
+    application's class loader to provide the paths and dependencies
+    from that project (via <code>reload-project!</code>). Each dep can either be
+    a lein coordinate ('[foo-bar "0.1.0"]) or a path (as a String) to
+    be added to <code>:source-paths</code>.  Returns the project map.
+</li>
+<li><a href="./apidoc/immutant.dev.html#var-current-project">immutant.dev/current-project</a> Returns the map representing the
+    currently active leiningen project. This will be the last project
+    reloaded by <code>reload-project!</code>, or the map read from <code>project.clj</code>
+    if <code>reload-project!</code> has yet to be called.
+
+<p>    
+    Examples:
+</p>
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">assuming we have an app loaded that initially only depends on clojure</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(from its project.clj)</span>
+(<span class="org-builtin">require</span> '[immutant.dev <span class="org-builtin">:as</span> dev]
+         '[clojure.java.io <span class="org-builtin">:as</span> io])
+
+(<span class="org-builtin">:dependencies</span> (dev/current-project)) <span class="org-comment-delimiter">; </span><span class="org-comment">=&gt; #{[org.clojure/clojure "1.4.0"]}</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">let's add more deps</span>
+(dev/add-dependencies! '[dep-1 <span class="org-string">"1.0.0"</span>] '[dep/two <span class="org-string">"0.1.0-SNAPSHOT"</span>] <span class="org-string">"extra"</span>)
+
+(<span class="org-builtin">:dependencies</span> (dev/current-project)) <span class="org-comment-delimiter">; </span><span class="org-comment">=&gt; #{[org.clojure/clojure "1.4.0"] [dep-1 "1.0.0"] [dep/two "0.1.0-SNAPSHOT"]}</span>
+
+(<span class="org-builtin">:source-paths</span> (dev/current-project)) <span class="org-comment-delimiter">; </span><span class="org-comment">=&gt; [["/path/to/app/root/src", "/path/to/app/root/extra"]]</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">now let's reset the deps to those specified in project.clj</span>
+(dev/reload-dependencies!)
+
+(<span class="org-builtin">:dependencies</span> (dev/current-project)) <span class="org-comment-delimiter">; </span><span class="org-comment">=&gt; #{[org.clojure/clojure "1.4.0"]}</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">let's add a path to :source-paths directly</span>
+(dev/reload-project! ((dev/current-project) [<span class="org-builtin">:source-paths</span>]
+                      #(<span class="org-builtin">conj</span> % <span class="org-string">"something"</span>)))
+
+(<span class="org-builtin">:source-paths</span> (dev/current-project)) <span class="org-comment-delimiter">; </span><span class="org-comment">=&gt; [["/path/to/app/root/src", "/path/to/app/root/something"]]</span>
+
+</pre>
+
+</li>
+</ul>
+
+
+
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="daemons.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="jboss.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 1.0.0.beta1</div>
+</div>
+
+
+</body></html>

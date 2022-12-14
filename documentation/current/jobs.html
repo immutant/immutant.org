@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Immutant Jobs</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Immutant Jobs" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2014-06-17 09:19:09 EDT" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="web.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="messaging.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 7. Immutant Jobs</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="jobs.html#sec-1">7.1. Introduction</a></li>
+<li><a href="jobs.html#sec-2">7.2. Scheduling Jobs</a>
+<ul>
+<li><a href="jobs.html#jobs-cron-syntax">7.2.1. Cron Syntax</a></li>
+<li><a href="jobs.html#sec-2-2">7.2.2. A Note On Dynamic Singleton Jobs</a></li>
+<li><a href="jobs.html#sec-2-3">7.2.3. Job MBeans</a></li>
+</ul>
+</li>
+<li><a href="jobs.html#sec-3">7.3. Unscheduling Jobs</a></li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">7.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  Jobs in Immutant are simply functions that execute on a recurring
+  schedule. They fire asynchronously, outside of the thread where they
+  are defined, and fire in the same runtime as the rest of the
+  application, so have access to any shared state.
+</p>
+<p>
+  Jobs are built on top of the <a href="http://quartz-scheduler.org">Quartz</a> library, and support scheduling
+  via a <i>cron</i>-like specification or a more finer-grained <i>at</i>-style
+  syntax.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">7.2.</span> Scheduling Jobs</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  Scheduling a job is as simple as calling <a href="./apidoc/immutant.jobs.html#var-schedule">immutant.jobs/schedule</a>:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> my.ns
+  (<span class="org-builtin">:require</span> [immutant.jobs <span class="org-builtin">:as</span> jobs]))
+
+(jobs/schedule <span class="org-string">"my-cron-job-name"</span>  
+               #(<span class="org-builtin">println</span> <span class="org-string">"I fire every 5s, forever."</span>)
+               <span class="org-string">"*/5 * * * * ?"</span>
+               <span class="org-builtin">:singleton</span> false)
+
+(jobs/schedule <span class="org-builtin">:my-at-job-name</span>  
+               #(<span class="org-builtin">println</span> <span class="org-string">"I fire 4 times with a 10ms delay between each, starting in 500ms."</span>)
+               <span class="org-builtin">:in</span> 500   <span class="org-comment-delimiter">; </span><span class="org-comment">ms</span>
+               <span class="org-builtin">:every</span> 10 <span class="org-comment-delimiter">; </span><span class="org-comment">ms</span>
+               <span class="org-builtin">:repeat</span> 3
+               <span class="org-builtin">:singleton</span> false)
+</pre>
+
+
+<p>
+  The <code>schedule</code> function takes two or three arguments, and also
+  accepts options:
+</p>
+<ul>
+<li><code>name</code> - the name of the job. If the given name is the same as the
+    name of previously scheduled job in the application's runtime, the
+    prior job will be unscheduled and the new job will be scheduled in
+    its place. The name can be either a keyword or a string, but
+    keywords will be converted to strings internally, so <code>:foo</code> and
+    "foo" will refer to the same job.
+</li>
+<li><code>f</code> - the zero argument function that will be invoked each time
+    the job fires.
+</li>
+<li><code>spec</code> - the optional <i>cron</i>-style specification string if you are
+    scheduling a <i>cron</i>-style job. It is an error to provide a spec
+    along with any of the <i>at</i> options. See <a href="#jobs-cron-syntax">Cron Syntax</a>.
+</li>
+<li><code>options</code> - options are specified as alternating key &amp; value
+    literals. Valid options are:
+
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="left"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="left" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">:at</td><td class="left"><i>none</i>, <i>now</i> if no <code>spec</code> provided</td><td class="left">Specifies when the <i>at</i> job should start firing. Can be a java.util.Date, ms since epoch, or a time in HH:mm format (see below). Can't be specified with a <code>spec</code> or <code>:in</code>.</td></tr>
+<tr><td class="left">:in</td><td class="left"><i>none</i></td><td class="left">Specifies when the <i>at</i> job should start firing, in ms from now, as a period alias, or as a period spec (see below). Can't be specified with a <code>spec</code> or <code>:at</code>.</td></tr>
+<tr><td class="left">:every</td><td class="left"><i>none</i></td><td class="left">Specifies the delay interval between <i>at</i> job firings, in ms, as a period alias, or as a period spec (see below). If specified without a <code>:repeat</code> or <code>:until</code>, the job will fire indefinitely. Can't be specified with a <code>spec</code>.</td></tr>
+<tr><td class="left">:repeat</td><td class="left"><i>none</i></td><td class="left">Specifies the number of times an <i>at</i> job should repeat beyond its initial firing. Can't be specified with a <code>spec</code>, and requires <code>:every</code> to be provided.</td></tr>
+<tr><td class="left">:until</td><td class="left"><i>none</i></td><td class="left">Specifies when the <i>at</i> job should stop firing. Can be a java.util.Date, ms since epoch, or a time in HH:mm format (see below). Can't be specified with a <code>spec</code>.</td></tr>
+<tr><td class="left">:singleton</td><td class="left"><code>true</code></td><td class="left">Marks the job as a <i>singleton</i> in a cluster. Singleton jobs will only execute on one node. If false, the job will execute on every node on which it is scheduled (see below).</td></tr>
+</tbody>
+</table>
+
+</li>
+</ul>
+
+
+<p>
+  As a convenience, you can pass a time as a String (in "HH:mm" or
+  "HHmm" format) for the <code>:at</code> and <code>:until</code> options. It will be
+  interpreted as the next occurence of "HH:mm:00" in the currently
+  active timezone.
+</p>
+<p>
+  You can also pass a period alias or period spec for <code>:in</code> or
+  <code>:repeat</code>. A period alias is one of: <code>:second</code>, <code>:minute</code>, <code>:hour</code>,
+  <code>:day</code>, or <code>:week</code>. A period spec is a vector or list with a number
+  followed by a period alias (including plural variants): <code>[1   :second]</code>, <code>[5 :minutes]</code>. Each will be converted into the
+  corresponding milliseconds.
+</p>
+<p>
+  Example:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> my.ns
+  (<span class="org-builtin">:require</span> [immutant.jobs <span class="org-builtin">:as</span> jobs]))
+
+(jobs/schedule <span class="org-builtin">:my-at-job-name</span>  
+               #(<span class="org-builtin">println</span> <span class="org-string">"I every minute until 4:30pm, starting in 2 hours."</span>)
+               <span class="org-builtin">:in</span> [2 <span class="org-builtin">:hours</span>]
+               <span class="org-builtin">:every</span> <span class="org-builtin">:minute</span>
+               <span class="org-builtin">:until</span> <span class="org-string">"16:30"</span>)
+</pre>
+
+
+<p>
+  If you specify a job without a <i>cron</i> spec or any <i>at</i> options, it
+  will fire once, immediately:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> my.ns
+  (<span class="org-builtin">:require</span> [immutant.jobs <span class="org-builtin">:as</span> jobs]))
+
+(jobs/schedule <span class="org-string">"another-job"</span>  
+               #(<span class="org-builtin">println</span> <span class="org-string">"I'll fire right now, once."</span>))
+
+</pre>
+
+
+<p>
+  Job scheduling is dynamic, and can occur anytime during your
+  application's lifecycle. 
+</p>
+<p>
+  You can safely call <code>schedule</code> multiple times with the same job
+  name - the named job will be rescheduled.
+</p>
+<p>
+  In case you need it, the <a href="http://quartz-scheduler.org/api/2.1.5/org/quartz/JobExecutionContext.html">org.quartz.JobExecutionContext</a> instance is
+  bound to  <a href="./apidoc/immutant.jobs.html#var-*job-execution-context*">immutant.jobs/*job-execution-context*</a> before invoking
+  your job function.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-jobs-cron-syntax">
+<h3 id="jobs-cron-syntax"><a id="sec-2-1" name="sec-2-1"></a><span class="section-number-3">7.2.1.</span> Cron Syntax</h3>
+<div class="outline-text-3" id="text-jobs-cron-syntax">
+
+
+<p>
+  The <code>spec</code> argument should contain a crontab-like entry. This is
+  similar to cron specifications used by Vixie cron, anacron and
+  friends, but includes an additional field for specifying seconds.
+  It is composed of 7 fields (6 are required):
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="left"><col class="left"><col class="left"><col class="left"><col class="left"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Seconds</th><th class="left" scope="col">Minutes</th><th class="left" scope="col">Hours</th><th class="left" scope="col">Day of Month</th><th class="left" scope="col">Month</th><th class="left" scope="col">Day of Week</th><th class="left" scope="col">Year</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">0-59</td><td class="left">0-59</td><td class="left">0-23</td><td class="left">1-31</td><td class="left">1-12 or JAN-DEC</td><td class="left">1-7 or SUN-SAT</td><td class="left">1970-2099 (optional)</td></tr>
+</tbody>
+</table>
+
+
+<p>
+  For several fields, you may denote subdivision by using the
+  forward-slash (/) character. To execute a job every 5 minutes, */5
+  in the minutes field would specify this condition.
+</p>
+<p>
+  Spans may be indicated using the dash (-) character. To execute a
+  job Monday through Friday, MON-FRI should be used in the day-of-week
+  field.
+</p>
+<p>
+  Multiple values may be separated using the comma (,) character. The
+  specification of 1,15 in the day-of-month field would result in the
+  job firing on the 1st and 15th of each month.
+</p>
+<p>
+  Either day-of-month or day-of-week must be specified using the ?
+  character, since specifying both is contradictory.
+</p>
+<p>
+  See the <a href="http://www.quartz-scheduler.org/documentation/quartz-2.1.x/tutorials/tutorial-lesson-06">Quartz cron specification</a> for additional details.
+</p>
+
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-2">
+<h3 id="sec-2-2"><span class="section-number-3">7.2.2.</span> A Note On Dynamic Singleton Jobs</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<p>   
+   The singleton functionality is ensures that a job that is scheduled
+   on multiple nodes only runs on one at a time, and, for <i>at</i> jobs
+   that have a finite execution count, ensures that the job only
+   executes the intended number of times in a cluster.
+</p>
+<p>
+   The singleton makes no effort to <i>distribute</i> jobs across a
+   cluster - for a job to take advantage of the singleton guarantees,
+   it will need to be scheduled on every node of the cluster by your
+   application code calling <code>schedule</code>.
+</p>
+<p>
+   For jobs that are started as part of your application
+   initialization process, this should be no problem, since the
+   application initialization will occur on every node where the
+   application is deployed. However, for jobs that are scheduled
+   dynamically after initialization based upon an external event, you
+   will need to implement a mechanism to schedule that job on each
+   node.
+</p>
+<p>
+   One option for doing so is to create a <a href="./messaging.html">topic listener</a> that runs on
+   each node, and is responsible for scheduling the job when a message
+   is received containing the job details. 
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-3">
+<h3 id="sec-2-3"><span class="section-number-3">7.2.3.</span> Job MBeans</h3>
+<div class="outline-text-3" id="text-2-3">
+
+
+<p>   
+   Each job scheduled gets its own mbean under the <code>immutant.jobs</code>
+   namespace. This mbean can be used to stop, start, and reschedule
+   the job.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-3">
+<h2 id="sec-3"><span class="section-number-2">7.3.</span> Unscheduling Jobs</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>  
+  Jobs can be unscheduled via the <a href="./apidoc/immutant.jobs.html#var-unschedule">immutant.jobs/unschedule</a> function:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.jobs <span class="org-builtin">:as</span> jobs])
+
+(jobs/unschedule <span class="org-string">"my-job-name"</span>)
+</pre>
+
+
+<p>
+  The <code>unschedule</code> function requires one argument:
+</p>
+<ul>
+<li><code>name</code> - the name of a previously scheduled job.
+</li>
+</ul>
+
+
+<p>
+  If the given name resolves to an existing job, that job will be unscheduled and the call will
+  return <code>true</code>, otherwise <code>nil</code> is returned.
+</p>
+<p>
+  Jobs are automatically unscheduled when your application is undeployed.
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="web.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="messaging.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 1.1.3</div>
+</div>
+
+
+</body></html>

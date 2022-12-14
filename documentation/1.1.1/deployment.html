@@ -1,0 +1,343 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Deploying Clojure Applications</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Deploying Clojure Applications" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2014-04-08 09:16:46 EDT" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="installation.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="initialization.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 3. Deploying Clojure Applications</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="deployment.html#sec-1">3.1. Introduction</a></li>
+<li><a href="deployment.html#sec-2">3.2. Manually Deploying Artifacts</a></li>
+<li><a href="deployment.html#deployment-directory">3.3. Directory-based Deployment</a></li>
+<li><a href="deployment.html#deployment-archive">3.4. Archive-based Deployment</a></li>
+<li><a href="deployment.html#deployment-descriptor">3.5. Deployment Descriptor</a></li>
+<li><a href="deployment.html#lein-immutant-run">3.6. Running Immutant</a></li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">3.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>  
+  Applications can be deployed to Immutant as a directory on disk, or
+  as an archive. The actual deployment process can be done manually or
+  using the <code>lein-immutant</code> Leiningen plugin. See the <a href="./installation.html">Installation</a>
+  chapter for details on how to install the plugin.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">3.2.</span> Manually Deploying Artifacts</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  To manually deploy any artifact to Immutant, you follow the standard AS7 deployment
+  method. Deploying consists of creating two files in <code>$JBOSS_HOME/standalone/deployments/</code>:
+  the artifact itself, and a marker file that tells Immutant that you have
+  finished creating the artifact. This marker file has the same name as the artifact, but
+  with the <code>.dodeploy</code> suffix appended, and has no content. Example:
+</p>
+
+
+
+<pre class="src src-sh">$ cp thing-to-deploy $<span class="org-variable-name">JBOSS_HOME</span>/standalone/deployments/
+$ touch $<span class="org-variable-name">JBOSS_HOME</span>/standalone/deployments/thing-to-deploy.dodeploy
+</pre>
+
+
+<p>
+  Luckily, you should rarely need to manually deploy your artifacts - the plugin 
+  takes care of that for you.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-deployment-directory">
+<h2 id="deployment-directory"><a id="sec-3" name="sec-3"></a><span class="section-number-2">3.3.</span> Directory-based Deployment</h2>
+<div class="outline-text-2" id="text-deployment-directory">
+
+
+<p>
+  To deploy an application from where it sits on disk (in other words, without having
+  to create an archive), simply call the <code>deploy</code> subtask of the plugin. The <code>deploy</code> 
+  subtask optionally accepts the path to the project. If no path  is specified,
+  the current working directory is assumed:
+</p>
+
+
+
+<pre class="src src-sh">$ lein immutant deploy
+<span class="org-comment-delimiter"># </span><span class="org-comment">or</span>
+$ lein immutant deploy path/to/project
+</pre>
+
+
+<p>
+  This generates and deploys a <i>deployment descriptor</i> that refers to the location
+  of the application on disk. See the <a href="#deployment-descriptor">descriptor</a> section below for more details.
+</p>
+<p>
+  The <code>lein-immutant</code> plugin provides additional deploy options - see <a href="https://github.com/immutant/lein-immutant#lein-immutant-">its README</a>
+  for details.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-deployment-archive">
+<h2 id="deployment-archive"><a id="sec-4" name="sec-4"></a><span class="section-number-2">3.4.</span> Archive-based Deployment</h2>
+<div class="outline-text-2" id="text-deployment-archive">
+
+
+<p>
+  Immutant supports deployment of archives that have been generated by the
+  <code>lein-immutant</code> plugin. An Immutant archive is simply a zip file with a
+  specific format that ends with a <code>.ima</code> suffix. Currently, the only supported
+  way to generate an Immutant archive is via the plugin. The <code>archive</code> subtask
+  optionally accepts the path to the project. If no path is specified, the 
+  current working directory is assumed. In either case, the <code>.ima</code> is written to the 
+  current working directory. Example usage:
+</p>
+
+
+
+<pre class="src src-sh">$ lein immutant archive
+<span class="org-comment-delimiter"># </span><span class="org-comment">or</span>
+$ lein immutant archive path/to/project
+</pre>
+
+
+<p>
+  The archive can optionally contain the application's
+  dependencies. They are included by default, but will be excluded if
+  the <code>--exclude-dependencies</code> option is passed to the <code>archive</code> subtask.
+</p>
+<p>
+  The <code>archive</code> subtask creates the archive using the following process:
+</p>
+<ul>
+<li>If dependencies are to be included, they are resolved into the
+    local maven repository, and then included in the zip archive
+    under <code>lib/</code>.
+</li>
+<li>From the project root, the <code>src/</code>, <code>resources/</code>, <code>target/native/</code>,
+    <code>classes/</code>, <code>target/classes/</code>, and <code>lib/</code> dirs are included in the
+    zip, as well as the <code>project.clj</code>.
+</li>
+</ul>
+
+
+<p>
+  The archive process honors the <code>:source-paths</code>, <code>:resources-paths</code>,
+  <code>:native-path</code>, and <code>:compile-path</code> options of <code>project.clj</code>, allowing you to 
+  override the default directories.
+</p>
+<p>
+  Calling the <code>archive</code> subtask directly gives you an <code>.ima</code> that you can then
+  manually deploy. To deploy an archive via the plugin, simply pass the <code>--archive</code>
+  option to the <code>deploy</code> subtask. The <code>deploy</code> subtask optionally accepts the path
+  to the project. If no path is specified, the 
+  current working directory is assumed:
+</p>
+
+
+
+<pre class="src src-sh">$ lein immutant deploy --archive
+<span class="org-comment-delimiter"># </span><span class="org-comment">or</span>
+$ lein immutant deploy --archive path/to/project
+</pre>
+
+
+<p>
+  A new <code>.ima</code> archive will be generated each time deploy is invoked.
+</p>
+<p>
+  In addition to deploying an <code>.ima</code> directly, you can also manually deploy a 
+  deployment descriptor that refers to the location of the archive. See the
+  <a href="#deployment-descriptor">descriptor</a> section below for more details.
+</p>
+<p>
+  The <code>lein-immutant</code> plugin provides additional archive and deploy options - see 
+  <a href="https://github.com/immutant/lein-immutant#lein-immutant-">its README</a> for details.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-deployment-descriptor">
+<h2 id="deployment-descriptor"><a id="sec-5" name="sec-5"></a><span class="section-number-2">3.5.</span> Deployment Descriptor</h2>
+<div class="outline-text-2" id="text-deployment-descriptor">
+
+
+<p>
+  An Immutant deployment descriptor is simply a Clojure file
+  containing a map of options. When a descriptor is deployed, Immutant
+  loads the file, evaluating all its forms, and uses it to determine
+  where the actual application resides by looking at its <code>:root</code>
+  entry. The <code>:root</code> entry can either be the path to the application
+  root on disk, or the path to an <code>.ima</code> archive. For details on the
+  format of the deployment descriptor, see <a href="./initialization.html#initialization-configuration">Configuration Options</a>.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-lein-immutant-run">
+<h2 id="lein-immutant-run"><a id="sec-6" name="sec-6"></a><span class="section-number-2">3.6.</span> Running Immutant</h2>
+<div class="outline-text-2" id="text-lein-immutant-run">
+
+
+<p>
+  Regardless of how you deploy your app, it will only run if Immutant
+  itself is running. This is easily accomplished using the plugin:
+</p>
+
+
+
+<pre class="src src-sh">$ lein immutant run
+</pre>
+
+
+<p>
+  Simply type Ctrl-c to exit, but you may as well leave it up in your
+  development environment. You can deploy and undeploy as many
+  applications as your RAM will allow to a single Immutant instance.
+</p>
+<p>
+  The <code>run</code> task is a thin wrapper around the <a href="./jboss.html#jboss-run">JBoss standalone.sh script</a>, so in addition to a few "convenience options", all of the
+  JBoss options are supported as well. Run the following commands to
+  list them:
+</p>
+
+
+
+<pre class="src src-sh">$ lein help immutant run
+$ lein immutant run -h
+</pre>
+
+
+<p>
+  JBoss makes much use of Java system properties for its
+  configuration. These are set using the <code>-D</code> option, e.g.
+  <code>-Dproperty\=value</code>. Here are some common ones:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="left"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">System Property</th><th class="left" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>http.port</code></td><td class="left">8080</td><td class="left">The port on which Immutant listens for web requests</td></tr>
+<tr><td class="left"><code>jboss.logging.level</code></td><td class="left">INFO</td><td class="left">The console's logging level threshold</td></tr>
+<tr><td class="left"><code>org.immutant.web.http.maxThreads</code></td><td class="left">512*#cores</td><td class="left">Thread pool size for HTTP connection handlers</td></tr>
+</tbody>
+</table>
+
+
+<p>
+  Other system properties can be found in the JBoss configuration
+  file, <code>$JBOSS_HOME/standalone/configuration/standalone.xml</code> (or
+  <code>standalone-ha.xml</code> if clustered). In that file, any attribute of
+  the form <code>${property:default}</code> denotes a system property and its
+  corresponding default value if unset, like <code>${http.port:8080}</code>, so
+  to override that, you could run either of the following:
+</p>
+
+
+
+<pre class="src src-sh">$ lein immutant run -Dhttp.port=7777
+$ ~/.immutant/current/jboss/bin/standalone.sh -Dhttp.port=7777
+</pre>
+
+
+<p>
+  Out of the box, Immutant is only accessible from localhost. To access it from
+  other machines pass the -b parameter to bind to a real IP address or any available
+  IP address:
+</p>
+
+
+
+<pre class="src src-sh">$ lein immutant run -b 10.100.10.25
+$ lein immutant run -b 0.0.0.0
+</pre>
+
+
+<p>
+  It's possible to run Immutant in "clustered" mode. Doing so in a
+  network with multicast enabled causes Immutants to discover each
+  other and, for example, easily distribute work via a message queue
+  across a linearly-scalable data grid.
+</p>
+<p>
+  To run in clustered mode, either of the following should work:
+</p>
+
+
+
+<pre class="src src-sh">$ lein immutant run --clustered
+$ ~/.immutant/current/jboss/bin/standalone.sh --server-config=standalone-ha.xml
+</pre>
+
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="installation.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="initialization.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 1.1.1</div>
+</div>
+
+
+</body></html>

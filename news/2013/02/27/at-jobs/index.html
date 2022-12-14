@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | At-style Jobs in Immutant
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            At-style Jobs in Immutant
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="post article">
+              <div class="byline">
+                <div class="author">
+                  Toby Crawley
+                </div>
+                <div class="date">
+                  Wednesday, February 27, 2013
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/scheduled-jobs/">scheduled-jobs</a>
+              </div>
+              <div class="body">
+                <p><img src="/images/news/clock.jpg" alt="[It's about time!]" class="alignright"/></p>
+                
+                <p>We&#39;ve always <a href="/tutorials/jobs">supported scheduling jobs</a> using a <em>cron-style</em>
+                syntax. We&#39;ve now extended that to support a finer-grained <em>at-style</em>
+                syntax:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.jobs :as jobs])&#x000A;&#x000A;(jobs/schedule "my-at-job"&#x000A;                #(println "I fire 4 times with a 10ms delay between each, starting in 500ms.")&#x000A;                :in 500   &#x000A;                :every 10 &#x000A;                :repeat 3)</pre>
+                
+                <p>This functionality is available in recent incremental builds, and will
+                be in <em>0.9.0</em>, which should be released <strike>today</strike>tomorrow.</p>
+                
+                <h2 id="The_Details" onclick="window.location = '#The_Details'">The Details</h2>
+                
+                <p>Instead of a specification string, at-style jobs are controlled by a set
+                of options that are passed to the
+                <a href="/builds/LATEST/html-docs/apidoc/immutant.jobs.html#var-schedule">immutant.jobs/schedule</a>
+                function, and can be mixed and matched.</p>
+                
+                <p>We won&#39;t go through all of the permutations of the options here - you
+                can see the details in 
+                <a href="/builds/LATEST/html-docs/jobs.html">the docs</a>. Instead, we&#39;ll
+                look at a few examples of usage.</p>
+                
+                <p>If you specify a job without a cron specification or any <em>at</em> options, it
+                will fire once, immediately:</p>
+                
+                <pre class="syntax clojure">(jobs/schedule "fire-now"  &#x000A;               #(println "I'll fire right now, once."))</pre>
+                
+                <p>Specifying a job with just a start option (either <code>:at</code> or <code>:in</code>) will
+                still only fire once, but at the specified time:</p>
+                
+                <pre class="syntax clojure">;; you can specify :at as a Date&#x000A;(jobs/schedule "fire-later"  &#x000A;               #(println "I'll fire at a-java-util-date, once.")&#x000A;               :at a-java-util-date)&#x000A;&#x000A;#inst "2013-02-27T18:29:35.222-00:00" 1361989775222&#x000A;&#x000A;;; or as ms since the epoch&#x000A;(jobs/schedule "fire-later2"  &#x000A;               #(println "I'll fire at 2013-02-27T18:29:35.222, once.")&#x000A;               :at 1361989775222)&#x000A;&#x000A;;; :in signifies "ms from now"&#x000A;(jobs/schedule "fire-in"  &#x000A;               #(println "I'll fire in 500 ms, once.")&#x000A;               :in 500)</pre>
+                
+                <p>You can control repetition of the jobs with <code>:every</code>, <code>:repeat</code>, and <code>:until</code>:</p>
+                
+                <pre class="syntax clojure">;; fire every 500 ms, forever&#x000A;(jobs/schedule "fire-forever"  &#x000A;               #(println "I'll fire every 500 ms, forever.")&#x000A;               :every 500)&#x000A;&#x000A;;; fire every 500 ms until a time in the future&#x000A;(jobs/schedule "fire-for-a-while"  &#x000A;               #(println "I'll fire every 500 ms, until a-java-util-date-or-ms-since-epoch.")&#x000A;               :every 500&#x000A;               :until a-java-util-date-or-ms-since-epoch)&#x000A;&#x000A;;; fire 6 times, every 500 ms&#x000A;(jobs/schedule "fire-repeat"  &#x000A;               #(println "I'll fire 6 times (:repeat + 1) on a 500 ms interval.")&#x000A;               :every 500&#x000A;               :repeat 5)&#x000A;&#x000A;;; all of the above work with an :at or :in&#x000A;(jobs/schedule "fire-forever-in-a-bit"  &#x000A;               #(println "I'll fire every 500 ms, forever, starting in 2500 ms.")&#x000A;               :every 500&#x000A;               :in 2500)</pre>
+                
+                <p>At-style jobs can be unscheduled just like cron-style jobs by passing
+                the name to
+                <a href="/builds/LATEST/html-docs/apidoc/immutant.jobs.html#var-unschedule">immutant.jobs/unschedule</a>,
+                which will be called on your behalf when the application is undeployed
+                if you don&#39;t do it. They can also be rescheduled by calling schedule
+                again with the same name. So &quot;forever&quot; in the examples really
+                means &quot;until undeployed, unscheduled, or rescheduled&quot;.</p>
+                
+                <h2 id="Can_I_still_use_the_cron_syntax?" onclick="window.location = '#Can_I_still_use_the_cron_syntax?'">Can I still use the cron syntax?</h2>
+                
+                <p>Absolutely! The only change that will affect you is the order of
+                arguments to the <code>schedule</code> function have changed (the old order still
+                works for now, but is deprecated, and will be removed in <em>1.0.0.Beta1</em>):</p>
+                
+                <pre class="syntax clojure">(require '[immutant.jobs :as job])&#x000A;;; the deprecated signature&#x000A;(jobs/schedule "old-api-cron-job"  &#x000A;                   "*/5 * * * * ?"&#x000A;                   #(println "I fire every 5s, forever."))&#x000A;&#x000A;;; the new signature&#x000A;(jobs/schedule "new-api-cron-job"  &#x000A;                   #(println "I fire every 5s, forever.")&#x000A;                   "*/5 * * * * ?")</pre>
+                
+                <p>At-style jobs are fairly new - please give it a try and <a href="/community/">let us
+                know</a> if you have any issues or questions.</p>
+                
+                <p><em>Image credit: <a href="http://www.flickr.com/photos/quinn/663704942/">quinnums</a></em></p>
+              </div>
+              <div class="comments">
+                
+                            <div id="disqus_thread"></div>
+                            <script type="text/javascript">
+                            var disqus_shortname = 'immutant';
+                            var disqus_url = "http://immutant.org/news/2013/02/27/at-jobs/";
+                            var disqus_developer = null;
+                            var disqus_identifier = null;
+                            (function() {
+                              var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
+                              dsq.src = "http://immutant.disqus.com/embed.js";
+                              (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq);
+                            })();
+                            </script>
+                            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=immutant">comments powered by Disqus.</a></noscript>
+              </div>
+            </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="post-navigation">
+              <div class="previous">
+                Previous:
+                <a href="/news/2013/02/26/slim-distribution/">A slimmer, trimmer Immutant</a>
+              </div>
+              <div class="next">
+                Next:
+                <a href="/news/2013/02/28/announcing-0-9-0/">Immutant 0.9.0 Released</a>
+              </div>
+            </div>
+            <hr>
+            <div class="tags">
+              <div class="tag-cloud">
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/announcement/">announcement</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/app-server/">app-server</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/bears/">bears</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/beginning/">beginning</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/boot/">boot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/boot-immutant/">boot-immutant</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/caching/">caching</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/clustering/">clustering</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/daemons/">daemons</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/datomic/">datomic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/deploy/">deploy</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/distribution/">distribution</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/enterprise/">enterprise</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/event/">event</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/first/">first</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/getting-started/">getting-started</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/hotrod/">hotrod</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/infinispan/">infinispan</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/installation/">installation</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/isolation/">isolation</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein/">lein</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/lein-immutant/">lein-immutant</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/luminus/">luminus</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/messaging/">messaging</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/openshift/">openshift</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/overlay/">overlay</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/pipelines/">pipelines</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/polyglot/">polyglot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/poorsmatic/">poorsmatic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/postgresql/">postgresql</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/presentations/">presentations</a>
+                </span>
+                <span class="tag tag-6">
+                  <a href="http://immutant.org/news/tags/releases/">releases</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/ring/">ring</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/runtime/">runtime</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/scheduling/">scheduling</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/screencast/">screencast</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/slim/">slim</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/sockjs/">sockjs</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/survey/">survey</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/thedeuce/">thedeuce</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/torquebox/">torquebox</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transactions/">transactions</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transit/">transit</a>
+                </span>
+                <span class="tag tag-3">
+                  <a href="http://immutant.org/news/tags/tutorial/">tutorial</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/under-the-hood/">under-the-hood</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/vertx/">vertx</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/web/">web</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/websockets/">websockets</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wildfly/">wildfly</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wtf/">wtf</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/xa/">xa</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

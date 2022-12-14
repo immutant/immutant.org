@@ -1,0 +1,408 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>JBoss AS Crash Course</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="JBoss AS Crash Course" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2014-02-04 10:36:45 EST" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="daemons.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="production.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 12. JBoss AS Crash Course</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="jboss.html#sec-1">12.1. Introduction</a></li>
+<li><a href="jboss.html#sec-2">12.2. Configuring</a></li>
+<li><a href="jboss.html#jboss-run">12.3. Running</a></li>
+<li><a href="jboss.html#sec-4">12.4. Deploying</a></li>
+<li><a href="jboss.html#sec-5">12.5. Logging</a>
+<ul>
+<li><a href="jboss.html#sec-5-1">12.5.1. JBoss Logging Configuration</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">12.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  The JBoss Application Server (AS7) is the foundation upon which Immutant
+  is built. You can go a long way with Immutant without knowing anything
+  about the administration of JBoss AS, but for advanced applications, it's
+  worth knowing something about how AS is configured and extended. Feel free
+  to skip this section if you're just getting started with Immutant, and use 
+  it as a reference later.
+</p>
+<p>
+  You'll see references below to <code>$JBOSS_HOME</code>. Use the <code>env</code> subtask
+  of the <a href="https://github.com/immutant/lein-immutant">lein-immutant plugin</a> to find yours.
+</p>
+<p>
+  For more detailed documentation, please read the <a href="https://docs.jboss.org/author/display/AS7/Documentation">official AS7 docs</a>.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">12.2.</span> Configuring</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  In AS7, all server configuration is kept in two folders, one for each runtime 
+  mode: <b>standalone</b> and <b>domain</b>. Administrative tasks are simplified from 
+  previous releases because all configuration is in one folder and, in 
+  standalone mode, in a single file.
+</p>
+<p>
+  <img alt="./images/jboss-server.png" src="./images/jboss-server.png">
+</p>
+<p>
+  Immutant uses standalone mode by default but can be run in domain mode as 
+  well.
+</p>
+<p>  
+  JBoss AS 7 uses a modular architecture - libraries common to all
+  server configurations are kept under the <code>modules/</code> directory.
+  Configuration files are stored inside
+  <code>$JBOSS_HOME/standalone/configuration/</code> and
+  <code>$JBOSS_HOME/domain/configuration/</code> folders.
+</p>
+<p>
+  Both standalone and domain modes have a common folder structure, including
+  the following directories: <code>configuration/</code>, <code>deployments/</code>, and <code>lib/</code>. 
+  In general, it isn't a good idea to remove anything from these directories 
+  that you didn't put there yourself.
+</p>
+<p>
+  <img alt="./images/jboss-standalone-mode.png" src="./images/jboss-standalone-mode.png">
+</p>
+<p>
+  Some additional directories are created automatically at runtime, as needed: 
+  <code>tmp/</code>, <code>data/</code>, and <code>log/</code>. Though not typically necessary, you may safely 
+  delete these when the server is not running to clear its persistent state.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-jboss-run">
+<h2 id="jboss-run"><a id="sec-3" name="sec-3"></a><span class="section-number-2">12.3.</span> Running</h2>
+<div class="outline-text-2" id="text-jboss-run">
+
+
+<p>
+  The <code>$JBOSS_HOME/bin/</code> directory contains the main JBoss entry point, 
+  <code>standalone.sh</code> (or <code>standalone.bat</code>), along with its config file, 
+  <code>standalone.conf</code>. Running the JBoss server is simple:
+</p>
+
+
+
+<pre class="src src-sh">$ $<span class="org-variable-name">JBOSS_HOME</span>/bin/standalone.sh 
+</pre>
+
+
+<p>
+  In fact, this is exactly what the <a href="./deployment.html#lein-immutant-run">lein-immutant plugin's run task</a>
+  does.
+</p>
+<p>
+  Use the <code>--server-config</code> option to specify a different configuration. For 
+  example, to put JBoss in "clustered" mode:
+</p>
+
+
+
+<pre class="src src-sh">$ $<span class="org-variable-name">JBOSS_HOME</span>/bin/standalone.sh --server-config=standalone-ha.xml
+</pre>
+
+
+<p>
+  The lein plugin's <code>--clustered</code> option is shorthand for the above:
+</p>
+
+
+
+<pre class="src src-sh">$ lein immutant run --clustered
+</pre>
+
+
+<p>
+  You may set Java system properties using the <code>-D</code> option. Pass <code>-h</code> for a 
+  list of all the available options.
+</p>
+<p>
+  Permanent runtime configuration of JBoss should go in
+  <code>$JBOSS_HOME/bin/standalone.conf</code>. For example, your application may
+  require more memory (RAM) than the default allocated. Edit
+  <code>standalone.conf</code> to increase the value of <code>-Xmx</code> to something
+  reasonable.
+</p>
+<p>
+  In production you may prefer to control JBoss via a Unix "init
+  script", examples of which may be found beneath
+  <code>$JBOSS_HOME/bin/init.d/</code>. Feel free to tweak one for your
+  particular OS.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-4">
+<h2 id="sec-4"><span class="section-number-2">12.4.</span> Deploying</h2>
+<div class="outline-text-2" id="text-4">
+
+
+<p>
+  Each runtime mode has a <code>deployments/</code> subdirectory, the contents of
+  which determine the applications and services JBoss runs. These apps
+  and services are represented as archives, "exploded" folders, or
+  text files called "deployment descriptors". The JBoss deployment
+  scanner operates in two different modes: <b>auto-deploy</b> and <b>manual   deploy</b> (the default).
+</p>
+<p>
+  Auto-deploy mode works like in previous releases of AS, in that a
+  resource will be redeployed every time its timestamp changes. The
+  scanner creates a marker file with a ".deployed" suffix, and if the
+  resource gets deleted the scanner will not trigger an undeployment.
+</p>
+<p>
+  In manual deploy mode the scanner will rely on addition or removal
+  of a marker files. To learn more about this deployment method, see
+  the marker files section of the <a href="https://docs.jboss.org/author/display/AS7/Admin+Guide#AdminGuide-DeploymentCommands">administrator guide</a>.
+</p>
+<p>
+  <img alt="./images/jboss-deploy.png" src="./images/jboss-deploy.png">
+</p>
+<p>
+  The <a href="https://github.com/immutant/lein-immutant">lein-immutant Leiningen plugin</a> provides commands to create and
+  copy a deployment descriptor for your Clojure application to
+  <code>$JBOSS_HOME/standalone/deployments/</code> along with the
+  required deployment markers. See <a href="./deployment.html">Deployment</a> for more details.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-5">
+<h2 id="sec-5"><span class="section-number-2">12.5.</span> Logging</h2>
+<div class="outline-text-2" id="text-5">
+
+
+<p>
+  The recommended way to integrate your applications with JBoss
+  logging is to use <a href="https://github.com/clojure/tools.logging/">clojure.tools.logging</a>, which will discover and use
+  the JBoss configuration automatically when your app is deployed on
+  Immutant. You'll find your log messages in
+  <code>$JBOSS_HOME/standalone/log/server.log</code>.
+</p>
+<p>
+  JBoss provides a very sophisticated logging system that nobody
+  completely understands. It's possible to configure hierarchical,
+  categorized log message routing, complex file rotation, syslog
+  integration, SMTP notifications, SNMP traps, JMS, JMX and much more.
+  Obviously, most of that is far beyond the scope of this document.
+</p>
+<p>
+  All JBoss log messages have an associated <b>category</b>, which
+  <code>clojure.tools.logging</code> defaults to the current namespace, and
+  <b>level</b>, e.g. <code>DEBUG</code>, <code>INFO</code>, <code>WARN</code>, <code>ERROR</code>, or <code>FATAL</code>. Levels
+  are ordered by increasing severity, e.g. <code>FATAL</code> is higher than
+  <code>ERROR</code>, which is higher than <code>WARN</code>, etc. Logging configuration
+  rules determine where messages are logged according to their
+  category and level. For standalone mode, these rules are contained
+  in the <b>logging</b> subsystem element of
+  <code>standalone/configuration/standalone.xml</code>. By default, you will see
+  <code>INFO</code> (and higher, i.e. more severe) messages on the console (the
+  shell where you start Immutant) and written persistently to
+  <code>standalone/log/server.log</code>.
+</p>
+<p>
+  Anything written to <code>stdout</code> or <code>stderr</code> is interpreted as an <code>INFO</code>
+  log message and will therefore also be displayed on the console and
+  written to <code>standalone/log/server.log</code>.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-5-1">
+<h3 id="sec-5-1"><span class="section-number-3">12.5.1.</span> JBoss Logging Configuration</h3>
+<div class="outline-text-3" id="text-5-1">
+
+
+<p>
+   The default AS7 configuration is shown below. It includes two
+   handlers (one for the CONSOLE and one for the FILE), some loggers
+   and a root logger. When a message is logged, here's what happens:
+</p>
+<ol>
+<li>The message's category is compared to any defined <code>&lt;logger&gt;</code>
+      elements. If a match is found, the message's level must be
+      greater than or equal to that of the <code>&lt;logger&gt;</code>, else it's
+      discarded.
+</li>
+<li>If no matching <code>&lt;logger&gt;</code> is found, the message's level must be
+      greater than or equal to the level of the <code>&lt;root-logger&gt;</code>, else
+      it's discarded.
+</li>
+<li>If it hasn't been discarded, the message is passed to all
+      handlers associated with its <code>&lt;logger&gt;</code>, including those in the
+      <code>&lt;root-logger&gt;</code>. Set the <code>use-parent-handlers</code> attribute of
+      <code>&lt;logger&gt;</code> to "false" to override this behavior.
+</li>
+<li>If the handler has no <code>&lt;level&gt;</code> threshold defined, as is the
+      case for the FILE handler below, the message is logged.
+</li>
+<li>If the handler has a <code>&lt;level&gt;</code> threshold defined, as is the case
+      for the CONSOLE handler below, the message's level must be
+      greater than or equal to that threshold to be logged.
+</li>
+</ol>
+
+
+<p>
+   Here's the default config from
+   <code>standalone/configuration/standalone.xml</code>:
+</p>
+
+
+
+<pre class="src src-xml"><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">subsystem</span> <span class="org-nxml-namespace-attribute-xmlns">xmlns</span>=<span class="org-nxml-namespace-attribute-value-delimiter">"</span><span class="org-nxml-namespace-attribute-value">urn:jboss:domain:logging:1.2</span><span class="org-nxml-namespace-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">console-handler</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">CONSOLE</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">level</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">INFO</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">formatter</span><span class="org-nxml-tag-delimiter">&gt;</span>
+            <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">pattern-formatter</span> <span class="org-nxml-attribute-local-name">pattern</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">%K{level}%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">formatter</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">console-handler</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">periodic-rotating-file-handler</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">FILE</span><span class="org-nxml-attribute-value-delimiter">"</span> <span class="org-nxml-attribute-local-name">autoflush</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">true</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">formatter</span><span class="org-nxml-tag-delimiter">&gt;</span>
+            <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">pattern-formatter</span> <span class="org-nxml-attribute-local-name">pattern</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">formatter</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">file</span> <span class="org-nxml-attribute-local-name">relative-to</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">jboss.server.log.dir</span><span class="org-nxml-attribute-value-delimiter">"</span> <span class="org-nxml-attribute-local-name">path</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">server.log</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">suffix</span> <span class="org-nxml-attribute-local-name">value</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">.yyyy-MM-dd</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">append</span> <span class="org-nxml-attribute-local-name">value</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">true</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">periodic-rotating-file-handler</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">logger</span> <span class="org-nxml-attribute-local-name">category</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">com.arjuna</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">level</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">WARN</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">logger</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">logger</span> <span class="org-nxml-attribute-local-name">category</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">org.apache.tomcat.util.modeler</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">level</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">WARN</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">logger</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">logger</span> <span class="org-nxml-attribute-local-name">category</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">org.jboss.as.config</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">level</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">DEBUG</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">logger</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">logger</span> <span class="org-nxml-attribute-local-name">category</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">sun.rmi</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">level</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">WARN</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">logger</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">logger</span> <span class="org-nxml-attribute-local-name">category</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">jacorb</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">level</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">WARN</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">logger</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">logger</span> <span class="org-nxml-attribute-local-name">category</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">jacorb.config</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">level</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">ERROR</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">logger</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">root-logger</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">level</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">INFO</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">handlers</span><span class="org-nxml-tag-delimiter">&gt;</span>
+            <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">handler</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">CONSOLE</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+            <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">handler</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">FILE</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">handlers</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">root-logger</span><span class="org-nxml-tag-delimiter">&gt;</span>
+<span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">subsystem</span><span class="org-nxml-tag-delimiter">&gt;</span>
+</pre>
+
+
+<p>
+   One thing to note about the default logging configuration is that
+   your DEBUG messages won't show up anywhere. You could lower the
+   default level for the root logger to DEBUG, but that results in
+   DEBUG messages for every other category that doesn't match any of
+   the loggers, potentially a lot of messages. A better solution is to
+   define a &lt;logger&gt; specifically for your namespace:
+</p>
+
+
+
+<pre class="src src-xml"><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">logger</span> <span class="org-nxml-attribute-local-name">category</span>=<span class="org-nxml-attribute-value-delimiter">'</span><span class="org-nxml-attribute-value">your.awesome.namespace</span><span class="org-nxml-attribute-value-delimiter">'</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">level</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">'</span><span class="org-nxml-attribute-value">DEBUG</span><span class="org-nxml-attribute-value-delimiter">'</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+<span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">logger</span><span class="org-nxml-tag-delimiter">&gt;</span>
+</pre>
+
+
+<p>   
+   This will result in log messages written to the FILE handler, but
+   not the CONSOLE, since its threshold level is still set at INFO.
+</p>
+<p>
+   For many applications, it's usually better to take advantage of the
+   hierarchical nature of categories and refer only to the top-level
+   namespace component so that any messages logged from a child
+   namespace will match. For example, this rule will cause debug
+   messages logged from both <code>your.awesome</code> and
+   <code>your.awesome.namespace</code>:
+</p>
+
+
+
+<pre class="src src-xml"><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">logger</span> <span class="org-nxml-attribute-local-name">category</span>=<span class="org-nxml-attribute-value-delimiter">'</span><span class="org-nxml-attribute-value">your</span><span class="org-nxml-attribute-value-delimiter">'</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">level</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">'</span><span class="org-nxml-attribute-value">DEBUG</span><span class="org-nxml-attribute-value-delimiter">'</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+<span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">logger</span><span class="org-nxml-tag-delimiter">&gt;</span>
+</pre>
+
+
+<p>   
+   For more information, see the <a href="https://docs.jboss.org/author/display/AS71/Logging+Configuration">official JBoss logging documentation</a>.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="daemons.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="production.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 1.1.0</div>
+</div>
+
+
+</body></html>

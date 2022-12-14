@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Production Setup</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Production Setup" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2014-02-04 10:36:43 EST" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="jboss.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 13. Production Setup</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="production.html#sec-1">13.1. Introduction</a></li>
+<li><a href="production.html#sec-2">13.2. Application Deployment</a></li>
+<li><a href="production.html#sec-3">13.3. Application Configuration</a></li>
+<li><a href="production.html#sec-4">13.4. Configuring JBoss as a Service</a></li>
+<li><a href="production.html#sec-5">13.5. Clustering without Multicast</a>
+<ul>
+<li><a href="production.html#sec-5-1">13.5.1. Clustering on Amazon EC2</a></li>
+<li><a href="production.html#sec-5-2">13.5.2. HornetQ Configuration</a></li>
+</ul>
+</li>
+<li><a href="production.html#sec-6">13.6. Apache mod_cluster Reverse Proxy</a></li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">13.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  We expect this document to evolve as more Immutant installations are
+  put into production. Of course, "production" means something
+  different to every organization, so it's difficult to be too
+  specific, but we hope to present some general guidelines that can be
+  successfully adapted to any environment.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">13.2.</span> Application Deployment</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  Immutant honors any active Leiningen profiles when your app is
+  deployed. Certain features, e.g. an nREPL service and Ring reloading
+  middleware, are enabled when the <code>:dev</code> profile is active, which is
+  the default. We recommend deploying your applications to production
+  with a non-dev profile activated, e.g.
+</p>
+
+
+
+<pre class="src src-sh">$ lein with-profile production immutant deploy
+<span class="org-comment-delimiter"># </span><span class="org-comment">or</span>
+$ lein with-profile production immutant archive
+</pre>
+
+
+<p>
+  Alternatively, you could manually add a <code>:lein-profiles</code> entry to
+  your deployment descriptor. This is the file that gets created by
+  the <code>deploy</code> task. See the <a href="./initialization.html">initialization</a> and <a href="./deployment.html">deployment</a> chapters
+  for more details.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-3">
+<h2 id="sec-3"><span class="section-number-2">13.3.</span> Application Configuration</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  Often, applications require environment-specific configuration when
+  deployed. Clojure makes this pretty simple. We recommend using
+  Clojure syntax or EDN for your config files, storing them in a known
+  location, and slurping them in during your application's
+  initialization.
+</p>
+<p>
+  Use some sort of "dev ops" system, e.g. Pallet/Chef/Puppet, for
+  transferring the config files along with your application archives
+  to your target hosts, and in your initialization, do something along
+  these lines:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">def</span> <span class="org-function-name">config</span> (<span class="org-builtin">read-string</span> (<span class="org-builtin">slurp</span> <span class="org-string">"/etc/yourapp/config.clj"</span>)))
+</pre>
+
+
+<p>
+  This assumes the contents of <code>/etc/yourapp/config.clj</code> look
+  something like this:
+</p>
+
+
+
+<pre class="src src-clojure">{
+ <span class="org-builtin">:db-host</span> 1.2.3.4
+ <span class="org-builtin">:db-user</span> <span class="org-string">"myuser"</span>
+ <span class="org-builtin">:db-pass</span> <span class="org-string">"mypass"</span>
+ }
+</pre>
+
+
+<p>  
+  Alternatively, you might take advantage of Immutant's registry
+  namespace, through which you can access your Leiningen project map
+  and your application's deployment descriptor. These are resolved
+  according to whatever Leiningen profiles are active when you deploy
+  the application (or are specified in the deployment descriptor).
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">def</span> <span class="org-function-name">deploy-descriptor</span> (immutant.registry/get <span class="org-builtin">:config</span>))
+(<span class="org-keyword">def</span> <span class="org-function-name">leiningen-project</span> (immutant.registry/get <span class="org-builtin">:project</span>))
+</pre>
+
+
+<p>
+  See <a href="./initialization.html#initialization-configuration-values">Initialization - Arbitrary Configuration Values</a> for more on
+  providing configuration values via the deployment descriptor or
+  <code>project.clj</code>.
+</p></div>
+
+</div>
+
+<div class="outline-2" id="outline-container-4">
+<h2 id="sec-4"><span class="section-number-2">13.4.</span> Configuring JBoss as a Service</h2>
+<div class="outline-text-2" id="text-4">
+
+
+<p>
+  JBoss AS7 ships with an example System V style startup script:
+  <code>$IMMUTANT_HOME/jboss/bin/init.d/jboss-as-standalone.sh</code>. You'll
+  also find <code>jboss-as.conf</code> in that same directory. You may copy it to
+  <code>/etc/jboss-as/</code> and edit further configuration for your Immutant
+  service there.
+</p>
+<p>
+  To have Immutant start when your server boots:
+</p>
+
+
+
+<pre class="src src-sh">$ ln -s $<span class="org-variable-name">IMMUTANT_HOME</span>/jboss/bin/init.d/jboss-as-standalone.sh /etc/init.d/immutant
+$ chkconfig --add immutant
+$ service immutant start
+</pre>
+
+
+<p>
+  Obviously, you'll need to tweak the above if you're using one of the
+  more modern init daemon alternatives, e.g. upstart, systemd, etc.
+</p>
+<p>
+  To have it come up in clustered mode, set the following in
+  <code>/etc/jboss-as/jboss-as.conf</code>:
+</p>
+
+
+
+<pre class="src src-sh"><span class="org-variable-name">JBOSS_CONFIG</span>=standalone-ha.xml
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-5">
+<h2 id="sec-5"><span class="section-number-2">13.5.</span> Clustering without Multicast</h2>
+<div class="outline-text-2" id="text-5">
+
+
+<p>
+  Immutant uses <a href="http://www.jgroups.org/">JGroups</a> for clustering.
+</p>
+<p>
+  By default, a clustered Immutant will attempt to discover and
+  connect to its peers using IP multicast. When it's enabled, forming
+  an Immutant cluster is easy, peasy, lemon squeezy!
+</p>
+<p>
+  But often, especially in cloud environments, IP multicast is not
+  available, or perhaps even undesired when a system administrator
+  requires direct control over the members of a cluster. In these
+  cases it's possible to configure Immutant to use a predefined set of
+  cluster members. Dynamic peer discovery is possible in a
+  non-multicast environment using a gossip router or, if on Amazon
+  EC2, the <a href="http://www.jgroups.org/javadoc/org/jgroups/protocols/S3_PING.html">S3_PING</a> JGroups protocol (see below).
+</p>
+<p>
+  When you want to set the hosts for your cluster, replace the <a href="http://www.jgroups.org/javadoc/org/jgroups/protocols/MPING.html">MPING</a>
+  protocol in the default configuration with <a href="http://www.jgroups.org/javadoc/org/jgroups/protocols/TCPPING.html">TCPPING</a>. You'll also want
+  to change both the <code>default-stack</code> attribute of the JGroups
+  <code>subsystem</code> and the <code>jgroups-stack</code> descendants of the
+  <code>hornetq-server</code> element from "udp" to "tcp". Edit
+  <code>$IMMUTANT_HOME/jboss/standalone/configuration/standalone-ha.xml</code> to
+  make it look similar to this:
+</p>
+
+
+
+<pre class="src src-xml"><span class="org-nxml-text">...</span>
+<span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">subsystem</span> <span class="org-nxml-namespace-attribute-xmlns">xmlns</span>=<span class="org-nxml-namespace-attribute-value-delimiter">"</span><span class="org-nxml-namespace-attribute-value">urn:jboss:domain:jgroups:1.1</span><span class="org-nxml-namespace-attribute-value-delimiter">"</span> <span class="org-nxml-attribute-local-name">default-stack</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">tcp</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+<span class="org-nxml-text">  ...</span>
+<span class="org-nxml-text">  </span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">stack</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">tcp</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+      <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">transport</span> <span class="org-nxml-attribute-local-name">type</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">TCP</span><span class="org-nxml-attribute-value-delimiter">"</span> <span class="org-nxml-attribute-local-name">socket-binding</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">jgroups-tcp</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+
+      <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">protocol</span> <span class="org-nxml-attribute-local-name">type</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">TCPPING</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+        <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">property</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">initial_hosts</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+<span class="org-nxml-text">          10.100.10.2[7600],10.100.10.3[7600]</span>
+<span class="org-nxml-text">        </span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">property</span><span class="org-nxml-tag-delimiter">&gt;</span>
+      <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">protocol</span><span class="org-nxml-tag-delimiter">&gt;</span>
+
+      <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">protocol</span> <span class="org-nxml-attribute-local-name">type</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">MERGE2</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+      <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">protocol</span> <span class="org-nxml-attribute-local-name">type</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">FD_SOCK</span><span class="org-nxml-attribute-value-delimiter">"</span> <span class="org-nxml-attribute-local-name">socket-binding</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">jgroups-tcp-fd</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+<span class="org-nxml-text">      ...</span>
+<span class="org-nxml-text">  </span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">stack</span><span class="org-nxml-tag-delimiter">&gt;</span>
+<span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">subsystem</span><span class="org-nxml-tag-delimiter">&gt;</span>
+</pre>
+
+
+
+</div>
+
+<div class="outline-3" id="outline-container-5-1">
+<h3 id="sec-5-1"><span class="section-number-3">13.5.1.</span> Clustering on Amazon EC2</h3>
+<div class="outline-text-3" id="text-5-1">
+
+
+<p>
+   Enabling clustering with dynamic discovery on EC2 amounts to
+   replacing the <a href="http://www.jgroups.org/javadoc/org/jgroups/protocols/MPING.html">MPING</a> protocol element of the "tcp" stack
+   configured in
+   <code>$IMMUTANT_HOME/jboss/standalone/configuration/standalone-ha.xml</code>
+   with <a href="http://www.jgroups.org/javadoc/org/jgroups/protocols/S3_PING.html">S3_PING</a>. And be sure to change the <code>default-stack</code> attribute
+   of the <code>subsystem</code> to "tcp".
+</p>
+
+
+
+<pre class="src src-xml"><span class="org-nxml-text">...</span>
+<span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">subsystem</span> <span class="org-nxml-namespace-attribute-xmlns">xmlns</span>=<span class="org-nxml-namespace-attribute-value-delimiter">"</span><span class="org-nxml-namespace-attribute-value">urn:jboss:domain:jgroups:1.1</span><span class="org-nxml-namespace-attribute-value-delimiter">"</span> <span class="org-nxml-attribute-local-name">default-stack</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">tcp</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+  <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">stack</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">tcp</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">transport</span> <span class="org-nxml-attribute-local-name">type</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">TCP</span><span class="org-nxml-attribute-value-delimiter">"</span> <span class="org-nxml-attribute-local-name">socket-binding</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">jgroups-tcp</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">protocol</span> <span class="org-nxml-attribute-local-name">type</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">S3_PING</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span>
+      <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">property</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">secret_access_key</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">YOUR_SECRET_ACCESS_KEY</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">property</span><span class="org-nxml-tag-delimiter">&gt;</span>
+      <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">property</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">access_key</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">YOUR_ACCESS_KEY</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">property</span><span class="org-nxml-tag-delimiter">&gt;</span>
+      <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">property</span> <span class="org-nxml-attribute-local-name">name</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">location</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">SOME_BUCKET_PATH</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">property</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">protocol</span><span class="org-nxml-tag-delimiter">&gt;</span>
+
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">protocol</span> <span class="org-nxml-attribute-local-name">type</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">MERGE2</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+    <span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">protocol</span> <span class="org-nxml-attribute-local-name">type</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">FD_SOCK</span><span class="org-nxml-attribute-value-delimiter">"</span> <span class="org-nxml-attribute-local-name">socket-binding</span>=<span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-attribute-value">jgroups-tcp-fd</span><span class="org-nxml-attribute-value-delimiter">"</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-tag-delimiter">&gt;</span>
+<span class="org-nxml-text">    ...</span>
+<span class="org-nxml-text">  </span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">stack</span><span class="org-nxml-tag-delimiter">&gt;</span>
+<span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">subsystem</span><span class="org-nxml-tag-delimiter">&gt;</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-5-2">
+<h3 id="sec-5-2"><span class="section-number-3">13.5.2.</span> HornetQ Configuration</h3>
+<div class="outline-text-3" id="text-5-2">
+
+
+<p>
+   Without multicast, you must change the HornetQ config to use the
+   JGroups "tcp" stack instead of the default "udp" stack.
+</p>
+<p>
+   Search for <code>jgroups-stack</code> in
+   <code>$IMMUTANT_HOME/jboss/standalone/configuration/standalone-ha.xml</code>,
+   and you'll see this beneath both the <code>broadcast-group</code> and
+   <code>discovery-group</code> elements:
+</p>
+
+
+
+<pre class="src src-xml"><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-element-local-name">jgroups-stack</span><span class="org-nxml-tag-delimiter">&gt;</span><span class="org-nxml-text">${msg.jgroups.stack:udp}</span><span class="org-nxml-tag-delimiter">&lt;</span><span class="org-nxml-tag-slash">/</span><span class="org-nxml-element-local-name">jgroups-stack</span><span class="org-nxml-tag-delimiter">&gt;</span>
+</pre>
+
+
+<p>   
+   This <code>${property:default}</code> syntax refers to a Java system property
+   called <code>msg.jgroups.stack</code>. If unset, the value following the colon
+   is used, so you must either set this system property to "tcp" <a href="./jboss.html#jboss-run">on the command line</a>, e.g. <code>-Dmsg.jgroups.stack=tcp</code>, or replace "udp"
+   with "tcp" in the config file for both the <code>broadcast-group</code> and
+   <code>discovery-group</code> elements.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-6">
+<h2 id="sec-6"><span class="section-number-2">13.6.</span> Apache <code>mod_cluster</code> Reverse Proxy</h2>
+<div class="outline-text-2" id="text-6">
+
+
+<p>
+  An Immutant production server will typically have a request
+  dispatching reverse proxy fronting the application, accepting web
+  requests and handing them off to your application. There are many
+  common reverse proxies, e.g. <a href="http://haproxy.1wt.eu/">HAProxy</a> and <a href="http://nginx.org">nginx</a>, and they'll all work
+  fine with Immutant, but the JBoss <a href="http://www.jboss.org/mod_cluster">mod_cluster</a> project is worth
+  special mention because it is aware of the deployment state of each
+  peer in your cluster. It is not enough for the node to simply be
+  "up": requests won't be routed to nodes that don't have the
+  corresponding application fully deployed.
+</p>
+<p>
+  Download and install <code>mod_cluster</code> using the instructions linked
+  from its <a href="http://www.jboss.org/mod_cluster/downloads/">downloads page</a>.
+</p>
+<p>
+  After installing it, check the configuration file,
+  <code>/etc/httpd/conf.d/mod_cluster.conf</code>. With something similar to the
+  following settings, you should have Apache's httpd daemon accepting
+  web requests on your host and <code>mod_cluster</code> dispatching those
+  requests to your Immutant[s]:
+</p>
+
+
+
+<pre class="src src-text">LoadModule slotmem_module       modules/mod_slotmem.so
+LoadModule proxy_cluster_module modules/mod_proxy_cluster.so
+LoadModule advertise_module     modules/mod_advertise.so
+LoadModule manager_module       modules/mod_manager.so
+
+&lt;Location /mod_cluster_manager&gt;
+    SetHandler mod_cluster-manager
+    AllowDisplay On
+&lt;/Location&gt;
+
+Listen 127.0.0.1:6666
+&lt;VirtualHost 127.0.0.1:6666&gt;
+
+  &lt;Directory /&gt;
+    Order deny,allow
+    Deny from all
+    Allow from all
+  &lt;/Directory&gt;
+
+  KeepAliveTimeout 60
+  MaxKeepAliveRequests 0
+
+  EnableMCPMReceive
+
+  ManagerBalancerName immutant-balancer
+  AllowDisplay On
+  AdvertiseFrequency 5
+
+&lt;/VirtualHost&gt;
+</pre>
+
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="jboss.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li></ul><div class="version">Immutant 1.1.0</div>
+</div>
+
+
+</body></html>

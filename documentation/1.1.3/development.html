@@ -1,0 +1,475 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Developing with Immutant</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Developing with Immutant" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2014-06-17 09:19:11 EDT" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="initialization.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="web.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 5. Developing with Immutant</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="development.html#sec-1">5.1. Introduction</a></li>
+<li><a href="development.html#sec-2">5.2. In-Container Testing</a>
+<ul>
+<li><a href="development.html#sec-2-1">5.2.1. lein immutant test</a></li>
+</ul>
+</li>
+<li><a href="development.html#interactive">5.3. The REPL</a>
+<ul>
+<li><a href="development.html#interactive-binding">5.3.1. Binding To An Interface</a></li>
+<li><a href="development.html#sec-3-2">5.3.2. nREPL</a>
+<ul>
+<li><a href="development.html#sec-3-2-1">5.3.2.1. Starting nREPL</a></li>
+<li><a href="development.html#sec-3-2-2">5.3.2.2. Starting nREPL via configuration</a></li>
+<li><a href="development.html#sec-3-2-3">5.3.2.3. Starting nREPL from code</a></li>
+<li><a href="development.html#sec-3-2-4">5.3.2.4. Connecting to nREPL</a></li>
+<li><a href="development.html#sec-3-2-5">5.3.2.5. Shutting Down nREPL</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="development.html#sec-4">5.4. Application Dependencies</a></li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">5.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  Immutant fully embraces the time-honored Lisp tradition of
+  incremental development at a REPL. This effectively puts you
+  <i>inside</i> the application server, with all its integrated services at
+  your fingertips.
+</p>
+<p>
+  It is quite an intimate experience to build your application while
+  it's deployed and running in Immutant, with frictionless access to
+  its services in real-time, running tests against those services
+  immediately, as you edit them. And no mocking, packaging, or
+  deployment steps to interrupt your flow.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">5.2.</span> In-Container Testing</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>  
+  At the REPL, you're free to use whichever Clojure testing library
+  you prefer, e.g. <code>clojure.test</code> or <a href="https://github.com/marick/Midje">Midje</a>. Each has its own way of
+  invoking tests, allowing you to, for example, run one at a time or
+  perhaps run every test in one or more namespaces. These should work
+  fine at the Immutant REPL, and you're free to refer to the
+  integrated Immutant services in your test definitions.
+</p>
+<p>
+  There are some handy reflective functions available in the
+  <a href="./apidoc/immutant.util.html">immutant.util</a> namespace, specifically <code>app-uri</code>, which can be used
+  to construct URL's in the tests for your web apps. This ensures
+  your tests can always "find" your app, regardless of context
+  path or HTTP port, for example.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-1">
+<h3 id="sec-2-1"><span class="section-number-3">5.2.1.</span> lein immutant test</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   The <code>test</code> task of the <a href="https://github.com/immutant/lein-immutant/">lein-immutant</a> plugin enables you to run your
+   in-container tests when not connected to an Immutant REPL. It will
+   find all the tests (or Midje facts) in a project, fire up an
+   Immutant instance, deploy the project to it, connect to its REPL,
+   run all the tests, undeploy the app, shutdown the Immutant, and
+   display the results, returning success only if all tests pass.
+</p>
+<p>
+   Because it conveniently runs all your tests inside the app server,
+   a successful run yields a high confidence that your code will run
+   correctly when it counts – in production, when deployed to the
+   same app server. For this reason, it may also be useful to run it
+   on your app's Continuous Integration host whenever any changes are
+   committed.
+</p>
+<p>
+   <b>Note:</b> the log output for the Immutant instance used for the test
+    run will be located in
+    <code>&lt;project-root&gt;/target/isolated-immutant/standalone/log/</code>.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-interactive">
+<h2 id="interactive"><a id="sec-3" name="sec-3"></a><span class="section-number-2">5.3.</span> The REPL</h2>
+<div class="outline-text-2" id="text-interactive">
+
+
+<p>
+  Immutant provides support for connecting to an application's runtime
+  via nREPL.
+</p>
+<p>
+  Each REPL service runs on a unique port, allowing you to have REPLs into
+  multiple applications within the same Immutant, or multiple REPLs within the
+  same application.
+</p>
+<p>
+  REPL services can be started at application deploy time, or dynamically from
+  application code. REPLs started dynamically can be also be shutdown
+  dynamically. REPLs started at deploy time and any dynamically started REPLs
+  that are not shut down by the application will be shut down when the
+  application is undeployed.
+</p>
+<p>
+  See <a href="./initialization.html#initialization-configuration">initialization configuration</a> for a list of configuration options
+  (like <code>:nrepl-port</code>) and how to apply them.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-interactive-binding">
+<h3 id="interactive-binding"><a id="sec-3-1" name="sec-3-1"></a><span class="section-number-3">5.3.1.</span> Binding To An Interface</h3>
+<div class="outline-text-3" id="text-interactive-binding">
+
+
+<p>
+   AS7 is setup to use multiple network interfaces, and allows you to specify
+   different interfaces for your server: <i>public</i>, <i>management</i>, and <i>unsecure</i>.
+   By default, these interfaces are all the same - <code>127.0.0.1</code>. But you can
+   specify different addresses for each named interface, aiding in the security
+   setup of your management ports.
+</p>
+<p>
+   By default, the repl services started by Immutant bind to the <i>management</i>
+   interface.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-3-2">
+<h3 id="sec-3-2"><span class="section-number-3">5.3.2.</span> nREPL</h3>
+<div class="outline-text-3" id="text-3-2">
+
+
+<p>
+   <a href="https://github.com/clojure/tools.nrepl">nREPL</a> is a client/server protocol that provides a Clojure REPL
+   across a network. It has several clients that support it.
+</p>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-1">
+<h4 id="sec-3-2-1"><span class="section-number-4">5.3.2.1.</span> Starting nREPL</h4>
+<div class="outline-text-4" id="text-3-2-1">
+
+
+<p>
+    You can start an nREPL service using one (or both) of two methods:
+    specifying <code>:nrepl-port</code> and/or <code>:nrepl-interface</code> options in your
+    configuration, or by calling <a href="./apidoc/immutant.repl.html#var-start-nrepl">immutant.repl/start-nrepl</a> from
+    application code.
+</p>
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-2">
+<h4 id="sec-3-2-2"><span class="section-number-4">5.3.2.2.</span> Starting nREPL via configuration</h4>
+<div class="outline-text-4" id="text-3-2-2">
+
+
+<p>
+    To have Immutant start a nREPL service on your behalf, you can specify
+    one or both of the following options:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="left"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="left" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:nrepl-port</code></td><td class="left">none, <code>0</code> if <code>:dev</code> profile is active or <code>:nrepl-interface</code> provided</td><td class="left">The port for binding the nREPL endpoint. <code>0</code> means "any available port"</td></tr>
+<tr><td class="left"><code>:nrepl-interface</code></td><td class="left">none, <code>:management</code> if <code>:nrepl-port</code> provided</td><td class="left">Can be one of <code>:public</code>, <code>:management</code>, or <code>:unsecure</code>, or an ip address string. See the section on <a href="#interactive-binding">interface aliases</a>.</td></tr>
+</tbody>
+</table>
+
+
+<p>   
+    If <code>:nrepl-port</code> is set to 0, the choice of an available port is
+    delegated to the operating system. Immutant will start up an nREPL
+    service using that port, and write it to a file beneath your
+    project's <code>target/</code> directory called <code>repl-port</code> and also to a
+    file in the root of the project called <code>.nrepl-port</code>, following
+    Leiningen's convention. Many nREPL clients will use one of these
+    files to establish a connection. Both will be deleted when the
+    Immutant process exits.
+</p>
+<p>
+    When the <code>:dev</code> profile is active, <code>:nrepl-port</code> defaults to 0.
+    This means that, by default, every application you deploy will
+    have its own dedicated nREPL, and most nREPL clients will
+    automatically detect and connect to it using the files mentioned
+    above.
+</p>
+<p>
+    To prevent the nREPL server from starting by default, simply
+    deploy your application without the <code>:dev</code> profile active, or set
+    <code>:nrepl-port</code> to <code>nil</code>.
+</p>
+<p>
+    Immutant also honors any <a href="https://github.com/weavejester/lein-ring#web-server-options">lein-ring options</a> specified in your
+    <code>project.clj</code>. These options will only be used if no <code>:nrepl-port</code>
+    is specified in your configuration. If <code>:start?</code> is falsey, no
+    nREPL will be started even when the <code>:dev</code> profile is active.
+</p>
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-3">
+<h4 id="sec-3-2-3"><span class="section-number-4">5.3.2.3.</span> Starting nREPL from code</h4>
+<div class="outline-text-4" id="text-3-2-3">
+
+
+<p>
+    You can also start an nREPL service from your own code, which is
+    useful if you need to start it in response to a runtime event. To
+    do so, simply call <a href="./apidoc/immutant.repl.html#var-start-nrepl">immutant.repl/start-nrepl</a>. nREPL allows you to
+    have multiple services in the same runtime, so you need to save
+    the return value of <code>start-nrepl</code> if you want to shut down the
+    nREPL service yourself:
+</p>
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">bind to the given port on the management interface, and</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">save the service handle for later</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">nrepl</span> (immutant.repl/start-nrepl 4242))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">bind to the given port and interface</span>
+(immutant.repl/start-nrepl <span class="org-string">"127.0.0.1"</span> 4242)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">bind to the given port on the :public interface</span>
+(immutant.repl/start-nrepl <span class="org-builtin">:public</span> 4242)
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-4">
+<h4 id="sec-3-2-4"><span class="section-number-4">5.3.2.4.</span> Connecting to nREPL</h4>
+<div class="outline-text-4" id="text-3-2-4">
+
+
+<ul>
+<li id="interactive-nrepl-emacs"><a id="sec-3-2-4-1" name="sec-3-2-4-1"></a>Via Emacs<br>
+
+<p>
+     To connect to nREPL from Emacs, first install <a href="https://github.com/clojure-emacs/cider">cider</a> (formerly
+     nrepl.el), then connect to your running nREPL via the <code>nrepl</code>
+     function (<code>M-x nrepl RET</code>).  It will prompt you for the host and
+     port, and if you're somewhere beneath your project, it should
+     default you with the correct port.
+</p>
+</li>
+</ul>
+<ul>
+<li id="sec-3-2-4-2">Via Leiningen<br>
+
+<p>
+     <a href="http://leiningen.org/">Leiningen</a> provides a REPL client (based on <a href="https://github.com/trptcolin/reply">reply</a>, an enhanced REPL
+     client) that supports connecting to an nREPL service:
+</p>
+
+
+
+<pre class="src src-sh"><span class="org-comment-delimiter"># </span><span class="org-comment">connect to an nREPL bound to port 4242 on localhost</span>
+$ lein repl :connect 4242 
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">connect to an nREPL bound to port 4242 on 10.0.0.10</span>
+$ lein repl :connect 10.0.0.10:4242 
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">if inside the project directory</span>
+$ lein repl :connect
+</pre>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-3-2-4-3">Via Counterclockwise<br>
+
+<p>
+     <a href="http://code.google.com/p/counterclockwise/">Counterclockwise</a> is an Eclipse plugin for Clojure development. You can
+     use it to connect to your Immutant nREPL session via <i>Window</i> -&gt; 
+     <i>Connect to REPL</i>. It will prompt you for an ip address and port to 
+     connect to.
+</p>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-5">
+<h4 id="sec-3-2-5"><span class="section-number-4">5.3.2.5.</span> Shutting Down nREPL</h4>
+<div class="outline-text-4" id="text-3-2-5">
+
+
+<p>
+    Immutant will automatically shutdown any nREPL services for you when your
+    application is undeployed, but if you need to do so before undeploy you
+    can do so using the <a href="./apidoc/immutant.repl.html#var-stop-nrepl">immutant.repl/stop-nrepl</a> function. You'll need to
+    pass it the service handle returned by the <code>start-nrepl</code> call:
+</p>
+
+
+
+<pre class="src src-clojure">(clojure.repl/stop-nrepl nrepl)
+</pre>
+
+
+<p>
+    Since you need the service handle to stop an nREPL service, you can only
+    manually stop nREPL's you start yourself. If you start an nREPL service
+    via the <code>:nrepl-port</code> configuration option, your only recourse is to
+    allow Immutant to shut it down for you on undeploy.
+</p>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-4">
+<h2 id="sec-4"><span class="section-number-2">5.4.</span> Application Dependencies</h2>
+<div class="outline-text-2" id="text-4">
+
+
+<p>  
+  Immutant provides tools to aid interactive REPL-based development via
+  the <a href="./apidoc/immutant.dev.html">immutant.dev</a> namespace. Currently, it provides three functions for 
+  reloading, updating, and viewing your application's dependencies in container:
+</p>
+<ul>
+<li><a href="./apidoc/immutant.dev.html#var-reload-project!">immutant.dev/reload-project!</a> Resets the application's class loader
+    to provide the paths and dependencies in the from the given
+    project. If no project is provided, the <code>project.clj</code> for the
+    appplication is loaded from disk. Also makes any new data readers
+    from the dependencies available.  Returns the project map.
+</li>
+<li><a href="./apidoc/immutant.dev.html#var-add-dependencies!">immutant.dev/add-dependencies!</a> Adds the given dependencies into
+    the currently active project's dependency set and resets the
+    application's class loader to provide the paths and dependencies
+    from that project (via <code>reload-project!</code>). Each dep can either be
+    a lein coordinate ('[foo-bar "0.1.0"]) or a path (as a String) to
+    be added to <code>:source-paths</code>.  Returns the project map.
+</li>
+<li><a href="./apidoc/immutant.dev.html#var-current-project">immutant.dev/current-project</a> Returns the map representing the
+    currently active leiningen project. This will be the last project
+    reloaded by <code>reload-project!</code>, or the map read from <code>project.clj</code>
+    if <code>reload-project!</code> has yet to be called.
+
+<p>    
+    Examples:
+</p>
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">assuming we have an app loaded that initially only depends on clojure</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(from its project.clj)</span>
+(<span class="org-builtin">require</span> '[immutant.dev <span class="org-builtin">:as</span> dev]
+         '[clojure.java.io <span class="org-builtin">:as</span> io])
+
+(<span class="org-builtin">:dependencies</span> (dev/current-project)) <span class="org-comment-delimiter">; </span><span class="org-comment">=&gt; #{[org.clojure/clojure "1.4.0"]}</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">let's add more deps</span>
+(dev/add-dependencies! '[dep-1 <span class="org-string">"1.0.0"</span>] '[dep/two <span class="org-string">"0.1.0-SNAPSHOT"</span>] <span class="org-string">"extra"</span>)
+
+(<span class="org-builtin">:dependencies</span> (dev/current-project)) <span class="org-comment-delimiter">; </span><span class="org-comment">=&gt; #{[org.clojure/clojure "1.4.0"] [dep-1 "1.0.0"] [dep/two "0.1.0-SNAPSHOT"]}</span>
+
+(<span class="org-builtin">:source-paths</span> (dev/current-project)) <span class="org-comment-delimiter">; </span><span class="org-comment">=&gt; [["/path/to/app/root/src", "/path/to/app/root/extra"]]</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">now let's reset the deps to those specified in project.clj</span>
+(dev/reload-project!)
+
+(<span class="org-builtin">:dependencies</span> (dev/current-project)) <span class="org-comment-delimiter">; </span><span class="org-comment">=&gt; #{[org.clojure/clojure "1.4.0"]}</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">let's add a path to :source-paths directly</span>
+(dev/reload-project! ((dev/current-project) [<span class="org-builtin">:source-paths</span>]
+                      #(<span class="org-builtin">conj</span> % <span class="org-string">"something"</span>)))
+
+(<span class="org-builtin">:source-paths</span> (dev/current-project)) <span class="org-comment-delimiter">; </span><span class="org-comment">=&gt; [["/path/to/app/root/src", "/path/to/app/root/something"]]</span>
+
+</pre>
+
+</li>
+</ul>
+
+
+
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="initialization.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="web.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 1.1.3</div>
+</div>
+
+
+</body></html>

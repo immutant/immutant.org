@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Immutant</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Immutant" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2013-07-31 14:57:35 EDT" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="next"><a accesskey="n" href="what-is.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Immutant</h1>
+
+
+<h2 class="subtitle">The Clojure Application Platform</h2>
+<p class="releaseinfo">Immutant 1.0.0</p>
+<hr>
+<div id="index-toc"><ul><li class="toc-chapter-heading"><a href="what-is.html">Chapter 1. What is Immutant?</a><ul>
+<li><a href="what-is.html#sec-1">1.1. Introduction</a></li>
+</ul></li><li class="toc-chapter-heading"><a href="installation.html">Chapter 2. Installing Immutant</a><ul>
+<li><a href="installation.html#sec-1">2.1. Introduction</a></li>
+<li><a href="installation.html#sec-2">2.2. Distribution variants</a></li>
+<li><a href="installation.html#sec-3">2.3. Installation via Leiningen</a></li>
+<li><a href="installation.html#sec-4">2.4. Installation via Zip Download</a></li>
+</ul></li><li class="toc-chapter-heading"><a href="deployment.html">Chapter 3. Deploying Clojure Applications</a><ul>
+<li><a href="deployment.html#sec-1">3.1. Introduction</a></li>
+<li><a href="deployment.html#sec-2">3.2. Manually Deploying Artifacts</a></li>
+<li><a href="deployment.html#deployment-directory">3.3. Directory-based Deployment</a></li>
+<li><a href="deployment.html#deployment-archive">3.4. Archive-based Deployment</a></li>
+<li><a href="deployment.html#deployment-descriptor">3.5. Deployment Descriptor</a></li>
+<li><a href="deployment.html#lein-immutant-run">3.6. Running Immutant</a></li>
+</ul></li><li class="toc-chapter-heading"><a href="initialization.html">Chapter 4. Application Initialization &amp; Configuration</a><ul>
+<li><a href="initialization.html#sec-1">4.1. Introduction</a></li>
+<li><a href="initialization.html#initialization-porting">4.2. Porting an existing Ring application</a></li>
+<li><a href="initialization.html#sec-3">4.3. The Initialization Process</a></li>
+<li><a href="initialization.html#initialization-configuration">4.4. Configuration Options</a>
+<ul>
+<li><a href="initialization.html#initialization-configuration-values">4.4.1. Arbitrary Configuration Values</a></li>
+<li><a href="initialization.html#initialization-profiles">4.4.2. A note on profiles</a></li>
+</ul>
+</li>
+<li><a href="initialization.html#sec-5">4.5. Files Used In Configuration &amp; Initialization</a>
+<ul>
+<li><a href="initialization.html#sec-5-1">4.5.1. Deployment Descriptor</a></li>
+<li><a href="initialization.html#initialization-project-clj">4.5.2. project.clj</a></li>
+<li><a href="initialization.html#initialization-immutant-init">4.5.3. immutant.init</a></li>
+</ul>
+</li>
+<li><a href="initialization.html#initialization-dependencies">4.6. Dependencies &amp; Resources</a></li>
+</ul></li><li class="toc-chapter-heading"><a href="web.html">Chapter 5. Web</a><ul>
+<li><a href="web.html#sec-1">5.1. Introduction</a></li>
+<li><a href="web.html#web-context-path">5.2. Context Path</a>
+<ul>
+<li><a href="web.html#sec-2-1">5.2.1. The Top-Level Context Path</a></li>
+<li><a href="web.html#sec-2-2">5.2.2. The Sub-Context Path</a></li>
+</ul>
+</li>
+<li><a href="web.html#web-virtual-host">5.3. Virtual Host</a></li>
+<li><a href="web.html#web-handler">5.4. Registering Handlers</a></li>
+<li><a href="web.html#sec-5">5.5. Deregistering Handlers</a></li>
+<li><a href="web.html#web-context-path-example">5.6. Context/Sub-Context Path Example</a></li>
+<li><a href="web.html#sec-7">5.7. Sessions</a>
+<ul>
+<li><a href="web.html#web-session-options">5.7.1. Setting session timeout and cookie attributes</a></li>
+<li><a href="web.html#sec-7-2">5.7.2. Duplicate session cookies</a></li>
+</ul>
+</li>
+<li><a href="web.html#sec-8">5.8. Locating dirs within the application root</a>
+<ul>
+<li><a href="web.html#sec-8-1">5.8.1. An example</a></li>
+</ul>
+</li>
+<li><a href="web.html#sec-9">5.9. Serving static resources</a></li>
+<li><a href="web.html#sec-10">5.10. Mounting Servlets instead of Ring handlers</a>
+<ul>
+<li><a href="web.html#sec-10-1">5.10.1. Pedestal</a></li>
+</ul>
+</li>
+</ul></li><li class="toc-chapter-heading"><a href="jobs.html">Chapter 6. Jobs</a><ul>
+<li><a href="jobs.html#sec-1">6.1. Introduction</a></li>
+<li><a href="jobs.html#sec-2">6.2. Scheduling Jobs</a>
+<ul>
+<li><a href="jobs.html#jobs-cron-syntax">6.2.1. Cron Syntax</a></li>
+<li><a href="jobs.html#sec-2-2">6.2.2. A Note On Dynamic Singleton Jobs</a></li>
+<li><a href="jobs.html#sec-2-3">6.2.3. Job MBeans</a></li>
+</ul>
+</li>
+<li><a href="jobs.html#sec-3">6.3. Unscheduling Jobs</a></li>
+</ul></li><li class="toc-chapter-heading"><a href="messaging.html">Chapter 7. Messaging</a><ul>
+<li><a href="messaging.html#sec-1">7.1. Introduction</a>
+<ul>
+<li><a href="messaging.html#sec-1-1">7.1.1. HornetQ</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#sec-2">7.2. Destinations</a>
+<ul>
+<li><a href="messaging.html#sec-2-1">7.2.1. Durable Topic Subscribers</a></li>
+<li><a href="messaging.html#sec-2-2">7.2.2. Deployment</a></li>
+<li><a href="messaging.html#sec-2-3">7.2.3. Accessing Destinations Controllers</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#sec-3">7.3. Messages</a>
+<ul>
+<li><a href="messaging.html#sec-3-1">7.3.1. Publishing</a>
+<ul>
+<li><a href="messaging.html#sec-3-1-1">7.3.1.1. Some Examples</a></li>
+<li><a href="messaging.html#messaging-publishing-encodings-note">7.3.1.2. A note about encodings</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#messaging-receiving">7.3.2. Receiving</a>
+<ul>
+<li><a href="messaging.html#sec-3-2-1">7.3.2.1. Transactional by default</a></li>
+<li><a href="messaging.html#sec-3-2-2">7.3.2.2. Some Examples</a></li>
+<li><a href="messaging.html#sec-3-2-3">7.3.2.3. Accessing Listeners via JMX</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="messaging.html#messaging-request-response">7.4. Request/Response</a>
+<ul>
+<li><a href="messaging.html#sec-4-1">7.4.1. Request</a></li>
+<li><a href="messaging.html#sec-4-2">7.4.2. Respond</a></li>
+<li><a href="messaging.html#sec-4-3">7.4.3. Some Examples</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#messaging-pipelines">7.5. Pipelines</a>
+<ul>
+<li><a href="messaging.html#sec-5-1">7.5.1. Creating a pipeline</a>
+<ul>
+<li><a href="messaging.html#sec-5-1-1">7.5.1.1. Pipeline options</a></li>
+<li><a href="messaging.html#sec-5-1-2">7.5.1.2. Per-step options</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#sec-5-2">7.5.2. Using a pipeline</a></li>
+<li><a href="messaging.html#messaging-pipelines-bindings">7.5.3. Available bindings</a></li>
+<li><a href="messaging.html#sec-5-4">7.5.4. Error handling</a></li>
+<li><a href="messaging.html#sec-5-5">7.5.5. Halting the pipeline for a particular message</a></li>
+<li><a href="messaging.html#sec-5-6">7.5.6. Stopping the pipeline</a></li>
+</ul>
+</li>
+</ul></li><li class="toc-chapter-heading"><a href="caching.html">Chapter 8. Caching</a><ul>
+<li><a href="caching.html#sec-1">8.1. Introduction</a>
+<ul>
+<li><a href="caching.html#sec-1-1">8.1.1. Infinispan</a></li>
+</ul>
+</li>
+<li><a href="caching.html#sec-2">8.2. Caching Modes</a>
+<ul>
+<li><a href="caching.html#sec-2-1">8.2.1. Local</a></li>
+<li><a href="caching.html#sec-2-2">8.2.2. Invalidated</a></li>
+<li><a href="caching.html#sec-2-3">8.2.3. Replicated</a></li>
+<li><a href="caching.html#sec-2-4">8.2.4. Distributed</a></li>
+</ul>
+</li>
+<li><a href="caching.html#sec-3">8.3. The API</a>
+<ul>
+<li><a href="caching.html#sec-3-1">8.3.1. Creating</a></li>
+<li><a href="caching.html#sec-3-2">8.3.2. Writing</a></li>
+<li><a href="caching.html#sec-3-3">8.3.3. Reading</a></li>
+<li><a href="caching.html#sec-3-4">8.3.4. Memoizing</a></li>
+</ul>
+</li>
+</ul></li><li class="toc-chapter-heading"><a href="transactions.html">Chapter 9. Distributed Transactions (XA)</a><ul>
+<li><a href="transactions.html#sec-1">9.1. Introduction</a></li>
+<li><a href="transactions.html#sec-2">9.2. Creating XA DataSources</a>
+<ul>
+<li><a href="transactions.html#sec-2-1">9.2.1. For use with clojure.java.jdbc</a>
+<ul>
+<li><a href="transactions.html#sec-2-1-1">9.2.1.1. Using immutant.xa/datasource</a></li>
+<li><a href="transactions.html#sec-2-1-2">9.2.1.2. Using an AS7-configured DataSource</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="transactions.html#sec-3">9.3. Defining Transactions</a>
+<ul>
+<li><a href="transactions.html#sec-3-1">9.3.1. Transaction Scope</a></li>
+</ul>
+</li>
+</ul></li><li class="toc-chapter-heading"><a href="daemons.html">Chapter 10. Daemons</a><ul>
+<li><a href="daemons.html#sec-1">10.1. Introduction</a></li>
+<li><a href="daemons.html#sec-2">10.2. Starting a Daemon</a></li>
+<li><a href="daemons.html#sec-3">10.3. Examples</a></li>
+</ul></li><li class="toc-chapter-heading"><a href="interactive.html">Chapter 11. Interactive Development</a><ul>
+<li><a href="interactive.html#sec-1">11.1. Introduction</a>
+<ul>
+<li><a href="interactive.html#interactive-binding">11.1.1. Binding To An Interface</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-2">11.2. nREPL</a>
+<ul>
+<li><a href="interactive.html#sec-2-1">11.2.1. Starting nREPL</a>
+<ul>
+<li><a href="interactive.html#sec-2-1-1">11.2.1.1. Starting nREPL Via :nrepl-port</a></li>
+<li><a href="interactive.html#sec-2-1-2">11.2.1.2. Starting nREPL Programatically</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-2-2">11.2.2. Connecting to nREPL</a>
+<ul>
+<li><a href="interactive.html#interactive-nrepl-emacs">11.2.2.1. Connecting via Emacs</a></li>
+<li><a href="interactive.html#sec-2-2-2">11.2.2.2. Connecting via reply</a></li>
+<li><a href="interactive.html#sec-2-2-3">11.2.2.3. Connecting via Counterclockwise</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-2-3">11.2.3. Shutting Down nREPL</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-3">11.3. Swank</a>
+<ul>
+<li><a href="interactive.html#sec-3-1">11.3.1. Starting Swank</a>
+<ul>
+<li><a href="interactive.html#sec-3-1-1">11.3.1.1. Starting Swank Via :swank-port</a></li>
+<li><a href="interactive.html#sec-3-1-2">11.3.1.2. Starting Swank Programatically</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-3-2">11.3.2. Connecting to Swank</a>
+<ul>
+<li><a href="interactive.html#sec-3-2-1">11.3.2.1. Connecting via Emacs</a></li>
+<li><a href="interactive.html#sec-3-2-2">11.3.2.2. Connecting via Vim</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-3-3">11.3.3. Shutting Down Swank</a></li>
+</ul>
+</li>
+<li><a href="interactive.html#sec-4">11.4. Reloading application dependencies</a></li>
+</ul></li><li class="toc-chapter-heading"><a href="jboss.html">Chapter 12. JBoss AS Crash Course</a><ul>
+<li><a href="jboss.html#sec-1">12.1. Introduction</a></li>
+<li><a href="jboss.html#sec-2">12.2. Configuring</a></li>
+<li><a href="jboss.html#jboss-run">12.3. Running</a></li>
+<li><a href="jboss.html#sec-4">12.4. Deploying</a></li>
+<li><a href="jboss.html#sec-5">12.5. Logging</a>
+<ul>
+<li><a href="jboss.html#sec-5-1">12.5.1. JBoss Logging Configuration</a></li>
+</ul>
+</li>
+</ul></li><li class="toc-chapter-heading"><a href="production.html">Chapter 13. Production Setup</a><ul>
+<li><a href="production.html#sec-1">13.1. Introduction</a></li>
+<li><a href="production.html#sec-2">13.2. Configuring JBoss as a Service</a></li>
+<li><a href="production.html#sec-3">13.3. Clustering without Multicast</a>
+<ul>
+<li><a href="production.html#sec-3-1">13.3.1. Clustering on Amazon EC2</a></li>
+<li><a href="production.html#sec-3-2">13.3.2. HornetQ Configuration</a></li>
+</ul>
+</li>
+<li><a href="production.html#sec-4">13.4. Apache mod_cluster Reverse Proxy</a></li>
+<li><a href="production.html#sec-5">13.5. Application Configuration</a></li>
+</ul></li></ul></div>
+<ul id="appendices">
+  <li class="toc-chapter-heading"><a href="./apidoc/index.html">Appendix A. API Documentation</a></li>
+</ul>
+
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="next"><a accesskey="n" href="what-is.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 1.0.0</div>
+</div>
+
+
+</body></html>

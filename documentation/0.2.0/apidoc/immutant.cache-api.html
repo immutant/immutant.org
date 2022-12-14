@@ -1,0 +1,283 @@
+<html>
+  <head>
+    <title>immutant.cache - Immutant Clojure API API documentation</title>
+    <link href="static/favicon.png" rel="icon" />
+    <link href="static/favicon.png" rel="shortcut icon" />
+    <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/wiki.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/internal.css" rel="stylesheet" />
+    <style>.menuWrapper{height: 36px;}</style>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" href="http://www.wikispaces.com/_/2009051601/s/internal_ie.css" type="text/css" />
+    <![endif]-->
+  </head>
+<!--
+This document was auto-generated from the source by the clojure autodoc system.
+To report errors or ask questions about the overall documentation structure, formatting,
+etc., contact Tom Faulhaber (google mail name: tomfaulhaber).
+For errors in the documentation of a particular namespace, contact the author of that
+namespace.
+-->
+  <body>
+    <div id="AllContentContainer">
+      <div id="Header">
+	<!-- <a href="index.html" id="Logo"><img src="static/immutant-icon.gif" width="100" height="100" alt="Immutant" /></a> -->
+	<h1><a title="page header title" id="page-header" href="index.html">Immutant Clojure API</a> - v0.2.0</h1>
+      </div>
+      <div id="leftcolumn"><div style="text-align: center;"></div>
+<div class="menu">
+  <div class="WikiCustomNav WikiElement wiki">
+    <span class="toc-header"><span id="project-name">Immutant Clojure API</span> <span id="version"></span></span><br />
+    <ul>
+      <li><a class="wiki_link" href="index.html">Overview</a></li>
+      <li><a class="wiki_link" href="api-index.html">API Index</a></li>
+    </ul>
+    <div class="NamespaceTOC">
+      <span class="toc-header">Namespaces</span>
+      <ul id="left-sidebar-list">
+        <li><a href="immutant.utilities-api.html" class="wiki_link">immutant.utilities</a></li><li><a href="immutant.runtime-api.html" class="wiki_link">immutant.runtime</a></li><li><a href="immutant.repl-api.html" class="wiki_link">immutant.repl</a></li><li><a href="immutant.registry-api.html" class="wiki_link">immutant.registry</a></li><li><a href="immutant.mbean-api.html" class="wiki_link">immutant.mbean</a></li><li><a href="immutant.codecs-api.html" class="wiki_link">immutant.codecs</a></li><li><a href="immutant.xa-api.html" class="wiki_link">immutant.xa</a></li><li><a href="immutant.messaging-api.html" class="wiki_link">immutant.messaging</a></li><li><a href="immutant.jobs-api.html" class="wiki_link">immutant.jobs</a></li><li><a href="immutant.daemons-api.html" class="wiki_link">immutant.daemons</a></li><li><a href="immutant.cache-api.html" class="wiki_link">immutant.cache</a></li><li><a href="immutant.web-api.html" class="wiki_link">immutant.web</a></li>
+      </ul>
+    </div>
+    
+    <a href="http://immutant.org" class="wiki_link">Immutant Home</a>
+    <a href="../index.html" class="wiki_link">Immutant Manual</a>
+
+  </div>
+</div>
+</div>
+      <div id="rightcolumn">
+	<div id="Content">
+	  <div class="contentBox"><div class="innerContentBox">
+              <div id="content_view" class="wiki wikiPage">
+                <div id="right-sidebar"><div id="toc">
+  <h1 class="nopad">Table of Contents</h1>
+  <div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.cache">immutant.cache</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/-&gt;DelayedCache">-&gt;DelayedCache</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/-&gt;InfinispanCache">-&gt;InfinispanCache</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/Mutable">Mutable</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/cache">cache</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/delete">delete</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/delete-all">delete-all</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/memo">memo</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/put">put</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/put-all">put-all</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/put-if-absent">put-if-absent</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/put-if-present">put-if-present</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache/put-if-replace">put-if-replace</a>
+    </div>
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.cache.core">immutant.cache.core</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.cache.core/raw-cache">raw-cache</a>
+    </div>
+    <br />
+  </div>
+</div>
+</div>
+                <div id="content-tag">
+<p></p>
+<h2 class="namespace-header" id="immutant.cache">immutant.cache</h2>
+<pre id="namespace-docstr">Infinispan-backed implementations of core.cache and core.memoize
+protocols supporting multiple replication options and more.</pre>
+
+
+<br />
+
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/-&gt;DelayedCache">-&gt;DelayedCache</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (-&gt;DelayedCache cache delayed)
+</pre>
+  <pre id="var-docstr">Positional factory function for class immutant.cache.DelayedCache.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/6accd0b68930b9a767aa9348e6d8516d6c54f72d/./modules/cache/src/main/clojure/immutant/cache.clj#L125" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/-&gt;InfinispanCache">-&gt;InfinispanCache</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (-&gt;InfinispanCache cache options)
+</pre>
+  <pre id="var-docstr">Positional factory function for class immutant.cache.InfinispanCache.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/6accd0b68930b9a767aa9348e6d8516d6c54f72d/./modules/cache/src/main/clojure/immutant/cache.clj#L57" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/Mutable">Mutable</h2>
+  <span id="var-type">var</span><br />
+  <pre id="var-usage"></pre>
+  <pre id="var-docstr">Functions for manipulating a shared, distributed cache.
+
+Every 'put' function optionally accepts a map with the following
+lifespan-oriented keys:
+
+  :ttl - time-to-live, the max time the entry will live before expiry [-1]
+  :idle - the time after which an entry will expire if not accessed [-1]
+  :units - the units for the values of :ttl and :idle [:seconds]
+
+Negative values imply no expiration.
+Possible values for :units -- :days, :hours, :minutes, :seconds,
+                              :milliseconds, :microseconds :nanoseconds
+
+The conditional functions, e.g. put-if-*, are all atomic.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/6accd0b68930b9a767aa9348e6d8516d6c54f72d/./modules/cache/src/main/clojure/immutant/cache.clj#L27" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/cache">cache</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (cache name &amp; {:keys [mode seed], :as options})
+</pre>
+  <pre id="var-docstr">Returns an object that implements both Mutable and
+core.cache/CacheProtocol. A name is the only required argument. The
+following options are supported:
+
+The following options are supported [default]:
+  :mode   Replication mode [:invalidated or :local]
+            :local, :invalidated, :distributed, or :replicated
+  :seed   A hash of initial entries [nil]
+  :ttl    The max time the entry will live before expiry [-1]
+  :idle   The time after which an entry will expire if not accessed [-1]
+  :units  The units for the values of :ttl and :idle [:seconds]
+
+The replication mode defaults to :invalidated when clustered. When
+not clustered, the value of :mode is ignored, and the cache will
+be :local.
+
+Seeding the cache will delete any existing entries.
+
+The lifespan-oriented options (:ttl :idle :units) become the
+default options for the functions of the Mutable protocol. But any
+options passed to those functions take precedence over these.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/6accd0b68930b9a767aa9348e6d8516d6c54f72d/./modules/cache/src/main/clojure/immutant/cache.clj#L151" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/delete">delete</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (delete cache key)
+       (delete cache key value)
+</pre>
+  <pre id="var-docstr">Delete the entry; value must match current if passed</pre>
+  
+  
+  
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/delete-all">delete-all</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (delete-all cache)
+</pre>
+  <pre id="var-docstr">Clear all entries from the cache and return it</pre>
+  
+  
+  
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/memo">memo</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (memo f name &amp; options)
+</pre>
+  <pre id="var-docstr">Memoize a function by associating its arguments with return values
+stored in a possibly-clustered Infinispan-backed cache. Other than
+the function to be memoized, arguments are the same as for the
+cache function.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/6accd0b68930b9a767aa9348e6d8516d6c54f72d/./modules/cache/src/main/clojure/immutant/cache.clj#L176" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/put">put</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (put cache key value)
+       (put cache key value options)
+</pre>
+  <pre id="var-docstr">Put an entry in the cache</pre>
+  
+  
+  
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/put-all">put-all</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (put-all cache map)
+       (put-all cache map options)
+</pre>
+  <pre id="var-docstr">Put all the entries in cache</pre>
+  
+  
+  
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/put-if-absent">put-if-absent</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (put-if-absent cache key value)
+       (put-if-absent cache key value options)
+</pre>
+  <pre id="var-docstr">Put it in only if key is not already there</pre>
+  
+  
+  
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/put-if-present">put-if-present</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (put-if-present cache key value)
+       (put-if-present cache key value options)
+</pre>
+  <pre id="var-docstr">Put it in only if key is already there</pre>
+  
+  
+  
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache/put-if-replace">put-if-replace</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (put-if-replace cache key old new)
+       (put-if-replace cache key old new options)
+</pre>
+  <pre id="var-docstr">Put it in only if key is there and current matches old</pre>
+  
+  
+  
+</div>
+<h2 class="namespace-header sub-namespace" id="immutant.cache.core">immutant.cache.core</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.cache.core/raw-cache">raw-cache</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (raw-cache name)
+       (raw-cache name mode)
+</pre>
+  <pre id="var-docstr">Returns the raw Infinispan cache, clustered if possible, otherwise local</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/6accd0b68930b9a767aa9348e6d8516d6c54f72d/./modules/cache/src/main/clojure/immutant/cache/core.clj#L80" id="var-source">Source</a>
+</div>
+
+
+</div>
+              </div>
+            </div>
+          </div>
+	</div>
+	<div id="foot">
+	  <div style="text-align: center;" id="copyright">Copyright 2011-2012 Red Hat, Inc.</div>
+	</div>
+      </div>
+      <div id="DesignedBy">Based on a site design by <a title="Visit Tom Hickey's website." href="http://www.tomhickey.com">Tom Hickey</a>.<br />
+      <a href="http://tomfaulhaber.github.com/autodoc/">Clojure auto-documentation system</a> by Tom Faulhaber.</div>
+    </div>
+    <!-- /AllContentContainer -->
+  </body>
+
+</html>

@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | News
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            News
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2015/09/09/datomic-redux/">Using Datomic With Immutant Redux</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  The Immutant Team
+                </div>
+                <div class="date">
+                  Wednesday, September  9, 2015
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/datomic/">datomic</a>
+                <a href="/news/tags/messaging/">messaging</a>
+              </div>
+              <div class="body">
+                <p>A month ago, we <a href="/news/2015/08/03/datomic/">covered</a> how to use <a href="http://www.datomic.com/">Datomic</a> with Immutant. Now that
+                Immutant 2.1.0 has been <a href="/news/2015/09/01/announcing-2-1-0/">released</a>, the process of using Immutant
+                messaging and Datomic in the same application is a bit simpler, so
+                we&#39;re covering just that here.</p>
+                
+                <p>With Immutant 2.1.0, <code>org.immutant/messaging</code> can now work with the
+                HornetQ 2.3.x brought in by Datomic, you just have to have the proper
+                dependency inclusions/exclusions for it to work. The minimum to get
+                this working is:</p>
+                
+                <pre class="syntax clojure">&#x000A;:dependencies [[org.immutant/immutant "2.1.0"]&#x000A;               ;; Datomic transitively brings in HornetQ 2.3.17.Final, which&#x000A;               ;; overrides the HornetQ 2.4.5.Final from org.immutant/messaging&#x000A;               [com.datomic/datomic-pro "0.9.5206"]&#x000A;               ;; org.immutant/messaging requires this, but Datomic doesn't&#x000A;               ;; bring it in, so we have to depend on it explicitly&#x000A;               [org.hornetq/hornetq-jms-server "2.3.17.Final"&#x000A;                :exclusions [org.jboss.jbossts.jts/jbossjts-jacorb]]]</pre>
+                
+                <p>But doing just that leads to lots of warnings in Leiningen&#39;s pedantic
+                report. Both Datomic and Immutant have large dependency trees, so
+                conflicts are inevitable. If you want to get rid of those warnings,
+                we&#39;ve figured that out for you as well:</p>
+                
+                <pre class="syntax clojure">&#x000A;:dependencies [[org.immutant/immutant "2.1.0"&#x000A;                :exclusions [org.hornetq/hornetq-server&#x000A;                             org.hornetq/hornetq-jms-server&#x000A;                             org.hornetq/hornetq-journal&#x000A;                             org.hornetq/hornetq-commons]]&#x000A;               [com.datomic/datomic-pro "0.9.5206"&#x000A;                :exclusions [org.slf4j/slf4j-nop&#x000A;                             joda-time&#x000A;                             commons-codec&#x000A;                             org.jboss.logging/jboss-logging]]&#x000A;               [org.hornetq/hornetq-jms-server "2.3.17.Final"&#x000A;                :exclusions [org.jboss.spec.javax.transaction/jboss-transaction-api_1.1_spec&#x000A;                             org.jboss.logging/jboss-logging&#x000A;                             org.jboss/jboss-transaction-spi&#x000A;                             org.jgroups/jgroups&#x000A;                             org.jboss.jbossts.jts/jbossjts-jacorb]]]</pre>
+                
+                <h2 id="Get_In_Touch" onclick="window.location = '#Get_In_Touch'">Get In Touch</h2>
+                
+                <p>If you have any questions, issues, or other feedback about Datomic
+                with Immutant, you can always find us on
+                <a href="/community/#irc">#immutant on freenode</a> or
+                <a href="/community/#mailing-lists">our mailing list</a>.</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2015/09/09/datomic-redux/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2015/08/03/datomic/">Using Datomic With Immutant</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  The Immutant Team
+                </div>
+                <div class="date">
+                  Monday, August  3, 2015
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/datomic/">datomic</a>
+                <a href="/news/tags/messaging/">messaging</a>
+              </div>
+              <div class="body">
+                <div class="notice big"> Note: now that <a
+                href="/news/2015/09/01/announcing-2-1-0/">Immutant 2.1.0 is out</a>,
+                we've published another <a
+                href="/news/2015/09/09/datomic-redux/">Datomic post</a> covering using
+                it with 2.1.0 specifically.
+                </div>
+                
+                <p>Immutant 2.x is just a set of libraries, usable from a standard
+                Clojure application. The <a href="http://www.datomic.com/">Datomic</a> peer client is also a library, so
+                in theory we can use Immutant and Datomic together in the same
+                application. But in pratice, it&#39;s not that simple.</p>
+                
+                <p>The sticking point is <a href="http://hornetq.org">HornetQ</a> - Datomic uses HornetQ to connect
+                peers to the transactor and depends on HornetQ 2.3.x, while Immutant
+                depends on 2.4.x. We should be able to resolve this with the proper
+                dependency exclusions - the API that Datomic uses in 2.3.x is
+                available in 2.4.x, but there are two issues that prevent that from
+                working with the current stable release of Immutant (<a href="/news/2015/06/22/announcing-2-0-2/">2.0.2</a>):</p>
+                
+                <ol>
+                <li>Immutant 2.0.x uses the <a href="http://www.oracle.com/technetwork/articles/java/jms20-1947669.html">JMS 2.0</a> API, which didn&#39;t appear in
+                HornetQ until 2.4.0, so 2.4.x is required.</li>
+                <li>The Datomic transactor is running HornetQ 2.3.x, and a 2.4.x client
+                can&#39;t connect to a 2.3.x server, so 2.3.x is required.</li>
+                </ol>
+                
+                <p>Hence our pickle.</p>
+                
+                <p>But, all is not lost - with Immutant 2.0.x, you have two (non-awesome)
+                options for using Datomic, and if you are willing to use recent
+                Immutant <a href="/builds/2x/">incremental builds</a> (and are willing to upgrade to
+                Immutant 2.1.0 when it is released in a few weeks), you have a third,
+                more palatable option.</p>
+                
+                <h2 id="Option_1_-_No_Immutant_Messaging" onclick="window.location = '#Option_1_-_No_Immutant_Messaging'">Option 1 - No Immutant Messaging</h2>
+                
+                <p>The first option for using Datomic with Immutant 2.0.x is to not use
+                Immutant messaging. This requires either depending individually on the
+                Immutant libraries you are using:</p>
+                
+                <pre class="syntax clojure">&#x000A;  :dependencies [[com.datomic/datomic-pro "0.9.5206"]&#x000A;                 [org.immutant/web "2.0.2"]&#x000A;                 [org.immutant/scheduling "2.0.2"]&#x000A;                 ...]</pre>
+                
+                <p>or using the catch-all artifact, and excluding messaging:</p>
+                
+                <pre class="syntax clojure">&#x000A;  :dependencies [[com.datomic/datomic-pro "0.9.5206"]&#x000A;                 [org.immutant/immutant "2.0.2"&#x000A;                  :exclusions [org.immutant/messaging]]&#x000A;                 ...]</pre>
+                
+                <p>But this means you can&#39;t use any of the Immutant <a href="/documentation/current/apidoc/immutant.messaging.html">messaging features</a>,
+                which isn&#39;t great.</p>
+                
+                <h2 id="Option_2_-_In_WildFly_Only" onclick="window.location = '#Option_2_-_In_WildFly_Only'">Option 2 - In WildFly Only</h2>
+                
+                <p>An Immutant application <a href="/documentation/current/apidoc/guide-wildfly.html">deployed</a> to a <a href="http://wildfly.org/">WildFly</a> application server
+                doesn&#39;t directly use any on the HornetQ APIs, and instead uses the JMS
+                API to communicate with the HornetQ provided by WildFly. That HornetQ
+                is ClassLoader-isolated, which means your application can bring in its
+                own version of HornetQ (in this case, 2.3.x via Datomic), which can be
+                used without issue.</p>
+                
+                <p>But this means you have to do all of your development against an
+                application running inside WildFly, which isn&#39;t a great development
+                experience. With our <a href="https://github.com/immutant/lein-immutant/blob/master/docs/deployment.md">&quot;dev&quot; war</a>, you can still have a REPL-driven
+                process, but it is definitely more painful than out-of-container
+                development.</p>
+                
+                <h2 id="Option_3_-_Use_Recent_Incrementals,_i.e._2.1.0" onclick="window.location = '#Option_3_-_Use_Recent_Incrementals,_i.e._2.1.0'">Option 3 - Use Recent Incrementals, i.e. 2.1.0</h2>
+                
+                <p>For the soon-to-be-released Immutant 2.1.0, we&#39;re working on
+                supporting <a href="https://www.redhat.com/en/technologies/jboss-middleware/application-platform">Red Hat JBoss Enterprise Application Platform</a> (which is
+                a mouthful, so we&#39;ll just call it EAP). EAP is the commercialized
+                version of Red Hat&#39;s open source JBoss Application Server (now known
+                as WildFly), and the current version (6.4.0) is based off an older
+                WildFly that uses HornetQ 2.3.x. We&#39;ll cover what EAP support really
+                means in a future blog post - what matters today is that changes we&#39;ve
+                made in Immutant to support EAP allow you to use Immutant messaging
+                with Datomic both in and out of WildFly (and soon EAP).</p>
+                
+                <p>The only issues with this option is you have to use a recent
+                incremental build of Immutant until we release 2.1.0, and do a few
+                dependency exclusions/inclusions to make Immutant messaging and
+                Datomic play nicely. Luckily, we&#39;ve figured that out for you! The bare
+                minimum to get things working is:</p>
+                
+                <pre class="syntax clojure">&#x000A;:dependencies [[org.immutant/immutant "2.x.incremental.602"]&#x000A;               ;; Datomic transitively brings in HornetQ 2.3.17.Final, which&#x000A;               ;; overrides the HornetQ 2.4.5.Final from org.immutant/messaging&#x000A;               [com.datomic/datomic-pro "0.9.5206"]&#x000A;               ;; org.immutant/messaging requires this, but Datomic doesn't&#x000A;               ;; bring it in, so we have to depend on it explicitly&#x000A;               [org.hornetq/hornetq-jms-server "2.3.17.Final"&#x000A;                :exclusions [org.jboss.jbossts.jts/jbossjts-jacorb]]]</pre>
+                
+                <p>Now that you have it working, you&#39;ll probably notice that Leiningen&#39;s
+                pedantic report is chock full of warnings. Both Datomic and Immutant
+                have large dependency trees, so conflicts are inevitable. If you want
+                to get rid of those warnings, we&#39;ve figured that out for you as well:</p>
+                
+                <pre class="syntax clojure">&#x000A;:dependencies [[org.immutant/immutant "2.x.incremental.602"&#x000A;                :exclusions [org.hornetq/hornetq-server&#x000A;                             org.hornetq/hornetq-jms-server&#x000A;                             org.hornetq/hornetq-journal&#x000A;                             org.hornetq/hornetq-commons]]&#x000A;               [com.datomic/datomic-pro "0.9.5206"&#x000A;                :exclusions [org.slf4j/slf4j-nop&#x000A;                             joda-time&#x000A;                             commons-codec&#x000A;                             org.jboss.logging/jboss-logging]]&#x000A;               [org.hornetq/hornetq-jms-server "2.3.17.Final"&#x000A;                :exclusions [org.jboss.spec.javax.transaction/jboss-transaction-api_1.1_spec&#x000A;                             org.jboss.logging/jboss-logging&#x000A;                             org.jboss/jboss-transaction-spi&#x000A;                             org.jgroups/jgroups&#x000A;                             org.jboss.jbossts.jts/jbossjts-jacorb]]]</pre>
+                
+                <p>Note again that this option currently requires you to run a recent
+                <a href="/builds/2x/">incremental build</a> (#602 or newer), which requires
+                relying on our incremental repo:</p>
+                
+                <pre class="syntax clojure">&#x000A;:repositories [["Immutant incremental builds" "http://downloads.immutant.org/incremental/"]]</pre>
+                
+                <h2 id="Get_In_Touch" onclick="window.location = '#Get_In_Touch'">Get In Touch</h2>
+                
+                <p>If you have any questions, issues, or other feedback about Datomic
+                with Immutant, you can always find us on
+                <a href="/community/">#immutant on freenode</a> or
+                <a href="/community/mailing_lists">our mailing lists</a>.</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2015/08/03/datomic/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2015/06/04/activemq-artemis/">Using ActiveMQ Artemis With Immutant</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Toby Crawley
+                </div>
+                <div class="date">
+                  Thursday, June  4, 2015
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/messaging/">messaging</a>
+              </div>
+              <div class="body">
+                <p><a href="http://activemq.apache.org/artemis/">Artemis</a> is a &quot;new&quot; JMS2-compatible message broker based on a merging
+                of the <a href="http://activemq.apache.org/">ActiveMQ</a> and <a href="http://hornetq.org/">HornetQ</a> codebases, and represents the future
+                of both projects.</p>
+                
+                <p>Immutant is built on an abstraction layer called <a href="https://github.com/projectodd/wunderboss/">WunderBoss</a> in order
+                to share much of the implementation with our sibling project,
+                <a href="http://torquebox.org/">TorqueBox</a>. An additional advantage of this layer is it allows us (in
+                theory) to easily switch out the underlying messaging implementation
+                while keeping the same Clojure API. With the release of Artemis 1.0.0,
+                we&#39;ve now taken the opportunity to test that theory.</p>
+                
+                <h2 id="wunderboss-artemis" onclick="window.location = '#wunderboss-artemis'">wunderboss-artemis</h2>
+                
+                <p>With only a couple of changes to WunderBoss that allow us to share the
+                bulk of the existing JMS2 implementation between the HornetQ and
+                Artemis adapters and make it easier to exclude the HornetQ
+                dependencies, we&#39;re now able to provide <a href="https://github.com/projectodd/wunderboss-artemis/">wunderboss-artemis</a>. It
+                allows you to use Artemis instead of HornetQ as the message broker in
+                an embedded application (it doesn&#39;t yet support Artemis if you are
+                deploying to WildFly).</p>
+                
+                <p>If you want to give it a try, you just need to depend on a recent
+                <a href="/builds/2x/">incremental build</a> (#585 or newer)
+                and make a few adjustments to your <code>:dependencies</code>:</p>
+                
+                <pre><code>:dependencies [[org.immutant/messaging &quot;2.x.incremental.585&quot;&#x000A;                :exclusions [org.projectodd.wunderboss/wunderboss-messaging-hornetq]]&#x000A;               [org.projectodd.wunderboss/wunderboss-artemis &quot;0.1.0&quot;]]&#x000A;</code></pre>
+                
+                <p>If you then use messaging and see something like the following in your
+                log output, you&#39;re all set!</p>
+                
+                <pre><code>14:12:44.471 INFO  [org.apache.activemq.artemis.core.server] (main) AMQ221020: Started Acceptor at localhost:5445 for protocols [CORE]&#x000A;14:12:44.471 INFO  [org.apache.activemq.artemis.core.server] (main) AMQ221007: Server is now live&#x000A;14:12:44.471 INFO  [org.apache.activemq.artemis.core.server] (main) AMQ221001: Apache ActiveMQ Artemis Message Broker version 1.0.0 [nodeID=2107a7c3-0a1c-11e5-955d-71ef037c4451]&#x000A;</code></pre>
+                
+                <p>Artemis is brand new - once it matures a bit, we may provide an
+                immutant-artemis lib that would bring in wunderboss-artemis and
+                provide an Artemis management namespace similar to the
+                <a href="http://immutant.org/documentation/current/apidoc/immutant.messaging.hornetq.html">immutant.messaging.hornetq</a> we currently provide.</p>
+                
+                <p>As always, if you have any issues or feedback, feel free to
+                <a href="/community/">get in touch</a>.</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2015/06/04/activemq-artemis/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2014/09/22/transit-and-immutant/">Using Transit with Immutant 2</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Toby Crawley
+                </div>
+                <div class="date">
+                  Monday, September 22, 2014
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/caching/">caching</a>
+                <a href="/news/tags/messaging/">messaging</a>
+                <a href="/news/tags/transit/">transit</a>
+              </div>
+              <div class="body">
+                <p>Out of the box, Immutant 2 has support for several data serialization
+                strategies for use with messaging and caching, namely: <a href="https://github.com/edn-format/edn">EDN</a>,
+                <a href="https://github.com/clojure/data.fressian">Fressian</a>, <a href="http://json.org/">JSON</a>, and none (which falls back to Java
+                serialization). But what if you want to use another strategy? Luckily,
+                this isn&#39;t a closed set - Immutant allows us to add new
+                strategies. We took advantage of that and have created a separate
+                project that brings <a href="https://github.com/cognitect/transit-clj">Transit</a> support to Immutant -
+                <a href="https://github.com/immutant/immutant-transit">immutant-transit</a>.</p>
+                
+                <h2 id="What_is_Transit?" onclick="window.location = '#What_is_Transit?'">What is Transit?</h2>
+                
+                <p>From the <a href="https://github.com/cognitect/transit-format">Transit format</a> page:</p>
+                
+                <blockquote>
+                <p>Transit is a format and set of libraries for conveying values
+                between applications written in different programming languages.</p>
+                </blockquote>
+                
+                <p>It&#39;s similar in purpose to EDN, but leverages the speed of the
+                optimized JSON readers that most platforms provide.</p>
+                
+                <h2 id="What_does_immutant-transit_offer_over_using_Transit_directly?" onclick="window.location = '#What_does_immutant-transit_offer_over_using_Transit_directly?'">What does immutant-transit offer over using Transit directly?</h2>
+                
+                <p>immutant-transit provides an Immutant <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.codecs.html">codec</a> for Transit that allows
+                for transparent encoding and decoding of Transit data when using
+                Immutant&#39;s <a href="/tutorials/messaging/">messaging</a> and <a href="/tutorials/caching/">caching</a> functionality. Without it, you would
+                need to set up the encode/decode logic yourself.</p>
+                
+                <h2 id="Usage" onclick="window.location = '#Usage'">Usage</h2>
+                
+                <p><strong>Note: immutant-transit won&#39;t work with Immutant 2.0.0-alpha1 -
+                 you&#39;ll need to use an <a href="/builds/2x/">incremental build</a> (#298 or newer).</strong></p>
+                
+                <p>First, we need to add <code>org.immutant/immutant-transit</code> to our
+                application&#39;s dependencies:</p>
+                
+                <pre class="syntax clojure">&#x000A;  :dependencies [[org.clojure/clojure "1.6.0"]&#x000A;                 [org.immutant/immutant "2.x.incremental.298"]&#x000A;                 [org.immutant/immutant-transit "0.2.2"]]</pre>
+                
+                <p>If you don&#39;t have <code>com.cognitect/transit-clj</code> in your dependencies,
+                immutant-transit will transitively bring in version 0.8.259. We&#39;ve
+                tested against 0.8.255 and 0.8.259, so if you&#39;re running another
+                version and are seeing issues, <a href="https://github.com/immutant/immutant-transit/issues">let us know</a>.</p>
+                
+                <p>Now, we need to register the Transit codec with Immutant:</p>
+                
+                <pre class="syntax clojure">&#x000A;  (ns your.app&#x000A;    (:require [immutant.codecs.transit :as it]))&#x000A;&#x000A;  (it/register-transit-codec)</pre>
+                
+                <p>This will register a vanilla JSON Transit codec that encodes to a
+                <code>byte[]</code> under the name <code>:transit</code> with the content-type
+                <code>application/transit+json</code> (Immutant uses the content-type to identify
+                the encoding for messages sent via HornetQ).</p>
+                
+                <p>To use the codec, provide it as the <code>:encoding</code> option wherever an
+                encoding is used:</p>
+                
+                <pre class="syntax clojure">&#x000A;  (immutant.messaging/publish some-queue {:a :message} :encoding :transit)&#x000A;&#x000A;  (def transit-cache (immutant.caching/with-codec some-cache :transit))&#x000A;  (immutant.caching/compare-and-swap! transit-cache a-key a-function)</pre>
+                
+                <p>If you need to change the underlying format that Transit uses, or need
+                to provide custom read/write handlers, you can pass them as options to
+                <a href="https://github.com/immutant/immutant-transit/blob/0.2.2/src/immutant/codecs/transit.clj#L55">register-transit-codec</a>:</p>
+                
+                <pre class="syntax clojure">&#x000A;  (it/register-transit-codec&#x000A;    :type :json-verbose&#x000A;    :read-handlers my-read-handlers&#x000A;    :write-handlers my-write-handlers)</pre>
+                
+                <p>The content-type will automatically be generated based on the <code>:type</code>,
+                and will be of the form <code>application/transit+&lt;:type&gt;</code>.</p>
+                
+                <p>You can also override the name and content-type:</p>
+                
+                <pre class="syntax clojure">&#x000A;  (it/register-transit-codec&#x000A;    :name :transit-with-my-handlers&#x000A;    :content-type "application/transit+json+my-stuff"&#x000A;    :read-handlers my-read-handlers&#x000A;    :write-handlers my-write-handlers)</pre>
+                
+                <p>For more examples, see the <a href="https://github.com/immutant/immutant-transit/tree/master/example-app">example project</a>.</p>
+                
+                <h2 id="Why_is_this_a_separate_project_from_Immutant?" onclick="window.location = '#Why_is_this_a_separate_project_from_Immutant?'">Why is this a separate project from Immutant?</h2>
+                
+                <p>Transit&#39;s format and implementation are young, and are still in
+                flux. We&#39;re currently developing this as a separate project so we can
+                make releases independent of Immutant proper that track changes to
+                Transit. Once Transit matures a bit, we&#39;ll likely roll this in to
+                Immutant itself.</p>
+                
+                <p>If you are interested in adding a codec of your own, take a look at
+                the <a href="https://github.com/immutant/immutant-transit/blob/0.2.2/src/immutant/codecs/transit.clj">immutant-transit source</a> and at the
+                <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.codecs.html">immutant.codecs namespace</a> to see how it&#39;s done.</p>
+                
+                <h2 id="Get_In_Touch" onclick="window.location = '#Get_In_Touch'">Get In Touch</h2>
+                
+                <p>If you have any questions, issues, or other feedback about mmutant-transit,
+                you can always find us on <a href="/community/">#immutant on freenode</a> or
+                <a href="/community/mailing_lists">our mailing lists</a>.</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2014/09/22/transit-and-immutant/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2014/06/09/immutant-messaging-2x/">Messaging with The Deuce</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Toby Crawley
+                </div>
+                <div class="date">
+                  Monday, June  9, 2014
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/thedeuce/">thedeuce</a>
+                <a href="/news/tags/getting-started/">getting-started</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/messaging/">messaging</a>
+              </div>
+              <div class="body">
+                <p><a href="https://flic.kr/p/6ZpegH"><img src="/images/news/mailboxes.jpg" alt="[mailboxes]" class="alignleft bordered"/></a></p>
+                
+                <p>In this installment of our series on
+                <a href="/news/tags/thedeuce/">getting started with Immutant 2</a>, we&#39;ll take a
+                detailed look at the API of our library for messaging, and show
+                a few examples of usage.</p>
+                
+                <p>If you&#39;re coming from Immutant 1.x, you may notice that the artifact
+                has been renamed (<code>org.immutant/immutant-messaging</code> is now
+                <code>org.immutant/messaging</code>), and the API has changed a bit. We&#39;ll point
+                out the notable API changes as we go.</p>
+                
+                <h2 id="The_API" onclick="window.location = '#The_API'">The API</h2>
+                
+                <p>The messaging <a href="/builds/2x/LATEST/target/apidocs/index.html">API</a>
+                 is backed by <a href="http://hornetq.jboss.org/">HornetQ</a>, which is an implementation
+                of <a href="https://en.wikipedia.org/wiki/Java_Message_Service">JMS</a>. JMS provides two primary destination types: <em>queues</em> and
+                <em>topics</em>. Queues represent point-to-point destinations, and topics
+                publish/subscribe.</p>
+                
+                <p>To use a destination, we need to get a reference to one via the
+                <a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-queue">queue</a> or
+                <a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-topic">topic</a>
+                functions, depending on the type required. This will create the
+                destination if it does not already exist. This is a bit different than
+                the 1.x API, which provided a single <code>start</code> function for this, and
+                determined the type of destination based on conventions around the
+                provided name. In 2.x, we&#39;ve removed those naming conventions.</p>
+                
+                <p>Once we have a reference to a destination, we can operate on it with
+                the following functions:</p>
+                
+                <ul>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-publish">publish</a> -
+                sends a message to the destination</li>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-receive">receive</a> -
+                receives a single message from the destination</li>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-listen">listen</a> -
+                registers a function to be called each time a message
+                arrives at the destination</li>
+                </ul>
+                
+                <p>If the destination is a queue, we can do synchronous messaging
+                (<a href="https://en.wikipedia.org/wiki/Request-response">request-response</a>):</p>
+                
+                <ul>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-respond">respond</a> -
+                registers a function that receives each request, and the
+                returned value will be sent back to the requester</li>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-request">request</a> -
+                sends a message to the responder</li>
+                </ul>
+                
+                <p>Finally, to deregister listeners, responders, and destinations, we
+                provide a single
+                <a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-stop">stop</a>
+                function. This is another difference from 1.x -
+                the <code>unlisten</code> and <code>stop</code> functions have been collapsed to <code>stop</code>.</p>
+                
+                <h3 id="Some_Examples" onclick="window.location = '#Some_Examples'">Some Examples</h3>
+                
+                <p>The following code fragments were tested against
+                <a href="http://immutant.org/builds/2x/">2.x.incremental.133</a>. You should
+                follow the instructions in the <a href="/news/2014/04/28/getting-started-with-2x/">getting started</a> post to set up a
+                project using Immutant 2.x, and add
+                <code>[org.immutant/messaging &quot;2.x.incremental.133&quot;]</code> and
+                <code>[cheshire &quot;5.3.1&quot;]</code> to the project dependencies (we&#39;ll be encoding
+                some messages as JSON in our examples below, so we&#39;ll go ahead and add
+                <a href="https://github.com/dakrone/cheshire">cheshire</a> while we&#39;re at
+                it). Then, fire up a REPL, and require the <code>immutant.messaging</code>
+                namespace to follow along:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.messaging :refer :all])</pre>
+                
+                <p>First, let&#39;s create a queue:</p>
+                
+                <pre class="syntax clojure">(queue "my-queue")</pre>
+                
+                <p>That will create the queue in the HornetQ broker for us. We&#39;ll need a
+                reference to that queue to operate on it. Let&#39;s go ahead and store
+                that reference in a var:</p>
+                
+                <pre class="syntax clojure">(def q (queue "my-queue"))</pre>
+                
+                <p>We can call <code>queue</code> any number of times - if the queue already exists,
+                we&#39;re just grabbing a reference to it.</p>
+                
+                <p>Now, let&#39;s register a listener on our queue. Let&#39;s just print every
+                message we get:</p>
+                
+                <pre class="syntax clojure">(def listener (listen q println))</pre>
+                
+                <p>We can publish to that queue, and see that the listener gets called:</p>
+                
+                <pre class="syntax clojure">(publish q {:hi :there})</pre>
+                
+                <p>You&#39;ll notice that we&#39;re publishing a map there - we can publish
+                pretty much any data structure as a message. By default, that message
+                will be encoded using <a href="https://github.com/edn-format/edn">edn</a>. We also support other encodings, namely:
+                <code>:clojure</code>, <code>:fressian</code>, <code>:json</code>, and <code>:text</code>. We can choose a
+                different encoding by passing an :encoding option to <code>publish</code>:</p>
+                
+                <pre class="syntax clojure">(publish q {:hi :there} :encoding :json)</pre>
+                
+                <p>Out of the box, we provide full support for the <code>:clojure</code>, <code>:edn</code>,
+                and <code>:text</code> encodings. If you want to use <code>:fressian</code> or <code>:json</code>,
+                you&#39;ll need to add <code>org.clojure/data.fressian</code> or <code>cheshire</code> to your
+                dependencies to enable them, respectively.</p>
+                
+                <p>We passed our options to <code>publish</code> as keyword arguments, but they can
+                also be passed as a map:</p>
+                
+                <pre class="syntax clojure">(publish q {:hi :there} {:encoding :json})</pre>
+                
+                <p>This holds true for any of the messaging functions that take options.</p>
+                
+                <p>We&#39;re also passing the destination reference to <code>publish</code> instead of the
+                destination name. That&#39;s a departure from 1.x, where you could just pass the
+                destination name. Since we no longer have conventions about how queues and
+                topics should be named, we can no longer determine the type of the
+                destination from the name alone.</p>
+                
+                <p>We can deregister the listener by either passing it to <code>stop</code> or
+                calling <code>.close</code> on it:</p>
+                
+                <pre class="syntax clojure">(stop listener)&#x000A;;; identical to&#x000A;(.close listener)</pre>
+                
+                <p>Now let&#39;s take a look at synchronous messaging. Let&#39;s create a new
+                queue for this (you&#39;ll want to use a dedicated queue for each
+                responder) and register a responder that just increments the request:</p>
+                
+                <pre class="syntax clojure">(def sync-q (queue "sync"))&#x000A;&#x000A;(def responder (respond sync-q inc))</pre>
+                
+                <p>Then, we make a request, which returns a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html">Future</a> that we can
+                dereference:</p>
+                
+                <pre class="syntax clojure">@(request sync-q 1)</pre>
+                
+                <p>The responder is just a fancy listener, and can be deregistered the
+                same way as a listener.</p>
+                
+                <h2 id="That&#39;s_not_all..." onclick="window.location = '#That&#39;s_not_all...'">That&#39;s not all...</h2>
+                
+                <p>That was just a brief introduction to the messaging API. There are
+                features we&#39;ve yet to cover (durable topic subscriptions,
+                connection/session sharing, transactional sessions, remote
+                connections), but it&#39;s getting late, so we&#39;ll save those for another
+                time.</p>
+                
+                <h2 id="Try_it_out!" onclick="window.location = '#Try_it_out!'">Try it out!</h2>
+                
+                <p>As always, we&#39;d love to incorporate your feedback. Find us via our
+                <a href="http://immutant.org/community/">community</a> page and join the fun!</p>
+                
+                <p><em>Thanks to <a href="https://flic.kr/p/6ZpegH">John Lillis</a> for the image, used under <a href="https://creativecommons.org/licenses/by-nc-nd/2.0/">CC BY-NC-ND</a></em></p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2014/06/09/immutant-messaging-2x/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="pagination-links"><span class="current-page">1</span> <a href="/news/tags/messaging/page/2.html" class="page-link">2</a> <a href="/news/tags/messaging/page/3.html" class="page-link">3</a> <a href="/news/tags/messaging/page/2.html" class="next-link">Next</a> </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tags">
+              <div class="tag-cloud">
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/announcement/">announcement</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/app-server/">app-server</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/bears/">bears</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/beginning/">beginning</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/boot/">boot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/boot-immutant/">boot-immutant</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/caching/">caching</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/clustering/">clustering</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/daemons/">daemons</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/datomic/">datomic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/deploy/">deploy</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/distribution/">distribution</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/enterprise/">enterprise</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/event/">event</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/first/">first</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/getting-started/">getting-started</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/hotrod/">hotrod</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/infinispan/">infinispan</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/installation/">installation</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/isolation/">isolation</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein/">lein</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/lein-immutant/">lein-immutant</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/luminus/">luminus</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/messaging/">messaging</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/openshift/">openshift</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/overlay/">overlay</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/pipelines/">pipelines</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/polyglot/">polyglot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/poorsmatic/">poorsmatic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/postgresql/">postgresql</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/presentations/">presentations</a>
+                </span>
+                <span class="tag tag-6">
+                  <a href="http://immutant.org/news/tags/releases/">releases</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/ring/">ring</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/runtime/">runtime</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/scheduling/">scheduling</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/screencast/">screencast</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/slim/">slim</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/sockjs/">sockjs</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/survey/">survey</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/thedeuce/">thedeuce</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/torquebox/">torquebox</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transactions/">transactions</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transit/">transit</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/tutorial/">tutorial</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/under-the-hood/">under-the-hood</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/vertx/">vertx</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/web/">web</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/websockets/">websockets</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wildfly/">wildfly</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wtf/">wtf</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/xa/">xa</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

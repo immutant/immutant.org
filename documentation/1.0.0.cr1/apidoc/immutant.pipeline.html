@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html><head><link href="css/default.css" rel="stylesheet" type="text/css"><script src="js/jquery.min.js" type="text/javascript"></script><script src="js/page_effects.js" type="text/javascript"></script><title>immutant.pipeline documentation</title></head><body><div id="header"><h2><a href="../index.html">Immutant Manual</a></h2><h2><a href="http://immutant.org/">Immutant Home</a></h2><h1><a href="index.html">Immutant 1.0.0.cr1 API documentation</a></h1></div><div class="sidebar" id="namespaces"><h3><span>Namespaces</span></h3><ul><li><a href="immutant.cache.html"><span>immutant.cache</span></a></li><li><a href="immutant.codecs.html"><span>immutant.codecs</span></a></li><li><a href="immutant.daemons.html"><span>immutant.daemons</span></a></li><li><a href="immutant.dev.html"><span>immutant.dev</span></a></li><li><a href="immutant.jobs.html"><span>immutant.jobs</span></a></li><li><a href="immutant.messaging.html"><span>immutant.messaging</span></a></li><li><a href="immutant.messaging.hornetq.html"><span>immutant.messaging.hornetq</span></a></li><li class="current"><a href="immutant.pipeline.html"><span>immutant.pipeline</span></a></li><li><a href="immutant.registry.html"><span>immutant.registry</span></a></li><li><a href="immutant.repl.html"><span>immutant.repl</span></a></li><li><a href="immutant.util.html"><span>immutant.util</span></a></li><li><a href="immutant.web.html"><span>immutant.web</span></a></li><li><a href="immutant.web.session.html"><span>immutant.web.session</span></a></li><li><a href="immutant.xa.html"><span>immutant.xa</span></a></li><li><a href="immutant.xa.transaction.html"><span>immutant.xa.transaction</span></a></li><li><a href="immutant.xa.wrappers.html"><span>immutant.xa.wrappers</span></a></li></ul></div><div class="sidebar" id="vars"><h3>Public Vars</h3><ul><li><a href="immutant.pipeline.html#var-*current-step*"><span class="">*current-step*</span></a></li><li><a href="immutant.pipeline.html#var-*next-step*"><span class="">*next-step*</span></a></li><li><a href="immutant.pipeline.html#var-*pipeline*"><span class="">*pipeline*</span></a></li><li><a href="immutant.pipeline.html#var-halt"><span class="">halt</span></a></li><li><a href="immutant.pipeline.html#var-pipeline"><span class="">pipeline</span></a></li><li><a href="immutant.pipeline.html#var-step"><span class="">step</span></a></li><li><a href="immutant.pipeline.html#var-stop"><span class="">stop</span></a></li></ul></div><div class="namespace-docs" id="content"><h2>immutant.pipeline documentation</h2><pre class="doc">Provides functions for creating and managing pipelines. A pipeline
+is a composition of functions (&quot;steps&quot;), where each function is
+passed the result of the previous function, dereferenced if needed.
+It is built on top of Immutant's messaging subsystem, allowing each
+step to have multiple processing threads, and to be automatically
+load balanced across a cluster.
+
+The `pipeline` function takes a unique (within the scope of the
+application) name, one or more single-arity functions, and optional
+kwarg options, returning a function that places its argument onto
+the pipeline when called. The resulting pipeline-fn optionally
+returns a delay that can be used to retrieve the result of the
+pipeline execution.
+
+Each function can be optionally be wrapped with metadata that
+provides options for how that particular function is handled (see
+the 'step' fn below).
+
+Example:
+
+(require '[immutant.pipeline :as pl])
+
+(defn calculate-foo [m]
+  ...
+  (assoc m :foo value))
+
+(defn save-data [m]
+  ...)
+
+;; create a pipeline
+(defonce foo-pipeline
+  (pl/pipeline &quot;foo&quot; ;; pipelines must be named
+    (pl/step calculate-foo :concurrency 5) ;; run this step with 5 threads
+    (pl/step #(update-in % [:bar] + (:foo %)) :name :update-bar) ;; give this step a name
+    save-data ;; a 'vanilla' step
+    :concurrency 2 ;; run all steps with 2 threads (unless overridden)
+    :error-handler (fn [ex m] ;; do something special with errors, and retry
+                     ...
+                     (pl/*pipeline* m :step *current-step*))))
+
+;; put data onto the front pipeline
+(foo-pipeline {:bar 1 :ham &quot;biscuit&quot;})
+
+;; put data onto the pipeline at a given step
+(foo-pipeline {:bar 1 :foo 42 :ham &quot;gravy&quot;} :step :update-bar)
+
+;; get the result
+(deref (foo-pipeline {:bar 1 :ham &quot;biscuit&quot;}) 1000 ::timeout!)
+
+;; optional - it will automatically be stopped on undeploy
+(pl/stop foo-pipeline)
+
+This API is alpha, and subject to change.</pre><div class="public " id="var-*current-step*"><h3>*current-step*</h3><h4 class="type">var</h4><div class="usage"></div><pre class="doc">The name of the current pipeline step. Will be bound within the
+pipeline steps and error handlers.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.0.0.cr1//modules/messaging/src/main/clojure/immutant/pipeline.clj#L84">Source</a></div></div><div class="public " id="var-*next-step*"><h3>*next-step*</h3><h4 class="type">var</h4><div class="usage"></div><pre class="doc">The name of the next pipeline step. Will be bound within the
+pipeline steps and error handlers.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.0.0.cr1//modules/messaging/src/main/clojure/immutant/pipeline.clj#L89">Source</a></div></div><div class="public " id="var-*pipeline*"><h3>*pipeline*</h3><h4 class="type">var</h4><div class="usage"></div><pre class="doc">The currently active pipeline fn. Will be bound within the
+pipeline steps and error handlers.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.0.0.cr1//modules/messaging/src/main/clojure/immutant/pipeline.clj#L79">Source</a></div></div><div class="public " id="var-halt"><h3>halt</h3><div class="usage"></div><pre class="doc">Halts pipeline processing for a given message if returned from any
+handler function.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.0.0.cr1//modules/messaging/src/main/clojure/immutant/pipeline.clj#L94">Source</a></div></div><div class="public " id="var-pipeline"><h3>pipeline</h3><div class="usage"><code>(pipeline pl-name &amp; args)</code></div><pre class="doc">Creates a pipeline function.
+
+It takes a unique (within the scope of the application) name, one
+or more single-arity functions, and optional kwarg options, and
+returns a function that places its argument onto the pipeline when
+called. If :sync is true (the default), it returns a delayed value
+that can be derefed to get the result of the pipeline execution.
+
+The following kwarg options are supported, and must follow the step
+functions [default]:
+
+:concurrency         the number of threads to use for *each* step. Can be
+                     overridden on a per-step basis - see the 'step'
+                     function. [1]
+:error-handler       a function that will be called when any step raises
+                     an exception. It will be passed the exception and
+                     the argument to the step. Without an error-handler,
+                     the default HornetQ retry semantics will be
+                     used. Can be overridden on a per-step basis - see
+                     the 'step' function. [nil]
+:result-ttl          the time-to-live for the final pipeline result,
+                     in ms. Set to 0 for &quot;forever&quot;, -1 to disable
+                     returning the result via a delay [1 hour]
+:step-deref-timeout  the amount of time to wait when dereferencing
+                     the result of a step that returns a delay,
+                     in ms. Can be overridden on a per-step basis -
+                     see the 'step' function. [10 seconds]
+
+During the execution of each step and each error-handler call, the
+following vars are bound:
+
+*pipeline*      the pipeline (as a fn) that is being executed
+*current-step*  the name of the currently executing step
+*next-step*     the name of the next step in the pipeline
+
+This function is *not* idempotent. Attempting to create a pipeline
+with the same name as an existing pipeline will raise an error.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.0.0.cr1//modules/messaging/src/main/clojure/immutant/pipeline.clj#L206">Source</a></div></div><div class="public " id="var-step"><h3>step</h3><div class="usage"><code>(step f &amp; {:as opts})</code></div><pre class="doc">Wraps the given function with the given options, returning a function.
+
+The following options are supported [default]:
+
+:name                a name to use for the step [the current index of the fn]
+:concurrency         the number of threads to use, overriding the pipeline
+                     setting [1]
+:error-handler       an error handler function that can override the
+                     pipeline setting [nil]
+:step-deref-timeout  the amount of time to wait when dereferencing
+                     the result of the step if it returns a delay,
+                     in ms. Overrides the pipeline setting [10 seconds]</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.0.0.cr1//modules/messaging/src/main/clojure/immutant/pipeline.clj#L267">Source</a></div></div><div class="public " id="var-stop"><h3>stop</h3><div class="usage"><code>(stop pl &amp; args)</code></div><pre class="doc">Destroys a pipeline. Typically not necessary since it will be done
+for you when your app is undeployed. This will fail with a warning
+if any messages are yet to be delivered unless ':force true' is
+passed. Returns true on success.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.0.0.cr1//modules/messaging/src/main/clojure/immutant/pipeline.clj#L284">Source</a></div></div></div></body></html>

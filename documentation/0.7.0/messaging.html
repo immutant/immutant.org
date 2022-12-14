@@ -1,0 +1,656 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Immutant Messaging</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Immutant Messaging" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2012-12-06 13:55:49 EST" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="jobs.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="caching.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 7. Immutant Messaging</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="messaging.html#sec-1">7.1. Introduction</a>
+<ul>
+<li><a href="messaging.html#sec-1-1">7.1.1. HornetQ</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#sec-2">7.2. Destinations</a>
+<ul>
+<li><a href="messaging.html#sec-2-1">7.2.1. Durable Topic Subscribers</a></li>
+<li><a href="messaging.html#sec-2-2">7.2.2. Deployment</a></li>
+<li><a href="messaging.html#sec-2-3">7.2.3. Accessing Destinations via JMX</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#sec-3">7.3. Messages</a>
+<ul>
+<li><a href="messaging.html#sec-3-1">7.3.1. Publishing</a>
+<ul>
+<li><a href="messaging.html#sec-3-1-1">7.3.1.1. Some Examples</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#sec-3-2">7.3.2. Receiving</a>
+<ul>
+<li><a href="messaging.html#sec-3-2-1">7.3.2.1. Some Examples</a></li>
+<li><a href="messaging.html#sec-3-2-2">7.3.2.2. Acessing Listeners via JMX</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="messaging.html#messaging-request-response">7.4. Request/Response</a>
+<ul>
+<li><a href="messaging.html#sec-4-1">7.4.1. Request</a></li>
+<li><a href="messaging.html#sec-4-2">7.4.2. Respond</a></li>
+<li><a href="messaging.html#sec-4-3">7.4.3. Some Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">7.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+</div>
+
+<div class="outline-3" id="outline-container-1-1">
+<h3 id="sec-1-1"><span class="section-number-3">7.1.1.</span> HornetQ</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<p>
+   Immutant encapsulates the JBoss <a href="http://www.jboss.org/hornetq/">HornetQ message broker</a>.  It is
+   automatically available to you, with no additional configuration
+   required to start the messaging service. HornetQ supports clustered
+   messaging, which provides auto-discovery, load-balancing, and
+   failover, among other things.
+</p>
+<p>
+   The term "messaging" encompasses a large area of functionality.
+   Messaging solutions are used to achieve loosely-coupled,
+   asynchronous systems. The primary actors in a messaging-based
+   system are messages, destinations, consumers, and producers. The
+   broker mediates the relationships between the other actors.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">7.2.</span> Destinations</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  A destination represents a rendezvous point where messages are
+  exchanged. A message may be sent to a destination by one actor,
+  and received from the destination by another.
+</p>
+<p>
+  There are two main types of destinations: <b>queues</b> (point-to-point)
+  and <b>topics</b> (publish-subscribe). All destinations allow multiple
+  actors to send messages. The type of destination determines how the
+  message is routed. A queue delivers the message to a single
+  recipient (possibly one of many candidates). And a topic delivers
+  the message to all interested recipients. In both cases, the message
+  producers have no direct knowledge of the message consumers.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-1">
+<h3 id="sec-2-1"><span class="section-number-3">7.2.1.</span> Durable Topic Subscribers</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   Typically, messages published to a topic are only delivered to
+   consumers connected to the topic at that time. But if a consumer
+   identifies itself with a unique name, then the broker will
+   accumulate messages for that client when it's disconnected and
+   deliver them in order whenever the client reconnects.
+</p>
+<p>
+   You implicitly create a durable topic subscriber by passing the
+   <code>:client-id</code> option to the <code>receive</code> and <code>listen</code> functions,
+   described below. As long as you pass the same <code>:client-id</code> in
+   subsequent <code>receive/listen</code> calls, you'll receive every message
+   published to that topic, whether you were connected at the time or
+   not.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-2">
+<h3 id="sec-2-2"><span class="section-number-3">7.2.2.</span> Deployment</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<p>
+   Use the <a href="./apidoc/immutant.messaging-api.html#immutant.messaging/start">immutant.messaging/start</a> function to define a messaging
+   destination. A simple naming convention designates the destination
+   as either a queue or a topic: if its name contains "queue",
+   it's a queue; if it contains "topic", it's a topic. If you
+   need to use queue or topic names that don't match the above
+   convention, you can wrap the name in a call to
+   <a href="./apidoc/immutant.messaging-api.html#immutant.messaging/as-queue">immutant.messaging/as-queue</a> or <a href="./apidoc/immutant.messaging-api.html#immutant.messaging/as-topic">immutant.messaging/as-topic</a>
+   respectively. If you do wrap a destination name, you'll need to
+   pass the wrapped version to any <code>immutant.messaging</code> function that
+   takes a destination name. It's common to separate sections of the
+   destination name with <code>.</code> or <code>/</code>, but is not required.
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.messaging <span class="org-builtin">:as</span> msg])
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">to start queues - these are all valid names</span>
+(msg/start <span class="org-string">"/queue/work"</span>)
+(msg/start <span class="org-string">".queue.play"</span>)
+(msg/start <span class="org-string">"queue.sing"</span>)
+(msg/start <span class="org-string">"dancequeued"</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">wrap an ambiguous queue name in as-queue</span>
+(msg/start (msg/as-queue <span class="org-string">"no-q-word"</span>))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">to start topics - these are all valid names</span>
+(msg/start <span class="org-string">"/topic/news"</span>)
+(msg/start <span class="org-string">"topic/infotainment"</span>)
+(msg/start <span class="org-string">".topic"</span>)
+(msg/start <span class="org-string">"topicality"</span>)
+(msg/start <span class="org-string">"topicality"</span>)
+(msg/start <span class="org-string">"some.kinda.topic"</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">wrap an ambiguous topic name in as-topic</span>
+(msg/start (msg/as-topic <span class="org-string">"no-t-word"</span>))
+
+</pre>
+
+
+<p>
+   Job scheduling is dynamic, and can occur anywhere in your
+   application code.  You can invoke <code>start</code> anytime during the
+   lifecycle of your application.
+</p>
+<p>
+   While <code>start</code> has a complement, <a href="./apidoc/immutant.messaging-api.html#immutant.messaging/stop">immutant.messaging/stop</a>, you needn't 
+   call it directly. It will be invoked when your application is
+   undeployed. And it's important to note that <code>start</code> is idempotent:
+   if an endpoint has already been started, likely by a cooperating
+   application, the call is effectively a no-op. Similarly, a call to
+   <code>stop</code> will silently fail if the endpoint is in use by any other
+   application.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-3">
+<h3 id="sec-2-3"><span class="section-number-3">7.2.3.</span> Accessing Destinations via JMX</h3>
+<div class="outline-text-3" id="text-2-3">
+
+
+<p>
+   Messaging destinations have MBeans exposed via JMX using the
+   HornetQ subsystem built into AS7. From there, you can see message
+   counts, list &amp; remove messages, and perform other operations. Two
+   different MBeans are provided for each destination, each with
+   slightly different operations. One is a JMS MBean, and the other is
+   HornetQ specific.
+</p>
+<p>   
+   For a given destination name (<code>queue.example</code> in this case), you
+   can access the MBeans with the following addresses:
+</p>
+
+
+
+<pre class="src src-text"># to access the JMS MBean
+org.hornetq:module=JMS,type=Queue,name="queue.example"
+
+# to access the HornetQ MBean
+org.hornetq:module=Core,type=Queue,address="jms.queue.queue.example",name="jms.queue.queue.example"
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-3">
+<h2 id="sec-3"><span class="section-number-2">7.3.</span> Messages</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  The unit of communication within a messaging system is a message.  A
+  message may either be simply a blob of octets, or it might have some
+  higher-order, application-defined semantics. All messages include a
+  set of headers, similar to email.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-3-1">
+<h3 id="sec-3-1"><span class="section-number-3">7.3.1.</span> Publishing</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+<p>
+   Any component or client code that creates messages and gives them
+   to the message broker for delivery is considered a
+   <i>producer</i>. Generally speaking, the producer does not know the
+   details of the destination or any of its <i>consumers</i>.
+</p>
+<p>
+   In Immutant, there is only one way to send a message, whether to a
+   queue or a topic: via the <a href="./apidoc/immutant.messaging-api.html#immutant.messaging/publish">immutant.messaging/publish</a> function. It 
+   accepts two required parameters: the name of the destination and the
+   message content, which can be just about anything.
+</p>
+<p>
+   If the message has any <a href="http://clojure.org/metadata">Clojure metadata</a> attached, it will be passed
+   as <a href="http://docs.oracle.com/javaee/6/api/javax/jms/Message.html">the JMS Message's properties</a>, the names of which are subject to
+   certain naming restrictions (they must be valid Java identifiers)
+   since they may be used as expressions in <i>selectors</i> (see below).
+   It's also possible to pass properties via the <code>:properties</code> option,
+   which will override any matching keys in the payload metadata, if
+   present.
+</p>
+<p>
+   The <code>publish</code> function accepts the following options:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="center"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="center" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:encoding</code></td><td class="center"><code>:clojure</code></td><td class="left">One of <code>:clojure</code>, <code>:json</code> or <code>:text</code></td></tr>
+<tr><td class="left"><code>:priority</code></td><td class="center"><code>4</code></td><td class="left">An integer (0-9) or one of <code>:low</code>, <code>:normal</code>, <code>:high</code> and <code>:critical</code> which correspond to 0, 4, 7 and 9, respectively</td></tr>
+<tr><td class="left"><code>:ttl</code></td><td class="center"><code>0</code></td><td class="left">An integer greater than 0, indicating the number of milliseconds after which the message is discarded if not consumed. A 0 indicates that the message should be held indefinitely.</td></tr>
+<tr><td class="left"><code>:persistent</code></td><td class="center"><code>true</code></td><td class="left">If true, undelivered messages survive restarts.</td></tr>
+<tr><td class="left"><code>:properties</code></td><td class="center"><code>{}</code></td><td class="left">A hash of arbitrary metadata upon which JMS selector expressions may be constructed to filter received messages</td></tr>
+<tr><td class="left"><code>:correlation-id</code></td><td class="center"><code>nil</code></td><td class="left">Used to set the JMSCorrelationID (see <a href="http://docs.oracle.com/javaee/6/api/javax/jms/Message.html#setJMSCorrelationID(java.lang.String)">setJMSCorrelationID</a>)</td></tr>
+<tr><td class="left"><code>:host</code></td><td class="center"><code>nil</code></td><td class="left">A remote HornetQ host to connect to.</td></tr>
+<tr><td class="left"><code>:port</code></td><td class="center"><code>nil</code>, or <code>5445</code> if <code>:host</code> is set</td><td class="left">A remote HornetQ port to connect to. Requires <code>:host</code> to be set.</td></tr>
+<tr><td class="left"><code>:username</code></td><td class="center"><code>nil</code></td><td class="left">The username to authenticate the connection with (if the broker has authentication enabled). Requires <code>:password</code> to be set.</td></tr>
+<tr><td class="left"><code>:password</code></td><td class="center"><code>nil</code></td><td class="left">The password to authenticate the connection with (if the broker has authentication enabled). Requires <code>:username</code> to be set.</td></tr>
+</tbody>
+</table>
+
+
+<p>
+   The <code>:json</code> encoding is useful when the message consumers aren't
+   written in Clojure. For example, <a href="http://torquebox.org">TorqueBox</a> Ruby processors will
+   automatically convert json-encoded messages generated by a Clojure
+   function into their analogous Ruby data structures, so as long as
+   you limit the content of your messages to standard collections and
+   types, they are transparently interoperable between Clojure and
+   Ruby in either direction.
+</p>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-1-1">
+<h4 id="sec-3-1-1"><span class="section-number-4">7.3.1.1.</span> Some Examples</h4>
+<div class="outline-text-4" id="text-3-1-1">
+
+
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">A simple string</span>
+(msg/publish <span class="org-string">"/queue/work"</span> <span class="org-string">"simple string"</span>)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Notify everyone something interesting just happened</span>
+(msg/publish <span class="org-string">"topic/news"</span> {<span class="org-builtin">:event</span> <span class="org-string">"VISIT"</span> <span class="org-builtin">:url</span> <span class="org-string">"/sales-inquiry"</span>})
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Move this message to the front of the line</span>
+(msg/publish <span class="org-string">"/queue/work"</span> some-message <span class="org-builtin">:priority</span> <span class="org-builtin">:high</span> <span class="org-builtin">:ttl</span> 1000)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Make messages as complex as necessary</span>
+(msg/publish <span class="org-string">"/queue/work"</span> {<span class="org-builtin">:a</span> <span class="org-string">"b"</span> <span class="org-builtin">:c</span> [1 2 3 {<span class="org-builtin">:foo</span> 42}]})
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Make messages consumable by a Ruby app</span>
+(msg/publish <span class="org-string">"/queue/work"</span> {<span class="org-builtin">:a</span> <span class="org-string">"b"</span> <span class="org-builtin">:c</span> [1 2 3 {<span class="org-builtin">:foo</span> 42}]} <span class="org-builtin">:encoding</span> <span class="org-builtin">:json</span>)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Publish to a remote broker</span>
+(msg/publish <span class="org-string">"queue.remote-work"</span> <span class="org-string">"a message"</span> <span class="org-builtin">:host</span> <span class="org-string">"foo.example.com"</span> <span class="org-builtin">:port</span> 5445)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">The received message's metadata =&gt; {:foo 42, :bar 1}</span>
+(msg/publish q (<span class="org-builtin">with-meta</span> msg {<span class="org-builtin">:foo</span> 42 <span class="org-builtin">:bar</span> 0}) <span class="org-builtin">:properties</span> {<span class="org-builtin">:bar</span> 1})
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-3-2">
+<h3 id="sec-3-2"><span class="section-number-3">7.3.2.</span> Receiving</h3>
+<div class="outline-text-3" id="text-3-2">
+
+
+<p>
+   Any component that waits for messages to be delivered to it by
+   the message broker is consider a <i>consumer</i>. Typically, a
+   consumer is unaware of the producer or any other consumers.
+</p>
+<p>   
+   If the published message payload contains metadata, the received
+   message should have it, too, transferred in the form of JMS
+   properties, subject to any overridden values passed in the
+   <code>:properties</code> option (see above). If the payload cannot accept
+   metadata, the message properties can be converted to a convenient
+   Clojure hash using <a href="./apidoc/immutant.messaging-api.html#immutant.messaging.core/get-properties">immutant.messaging.core/get-properties</a>.
+</p>
+<p>
+   Immutant features three functions for consuming messages.
+</p><ul>
+<li><a href="./apidoc/immutant.messaging-api.html#immutant.messaging/receive">immutant.messaging/receive</a> Blocks the caller until a message arrives and returns
+     the decoded message
+</li>
+<li><a href="./apidoc/immutant.messaging-api.html#immutant.messaging/message-seq">immutant.messaging/message-seq</a> Creates a lazy sequence of messages
+</li>
+<li><a href="./apidoc/immutant.messaging-api.html#immutant.messaging/listen">immutant.messaging/listen</a> Register a handler function that will receive the
+     decoded message when it arrives
+</li>
+</ul>
+
+
+<p>
+   Both <code>receive</code> and <code>message-seq</code> expect the destination name as the
+   first parameter, and optionally, the following key/value pairs:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="center"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="center" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:timeout</code></td><td class="center"><code>10000</code></td><td class="left">An expiration in milliseconds, after which nil is returned; a value of 0 means wait forever</td></tr>
+<tr><td class="left"><code>:selector</code></td><td class="center"><code>nil</code></td><td class="left">A JMS expression used to filter messages according to the values of arbitrary <code>:properties</code></td></tr>
+<tr><td class="left"><code>:decode?</code></td><td class="center"><code>true</code></td><td class="left">If true, the decoded message body is returned. Otherwise, the javax.jms.Message object is returned</td></tr>
+<tr><td class="left"><code>:client-id</code></td><td class="center"><code>nil</code></td><td class="left">Identifies a durable topic subscriber; ignored for queues</td></tr>
+<tr><td class="left"><code>:host</code></td><td class="center"><code>nil</code></td><td class="left">A remote HornetQ host to connect to.</td></tr>
+<tr><td class="left"><code>:port</code></td><td class="center"><code>nil</code>, or <code>5445</code> if <code>:host</code> is set</td><td class="left">A remote HornetQ port to connect to. Requires <code>:host</code> to be set.</td></tr>
+<tr><td class="left"><code>:username</code></td><td class="center"><code>nil</code></td><td class="left">The username to authenticate the connection with (if the broker has authentication enabled). Requires <code>:password</code> to be set.</td></tr>
+<tr><td class="left"><code>:password</code></td><td class="center"><code>nil</code></td><td class="left">The password to authenticate the connection with (if the broker has authentication enabled). Requires <code>:username</code> to be set.</td></tr>
+</tbody>
+</table>
+
+
+<p>
+   For more details on message selectors, see <a href="http://docs.oracle.com/javaee/6/api/javax/jms/Message.html">javax.jms.Message</a>. 
+</p>
+<p>
+   The <code>listen</code> method takes two parameters: the destination name and
+   a function accepting one parameter which will be applied to any
+   received message. The following key/value options are also
+   available:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="center"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="center" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:concurrency</code></td><td class="center"><code>1</code></td><td class="left">The maximum number of listening threads that can simultaneouly call the function</td></tr>
+<tr><td class="left"><code>:selector</code></td><td class="center"><code>nil</code></td><td class="left">Same as <code>receive</code></td></tr>
+<tr><td class="left"><code>:decode?</code></td><td class="center"><code>true</code></td><td class="left">If true, the decoded message body is passed to f. Otherwise, the javax.jms.Message object is passed</td></tr>
+<tr><td class="left"><code>:name</code></td><td class="center"><code>nil</code></td><td class="left">A name for this listener that is used to give the mbean a known identifier, and to allow future calls to listen with the same :name to replace the prior listener with that name</td></tr>
+<tr><td class="left"><code>:client-id</code></td><td class="center"><code>nil</code></td><td class="left">Identifies a durable topic subscriber; ignored for queues</td></tr>
+<tr><td class="left"><code>:host</code></td><td class="center"><code>nil</code></td><td class="left">A remote HornetQ host to connect to.</td></tr>
+<tr><td class="left"><code>:port</code></td><td class="center"><code>nil</code>, or <code>5445</code> if <code>:host</code> is set</td><td class="left">A remote HornetQ port to connect to. Requires <code>:host</code> to be set.</td></tr>
+<tr><td class="left"><code>:username</code></td><td class="center"><code>nil</code></td><td class="left">The username to authenticate the connection with (if the broker has authentication enabled). Requires <code>:password</code> to be set.</td></tr>
+<tr><td class="left"><code>:password</code></td><td class="center"><code>nil</code></td><td class="left">The password to authenticate the connection with (if the broker has authentication enabled). Requires <code>:username</code> to be set.</td></tr>
+</tbody>
+</table>
+
+
+<p>
+   By default, message handlers are transactional, so the function
+   invoked in response to a message effectively demarcates a
+   transaction that will be automatically committed if no exceptions
+   are raised in the handler, and otherwise rolled back.
+</p>
+<p>
+   Any messages published within the handler automatically become part
+   of its transaction, by default. So they won't be delivered until
+   that transaction commits. To override this behavior, wrap your
+   handler inside the <a href="./apidoc/immutant.messaging-api.html#immutant.xa.transaction/not-supported">immutant.xa.transaction/not-supported</a> macro.
+</p>
+<p>
+   See <a href="./transactions.html">Distributed Transactions</a> for more details.
+</p>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-1">
+<h4 id="sec-3-2-1"><span class="section-number-4">7.3.2.1.</span> Some Examples</h4>
+<div class="outline-text-4" id="text-3-2-1">
+
+
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Wait on a task</span>
+(<span class="org-keyword">let</span> [task (msg/receive <span class="org-string">"/queue/work"</span>)]
+  (perform task))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Case-sensitive work queues?</span>
+(msg/listen <span class="org-string">".queue.lower"</span> #(msg/publish <span class="org-string">"/queue/upper"</span> (<span class="org-preprocessor">.toUpperCase</span> %)) <span class="org-builtin">:name</span> <span class="org-string">"upperizer"</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Listen to a remote queue</span>
+(msg/listen <span class="org-string">"queue/remote"</span> #(do-someting %) <span class="org-builtin">:host</span> <span class="org-string">"foo.example.com"</span> <span class="org-builtin">:port</span> 5445)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Contrived laziness</span>
+(<span class="org-keyword">let</span> [messages (message-seq queue)]
+  (<span class="org-keyword">doseq</span> [i (<span class="org-builtin">range</span> 4)] (publish queue i))
+  (<span class="org-builtin">=</span> (<span class="org-builtin">range</span> 4) (<span class="org-builtin">take</span> 4 messages)))
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-2">
+<h4 id="sec-3-2-2"><span class="section-number-4">7.3.2.2.</span> Acessing Listeners via JMX</h4>
+<div class="outline-text-4" id="text-3-2-2">
+
+
+<p>
+   Each message listener has a MBean exposed via JMX. Currently, you
+   can only stop and start the listener from the MBean.
+</p>
+<p>   
+   The MBean name is derived from the <code>:name</code> option (or the listener
+   function object if <code>:name</code> is not provided to <code>listen</code>), the
+   destination name, and the application name. Given an application
+   name of <code>my-app</code> and a destination name of <code>queue.example</code>:
+</p>
+
+
+
+<pre class="src src-text"># when given a listener fn referenced by the symbol immutant.init/my-listener
+immutant.messaging:app=my-app,name=queue.example.immutant.init$my_listener@a4e459
+
+# when given an anonymous listener fn defined in immutant.init
+immutant.messaging:app=my-app,name=queue.example.immutant.init$eval4385$fn_4386@8e33a2
+
+# when given a :name of "foo"
+immutant.messaging:app=my-app,name=queue.example.foo
+</pre>
+
+
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-messaging-request-response">
+<h2 id="messaging-request-response"><a id="sec-4" name="sec-4"></a><span class="section-number-2">7.4.</span> Request/Response</h2>
+<div class="outline-text-2" id="text-messaging-request-response">
+
+
+<p>
+  Immutant also provides an implementation of the <a href="http://en.wikipedia.org/wiki/Request-response">request/response</a> pattern 
+  for synchronous work distribution. This feature is provided by two 
+  cleverly named functions: <code>request</code> and <code>respond</code>. Since they leverage
+  the existing messaging subsystem, the work is automatically distributed
+  across multiple workers within the same JVM or across multiple nodes if
+  in a cluster.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-4-1">
+<h3 id="sec-4-1"><span class="section-number-3">7.4.1.</span> Request</h3>
+<div class="outline-text-3" id="text-4-1">
+
+
+<p>   
+   The <a href="./apidoc/immutant.messaging-api.html#immutant.messaging/request">immutant.messaging/request</a> function takes a queue, a message, and an
+   optional list of options. It publishes the message to the queue, marking 
+   it as a <i>synchronous</i> message and returns a delay that will receive the 
+   response from the worker initiated by the <code>respond</code> function. It accepts
+   the same options as <code>publish</code>, with one additional option:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="center"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="center" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:timeout</code></td><td class="center"><code>10000</code></td><td class="left">Time in ms for the delayed receive to wait once it it is dereferenced, after which nil is returned</td></tr>
+</tbody>
+</table>
+
+
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-4-2">
+<h3 id="sec-4-2"><span class="section-number-3">7.4.2.</span> Respond</h3>
+<div class="outline-text-3" id="text-4-2">
+
+
+<p>
+   The <a href="./apidoc/immutant.messaging-api.html#immutant.messaging/respond">immutant.messaging/respond</a> method takes a queue, a function, and an
+   optional list of options. It sets up a listener (via the <code>listen</code>
+   function) that applies the given function to any received message and publishes
+   the result back to the queue for the delay returned by <code>request</code> to receive.
+   It accepts the same options as listen.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-4-3">
+<h3 id="sec-4-3"><span class="section-number-3">7.4.3.</span> Some Examples</h3>
+<div class="outline-text-3" id="text-4-3">
+
+
+<p>
+   A basic example:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.messaging <span class="org-builtin">:as</span> msg])
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">setup a responder</span>
+(msg/respond <span class="org-string">"/queue/work"</span> (<span class="org-builtin">partial</span> apply +))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">send a request</span>
+(<span class="org-keyword">let</span> [result (msg/request <span class="org-string">"/queue/work"</span> [1 2 3])]
+  (<span class="org-builtin">println</span> @result)) <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; 6</span>
+</pre>
+
+
+<p>
+   An example of using properties and selectors to segment work on the same 
+   queue:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.messaging <span class="org-builtin">:as</span> msg])
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">respond to 'add' messages</span>
+(msg/respond <span class="org-string">"/queue/work"</span> (<span class="org-builtin">partial</span> apply +) <span class="org-builtin">:selector</span> <span class="org-string">"operation='add'"</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">respond to 'multiply' messages</span>
+(msg/respond <span class="org-string">"/queue/work"</span> (<span class="org-builtin">partial</span> apply *) <span class="org-builtin">:selector</span> <span class="org-string">"operation='multiply'"</span>)
+
+@(msg/request <span class="org-string">"/queue/work"</span> [1 2 3 4] <span class="org-builtin">:properties</span> {<span class="org-string">"operation"</span> <span class="org-string">"add"</span>}) <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; 9</span>
+
+@(msg/request <span class="org-string">"/queue/work"</span> [1 2 3 4] <span class="org-builtin">:properties</span> {<span class="org-string">"operation"</span> <span class="org-string">"multiply"</span>}) <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; 24</span>
+</pre>
+
+
+
+
+
+
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="jobs.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="caching.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 0.7.0</div>
+</div>
+
+
+</body></html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | Messaging
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            Tutorial: Messaging
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="tutorial article">
+              <div class="byline">
+                <div class="date">
+                  Last updated:
+                  <span class="date">
+                    Monday, June 23, 2014
+                  </span>
+                </div>
+                <div class="author">
+                  Author:
+                  The Immutant Team
+                </div>
+              </div>
+              <div class="body">
+                <div class="notice big">
+                  <strong>Note:</strong> This tutorial covers Immutant 2.0.0.alpha1.
+                  The Immutant 1.x tutorials are still
+                  available <a href="/tutorials-1x/" rel="nofollow">here</a>, and the 2.0.0.alpha2
+                  (and up) tutorials are now part of the <a
+                  href="/documentation/">documentation</a> as 'Guides'.
+                </div>
+                <p>If you&#39;re coming from Immutant 1.x, you may notice that the artifact
+                has been renamed (<code>org.immutant/immutant-messaging</code> is now
+                <code>org.immutant/messaging</code>), and the API has changed a bit. We&#39;ll point
+                out the notable API changes as we go.</p>
+                
+                <h2 id="The_API" onclick="window.location = '#The_API'">The API</h2>
+                
+                <p>The messaging <a href="/builds/2x/LATEST/target/apidocs/index.html">API</a> is backed by
+                <a href="http://hornetq.jboss.org/">HornetQ</a>, which is an implementation of <a href="https://en.wikipedia.org/wiki/Java_Message_Service">JMS</a>. JMS provides two
+                primary destination types: <em>queues</em> and <em>topics</em>. Queues represent
+                point-to-point destinations, and topics publish/subscribe.</p>
+                
+                <p>To use a destination, we need to get a reference to one via the
+                <a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-queue">queue</a> or
+                <a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-topic">topic</a>
+                functions, depending on the type required. This will create the
+                destination if it does not already exist. This is a bit different than
+                the 1.x API, which provided a single <code>start</code> function for this, and
+                determined the type of destination based on conventions around the
+                provided name. In 2.x, we&#39;ve removed those naming conventions.</p>
+                
+                <p>Once we have a reference to a destination, we can operate on it with
+                the following functions:</p>
+                
+                <ul>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-publish">publish</a> -
+                sends a message to the destination</li>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-receive">receive</a> -
+                receives a single message from the destination</li>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-listen">listen</a> -
+                registers a function to be called each time a message
+                arrives at the destination</li>
+                </ul>
+                
+                <p>If the destination is a queue, we can do synchronous messaging
+                (<a href="https://en.wikipedia.org/wiki/Request-response">request-response</a>):</p>
+                
+                <ul>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-respond">respond</a> -
+                registers a function that receives each request, and the
+                returned value will be sent back to the requester</li>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-request">request</a> -
+                sends a message to the responder</li>
+                </ul>
+                
+                <p>Finally, to deregister listeners, responders, and destinations, we
+                provide a single
+                <a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-stop">stop</a>
+                function. This is another difference from 1.x -
+                the <code>unlisten</code> and <code>stop</code> functions have been collapsed to <code>stop</code>.</p>
+                
+                <h3 id="Some_Examples" onclick="window.location = '#Some_Examples'">Some Examples</h3>
+                
+                <p>You should follow the instructions in the <a href="/tutorials/installation/">installation</a> tutorial to
+                set up a project using Immutant 2.x, and in addition to
+                <code>org.immutant/messaging</code> add <code>[cheshire &quot;5.3.1&quot;]</code> to the project
+                dependencies (we&#39;ll be encoding some messages as JSON in our examples
+                below, so we&#39;ll go ahead and add
+                <a href="https://github.com/dakrone/cheshire">cheshire</a> while we&#39;re at it).
+                Then, fire up a REPL, and require the <code>immutant.messaging</code> namespace
+                to follow along:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.messaging :refer :all])</pre>
+                
+                <p>First, let&#39;s create a queue:</p>
+                
+                <pre class="syntax clojure">(queue "my-queue")</pre>
+                
+                <p>That will create the queue in the HornetQ broker for us. We&#39;ll need a
+                reference to that queue to operate on it. Let&#39;s go ahead and store
+                that reference in a var:</p>
+                
+                <pre class="syntax clojure">(def q (queue "my-queue"))</pre>
+                
+                <p>We can call <code>queue</code> any number of times - if the queue already exists,
+                we&#39;re just grabbing a reference to it.</p>
+                
+                <p>Now, let&#39;s register a listener on our queue. Let&#39;s just print every
+                message we get:</p>
+                
+                <pre class="syntax clojure">(def listener (listen q println))</pre>
+                
+                <p>We can publish to that queue, and see that the listener gets called:</p>
+                
+                <pre class="syntax clojure">(publish q {:hi :there})</pre>
+                
+                <p>You&#39;ll notice that we&#39;re publishing a map there - we can publish
+                pretty much any data structure as a message. By default, that message
+                will be encoded using <a href="https://github.com/edn-format/edn">edn</a>. We also support other encodings, namely:
+                <code>:fressian</code>, <code>:json</code>, and <code>:none</code>. We can choose a different encoding
+                by passing an :encoding option to <code>publish</code>:</p>
+                
+                <pre class="syntax clojure">(publish q {:hi :there} :encoding :json)</pre>
+                
+                <p>If you want to use <code>:fressian</code> or <code>:json</code>, you&#39;ll need to add
+                <code>org.clojure/data.fressian</code> or <code>cheshire</code> to your dependencies to
+                enable them, respectively.</p>
+                
+                <p>We passed our options to <code>publish</code> as keyword arguments, but they can
+                also be passed as a map:</p>
+                
+                <pre class="syntax clojure">(publish q {:hi :there} {:encoding :json})</pre>
+                
+                <p>This holds true for any of the messaging functions that take options.</p>
+                
+                <p>We&#39;re also passing the destination reference to <code>publish</code> instead of the
+                destination name. That&#39;s a departure from 1.x, where you could just pass the
+                destination name. Since we no longer have conventions about how queues and
+                topics should be named, we can no longer determine the type of the
+                destination from the name alone.</p>
+                
+                <p>We can deregister the listener by either passing it to <code>stop</code> or
+                calling <code>.close</code> on it:</p>
+                
+                <pre class="syntax clojure">(stop listener)&#x000A;;; identical to&#x000A;(.close listener)</pre>
+                
+                <p>Now let&#39;s take a look at synchronous messaging. Let&#39;s create a new
+                queue for this (you&#39;ll want to use a dedicated queue for each
+                responder) and register a responder that just increments the request:</p>
+                
+                <pre class="syntax clojure">(def sync-q (queue "sync"))&#x000A;&#x000A;(def responder (respond sync-q inc))</pre>
+                
+                <p>Then, we make a request, which returns a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html">Future</a> that we can
+                dereference:</p>
+                
+                <pre class="syntax clojure">@(request sync-q 1)</pre>
+                
+                <p>The responder is just a fancy listener, and can be deregistered the
+                same way as a listener.</p>
+                
+                <h2 id="More_to_come" onclick="window.location = '#More_to_come'">More to come</h2>
+                
+                <p>That was just a brief introduction to the messaging API. There are
+                features we&#39;ve yet to cover (durable topic subscriptions,
+                connection/session sharing, transactional sessions, remote
+                connections)...</p>
+              </div>
+              <div class="comments">
+                
+                            <div id="disqus_thread"></div>
+                            <script type="text/javascript">
+                            var disqus_shortname = 'immutant';
+                            var disqus_url = "http://immutant.org/tutorials/messaging/";
+                            var disqus_developer = null;
+                            var disqus_identifier = null;
+                            (function() {
+                              var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
+                              dsq.src = "http://immutant.disqus.com/embed.js";
+                              (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq);
+                            })();
+                            </script>
+                            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=immutant">comments powered by Disqus.</a></noscript>
+              </div>
+            </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tutorial-nav">
+              <h3 id="All_Tutorials" onclick="window.location = '#All_Tutorials'">All Tutorials</h3>
+              <ul class="nav nav-tabs nav-stacked">
+                <li class="">
+                  <a href="/tutorials/installation/index.html">Installation</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/web/index.html">Web</a>
+                </li>
+                <li class="current">
+                  <a href="/tutorials/messaging/index.html">Messaging</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/scheduling/index.html">Scheduling</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/caching/index.html">Caching</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/wildfly/index.html">WildFly</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/logging/index.html">Logging</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

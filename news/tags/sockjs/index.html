@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | News
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            News
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2013/09/23/websocket-sockjs-part-deux/">WebSockets and SockJS with Immutant and Vert.x - Part 2</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Toby Crawley
+                </div>
+                <div class="date">
+                  Monday, September 23, 2013
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/daemons/">daemons</a>
+                <a href="/news/tags/vertx/">vertx</a>
+                <a href="/news/tags/websockets/">websockets</a>
+                <a href="/news/tags/sockjs/">sockjs</a>
+                <a href="/news/tags/messaging/">messaging</a>
+              </div>
+              <div class="body">
+                <p>This is a followup to our
+                <a href="/news/2013/09/17/websocket-sockjs/">post last week on WebSockets with Vert.x</a>. If you haven&#39;t read
+                it, you should do so now. In that post, we set up a simple echo
+                service in <a href="http://vertx.io/">Vert.x</a> that bridged the Vert.x <a href="https://github.com/vert-x/mod-lang-clojure/blob/master/docs/core_manual_clojure.md#the-event-bus">EventBus</a> to the
+                browser. But that echo service wasn&#39;t very useful - there was no way
+                to process incoming messages outside of the daemon, and no way to send
+                messages down to the browser client from other parts of the
+                application. Today, we&#39;re going to look at bridging the EventBus over
+                to <a href="/documentation/current/messaging.html">Immutant messaging</a>, allowing us to actually interact with the
+                client from anywhere within our application.</p>
+                
+                <h2 id="Our_application" onclick="window.location = '#Our_application'">Our application</h2>
+                
+                <p>We&#39;ll be using the <a href="https://github.com/immutant/simple-immutant-vertx-demo">same application</a> we used in the last post, but
+                will be working off of a <a href="https://github.com/immutant/simple-immutant-vertx-demo/tree/with-messaging">branch</a>.</p>
+                
+                <p>To get started, <a href="https://github.com/immutant/simple-immutant-vertx-demo">clone the app</a> and run it:<sup id="bfn1"><a href="#fn1">1</a></sup></p>
+                
+                <pre><code>cd /path/to/simple-immutant-vertx-demo&#x000A;git checkout with-messaging&#x000A;lein do immutant deploy, immutant run&#x000A;</code></pre>
+                
+                <p>Then browse to <a href="http://localhost:8080/">http://localhost:8080/</a>. You should see a UI that lets
+                you send messages and see those messages echoed back, but now they
+                come back in uppercase:</p>
+                
+                <p><img src="/images/news/sockjs2.png" alt="[UI activity]" class="bordered aligncenter"/></p>
+                
+                <h2 id="Let&#39;s_see_some_code!" onclick="window.location = '#Let&#39;s_see_some_code!'">Let&#39;s see some code!</h2>
+                
+                <p>Most of the application remains the same as it did before. But instead
+                of just copying messages from the request address to the response
+                address, we&#39;ve now wired our
+                <a href="https://github.com/immutant/simple-immutant-vertx-demo/blob/with-messaging/src/demo/bridge.clj"><code>demo.bridge</code> namespace</a>
+                to the Immutant messaging system. We now have functions that bridge
+                EventBus addresses to Immutant messaging destinations, and vice-versa,
+                and have modified the <code>init-bridge</code> function to map the appropriate
+                addresses and destinations:</p>
+                
+                <pre class="syntax clojure">(ns demo.bridge&#x000A;  (:require [vertx.embed :as vembed :refer [with-vertx]]&#x000A;            [vertx.http :as http]&#x000A;            [vertx.http.sockjs :as sockjs]&#x000A;            [vertx.eventbus :as eb]&#x000A;            [immutant.messaging :as msg]))&#x000A;&#x000A;(defn dest->eventbus&#x000A;  "Sets up a bridge to copy messages from an Immutant messaging dest to a Vertx address."&#x000A;  [vertx dest address]&#x000A;  (msg/listen dest #(with-vertx vertx&#x000A;                      (eb/publish address %))))&#x000A;&#x000A;(defn eventbus->dest&#x000A;  "Sets up a bridge to copy messages from a Vertx address to an Immutant messaging dest."&#x000A;  [vertx address dest]&#x000A;  (with-vertx vertx&#x000A;    (eb/on-message address (partial msg/publish dest))))&#x000A;&#x000A;(defn- start-sockjs-bridge&#x000A;  "Creates a Vert.x http server, a sockjs server within that http&#x000A;  server, then installs an eventbus bridge in the sockjs server."&#x000A;  [vertx host port path]&#x000A;  (println (format "Starting SockJS bridge at http://%s:%s%s" host port path))&#x000A;  (with-vertx vertx&#x000A;    (let [server (http/server)]&#x000A;      (-> server&#x000A;          (sockjs/sockjs-server)&#x000A;          (sockjs/bridge {:prefix path} [{}] [{}]))&#x000A;      (http/listen server port host))))&#x000A;&#x000A;(defn init-bridge&#x000A;  "Initializes the embedded vertx instance, bridges to Immutant destinations, and starts the sockjs bridge."&#x000A;  [{:keys [request-dest response-dest]}]&#x000A;  (let [vertx (vembed/vertx)]&#x000A;    (eventbus->dest vertx "demo.request" request-dest)&#x000A;    (dest->eventbus vertx response-dest "demo.response")&#x000A;    {:vertx vertx&#x000A;     :server (start-sockjs-bridge vertx "localhost" 8081 "/eventbus")}))</pre>
+                
+                <p>Now that <code>demo.bridge</code> no longer echos, but instead expects something
+                on the other end of the <code>request-dest</code>, we need something listening on
+                the other end to do the work. We&#39;ve added this to the
+                <a href="https://github.com/immutant/simple-immutant-vertx-demo/blob/with-messaging/src/demo/init.clj"><code>demo.init</code> namespace</a>,
+                which is also where we define the request/response destination
+                names. Our listener here just watches <code>queue.request</code>, uppercases each
+                message, and publishes it to <code>topic.response</code>. Since we have bridged
+                those same destinations in <code>demo.bridge</code>, we again have a completed
+                circle from the client and back:</p>
+                
+                <pre class="syntax clojure">(ns demo.init&#x000A;  (:require [demo.web :as web]&#x000A;            [demo.daemon :as daemon]&#x000A;            [immutant.messaging :as msg]))&#x000A;&#x000A;(def config {:response-dest "topic.response"&#x000A;             :request-dest "queue.request"&#x000A;             :process-fn (memfn toUpperCase)})&#x000A;&#x000A;(defn init []&#x000A;  (let [{:keys [request-dest response-dest process-fn]} config]&#x000A;    (msg/start request-dest)&#x000A;    (msg/start response-dest)&#x000A;    (msg/listen request-dest&#x000A;                #(msg/publish response-dest (process-fn %))))&#x000A;  (web/start)&#x000A;  (daemon/start config))</pre>
+                
+                <h2 id="Touch_the_UI_from_anywhere" onclick="window.location = '#Touch_the_UI_from_anywhere'">Touch the UI from anywhere</h2>
+                
+                <p>Now that we&#39;ve bridged the EventBus to the Immutant messaging system,
+                we can interact with our client UI from anywhere within our
+                application. Just to beat the horse a bit more, let&#39;s do it from the
+                repl. Connect to the <a href="/documentation/current/development.html#interactive">nREPL endpoint</a> in the application running on
+                port <code>5309</code><sup id="bfn2"><a href="#fn2">2</a></sup> using your favorite client, then try sending messages
+                directly to the response topic, or to the request queue to have them
+                uppercased first:</p>
+                
+                <pre class="syntax clojure">user&gt; (require '[immutant.messaging :as msg])&#x000A;nil&#x000A;user&gt; (msg/publish "topic.response" "ahoyhoy")&#x000A;#&lt;HornetQTextMessage HornetQMessage[ID:8af51642-2478-11e3-9deb-25745b71356d]:PERSISTENT&gt;&#x000A;user&gt; (msg/publish "queue.request" "ahoyhoy")&#x000A;#&lt;HornetQTextMessage HornetQMessage[ID:90e4b5b8-2478-11e3-9deb-25745b71356d]:PERSISTENT&gt;&#x000A;user&gt; </pre>
+                
+                <p>You can also send structured messages:</p>
+                
+                <pre class="syntax clojure">user&gt; (msg/publish "topic.response" {:x :y})&#x000A;#&lt;HornetQTextMessage HornetQMessage[ID:e09bf794-2478-11e3-9deb-25745b71356d]:PERSISTENT&gt;</pre>
+                
+                <p>And see them all displayed in the client UI:</p>
+                
+                <p><img src="/images/news/sockjs3.png" alt="[repl UI activity]" class="bordered aligncenter"/></p>
+                
+                <h2 id="Fare_thee_well" onclick="window.location = '#Fare_thee_well'">Fare thee well</h2>
+                
+                <p>We&#39;ve extended our <a href="/news/2013/09/17/websocket-sockjs/">prior example</a> to make it actually useful, and
+                maintained a separation of concerns within our application - code
+                outside of the <code>demo.bridge</code> namespace has no knowledge of Vert.x, nor
+                of the UI communication mechanism. We think this provides a compelling
+                way to provide dynamic updates to the browser, but if you don&#39;t, or
+                have any other questions, comments, or feedback, please
+                <a href="/community/">get in touch</a>.</p>
+                
+                <hr>
+                
+                <ol>
+                <li id="fn1" class="footnote"> <a href="#bfn1">^</a> This assumes you have a recent Immutant
+                <a href="/install/">installed</a>.</li>
+                <li id="fn2" class="footnote"> <a href="#bfn2">^</a> The demo application specifies <code>5309</code> as the <code>:nrepl-port</code> in
+                its <code>project.clj</code>. If you have <code>:immutant {:nrepl-port some-port}</code>
+                set in your <code>~/.lein/profiles.clj</code>, that will override <code>5309</code> and
+                you&#39;ll need to connect to whatever port the endpoint is bound to.</li>
+                </ol>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2013/09/23/websocket-sockjs-part-deux/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2013/09/17/websocket-sockjs/">WebSockets and SockJS with Immutant and Vert.x</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Toby Crawley
+                </div>
+                <div class="date">
+                  Tuesday, September 17, 2013
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/daemons/">daemons</a>
+                <a href="/news/tags/vertx/">vertx</a>
+                <a href="/news/tags/websockets/">websockets</a>
+                <a href="/news/tags/sockjs/">sockjs</a>
+              </div>
+              <div class="body">
+                <p>Currently, Immutant doesn&#39;t provide any native WebSockets
+                support. However, it is possible to use another WebSockets-capable
+                server from within an <a href="/documentation/current/daemons.html">Immutant daemon</a>. There are quite a few
+                well-known options in the Clojure ecosystem that we could use here,
+                like <a href="https://github.com/ztellman/aleph">Aleph</a>, <a href="http://http-kit.org/">http-kit</a>, or raw <a href="http://www.eclipse.org/jetty/">Jetty</a> or <a href="http://netty.io/">Netty</a>. Instead, we&#39;re
+                going to use a relative newcomer to the Clojure space: <a href="http://vertx.io/">Vert.x</a>.</p>
+                
+                <h2 id="What_is_Vert.x?" onclick="window.location = '#What_is_Vert.x?'">What is Vert.x?</h2>
+                
+                <p>Vert.x is an asynchronous polyglot application platform built on top
+                of Netty that has been around for a while, but just recently gained
+                <a href="https://github.com/vert-x/mod-lang-clojure">Clojure support</a>. It provides (among other things) its own message
+                passing system (the <a href="https://github.com/vert-x/mod-lang-clojure/blob/master/docs/core_manual_clojure.md#the-event-bus">EventBus</a>), and provides a <a href="http://sockjs.org">SockJS</a>
+                implementation that allows browser clients to participate as peers in
+                the EventBus over WebSockets, falling back to other protocols as the
+                browser and network topology dictate. SockJS and an EventBus that is
+                bridged to the client abstracts away some of the complexity of
+                managing dynamic updates to the browser, and is the primary reason
+                we&#39;re using Vert.x over some of the alternatives mentioned above.</p>
+                
+                <p>Vert.x includes a <a href="https://github.com/eclipse/vert.x/blob/master/src/dist/client/vertxbus.js">javascript EventBus client</a> for use in client-side
+                code that allows the browser to participate in the EventBus as a
+                peer. The Vert.x Clojure language module includes a
+                <a href="https://github.com/vert-x/mod-lang-clojure/blob/master/api/src/main/clojure/vertx/client/eventbus.cljs">ClojureScript wrapper</a> around that javascript client, which we&#39;ll use
+                in a bit.</p>
+                
+                <h2 id="Our_application" onclick="window.location = '#Our_application'">Our application</h2>
+                
+                <p>To demonstrate using the Vert.x EventBus bridge from Immutant, we&#39;re
+                going to look at a simple application that embeds<sup id="bfn1"><a href="#fn1">1</a></sup> Vert.x into an
+                <a href="/documentation/current/daemons.html">Immutant daemon</a> to provide an echo service over the EventBus.</p>
+                
+                <p>To get started,
+                <a href="https://github.com/immutant/simple-immutant-vertx-demo">clone the app</a>
+                and run it:<sup id="bfn2"><a href="#fn2">2</a></sup></p>
+                
+                <pre><code>cd /path/to/simple-immutant-vertx-demo&#x000A;lein do immutant deploy, immutant run&#x000A;</code></pre>
+                
+                <p>Then browse to <a href="http://localhost:8080/">http://localhost:8080/</a>. You should see a UI that lets
+                you send messages and see those messages echoed back. If you&#39;re using
+                a browser with a Network console, you should be able to see the
+                the SockJS WebSockets traffic, like so:</p>
+                
+                <p><img src="/images/news/sockjs.png" alt="[websocket activity]"/></p>
+                
+                <h2 id="Let&#39;s_see_some_code!" onclick="window.location = '#Let&#39;s_see_some_code!'">Let&#39;s see some code!</h2>
+                
+                <p>First, let&#39;s take a look at the <a href="https://github.com/immutant/simple-immutant-vertx-demo/blob/master/src-cljs/demo/client.cljs">ClojureScript client</a>. It&#39;s fairly
+                standard <a href="https://github.com/ckirkendall/enfocus">Enfocus</a> transformations, with EventBus calls mixed in:</p>
+                
+                <pre class="syntax clojure">(ns demo.client&#x000A;  (:require [enfocus.core :as ef]&#x000A;            [enfocus.events :as events]&#x000A;            [vertx.client.eventbus :as eb]))&#x000A;&#x000A;(defn open-eventbus&#x000A;  "Opens a connection to the remote EventBus endpoint."&#x000A;  [& on-open]&#x000A;  (let [eb (eb/eventbus "http://localhost:8081/eventbus")]&#x000A;    (eb/on-open eb #(.log js/console "eventbus opened"))&#x000A;    (mapv #(eb/on-open eb (fn [] (% eb))) on-open)))&#x000A;&#x000A;(defn append-content&#x000A;  "Append the given content to the element specified by id"&#x000A;  [id content]&#x000A;  (ef/at id (ef/append (ef/html [:div content]))))&#x000A;&#x000A;(defn send-message&#x000A;  "Sends a message to the request address."&#x000A;  [eb message]&#x000A;  (eb/publish eb "demo.request" message))&#x000A;&#x000A;(defn attach-listeners&#x000A;  "Attaches listeners to both the the request and response addresses,&#x000A;   displaying the received messages in the appropriate divs."&#x000A;  [eb]&#x000A;  (eb/on-message eb "demo.request" (partial append-content "#sent"))&#x000A;  (eb/on-message eb "demo.response" (partial append-content "#rcvd")))&#x000A;&#x000A;(defn attach-send-click&#x000A;  "Attaches handler to send a message when the send button is clicked."&#x000A;  [eb]&#x000A;  (ef/at "#send-message"&#x000A;         (events/listen :click&#x000A;                        #(send-message eb (ef/from "#message"&#x000A;                                                   (ef/get-prop :value))))))&#x000A;(defn init []&#x000A;  (open-eventbus&#x000A;   attach-listeners&#x000A;   attach-send-click))&#x000A;&#x000A;(set! (.-onload js/window) init)</pre>
+                
+                <p>On the server side, we start up the SockJS EventBus bridge as an
+                Immutant daemon in the
+                <a href="https://github.com/immutant/simple-immutant-vertx-demo/blob/master/src/demo/daemon.clj"><code>demo.daemon</code> namespace</a>,
+                and is standard Immutant daemon management code.  The functions that
+                actually do the work of setting up the bridge are in the
+                <a href="https://github.com/immutant/simple-immutant-vertx-demo/blob/master/src/demo/bridge.clj"><code>demo.bridge</code> namespace</a>:<sup id="bfn3"><a href="#fn3">3</a></sup></p>
+                
+                <pre class="syntax clojure">(ns demo.bridge&#x000A;  (:require [vertx.embed :as vembed :refer [with-vertx]]&#x000A;            [vertx.http :as http]&#x000A;            [vertx.http.sockjs :as sockjs]&#x000A;            [vertx.eventbus :as eb]))&#x000A;&#x000A;(defn- start-sockjs-bridge&#x000A;  "Creates a Vert.x http server, a sockjs server within that http&#x000A;  server, then installs an eventbus bridge in the sockjs server."&#x000A;  [vertx host port path]&#x000A;  (println (format "Starting SockJS bridge at http://%s:%s%s" host port path))&#x000A;  (with-vertx vertx&#x000A;    (let [server (http/server)]&#x000A;      (-> server&#x000A;          (sockjs/sockjs-server)&#x000A;          (sockjs/bridge {:prefix path} [{}] [{}]))&#x000A;      (http/listen server port host))))&#x000A;&#x000A;(defn init-bridge&#x000A;  "Initializes the embedded vertx instance, sets up our echo handler,&#x000A;   and starts the sockjs bridge."&#x000A;  []&#x000A;  (let [vertx (vembed/vertx)]&#x000A;    (with-vertx vertx&#x000A;      (eb/on-message "demo.request"&#x000A;                     (partial eb/publish "demo.response")))&#x000A;    {:vertx vertx&#x000A;     :server (start-sockjs-bridge vertx "localhost" 8081 "/eventbus")}))</pre>
+                
+                <h2 id="A_nice,_neat_little_package?" onclick="window.location = '#A_nice,_neat_little_package?'">A nice, neat little package?</h2>
+                
+                <p>So, what have we done here? We&#39;ve added dynamic updates over
+                WebSockets (with fallback) to an Immutant application, without having
+                to handle the minutiae of bi-directional communication over WebSockets
+                and any fallback protocols. And since Vert.x allows the browser client
+                to be an equal peer in the EventBus, we were able to use a similar API
+                on the server and client.</p>
+                
+                <p>However, it&#39;s not all roses - there is a drawback to this approach:
+                since Immutant doesn&#39;t support WebSockets natively, we can&#39;t share the
+                http port and upgrade connections to WebSockets on request. This means
+                that any WebSockets solution we run as a daemon has to bind to its own
+                port.</p>
+                
+                <p>This has been an exploration of one way to add simple dynamic
+                interaction to an Immutant application, but is certainly not the only
+                way. If you try this approach with another WebSockets server, let us
+                know how it goes.</p>
+                
+                <p>Watch for a post in the future that presents a more complex
+                application that bridges the Vert.x EventBus to <a href="/documentation/current/messaging.html">Immutant messaging</a>
+                destinations.</p>
+                
+                <p>If you have any questions, comments, or feedback, please
+                <a href="/community/">get in touch</a>.</p>
+                
+                <hr>
+                
+                <ol>
+                <li id="fn1" class="footnote"> <a href="#bfn1">^</a> Vert.x provides its own <a href="http://vertx.io/manual.html#using-vertx-from-the-command-line">application container</a>, but we&#39;re
+                using it embedded, which is an advanced usage.</li>
+                <li id="fn2" class="footnote"> <a href="#bfn2">^</a> This assumes you have a recent Immutant
+                <a href="/install/">installed</a>.</li>
+                <li id="fn3" class="footnote"> <a href="#bfn3">^</a> For this example, we&#39;re not securing the EventBus bridge at
+                all. <a href="https://github.com/vert-x/mod-lang-clojure/blob/master/docs/core_manual_clojure.md#securing-the-bridge">Doing so</a> is probably a good idea.</li>
+                </ol>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2013/09/17/websocket-sockjs/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="pagination-links"><span class="current-page">1</span> </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tags">
+              <div class="tag-cloud">
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/announcement/">announcement</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/app-server/">app-server</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/bears/">bears</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/beginning/">beginning</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/boot/">boot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/boot-immutant/">boot-immutant</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/caching/">caching</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/clustering/">clustering</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/daemons/">daemons</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/datomic/">datomic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/deploy/">deploy</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/distribution/">distribution</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/enterprise/">enterprise</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/event/">event</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/first/">first</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/getting-started/">getting-started</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/hotrod/">hotrod</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/infinispan/">infinispan</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/installation/">installation</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/isolation/">isolation</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein/">lein</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/lein-immutant/">lein-immutant</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/luminus/">luminus</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/messaging/">messaging</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/openshift/">openshift</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/overlay/">overlay</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/pipelines/">pipelines</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/polyglot/">polyglot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/poorsmatic/">poorsmatic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/postgresql/">postgresql</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/presentations/">presentations</a>
+                </span>
+                <span class="tag tag-6">
+                  <a href="http://immutant.org/news/tags/releases/">releases</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/ring/">ring</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/runtime/">runtime</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/scheduling/">scheduling</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/screencast/">screencast</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/slim/">slim</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/sockjs/">sockjs</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/survey/">survey</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/thedeuce/">thedeuce</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/torquebox/">torquebox</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transactions/">transactions</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transit/">transit</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/tutorial/">tutorial</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/under-the-hood/">under-the-hood</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/vertx/">vertx</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/web/">web</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/websockets/">websockets</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wildfly/">wildfly</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wtf/">wtf</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/xa/">xa</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

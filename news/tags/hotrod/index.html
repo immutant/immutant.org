@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | News
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            News
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2013/10/28/hotrod-datomic/">Immutant as a Datomic Storage Service</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Jim Crossley
+                </div>
+                <div class="date">
+                  Monday, October 28, 2013
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/datomic/">datomic</a>
+                <a href="/news/tags/hotrod/">hotrod</a>
+                <a href="/news/tags/overlay/">overlay</a>
+                <a href="/news/tags/infinispan/">infinispan</a>
+              </div>
+              <div class="body">
+                <p>In this post, I&#39;m going to show you how to configure an Immutant
+                cluster as a <a href="http://www.datomic.com/">Datomic</a> storage service and test it with an example
+                application. </p>
+                
+                <p>Datomic prescribes a <a href="http://docs.datomic.com/architecture.html">unique architecture</a> in which database concepts
+                -- <a href="http://www.datomic.com/overview.html">transactions, queries, and storage</a> -- are separated. It
+                treats external storage engines much the same way a traditional
+                database treats a file system. And one of its supported engines is
+                <a href="http://infinispan.org/">Infinispan</a>, which just so happens to be included in Immutant!</p>
+                
+                <p>But there&#39;s a catch. Immutant only provides in-process access to
+                Infinispan. And the Datomic <a href="http://www.datomic.com/overview.html">transactor</a> is a standalone
+                application meant to run in its own process, so it expects to access
+                Infinispan via a <a href="http://infinispan.org/docs/6.0.x/user_guide/user_guide.html#_server_modules">HotRod</a> server, which is not provided by Immutant...</p>
+                
+                <h3 id="<em>...until_now!</em>" onclick="window.location = '#<em>...until_now!</em>'"><em>...until now!</em></h3>
+                
+                <p>As of version 1.1.0 of the <a href="https://github.com/immutant/lein-immutant">lein-immutant</a> plugin, it&#39;s possible to
+                overlay <a href="https://github.com/immutant/hotrod-overlay">the HotRod modules and configuration</a> onto an
+                installation of a recent Immutant incremental build.</p>
+                
+                <p>I need to stress <strong><em>incremental build</em></strong> here. This effort exposed a bug
+                in Infinispan 5.3.0, the version included in the official Immutant
+                1.0.x releases, that prevented the durability of any data written via
+                HotRod. So we upgraded to Infinispan 6.0, but that&#39;s currently only
+                available in our <a href="http://immutant.org/builds/">incremental builds</a>.</p>
+                
+                <p>Installing an incremental build is easy. Just pass <code>LATEST</code> (or a
+                specific build number) for the version:</p>
+                
+                <pre><code>$ lein immutant install LATEST&#x000A;</code></pre>
+                
+                <h2 id="Why?" onclick="window.location = '#Why?'">Why?</h2>
+                
+                <p>Before we get started, we should have reasons for doing so.</p>
+                
+                <p>If you already have some idea of the benefits of either Datomic or
+                Immutant or Infinispan, the benefits of combining them may be
+                apparent, but let&#39;s be specific:</p>
+                
+                <ul>
+                <li><strong>Simpler deployment</strong> There is no external storage service process
+                to manage: it&#39;s contained within Immutant.</li>
+                <li><strong>Simpler configuration</strong> Because your Datomic peers are colocated
+                with their storage service, the connection URI is always the same on
+                any node in the cluster: <code>datomic:inf://localhost:11222/&lt;DB_NAME&gt;</code></li>
+                <li><strong>Robust high availability</strong> As we&#39;ll see below, once a transactor
+                connects to a HotRod peer, it becomes &quot;topology-aware&quot; and remains
+                connected as long as there is at least one node in the cluster,
+                whether the original peer crashes or not.</li>
+                <li><strong>Linear scalability</strong> Infinispan&#39;s <a href="http://infinispan.org/docs/6.0.x/user_guide/user_guide.html#_distribution_mode">distributed replication</a> limits
+                copies of writes to a fixed number of nodes (default 2) regardless
+                of cluster size, so database capacity is increased by increasing the
+                size of your cluster. A consistent hashing algorithm is used to
+                determine which nodes will store a given entry, and the HotRod
+                client is aware of the hash distribution, enabling it to use the
+                most appropriate remote server for each operation.</li>
+                </ul>
+                
+                <h2 id="HotRod" onclick="window.location = '#HotRod'">HotRod</h2>
+                
+                <p>Using version 1.1.0 (or higher) of the <a href="https://github.com/immutant/lein-immutant">lein-immutant</a> plugin,
+                here&#39;s how to add HotRod to your Immutant:</p>
+                
+                <pre><code>$ lein immutant overlay hotrod&#x000A;</code></pre>
+                
+                <p>That&#39;s it! The next time you run Immutant, you&#39;ll have a HotRod
+                service awaiting connections on port 11222 with a cache named
+                <code>datomic</code> configured for synchronous, distributed replication,
+                persisting its contents to
+                <code>$IMMUTANT_HOME/jboss/standalone/data/infinispan/polyglot/datomic.dat</code></p>
+                
+                <h2 id="Datomic" onclick="window.location = '#Datomic'">Datomic</h2>
+                
+                <p>Datomic comes in two flavors: <a href="http://www.datomic.com/pricing.html">Free and Pro</a>. Infinispan storage
+                support is only included in Datomic Pro, so you&#39;ll need to
+                <a href="http://www.datomic.com/get-datomic.html">obtain a license</a>. BTW, much
+                thanks to <a href="https://twitter.com/stuarthalloway">Stuart Halloway</a> for hooking me up with one to get this
+                stuff working.</p>
+                
+                <div class="notice big">
+                
+                  <i><b>UPDATE 11/8/2013</b></i>: Datomic recently <a
+                  href="http://blog.datomic.com/2013/11/datomic-pro-starter-edition.html">announced</a>
+                  a <i>Datomic Pro Starter Edition</i> featuring support for all
+                  storages, including Infinispan, and a perpetual license.
+                
+                </div>
+                
+                <p>I&#39;ve been testing successfully with version <code>0.8.4218</code>, available
+                <a href="http://downloads.datomic.com/pro.html">here</a>. Once you download and
+                unzip it, cd to its directory and install the peer library to your
+                local Maven repo:</p>
+                
+                <pre><code>$ bin/maven-install&#x000A;</code></pre>
+                
+                <p>This isn&#39;t required for Immutant itself, but we&#39;ll need it for our
+                example app described below. Finally, install your license key. Use
+                the provided sample template for Infinispan:</p>
+                
+                <pre><code>$ cp config/samples/inf-transactor-template.properties config/immutant.properties&#x000A;</code></pre>
+                
+                <p>And update the <code>license-key</code> property in <code>config/immutant.properties</code>.
+                That&#39;s it! You&#39;re ready to run!</p>
+                
+                <p>In one shell, fire up Immutant:</p>
+                
+                <pre><code>$ lein immutant run&#x000A;</code></pre>
+                
+                <p>And in another shell, fire up the Datomic transactor:</p>
+                
+                <pre><code>$ bin/transactor config/immutant.properties&#x000A;</code></pre>
+                
+                <p>If you don&#39;t see any error stack traces in either shell, <a href="https://www.youtube.com/watch?v=b4810hS8weQ">yay</a>!</p>
+                
+                <h2 id="Counting_on_ACID" onclick="window.location = '#Counting_on_ACID'">Counting on ACID</h2>
+                
+                <p>To demonstrate some features, we need an example app. Here&#39;s one:
+                <a href="https://github.com/jcrossley3/datomic-counter">https://github.com/jcrossley3/datomic-counter</a>:</p>
+                
+                <pre><code>$ git clone git@github.com:jcrossley3/datomic-counter.git&#x000A;$ cd datomic-counter&#x000A;</code></pre>
+                
+                <p>As its name implies, it counts. But it does this using a pretty cool
+                Datomic feature: <a href="http://docs.datomic.com/database-functions.html">transaction functions</a>.</p>
+                
+                <p>Before we deploy it, let&#39;s highlight a few things. First, notice that
+                we added dependencies in <a href="https://github.com/jcrossley3/datomic-counter/blob/master/project.clj">project.clj</a> for our storage service and the
+                Datomic peer library (that we installed above):</p>
+                
+                <pre class="syntax clojure">  :dependencies [[org.clojure/clojure "1.5.1"]&#x000A;                 [org.infinispan/infinispan-client-hotrod "6.0.0.CR1"]&#x000A;                 [com.datomic/datomic-pro "0.8.4218"]]&#x000A;  :immutant {:init counter.core/start}</pre>
+                
+                <p>And we configured an <code>:init</code> function to be called when the app
+                deploys: <code>start</code> from the <a href="https://github.com/jcrossley3/datomic-counter/blob/master/src/counter/core.clj">counter.core</a> namespace. It has two duties:
+                1) initialize our Datomic database and b) schedule a job to increment
+                a counter every couple of seconds.</p>
+                
+                <pre class="syntax clojure">(defn start&#x000A;  "Initialize the database and schedule the counter"&#x000A;  []&#x000A;  (try&#x000A;    (db/init)&#x000A;    (job/schedule "counter" job, :every [2 :seconds], :singleton false)&#x000A;    (catch Exception e&#x000A;      (println "Check the transactor, retrying in 10 seconds")&#x000A;      (future (Thread/sleep 10000) (start)))))</pre>
+                
+                <p>We log and increment the counter in the <code>counter.core/job</code> function.
+                Note the job sets <code>:singleton false</code> so it&#39;ll run on all nodes in a
+                cluster, introducing the potential for race conditions as multiple
+                processes attempt to increment a shared counter. We&#39;ll deal with those
+                using a transaction function.</p>
+                
+                <p>We naively assume any exception is due to the <code>transactor</code> not being
+                around, so we log a warning, wait a bit, and retry. We do that in a
+                separate thread so as not to lock up the Immutant deployer. Now let&#39;s
+                take a closer look at the <code>init</code> function from <a href="https://github.com/jcrossley3/datomic-counter/blob/master/src/counter/db.clj">counter.db</a>:</p>
+                
+                <pre class="syntax clojure">(defn init&#x000A;  "Create the database, load the schema, initialize counter, and&#x000A;  define transaction function named :increment"&#x000A;  []&#x000A;  (when (d/create-database uri)&#x000A;    @(d/transact @conn (read-string (slurp (io/resource "schema.dtm"))))&#x000A;    @(d/transact @conn [{:db/id :counter :value 0}&#x000A;                        {:db/id (d/tempid :db.part/user)&#x000A;                         :db/ident :increment&#x000A;                         :db/fn (d/function&#x000A;                                 {:lang "clojure"&#x000A;                                  :params '[db]&#x000A;                                  :code '(let [v (:value (d/entity db :counter))]&#x000A;                                           (println "inc" v)&#x000A;                                           [{:db/id :counter&#x000A;                                             :value (inc v)}])})}])))</pre>
+                
+                <p>Note that we rely on the return value of <a href="http://docs.datomic.com/clojure/index.html#datomic.api/create-database">create-database</a> to ensure
+                that only one node in our cluster loads
+                <a href="https://github.com/jcrossley3/datomic-counter/blob/master/resources/schema.dtm">our very simple schema</a> and initializes our counter.</p>
+                
+                <p>The <code>:increment</code> entity is an example of a Datomic
+                <a href="http://docs.datomic.com/database-functions.html">transaction function</a>. It runs inside the transactor, which
+                serializes all writes to the database, and eliminates the potential
+                for the race conditions mentioned above. Note that the <code>println</code>
+                output should appear in the transactor&#39;s stdout.</p>
+                
+                <p>Go ahead and deploy it:</p>
+                
+                <pre><code>$ lein immutant deploy&#x000A;</code></pre>
+                
+                <p>Monitor the shells in which you started Immutant and the Datomic
+                transactor to see the expected output once the counting commences.</p>
+                
+                <h2 id="Cluster_Time!" onclick="window.location = '#Cluster_Time!'">Cluster Time!</h2>
+                
+                <p>Now the fun begins. I&#39;m going to assume you don&#39;t have a spare server
+                lying around, virtual or otherwise, that is discoverable via
+                multicast, on which you can install immutant and deploy the app, but
+                if you did, you&#39;d simply pass the <code>--clustered</code> option when you fire
+                up the Immutants on both hosts:</p>
+                
+                <pre><code>$ lein immutant run --clustered&#x000A;</code></pre>
+                
+                <p>But it&#39;s never that easy, is it? ;)</p>
+                
+                <p>Instead, I&#39;m going to show you how to create a cluster of Immutants on
+                your laptop using a port offset. First, kill the Immutant and
+                transactor processes (Ctrl-c) you started earlier, make sure you have
+                the app deployed, clean the runtime state, and replicate our Immutant
+                installation:</p>
+                
+                <pre><code>$ lein immutant deploy /path/to/datomic-counter&#x000A;$ rm -rf ~/.immutant/current/jboss/standalone/data&#x000A;$ cp -R ~/.immutant/current/ /tmp/node1&#x000A;$ cp -R ~/.immutant/current/ /tmp/node2&#x000A;</code></pre>
+                
+                <p>We&#39;re going to use two system properties to simulate our cluster:</p>
+                
+                <ul>
+                <li><strong>jboss.node.name</strong> Every node in a cluster must have a unique
+                identifier, which defaults to <code>hostname</code>, which will be the same for
+                both of our Immutants, so we&#39;ll override it on one of them.</li>
+                <li><strong>jboss.socket.binding.port-offset</strong> To avoid port conflicts, all
+                socket bindings will be incremented by this value, which defaults to
+                0.</li>
+                </ul>
+                
+                <p>In one shell, fire up <em>node1</em>:</p>
+                
+                <pre><code>$ IMMUTANT_HOME=/tmp/node1 lein immutant run --clustered -Djboss.node.name=node1&#x000A;</code></pre>
+                
+                <p>And in another shell, fire up <em>node2</em>:</p>
+                
+                <pre><code>$ IMMUTANT_HOME=/tmp/node2 lein immutant run --clustered -Djboss.socket.binding.port-offset=100&#x000A;</code></pre>
+                
+                <p>Assuming you have lots of RAM and disk and generous <code>ulimit</code> settings,
+                you can fire up as many of these as you like, e.g.</p>
+                
+                <pre><code>$ cp -R ~/.immutant/current/ /tmp/node3&#x000A;$ IMMUTANT_HOME=/tmp/node3 lein immutant run --clustered \&#x000A;  -Djboss.node.name=node3 \&#x000A;  -Djboss.socket.binding.port-offset=200&#x000A;</code></pre>
+                
+                <p>At this point, your Immutants should be complaining about the lack of
+                a running transactor, so go back to your transactor shell and restart
+                it:</p>
+                
+                <pre><code>$ bin/transactor config/immutant.properties&#x000A;</code></pre>
+                
+                <p>After a few seconds, you should see expected log output from the two
+                &quot;nodes&quot; and the transactor. </p>
+                
+                <p>To see some failover, recall that the transactor is configured to
+                connect to port <code>11222</code>, which is the <em>node1</em> Immutant. The <em>node2</em>
+                Immutant with the port offset is listening on port <code>11322</code>. Go back to
+                your <em>node1</em> shell and hit Ctrl-c to kill it. Observe that the
+                transactor doesn&#39;t miss a beat because it&#39;s already aware of <em>node2</em>&#39;s
+                membership in the cluster. The transactor only needed <em>node1</em> up long
+                enough to bootstrap itself into the cluster. The database remains
+                consistent as long as there&#39;s at least one node present thereafter.</p>
+                
+                <p>Now restart <em>node1</em> and kill the transactor using Ctrl-c. You should
+                see some errors in the output of the Immutants, but they&#39;ll recover
+                gracefully whenever you restart the transactor, whose output should
+                pick up right where it left off when you killed it.</p>
+                
+                <h2 id="Feedback" onclick="window.location = '#Feedback'">Feedback</h2>
+                
+                <p>It&#39;s still early days, obviously, and I can&#39;t yet articulate the
+                trade-offs, but I feel confident enough after my limited testing to
+                invite others to kick the tires, especially those with more Datomic
+                expertise than me. I suspect there are opportunities for tuning, and
+                we need to define some best practices around deployment, maybe come up
+                with some <a href="https://www.docker.io/">Docker</a> container images, for example.</p>
+                
+                <p>As always, feel free to reach out in the <a href="/community">usual ways</a> and feedback us!</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2013/10/28/hotrod-datomic/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="pagination-links"><span class="current-page">1</span> </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tags">
+              <div class="tag-cloud">
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/announcement/">announcement</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/app-server/">app-server</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/bears/">bears</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/beginning/">beginning</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/boot/">boot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/boot-immutant/">boot-immutant</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/caching/">caching</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/clustering/">clustering</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/daemons/">daemons</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/datomic/">datomic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/deploy/">deploy</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/distribution/">distribution</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/enterprise/">enterprise</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/event/">event</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/first/">first</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/getting-started/">getting-started</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/hotrod/">hotrod</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/infinispan/">infinispan</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/installation/">installation</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/isolation/">isolation</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein/">lein</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/lein-immutant/">lein-immutant</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/luminus/">luminus</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/messaging/">messaging</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/openshift/">openshift</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/overlay/">overlay</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/pipelines/">pipelines</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/polyglot/">polyglot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/poorsmatic/">poorsmatic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/postgresql/">postgresql</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/presentations/">presentations</a>
+                </span>
+                <span class="tag tag-6">
+                  <a href="http://immutant.org/news/tags/releases/">releases</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/ring/">ring</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/runtime/">runtime</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/scheduling/">scheduling</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/screencast/">screencast</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/slim/">slim</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/sockjs/">sockjs</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/survey/">survey</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/thedeuce/">thedeuce</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/torquebox/">torquebox</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transactions/">transactions</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transit/">transit</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/tutorial/">tutorial</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/under-the-hood/">under-the-hood</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/vertx/">vertx</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/web/">web</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/websockets/">websockets</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wildfly/">wildfly</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wtf/">wtf</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/xa/">xa</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

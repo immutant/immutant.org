@@ -1,0 +1,165 @@
+<html>
+  <head>
+    <title>immutant.jobs - Immutant Clojure API API documentation</title>
+    <link href="static/favicon.png" rel="icon" />
+    <link href="static/favicon.png" rel="shortcut icon" />
+    <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/wiki.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/internal.css" rel="stylesheet" />
+    <style>.menuWrapper{height: 36px;}</style>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" href="http://www.wikispaces.com/_/2009051601/s/internal_ie.css" type="text/css" />
+    <![endif]-->
+  </head>
+<!--
+This document was auto-generated from the source by the clojure autodoc system.
+To report errors or ask questions about the overall documentation structure, formatting,
+etc., contact Tom Faulhaber (google mail name: tomfaulhaber).
+For errors in the documentation of a particular namespace, contact the author of that
+namespace.
+-->
+  <body>
+    <div id="AllContentContainer">
+      <div id="Header">
+	<!-- <a href="index.html" id="Logo"><img src="static/immutant-icon.gif" width="100" height="100" alt="Immutant" /></a> -->
+	<h1><a title="page header title" id="page-header" href="index.html">Immutant Clojure API</a> - v0.1.0</h1>
+      </div>
+      <div id="leftcolumn"><div style="text-align: center;"></div>
+<div class="menu">
+  <div class="WikiCustomNav WikiElement wiki">
+    <span class="toc-header"><span id="project-name">Immutant Clojure API</span> <span id="version"></span></span><br />
+    <ul>
+      <li><a class="wiki_link" href="index.html">Overview</a></li>
+      <li><a class="wiki_link" href="api-index.html">API Index</a></li>
+    </ul>
+    <div class="NamespaceTOC">
+      <span class="toc-header">Namespaces</span>
+      <ul id="left-sidebar-list">
+        <li><a href="immutant.utilities-api.html" class="wiki_link">immutant.utilities</a></li><li><a href="immutant.runtime-api.html" class="wiki_link">immutant.runtime</a></li><li><a href="immutant.repl-api.html" class="wiki_link">immutant.repl</a></li><li><a href="immutant.registry-api.html" class="wiki_link">immutant.registry</a></li><li><a href="immutant.mbean-api.html" class="wiki_link">immutant.mbean</a></li><li><a href="immutant.codecs-api.html" class="wiki_link">immutant.codecs</a></li><li><a href="immutant.web-api.html" class="wiki_link">immutant.web</a></li><li><a href="immutant.cache-api.html" class="wiki_link">immutant.cache</a></li><li><a href="immutant.daemons-api.html" class="wiki_link">immutant.daemons</a></li><li><a href="immutant.jobs-api.html" class="wiki_link">immutant.jobs</a></li><li><a href="immutant.messaging-api.html" class="wiki_link">immutant.messaging</a></li>
+      </ul>
+    </div>
+    
+    <a href="http://immutant.org" class="wiki_link">Immutant Home</a>
+    <a href="../index.html" class="wiki_link">Immutant Manual</a>
+
+  </div>
+</div>
+</div>
+      <div id="rightcolumn">
+	<div id="Content">
+	  <div class="contentBox"><div class="innerContentBox">
+              <div id="content_view" class="wiki wikiPage">
+                <div id="right-sidebar"><div id="toc">
+  <h1 class="nopad">Table of Contents</h1>
+  <div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.jobs">immutant.jobs</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.jobs/schedule">schedule</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.jobs/unschedule">unschedule</a>
+    </div>
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.jobs.internal">immutant.jobs.internal</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.jobs.internal/create-job">create-job</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.jobs.internal/create-scheduler">create-scheduler</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.jobs.internal/scheduler">scheduler</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.jobs.internal/stop-job">stop-job</a>
+    </div>
+    <br />
+  </div>
+</div>
+</div>
+                <div id="content-tag">
+<p></p>
+<h2 class="namespace-header" id="immutant.jobs">immutant.jobs</h2>
+<pre id="namespace-docstr">Associate recurring jobs with an application using cron-like specifications</pre>
+
+
+<br />
+
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.jobs/schedule">schedule</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (schedule name spec f &amp; {singleton :singleton, :or {singleton true}})
+</pre>
+  <pre id="var-docstr">Schedules a job to execute based on the spec.
+Calling this function with the same name as a previously scheduled job will replace that job.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/1a56cf838c0c0ffd99d043907f4ee33f8fde3e17/./modules/jobs/src/main/clojure/immutant/jobs.clj#L35" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.jobs/unschedule">unschedule</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (unschedule name)
+</pre>
+  <pre id="var-docstr">Removes the named job from the scheduler</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/1a56cf838c0c0ffd99d043907f4ee33f8fde3e17/./modules/jobs/src/main/clojure/immutant/jobs.clj#L26" id="var-source">Source</a>
+</div>
+<h2 class="namespace-header sub-namespace" id="immutant.jobs.internal">immutant.jobs.internal</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.jobs.internal/create-job">create-job</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (create-job f name spec singleton)
+</pre>
+  <pre id="var-docstr">Instantiates and starts a job</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/12817e8eadc0e9ca2d741bf2a6fb0daed72f5c7f/./modules/jobs/src/main/clojure/immutant/jobs/internal.clj#L59" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.jobs.internal/create-scheduler">create-scheduler</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (create-scheduler singleton)
+</pre>
+  <pre id="var-docstr">Creates a scheduler for the current application.
+A singleton scheduler will participate in a cluster, and will only execute its jobs on one node.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/12817e8eadc0e9ca2d741bf2a6fb0daed72f5c7f/./modules/jobs/src/main/clojure/immutant/jobs/internal.clj#L30" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.jobs.internal/scheduler">scheduler</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (scheduler singleton)
+</pre>
+  <pre id="var-docstr">Retrieves the appropriate scheduler, creating it if necessary</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/12817e8eadc0e9ca2d741bf2a6fb0daed72f5c7f/./modules/jobs/src/main/clojure/immutant/jobs/internal.clj#L37" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.jobs.internal/stop-job">stop-job</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (stop-job job)
+</pre>
+  <pre id="var-docstr">Stops (unschedules) a job, removing it from the scheduler.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/12817e8eadc0e9ca2d741bf2a6fb0daed72f5c7f/./modules/jobs/src/main/clojure/immutant/jobs/internal.clj#L75" id="var-source">Source</a>
+</div>
+
+
+</div>
+              </div>
+            </div>
+          </div>
+	</div>
+	<div id="foot">
+	  <div style="text-align: center;" id="copyright">Copyright 2011-2012 Red Hat, Inc.</div>
+	</div>
+      </div>
+      <div id="DesignedBy">Based on a site design by <a title="Visit Tom Hickey's website." href="http://www.tomhickey.com">Tom Hickey</a>.<br />
+      <a href="http://tomfaulhaber.github.com/autodoc/">Clojure auto-documentation system</a> by Tom Faulhaber.</div>
+    </div>
+    <!-- /AllContentContainer -->
+  </body>
+
+</html>

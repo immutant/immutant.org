@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Installing Immutant</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Installing Immutant" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2013-02-28 12:01:57 EST" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="what-is.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="deployment.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 2. Installing Immutant</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="installation.html#sec-1">2.1. Introduction</a></li>
+<li><a href="installation.html#sec-2">2.2. Installation via Leiningen</a></li>
+<li><a href="installation.html#sec-3">2.3. Installation via Zip Download</a></li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">2.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+<p>  There are currently two options for installing Immutant: using the 
+  Leiningen plugin and downloading a zip file.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">2.2.</span> Installation via Leiningen</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  To install Immutant via the <a href="http://leiningen.org/">Leiningen</a> plugin, you'll need to
+  first install Leiningen, followed by the <a href="https://github.com/immutant/lein-immutant/">lein-immutant</a> plugin.
+  The plugin supports both Leiningen 1.x and 2.x, but the method for
+  installing the plugin is different for each version.
+</p>
+<p>
+  To install the plugin under Leiningen 1.x (version 1.6.2 or greater),
+  you'll use the <code>lein plugin install</code> command:
+</p>
+
+
+
+<pre class="src src-sh">$ lein plugin install lein-immutant VERSION
+</pre>
+
+
+<p>
+  To install the plugin under 2.x, you'll need to add it to the plugin
+  list in <code>~/.lein/profiles.clj</code>:
+</p>
+
+
+
+<pre class="src src-clojure">{<span class="org-builtin">:user</span> {<span class="org-builtin">:plugins</span> [[lein-immutant <span class="org-string">"VERSION"</span>]]}}
+</pre>
+
+
+<p>
+  You can determine the current version of the plugin by looking at
+  its <a href="http://clojars.org/lein-immutant">page on clojars</a>.
+</p>
+<p>
+  The plugin provides a number of subcommands, one of which is
+  <code>install</code>. So installing Immutant is as easy as this:
+</p>
+
+
+
+<pre class="src src-sh">$ lein immutant install [VERSION]
+</pre>
+
+
+<p>  
+  Without a VERSION specified, the LATEST successful incremental build
+  will be installed. To obtain fixes
+  released in subsequent incremental builds, simply run <code>install</code> again.
+</p>
+<p>
+  To obtain a specific version, you can specify an incremental build 
+  number (ex: 123) or a released version (ex: 0.2.0).
+</p>
+<p>
+  Releases installed via the plugin are installed by default under
+  <code>~/.lein/immutant/releases</code>, and <code>~/.lein/immutant/current</code> is 
+  linked to that release. You can specify an alternative parent install
+  directory by passing it as the third argument to <code>install</code>:
+</p>
+
+
+
+<pre class="src src-sh">$ lein immutant install VERSION /path/where/you/want/it  
+</pre>
+
+
+<p>
+  The plugin will install Immutant there, and link <code>~/.lein/immutant/current</code>
+  to that version.
+</p>
+<p>
+  This installed version of Immutant is shared across all Immutant applications
+  on your machine, and does not need to be installed for each application.
+</p>
+<p>
+  See <a href="./deployment.html">Deployment</a> for more details about the plugin.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-3">
+<h2 id="sec-3"><span class="section-number-2">2.3.</span> Installation via Zip Download</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  You can manually download any of the same builds that you can install 
+  via the plugin. You can download incremental builds from our <a href="http://immutant.org/builds/">builds page</a>
+  and an official releases from our <a href="http://immutant.org/releases/">releases page</a>.
+</p>
+<p>  
+  Once you have the zip downloaded, expand it somewhere handy. If you want
+  to use the Leiningen plugin with this build, you'll need to set <code>$IMMUTANT_HOME</code>:
+</p>
+
+
+
+<pre class="src src-sh">$ mkdir immutant-releases
+$ cd immutant-releases
+$ unzip path/to/immutant-dist-bin.zip
+$ export $<span class="org-variable-name">IMMUTANT_HOME</span>=~/immutant-releases/0.2.0/
+</pre>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="what-is.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="deployment.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 0.9.0</div>
+</div>
+
+
+</body></html>

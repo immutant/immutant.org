@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | Immutant 0.8.0 Released
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            Immutant 0.8.0 Released
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="post">
+              <div class="byline">
+                <div class="author">
+                  The Immutant Team
+                </div>
+                <div class="date">
+                  Monday, January 14, 2013
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/releases/">releases</a>
+              </div>
+              <div class="body">
+                <p>We&#39;re as happy as
+                <a href="http://www.youtube.com/watch?v=8BdT5mFAk-Y">Walter after Smokey marks it zero</a>
+                to announce our latest release of Immutant - version <strong><em>0.8.0</em></strong>,
+                hopefully culminating in a 1.0.0 version late winter/early spring. As
+                always, view our road map
+                <a href="https://issues.jboss.org/browse/IMMUTANT">here</a>.</p>
+                
+                <h2 id="What_is_Immutant?" onclick="window.location = '#What_is_Immutant?'">What is Immutant?</h2>
+                
+                <p>Immutant is an application server for <a href="http://clojure.org">Clojure</a>.
+                It&#39;s an integrated platform built on
+                <a href="http://www.jboss.org/as7">JBoss AS7</a> that aims to reduce the inherent
+                <a href="http://en.wikipedia.org/wiki/Accidental_complexity">incidental complexity</a>
+                in real world applications.</p>
+                
+                <h2 id="What&#39;s_in_this_release?" onclick="window.location = '#What&#39;s_in_this_release?'">What&#39;s in this release?</h2>
+                
+                <p>The most exciting feature included in this release is our new
+                <a href="/news/2013/01/14/pipelines/">Pipelines</a> library, inspired by Rich Hickey&#39;s Clojure/Conj 2012
+                keynote and Zach Tellman&#39;s <a href="https://github.com/ztellman/lamina">Lamina</a> project.</p>
+                
+                <p>In addition to Pipelines: caches can now be optionally persisted to
+                disk, static asset middleware is context-aware, and idempotent
+                behavior for messaging destinations should be more predictable.</p>
+                
+                <p>We also upgraded a few runtime dependencies (<a href="https://github.com/clojure/tools.nrepl">nREPL</a>, <a href="https://github.com/technomancy/leiningen/tree/master/leiningen-core">leiningen-core</a>)
+                and added a new one (<a href="https://github.com/dakrone/cheshire">cheshire</a>). Plus we switched to <a href="https://github.com/weavejester/codox">codox</a> for our
+                <a href="http://immutant.org/builds/LATEST/html-docs/apidoc/index.html">API</a> docs.</p>
+                
+                <p>We know of no breaking API changes from 0.7.0, but we&#39;re sure you&#39;ll
+                let us know if we missed something. ;-)</p>
+                
+                <h2 id="Get_It" onclick="window.location = '#Get_It'">Get It</h2>
+                
+                <p>The simplest way to install or upgrade to 0.8.0 is via our
+                <a href="https://clojars.org/lein-immutant">Leiningen plugin</a>:</p>
+                
+                <pre><code>$ lein immutant install 0.8.0&#x000A;</code></pre>
+                
+                <p>See our <a href="/install/">install page</a> for more details. Once you have it
+                installed, take a look at our <a href="/tutorials/">tutorials</a>.</p>
+                
+                <h2 id="Get_In_Touch" onclick="window.location = '#Get_In_Touch'">Get In Touch</h2>
+                
+                <p>If you have any questions, issues, or other feedback about Immutant,
+                you can always find us on <a href="/community/">#immutant on freenode</a> or
+                <a href="/community/mailing_lists">our mailing lists</a>. </p>
+                
+                <h2 id="Issues_resolved_in_0.8.0" onclick="window.location = '#Issues_resolved_in_0.8.0'">Issues resolved in 0.8.0</h2>
+                
+                <ul>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-114'>IMMUTANT-114</a>] -         support async servlet API
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-115'>IMMUTANT-115</a>] -         Make bultitude.core/namespaces-on-classpath work
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-116'>IMMUTANT-116</a>] -         Expose support for Infinispan cache loaders 
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-171'>IMMUTANT-171</a>] -         Add messaging pipeline
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-188'>IMMUTANT-188</a>] -         AOT compiling immutant.init breaks: web/start – not registering ring handlers
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-189'>IMMUTANT-189</a>] -         Switch from autodoc to codox for api docs.
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-190'>IMMUTANT-190</a>] -         jar mounts need to be under the deployment root for some of the AS&#39;s deployment scanners to work
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-193'>IMMUTANT-193</a>] -         file-store session persistence not working
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-191'>IMMUTANT-191</a>] -         Let xa/datasource accept :subprotocol and :subname as aliases
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-195'>IMMUTANT-195</a>] -         Immutant rejects URLs with %5C
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-196'>IMMUTANT-196</a>] -         Serve static assets for apps not mounted at root context
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-198'>IMMUTANT-198</a>] -         Replace queue listeners and append topic listeners by default
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-199'>IMMUTANT-199</a>] -         Expose the base url for a deployed webapp
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-200'>IMMUTANT-200</a>] -         replace data.json with cheshire
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-201'>IMMUTANT-201</a>] -         msg/request should return a IBlockingDeref instead of taking a :timeout parameter
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-202'>IMMUTANT-202</a>] -         update to leiningen-core 2.0.0-RC2
+                </li>
+                <li>[<a href='https://issues.jboss.org/browse/IMMUTANT-204'>IMMUTANT-204</a>] -         update to nrepl 0.2.1
+                </li>
+                </ul>
+              </div>
+              <div class="comments">
+                
+                            <div id="disqus_thread"></div>
+                            <script type="text/javascript">
+                            var disqus_shortname = 'immutant';
+                            var disqus_url = "http://immutant.org/news/2013/01/14/announcing-0-8-0/";
+                            var disqus_developer = null;
+                            var disqus_identifier = null;
+                            (function() {
+                              var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
+                              dsq.src = "http://immutant.disqus.com/embed.js";
+                              (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq);
+                            })();
+                            </script>
+                            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=immutant">comments powered by Disqus.</a></noscript>
+              </div>
+            </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="post-navigation">
+              <div class="previous">
+                Previous:
+                <a href="/news/2013/01/14/pipelines/">Introducing Immutant Pipelines</a>
+              </div>
+              <div class="next">
+                Next:
+                <a href="/news/2013/02/26/slim-distribution/">A slimmer, trimmer Immutant</a>
+              </div>
+            </div>
+            <div id="release-block">
+              <hr>
+              <p><strong>Version <em>0.8.0</em> was released on
+              Monday, January 14, 2013</strong>.</p>
+              <p>You can <a href="/documentation/0.8.0/">browse the documentation</a> or
+              install it via:</p>
+              
+              <pre><code>$ lein immutant install &#x000A;</code></pre>
+              
+              <p>Don&#39;t have the <code>lein-immutant</code> plugin installed?
+              <a href="/tutorials/installation/">Learn how</a>, or
+              <a href="http://downloads.immutant.org/release/org/immutant/immutant-dist/0.8.0/immutant-dist-0.8.0-bin.zip">download the zip archive</a>.</p>
+              <hr>
+            </div>
+            <div class="tags">
+              <div class="tag-cloud">
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/announcement/">announcement</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/app-server/">app-server</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/bears/">bears</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/beginning/">beginning</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/boot/">boot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/boot-immutant/">boot-immutant</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/caching/">caching</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/clustering/">clustering</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/daemons/">daemons</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/datomic/">datomic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/deploy/">deploy</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/distribution/">distribution</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/enterprise/">enterprise</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/event/">event</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/first/">first</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/getting-started/">getting-started</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/hotrod/">hotrod</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/infinispan/">infinispan</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/installation/">installation</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/isolation/">isolation</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein/">lein</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/lein-immutant/">lein-immutant</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/luminus/">luminus</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/messaging/">messaging</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/openshift/">openshift</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/overlay/">overlay</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/pipelines/">pipelines</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/polyglot/">polyglot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/poorsmatic/">poorsmatic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/postgresql/">postgresql</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/presentations/">presentations</a>
+                </span>
+                <span class="tag tag-6">
+                  <a href="http://immutant.org/news/tags/releases/">releases</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/ring/">ring</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/runtime/">runtime</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/scheduling/">scheduling</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/screencast/">screencast</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/slim/">slim</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/sockjs/">sockjs</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/survey/">survey</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/thedeuce/">thedeuce</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/torquebox/">torquebox</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transactions/">transactions</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transit/">transit</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/tutorial/">tutorial</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/under-the-hood/">under-the-hood</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/vertx/">vertx</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/web/">web</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/websockets/">websockets</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wildfly/">wildfly</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wtf/">wtf</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/xa/">xa</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

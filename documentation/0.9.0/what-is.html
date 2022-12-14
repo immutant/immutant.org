@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>What is Immutant?</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="What is Immutant?" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2013-02-28 12:01:52 EST" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="index.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="installation.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 1. What is Immutant?</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="what-is.html#sec-1">1.1. Introduction</a></li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">1.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  Immutant is essentially an enhanced version of the <a href="http://jboss.org/jbossas">JBoss Application Server 7</a>. 
+  It repackages AS7 with additional modules that support Clojure applications, 
+  similar to what the <a href="http://torquebox.org">TorqueBox</a> project does for Ruby applications.
+</p>
+<p>  
+  Immutant reduces the <b>incidental complexity</b> (a.k.a. <a href="http://en.wikipedia.org/wiki/No_Silver_Bullet">accidental</a>)
+  inherent in non-trivial applications by providing an integrated
+  platform for <a href="./web.html">web</a>, <a href="./messaging.html">messaging</a>, <a href="./jobs.html">scheduling</a>, <a href="./caching.html">caching</a>, <a href="./daemons.html">daemons</a>,
+  <a href="./transactions.html">transactions</a>, and more. This frees the developer from having to
+  build a unique stack from scratch, not to mention the responsibility
+  of supporting the evolution of that stack as the application
+  requirements expand.
+</p>
+<p>
+  The Immutant API's are comprised of functions whose side effects
+  trigger the services provided by the app server. For example:
+</p>
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;;; </span><span class="org-comment">Mount a Ring handler, i.e. a web app</span>
+(immutant.web/start <span class="org-string">"/"</span> your.web/app)
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Start a message queue</span>
+(immutant.messaging/start <span class="org-string">"/queue/tweets"</span>)
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Map a listener to the queue</span>
+(immutant.messaging/listen <span class="org-string">"/queue/tweets"</span> your.msg/handler)
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Schedule a recurring job to run at midnight</span>
+(immutant.jobs/schedule <span class="org-string">"housekeeper"</span> <span class="org-string">"0 0 0 * * ?"</span> your.job/purge)
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Create a distributed data grid</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">data-grid</span> (immutant.cache/cache <span class="org-string">"tweets"</span> <span class="org-builtin">:mode</span> <span class="org-builtin">:distributed</span>))
+</pre>
+
+
+<p>
+  All of the above functions are dynamic, meaning you can call them
+  from anywhere within your application. <b>There are no XML or YAML   config files, only Clojure.</b>
+</p>
+<p>
+  Leiningen applications may be deployed directly from disk using a
+  convenient <a href="./deployment.html">Immutant plugin</a>, so <b>there is no need to package your app   into a war file in order to deploy it.</b>
+</p>
+<p>
+  Multiple applications can be deployed to the same Immutant instance
+  and are each given <b>a fully isolated Clojure runtime</b> that allows the
+  application to load its own versions of its dependencies (including
+  Clojure itself) without affecting other applications.
+</p>
+<p>
+  Further, Immutant enables <a href="./interactive.html">interactive, REPL-based development</a>,
+  allowing you to <b>manipulate your application while it's running in   the app server.</b>
+</p></div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="index.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="installation.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 0.9.0</div>
+</div>
+
+
+</body></html>

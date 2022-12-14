@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | Using Noir
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/install/">Install</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/tutorials/">Tutorials</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/">Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/current/apidoc/">API Docs</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="/builds/">Incremental Builds</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            Tutorial: Using Noir
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="tutorial article">
+              <div class="byline">
+                <div class="date">
+                  Last updated:
+                  <span class="date">
+                    Thursday, October 10, 2013
+                  </span>
+                </div>
+                <div class="author">
+                  Author:
+                  <a href="https://github.com/dougselph">Doug Selph</a>
+                </div>
+              </div>
+              <div class="body">
+                <p>This tutorial covers creating a basic <a href="https://github.com/noir-clojure/noir">Noir</a> web application and deploying it 
+                to an Immutant application server. If you haven&#39;t read the <a href="../installation/">Installation</a> and 
+                <a href="../deploying/">Deployment</a> tutorials, go do so now, since you&#39;ll need Immutant 
+                and the lein-immutant plugin installed. This tutorial assumes you are on 
+                a *nix system.</p>
+                
+                <h2>Creating a Noir application</h2>
+                
+                <p>First, let&#39;s create a noir application named noirtant. </p>
+                
+                <pre><code>~/ $ lein new noir noirtant&#x000A;Generating a lovely new Noir project named noirtant...&#x000A;</code></pre>
+                
+                <p>You now have a skeleton noir application. Provided you don&#39;t currently have Immutant 
+                running on port 8080, you can start your app under Jetty to verify it is working:</p>
+                
+                <pre><code> ~/ $ cd noirtant&#x000A; ~/noirtant $ lein run&#x000A; Compiling noirtant.server&#x000A; Starting server...&#x000A; 2012-11-16 15:22:40.693:INFO::Logging to STDERR via org.mortbay.log.StdErrLog&#x000A; 2012-11-16 15:22:40.693:INFO::jetty-6.1.25&#x000A; Server started on port [8080].&#x000A; You can view the site at http://localhost:8080&#x000A; #&lt;Server Server@68acbd3a&gt;&#x000A; 2012-11-16 15:22:40.734:INFO::Started SocketConnector@0.0.0.0:8080&#x000A;</code></pre>
+                
+                <p>You can now see your application <a href="http://localhost:8080/">here</a>. When you&#39;re finished admiring your 
+                shiny app, stop Jetty with CTRL-c.</p>
+                
+                <h2>Configure your application to run in immutant</h2>
+                
+                <p>You have a working noir application. Now let&#39;s make it work with Immutant.
+                Let&#39;s create an <code>immutant.init</code> namespace in <code>src/immutant/init.clj</code> that 
+                looks like:</p>
+                
+                <pre class="syntax clojure">(ns immutant.init&#x000A;  (:require [immutant.messaging :as messaging]&#x000A;            [immutant.web :as web]&#x000A;            [immutant.util :as util]&#x000A;            [noir.server :as server]))&#x000A;&#x000A;;; This file will be loaded when the application is deployed to Immutant, and&#x000A;;; can be used to start services your app needs. Examples:&#x000A;&#x000A;;; To start a Noir app:&#x000A;(server/load-views (util/app-relative "src/noirtant/views"))&#x000A;(web/start "/" (server/gen-handler {:mode :dev :ns 'noirtant}))</pre>
+                
+                <p>If you are familiar with noir already, the last two lines of your modified init.clj 
+                may raise some questions for you, as they look very similar to lines from your 
+                noirtant/src/noirtant/server.clj file. Because of the way Immutant initializes your 
+                application, this is not a problem. </p>
+                
+                <p>You can now start immutant and deploy your application:</p>
+                
+                <pre><code>~/noirtant $ lein immutant run&#x000A;Starting Immutant via ~/.immutant/current/jboss/bin/standalone.sh&#x000A;... &#x000A;(a plethora of log messages deleted)&#x000A;...&#x000A;18:07:58,706 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015961: Http management interface listening on http://127.0.0.1:9990/management&#x000A;18:07:58,706 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015951: Admin console listening on http://127.0.0.1:9990&#x000A;18:07:58,707 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015874: JBoss AS 7.1.x.incremental.129 &quot;Arges&quot; started in 15449ms - Started 276 of 368 services (91 services are passive or on-demand)&#x000A;</code></pre>
+                
+                <p>Immutant will run in the foreground, so switch to another shell and run:</p>
+                
+                <pre><code>~/noirtant $ lein immutant deploy&#x000A;Deployed noirtant to ~/.immutant/current/jboss/standalone/deployments/noirtant.clj&#x000A;</code></pre>
+                
+                <p>You application can now be accessed <a href="http://localhost:8080/noirtant">here</a>. Neat, huh? (Golf claps, 
+                everyone!) When you&#39;ve had your fill of playing with noirtant, you can shut down your 
+                immutant with CTRL-c or undeploy noirtant:</p>
+                
+                <pre><code>~/noirtant $ lein immutant undeploy&#x000A;Undeployed noirtant from ~/.immutant/current/jboss/standalone/deployments&#x000A;</code></pre>
+                
+                <h2>Wrapping up</h2>
+                
+                <p>We hope you&#39;ve enjoyed this quick run-through of creating and deploying a noir 
+                web application to Immutant. Now go build your noir application, and enjoy running 
+                it on Immutant. Thanks to the fine folks on the Immutant team for their constant 
+                work on improving our experience using Immutant and JBoss.</p>
+                
+                <p>If you have any feedback or questions, <a href="/community">get in touch</a>! </p>
+              </div>
+              <div class="comments">
+                
+                            <div id="disqus_thread"></div>
+                            <script type="text/javascript">
+                            var disqus_shortname = 'immutant';
+                            var disqus_url = "http://immutant.org/tutorials/noir/";
+                            var disqus_developer = null;
+                            var disqus_identifier = null;
+                            (function() {
+                              var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
+                              dsq.src = "http://immutant.disqus.com/embed.js";
+                              (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq);
+                            })();
+                            </script>
+                            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=immutant">comments powered by Disqus.</a></noscript>
+              </div>
+            </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tutorial-nav">
+              <h3>All Tutorials</h3>
+              <ul class="nav nav-tabs nav-stacked">
+                <li class="">
+                  <a href="/tutorials/installation/index.html">Installation</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/deploying/index.html">Deployment</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/messaging/index.html">Messaging</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/jobs/index.html">Scheduling</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/caching/index.html">Caching</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/clustering/index.html">Clustering</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/overlay/index.html">Overlay</a>
+                </li>
+                <li class="current">
+                  <a href="/tutorials/noir/index.html">Using Noir</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>
+                The Immutant project is a member of the
+                <a href="http://jboss.org/">JBoss Community</a> and
+                produced by the <a href="http://projectodd.org/">Project:odd</a> team.
+                It is a community-driven open-source project, and is licensed under the
+                <a href="/license-lgpl.txt">GNU LGPL</a>.
+              </p>
+              <p>
+                Copyright 2011 - 2013 <a href="http://redhat.com/">Red Hat, Inc.</a>
+                Immutant&trade; is a trademark of Red Hat, Inc.
+              </p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+    var pageTracker = _gat._getTracker("UA-6435340-7");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+  </body>
+</html>

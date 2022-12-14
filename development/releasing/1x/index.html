@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | Releasing a 1.x Release
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            Releasing a 1.x Release
+          </h1>
+        </div>
+        <h1>Preparation</h1>
+        
+        <p>Code is released from the <code>master</code> branch of <a href="http://github.com/immutant/immutant-release">immutant/immutant-release</a>.</p>
+        
+        <p>Set up this repository as an additional remote for your workspace:</p>
+        
+        <pre><code>git remote add release git@github.com:immutant/immutant-release.git&#x000A;</code></pre>
+        
+        <p>Ensure that the tag you are attempting to release does not exist in the release repository,
+        or maven will fail part way through the build</p>
+        
+        <pre><code>git push release :1.0.0&#x000A;</code></pre>
+        
+        <p>Ensure that the <code>master</code> branch has the contents you wish to release.  Using the <code>-f</code>
+        flag to force is allowed in this case, since the <strong>immutant-release</strong> repository is not
+        a public-facing human-cloneable repository.</p>
+        
+        <pre><code>git push release master:master -f&#x000A;</code></pre>
+        
+        <h1>Pre-flight build</h1>
+        
+        <p>Using the <a href="http://projectodd.ci.cloudbees.com/">build system</a>, select the
+        <strong>immutant-release</strong> job.  This job may be easily found under the
+        <strong>Release</strong> tab in CI.</p>
+        
+        <p><img src="/images/releasing/ci.png" /></p>
+        
+        <p>Enter in the version to release, followed by the <strong>next</strong> version after the release, and
+        select the <strong>release-staging</strong> profile.  The <strong>release-staging</strong> profile can build against
+        other projects also built to the <strong>release-staging</strong> repository.  This is useful when
+        performing a chain of releasing involving <strong>polyglot</strong> and <strong>immutant</strong>
+        to ensure they all work together before publishing any to public repositories.</p>
+        
+        <p><img src="/images/releasing/start-preflight.png" /></p>
+        
+        <p>After each pre-flight build, you will need to reset the release repository:</p>
+        
+        <pre><code>git push release :1.0.0&#x000A;git push release master:master -f&#x000A;</code></pre>
+        
+        <p>When you are happy with the pre-flight build (in other words, it completes successfully),
+        you&#39;re ready to run the real build.</p>
+        
+        <h1>Perform the Builds</h1>
+        
+        <p>Using the <a href="http://projectodd.ci.cloudbees.com/">build system</a>, again select the
+        <strong>immutant-release</strong> job, selecting the <strong>release</strong> profile this time.</p>
+        
+        <p><img src="/images/releasing/start-build.png" /></p>
+        
+        <h1>Verify the maven artifacts</h1>
+        
+        <p>Verify that the artifacts you expect have been uploaded and deployed to</p>
+        
+        <p><a href="http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/">http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/</a></p>
+        
+        <h1>Push changes from the release repository to the official repository</h1>
+        
+        <h2>Fetch the release commits locally:</h2>
+        
+        <pre><code>git fetch release&#x000A;</code></pre>
+        
+        <h2>Rebase in the release commits:</h2>
+        
+        <pre><code>git rebase release/master&#x000A;</code></pre>
+        
+        <h2>Push to the official repository</h2>
+        
+        <pre><code>git push origin master&#x000A;</code></pre>
+        
+        <h2>Push the tag to the official repository</h2>
+        
+        <pre><code>git push origin 1.0.0&#x000A;</code></pre>
+        
+        <h1>Push the public artifacts to clojars.org</h1>
+        
+        <p>Grab the public artifacts as a zip file:</p>
+        
+        <p><img src="/images/releasing/artifacts.png" /></p>
+        
+        <p>Unzip that file, cd to <code>support/clojoars-deployer</code>, and run <code>lein run</code>
+        with a path to the <code>target/namespaces</code> dir in from the archive:</p>
+        
+        <pre><code>cd ~/work/immutant/support/clojars-deployer&#x000A;lein run ~/Downloads/archive/namespaces/target/namespaces&#x000A;</code></pre>
+        
+        <h1>Smoketest the artifacts from clojars</h1>
+        
+        <p>Shutdown any local JBoss instances and run the following:</p>
+        
+        <pre><code>~/work/immutant/support/smoketest/bin/smoke 1.0.0&#x000A;</code></pre>
+        
+        <p>That will initialize a local maven repository beneath
+        <code>smoketest/target/.m2</code> and download all required dependencies there
+        before running a test to ensure all namespaces can be loaded
+        successfully outside the container. Then it will install the desired
+        version of Immutant locally, clone the feature-demo app, and test it,
+        verifying all the namespaces run correctly inside the container.</p>
+        
+        <p>If you see any errors... well...</p>
+        
+        <blockquote>
+        <p>&#39;Tis a lesson you should heed,
+        If at first you don&#39;t succeed,
+        Try, try again</p>
+        </blockquote>
+        
+        <h1>Promote the clojars artifacts</h1>
+        
+        <p>Login to <a href="http://clojars.org">clojars</a>, and promote all eight of the
+        deployed artifacts.</p>
+        
+        <h1>Release the project in JIRA</h1>
+        
+        <p><img src="/images/releasing/jira-release.png" style="width: 100%"/></p>
+        
+        <h1>Submit a PR to the docker repo</h1>
+        
+        <p><a href="https://github.com/jboss/dockerfiles/tree/master/immutant">https://github.com/jboss/dockerfiles/tree/master/immutant</a></p>
+        
+        <h1>Announce it</h1>
+        
+        <ul>
+        <li>Post it on <code>immutant.org</code></li>
+        <li>Notify <code>immutant-users@</code></li>
+        <li>Notify <code>the-core@</code></li>
+        <li>Notify <code>clojure@</code></li>
+        <li>Tweet.</li>
+        <li>Set the /topic in <code>#immutant</code> IRC channel using ChanServ (if you can).</li>
+        </ul>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2014 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

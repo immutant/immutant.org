@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Immutant Daemons</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Immutant Daemons" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2012-03-14 15:01:36 EDT" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="caching.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="interactive.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 10. Immutant Daemons</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="daemons.html#sec-1">10.1. Introduction</a></li>
+<li><a href="daemons.html#sec-2">10.2. Starting a Daemon</a></li>
+<li><a href="daemons.html#sec-3">10.3. Example</a></li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">10.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  Daemons are long-running services sharing the lifecycle of your
+  application.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">10.2.</span> Starting a Daemon</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  You can start a daemon at any point in your application, but it's
+  typically done in the bootstrap file, <code>immutant.clj</code>.
+</p>
+<p>
+  Daemons are defined via <a href="./apidoc/immutant.daemons-api.html#immutant.daemons/start">immutant.daemons/start</a>, which requires
+  three parameters:
+</p>
+<ul>
+<li><code>name</code> - a name for referencing as a JMX MBean
+</li>
+<li><code>start</code> - a start function to be invoked asynchronously
+</li>
+<li><code>stop</code> - a stop function that will be automatically invoked when
+    your app is undeployed, providing a hook to cleanly teardown
+    resources used by the daemon
+</li>
+</ul>
+
+
+<p>
+  In addition, the following options are supported:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="left"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="left" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">:singleton</td><td class="left"><i>true</i></td><td class="left">Singleton daemons will only execute on one node in a cluster. If false, the daemon will run on every node.</td></tr>
+</tbody>
+</table>
+
+
+<p>
+  The <code>:singleton</code> option only applies when deployed to a
+  cluster. Immutant provides automatic failover for singleton daemons:
+  should it crash, the daemon will be automatically started on another
+  node chosen at random, resulting in a robust, highly-available
+  service.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-3">
+<h2 id="sec-3"><span class="section-number-2">10.3.</span> Example</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  The following contrived example shows a simple mechanism for
+  controlling a daemon via a shared atom:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> example.init
+  (<span class="org-builtin">:require</span> [immutant.daemons <span class="org-builtin">:as</span> daemon])
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Controls the state of our daemon</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">done</span> (<span class="org-builtin">atom</span> false))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Our daemon's start function</span>
+(<span class="org-keyword">defn</span> <span class="org-function-name">start</span> []
+  (<span class="org-builtin">reset!</span> done false)
+  (<span class="org-keyword">loop</span> [i 0]
+    (<span class="org-preprocessor">Thread/sleep</span> 1000)
+    (<span class="org-keyword">when-not</span> @done
+      (do-something)
+      (<span class="org-keyword">recur</span> (<span class="org-builtin">inc</span> i)))))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Our daemon's stop function</span>
+(<span class="org-keyword">defn</span> <span class="org-function-name">stop</span> []
+  (<span class="org-builtin">reset!</span> done true))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Register the daemon</span>
+(daemon/start <span class="org-string">"mydaemon"</span> start stop <span class="org-builtin">:singleton</span> false)
+</pre>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="caching.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="interactive.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 0.1.0</div>
+</div>
+
+
+</body></html>

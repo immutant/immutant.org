@@ -1,0 +1,436 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Immutant Caching</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Immutant Caching" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2012-09-11 12:44:03 EDT" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="messaging.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="transactions.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 8. Immutant Caching</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="caching.html#sec-1">8.1. Introduction</a>
+<ul>
+<li><a href="caching.html#sec-1-1">8.1.1. Infinispan</a></li>
+</ul>
+</li>
+<li><a href="caching.html#sec-2">8.2. Caching Modes</a>
+<ul>
+<li><a href="caching.html#sec-2-1">8.2.1. Local</a></li>
+<li><a href="caching.html#sec-2-2">8.2.2. Invalidated</a></li>
+<li><a href="caching.html#sec-2-3">8.2.3. Replicated</a></li>
+<li><a href="caching.html#sec-2-4">8.2.4. Distributed</a></li>
+</ul>
+</li>
+<li><a href="caching.html#sec-3">8.3. The API</a>
+<ul>
+<li><a href="caching.html#sec-3-1">8.3.1. Creating</a></li>
+<li><a href="caching.html#sec-3-2">8.3.2. Writing</a></li>
+<li><a href="caching.html#sec-3-3">8.3.3. Reading</a></li>
+<li><a href="caching.html#sec-3-4">8.3.4. Memoizing</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">8.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  Immutant provides built-in support for local and distributed caching
+  through Infinispan. And because Immutant caches implement
+  <a href="https://github.com/clojure/core.cache">clojure.core.cache/CacheProtocol</a>, they may be used as standard
+  <a href="https://github.com/clojure/core.memoize">memoization</a> stores.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-1-1">
+<h3 id="sec-1-1"><span class="section-number-3">8.1.1.</span> Infinispan</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<p>
+   Immutant encapsulates the JBoss <a href="http://www.infinispan.org">Infinispan data grid</a>, enabling
+   simple construction of transactional, high-performance key/value
+   stores that can either be run locally or efficiently replicated
+   across a cluster.
+</p>
+<p>
+   Infinispan offers a number of clustering modes that determine how
+   data is replicated when an entry is written to the cache.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">8.2.</span> Caching Modes</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  Infinispan supports three clustered modes and one non-clustered.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-1">
+<h3 id="sec-2-1"><span class="section-number-3">8.2.1.</span> Local</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   This is the only supported mode when Immutant runs non-clustered:
+   essentially an enhanced, in-memory <a href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ConcurrentMap.html">ConcurrentMap</a> implementation,
+   featuring write-through/write-behind persistence, eviction,
+   expiration, JTA/XA support, MVCC-based concurency, and JMX
+   manageability.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-2">
+<h3 id="sec-2-2"><span class="section-number-3">8.2.2.</span> Invalidated</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<p>
+   This is the default mode when Immutant runs clustered. No data is
+   actually shared among the cluster nodes in this mode. Instead,
+   notifications are sent to all nodes when data changes, causing
+   them to evict their stale copies of the updated entry.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-3">
+<h3 id="sec-2-3"><span class="section-number-3">8.2.3.</span> Replicated</h3>
+<div class="outline-text-3" id="text-2-3">
+
+
+<p>
+   In this mode, entries added to any cache instance will be copied
+   to all other cache instances in the cluster, and can then be
+   retrieved locally from any instance. This mode is probably
+   impractical for clusters of any significant size. Infinispan
+   recommends 10 as a reasonable upper bound on the number of
+   replicated nodes.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-4">
+<h3 id="sec-2-4"><span class="section-number-3">8.2.4.</span> Distributed</h3>
+<div class="outline-text-3" id="text-2-4">
+
+
+<p>
+   This mode enables Infinispan clusters to achieve "linear
+   scalability". Cache entries are copied to a fixed number of
+   cluster nodes (2, by default) regardless of the cluster
+   size. Distribution uses a consistent hashing algorithm to
+   determine which nodes will store a given entry.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-3">
+<h2 id="sec-3"><span class="section-number-2">8.3.</span> The API</h2>
+<div class="outline-text-2" id="text-3">
+
+
+</div>
+
+<div class="outline-3" id="outline-container-3-1">
+<h3 id="sec-3-1"><span class="section-number-3">8.3.1.</span> Creating</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+<p>
+   Caches are defined using the <code>immutant.cache/cache</code> function. Its
+   only required argument is a name. Creating two caches with the same
+   name means each is backed by the same Infinispan cache.
+</p>
+<p>
+   Additional options may be passed as in-line keyword arguments. The
+   following are supported:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="left"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="left" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:mode</code></td><td class="left"><code>:local</code></td><td class="left">Replication mode. One of <code>:local</code>, <code>:invalidated</code>, <code>:replicated</code> or <code>:distributed</code>. Defaults to <code>:invalidated</code> if clustered.</td></tr>
+<tr><td class="left"><code>:seed</code></td><td class="left"><code>nil</code></td><td class="left">A hash of initial entries to replace the existing ones.</td></tr>
+<tr><td class="left"><code>:ttl</code></td><td class="left"><code>-1</code></td><td class="left">Time-To-Live. The maximum time the entry will live before being expired. A negative value disables time-to-live expiration.</td></tr>
+<tr><td class="left"><code>:idle</code></td><td class="left"><code>-1</code></td><td class="left">The time after which an entry will expire if not accessed. A negative value disables idle expiration.</td></tr>
+<tr><td class="left"><code>:units</code></td><td class="left"><code>:seconds</code></td><td class="left">The units for <code>:ttl</code> and <code>:idle</code>. One of <code>:days</code>, <code>:hours</code>, <code>:minutes</code>, <code>:seconds</code>, <code>:milliseconds</code>, <code>:microseconds</code> or <code>:nanoseconds</code></td></tr>
+</tbody>
+</table>
+
+
+<p>
+   When not clustered, the value of <code>:mode</code> is ignored and set to
+   <code>:local</code>.
+</p>
+<p>
+   Seeding a cache will cause existing entries to be deleted, a
+   potentially expensive operation depending on replication mode.
+</p>
+<p>
+   Some examples are in order.
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> example.test
+  (<span class="org-builtin">:use</span> [immutant.cache]))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Obtain a cache in :invalidated mode if clustered, :local otherwise</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">c1</span> (cache <span class="org-string">"jimi"</span>))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">A cache in :distributed mode if clustered, :local otherwise</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">c2</span> (cache <span class="org-string">"jeff"</span> <span class="org-builtin">:mode</span> <span class="org-builtin">:distributed</span>))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Initialize a replicated cache, if clustered, with a seed</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">c3</span> (cache <span class="org-string">"billy"</span> <span class="org-builtin">:mode</span> <span class="org-builtin">:replicated</span>, <span class="org-builtin">:seed</span> {<span class="org-builtin">:a</span> 1 <span class="org-builtin">:b</span> 2}))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Expire all entries after 10 minutes and any not accessed after 1 minute</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">c4</span> (cache <span class="org-string">"jerry"</span> <span class="org-builtin">:ttl</span> 10, <span class="org-builtin">:idle</span> 1, <span class="org-builtin">:units</span> <span class="org-builtin">:minutes</span>))
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-3-2">
+<h3 id="sec-3-2"><span class="section-number-3">8.3.2.</span> Writing</h3>
+<div class="outline-text-3" id="text-3-2">
+
+
+<p>
+   Immutant caches are <b>mutable</b>. This is sensible in a clustered
+   environment, because the local process benefits from fast reads of
+   data that may have been put there by a remote process. We
+   effectively shift the responsibility of "sane data management",
+   i.e. MVCC, from Clojure to Infinispan.
+</p>
+<p>
+   Immutant caches implement the <code>immutant.cache/Mutable</code> protocol,
+   through which Infinispan's cache manipulation features are exposed.
+</p>
+<p>
+   Data is inserted into an Immutant cache using one of the <code>put</code>
+   functions of the <code>Mutable</code> protocol. Each takes an optional hash of
+   lifespan-oriented parameters (<code>:ttl</code> <code>:idle</code> <code>:units</code>) that may be
+   used to override the values specified when the cache was created.
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">def</span> <span class="org-function-name">c</span> (cache <span class="org-string">"foo"</span> <span class="org-builtin">:ttl</span> 300))
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Put an entry in the cache</span>
+(put c <span class="org-builtin">:a</span> 1)
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Override its time-to-live</span>
+(put c <span class="org-builtin">:a</span> 1 {<span class="org-builtin">:ttl</span> 1, <span class="org-builtin">:units</span> <span class="org-builtin">:hours</span>})
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Add all the entries in the map to the cache</span>
+(put-all c {<span class="org-builtin">:b</span> 2, <span class="org-builtin">:c</span> 3})
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Put it in only if key is not already present</span>
+(put-if-absent c <span class="org-builtin">:b</span> 6)                  <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 2</span>
+(put-if-absent c <span class="org-builtin">:d</span> 4)                  <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; nil</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Put it in only if key is already present</span>
+(put-if-present c <span class="org-builtin">:e</span> 5)                 <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; nil</span>
+(put-if-present c <span class="org-builtin">:b</span> 6)                 <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 2</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Put it in only if key is there and current matches old</span>
+(put-if-replace c <span class="org-builtin">:b</span> 2 0)               <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; false</span>
+(put-if-replace c <span class="org-builtin">:b</span> 6 0)               <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; true</span>
+(<span class="org-builtin">:b</span> c)                                  <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 0</span>
+
+</pre>
+
+
+<p>
+   The conditional <code>put-if-*</code> functions are atomic and return values
+   as specified by <a href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ConcurrentMap.html">java.util.concurrent.ConcurrentMap</a>, so
+   <code>put-if-absent</code> returns the previously mapped value on failure, and
+   <code>put-if-present</code> returns the previously mapped value on success.
+</p>
+<p>
+   To remove entries from the cache, use <code>delete</code>.
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">def</span> <span class="org-function-name">c</span> (cache <span class="org-string">"bar"</span> <span class="org-builtin">:seed</span> {<span class="org-builtin">:a</span> 1 <span class="org-builtin">:b</span> 2}))
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Deleting a missing key is harmless</span>
+(delete c <span class="org-builtin">:missing</span>)                     <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; nil</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Deleting an existing key returns its value</span>
+(delete c <span class="org-builtin">:b</span>)                           <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 2</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">If value is passed, both must match for delete to succeed</span>
+(delete c <span class="org-builtin">:a</span> 2)                         <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; false</span>
+(delete c <span class="org-builtin">:a</span> 1)                         <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; true</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Clear all keys, returning the empty cache</span>
+(delete-all c)                          <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; c</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-3-3">
+<h3 id="sec-3-3"><span class="section-number-3">8.3.3.</span> Reading</h3>
+<div class="outline-text-3" id="text-3-3">
+
+
+<p>
+   Data is read from an Immutant cache the same way data is read from
+   any standard Clojure map, i.e. using core Clojure functions.
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">def</span> <span class="org-function-name">c</span> (cache <span class="org-string">"baz"</span> <span class="org-builtin">:seed</span> {<span class="org-builtin">:a</span> 1, <span class="org-builtin">:b</span> {<span class="org-builtin">:c</span> 3, <span class="org-builtin">:d</span> 4}}))
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Use get to obtain associated values</span>
+(<span class="org-builtin">get</span> c <span class="org-builtin">:a</span>)                              <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 1</span>
+(<span class="org-builtin">get</span> c <span class="org-builtin">:x</span>)                              <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; nil</span>
+(<span class="org-builtin">get</span> c <span class="org-builtin">:x</span> 42)                           <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 42</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Symbols look up their value</span>
+(<span class="org-builtin">:a</span> c)                                  <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 1</span>
+(<span class="org-builtin">:x</span> c 42)                               <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 42</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Nested structures work as you would expect</span>
+(<span class="org-builtin">get-in</span> c [<span class="org-builtin">:b</span> <span class="org-builtin">:c</span>])                      <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 3</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Use find to return entries</span>
+(<span class="org-builtin">find</span> c <span class="org-builtin">:a</span>)                             <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; [:a 1]</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Use contains? to check membership</span>
+(<span class="org-builtin">contains?</span> c <span class="org-builtin">:a</span>)                        <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; true</span>
+(<span class="org-builtin">contains?</span> c <span class="org-builtin">:x</span>)                        <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; false</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-3-4">
+<h3 id="sec-3-4"><span class="section-number-3">8.3.4.</span> Memoizing</h3>
+<div class="outline-text-3" id="text-3-4">
+
+
+<p>
+   Memoization is an optimization technique associating a cache of
+   calculated values with a potentially expensive function, incurring
+   the expense only once, with subsequent calls retrieving the result
+   from the cache. The keys of the cache are the arguments passed to
+   the function.
+</p>
+<p>
+   Because an Immutant cache implements
+   <code>clojure.core.cache/CacheProtocol</code>, it can act as an underlying
+   implementation for <code>clojure.core.memoize/PluggableMemoization</code>.
+   Immutant includes a higher-order <code>memo</code> function for doing exactly
+   that:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.cache <span class="org-builtin">:as</span> ic])
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Other than the function to be memoized, arguments are the same as</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">for the cache function.</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">memoized-fn</span> (ic/memo slow-fn <span class="org-string">"foo"</span> <span class="org-builtin">:mode</span> <span class="org-builtin">:distributed</span>, <span class="org-builtin">:ttl</span> 600))
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Invoking the memoized function fills the cache with the result</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">from the slow function the first time it is called.</span>
+(memoized-fn 1 2 3)                     <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 42</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">Subsequent invocations with the same parameters return the result</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">from the cache, avoiding the overhead of the slow function</span>
+(memoized-fn 1 2 3)                     <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 42</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">It's possible to manipulate the cache backing the memoized</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">function by referring to its name</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">c</span> (ic/cache <span class="org-string">"foo"</span>))
+(<span class="org-builtin">get</span> c [1 2 3])                         <span class="org-comment-delimiter">;</span><span class="org-comment">=&gt; 42</span>
+
+</pre>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="messaging.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="transactions.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 0.3.0</div>
+</div>
+
+
+</body></html>

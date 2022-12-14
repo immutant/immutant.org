@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | Scheduling
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/install/">Install</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/tutorials/">Tutorials</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/">Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/current/apidoc/">API Docs</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="/builds/">1.x Incremental Builds</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            Tutorial: Scheduling
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="tutorial article">
+              <div class="byline">
+                <div class="date">
+                  Last updated:
+                  <span class="date">
+                    Wednesday, February 12, 2014
+                  </span>
+                </div>
+                <div class="author">
+                  Author:
+                  The Immutant Team
+                </div>
+              </div>
+              <div class="body">
+                <p>This tutorial covers job scheduling in Immutant - functions that execute on a recurring 
+                schedule. They fire asynchronously, outside of the thread where they are 
+                defined, and fire in the same runtime as the rest of the application, so 
+                have access to any shared state.</p>
+                
+                <p>Jobs are built on top of the <a href="http://quartz-scheduler.org/">Quartz</a> library, and support scheduling via a 
+                <em>cron-like</em> specification or <em>at-style</em> options. </p>
+                
+                <h2>Why would I use this over quartz-clj or calling Quartz directly?</h2>
+                
+                <p>I&#39;m glad you asked! There are several reasons:</p>
+                
+                <ul>
+                <li>Immutant abstracts away the complexity of Quartz&#39;s internals, so you don&#39;t
+                have to worry about managing <a href="http://quartz-scheduler.org/api/1.8.5/org/quartz/Scheduler.html">Schedulers</a> and creating <a href="http://quartz-scheduler.org/api/1.8.5/org/quartz/JobDetail.html">JobDetails</a>, and
+                provides enough functionality for a majority of use cases. For 
+                cases where you need advanced scheduling functionality, you can still use
+                <a href="https://github.com/mdpendergrass/quartz-clj">quartz-clj</a> or the Quartz classes directly.</li>
+                <li>If you are using Immutant in a cluster, jobs that should fire only once per
+                cluster (aka &#39;singleton jobs&#39;) are handled automatically (see our 
+                <a href="../clustering/">clustering tutorial</a> for more information).</li>
+                <li>When your application is undeployed, your jobs are automatically unscheduled.
+                Note that if you use quartz-clj or Quartz directly from your application,
+                you&#39;ll need  to clean up after yourself so you don&#39;t leave jobs lingering around 
+                since Immutant can&#39;t automatically unschedule them for you.</li>
+                </ul>
+                
+                <h2>Scheduling Jobs</h2>
+                
+                <p>Scheduling a job is as simple as calling the <code>schedule</code> function from the
+                <code>immutant.jobs</code> namespace. Let&#39;s see it in use - if you need
+                an Immutant-ready application, see the <a href="../deploying/">deployment tutorial</a> or grab the
+                <a href="https://github.com/immutant/immutant-basic-web-demo">sample application</a> from that tutorial. The rest of this tutorial will 
+                assume you are using that sample application.</p>
+                
+                <p>Add a cron-style job to your <code>src/immutant/init.clj</code>:</p>
+                
+                <pre class="syntax clojure">(ns immutant.init&#x000A;  (:use immutant-demo.core)&#x000A;  (:require [immutant.web :as web]&#x000A;            [immutant.jobs :as jobs])) ;; require the jobs ns&#x000A;...&#x000A;&#x000A;(jobs/schedule "my-job-name"  &#x000A;                #(println "I was called!")&#x000A;                "*/5 * * * * ?")</pre>
+                
+                <p>Now, if you deploy and run the application (via <code>lein immutant deploy &amp;&amp; lein immutant run</code>),
+                you should see the following log output:</p>
+                
+                <pre><code>...&#x000A;11:49:24,691 INFO  [org.jboss.as.server] (DeploymentScanner-threads - 2) JBAS018559: Deployed &quot;immutant-demo.clj&quot;&#x000A;11:49:25,008 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called!&#x000A;11:49:30,018 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-2) I was called!&#x000A;11:49:35,002 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-3) I was called!&#x000A;11:49:40,002 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called!&#x000A;...&#x000A;</code></pre>
+                
+                <p>The <a href="/builds/LATEST/html-docs/apidoc/immutant.jobs.html#var-schedule">schedule</a>
+                function takes two or three arguments, and also accepts options:</p>
+                
+                <ul>
+                <li><em>name</em> - the name of the job.</li>
+                <li><em>f</em> - the zero argument function that will be invoked each time the job fires.</li>
+                <li><em>spec</em> - the cron-style specification string (optional, see below).</li>
+                <li><em>options</em> - options are specified as alternating key &amp; value literals. See <a href="/builds/LATEST/html-docs/jobs.html">the docs</a>
+                for a full list of the available options.</li>
+                </ul>
+                
+                <p>Job scheduling is dynamic, and can occur at any time during your application&#39;s lifecycle. 
+                We started the job above in <code>immutant.clj</code>, but it could also be done from anywhere within 
+                your application code. Jobs that share the lifecycle of your application are idiomatically 
+                placed in <code>immutant.clj</code>.</p>
+                
+                <p>You can safely call <code>schedule</code> multiple times with the same job name - the named job will 
+                rescheduled.</p>
+                
+                <h2>Cron Syntax</h2>
+                
+                <p>The spec attribute should contain a crontab-like entry. This is similar to cron specifications
+                used by Vixie cron, anacron and friends, but includes an additional field for specifying seconds.
+                It is composed of 7 fields (6 are required):</p>
+                
+                <table class="fancy">
+                    <tr><th>Seconds</th><th>Minutes</th><th>Hours</th><th>Day of Month</th><th>Month</th><th>Day of Week</th><th>Year</th></tr>
+                    <tr><td>0-59</td><td>0-59</td><td>0-23</td><td>1-31</td><td>1-12 or JAN-DEC</td><td>1-7 or SUN-SAT</td><td>1970-2099 (optional)</td></tr>
+                </table>
+                
+                <p>For several fields, you may denote subdivision by using the forward-slash (/) character. To execute a job 
+                every 5 minutes, */5 in the minutes field would specify this condition.</p>
+                
+                <p>Spans may be indicated using the dash (-) character. To execute a job Monday through Friday, MON-FRI 
+                should be used in the day-of-week field.</p>
+                
+                <p>Multiple values may be separated using the comma (,) character. The specification of 1,15 in the 
+                day-of-month field would result in the job firing on the 1st and 15th of each month.</p>
+                
+                <p>Either day-of-month or day-of-week must be specified using the ? character, since specifying
+                both is contradictory.</p>
+                
+                <p>See the <a href="http://www.quartz-scheduler.org/documentation/quartz-1.x/tutorials/TutorialLesson06">Quartz cron specification</a> for additional details.</p>
+                
+                <h2>At-style jobs</h2>
+                
+                <p>Now let&#39;s add an at-style job to <code>src/immutant/init.clj</code>:</p>
+                
+                <pre class="syntax clojure">(jobs/schedule "my-at-job"  &#x000A;                #(println "I was called via at!")&#x000A;                :every [1 :second])</pre>
+                
+                <p>Now, if we redeploy the running application (via <code>lein immutant deploy</code>), 
+                you should see the following log output:</p>
+                
+                <pre><code>...&#x000A;12:01:38,633 INFO  [org.jboss.as.server] (DeploymentScanner-threads - 2) JBAS018559: Deployed &quot;immutant-demo.clj&quot;&#x000A;12:01:40,001 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called via at!&#x000A;12:01:41,001 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called via at!&#x000A;12:01:42,002 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called via at!&#x000A;12:01:43,001 INFO  [stdout] (JobScheduler$immutant-demo.clj_Worker-1) I was called via at!&#x000A;...&#x000A;</code></pre>
+                
+                <p>There are several other options that can be used to schedule at-style
+                jobs - see <a href="/builds/LATEST/html-docs/jobs.html">the docs</a> for more details.</p>
+                
+                <h2>Unscheduling Jobs</h2>
+                
+                <p>Jobs can be unscheduled via the <code>unschedule</code> function:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.jobs :as jobs])&#x000A;    &#x000A;(jobs/unschedule "my-job-name")</pre>
+                
+                <p>The <code>unschedule</code> function requires one argument:</p>
+                
+                <ul>
+                <li><em>name</em> - the name of a previously scheduled job.</li>
+                </ul>
+                
+                <p>If the given name resolves to an existing job, that job will be unscheduled and the call will
+                return <code>true</code>, otherwise <code>nil</code> is returned.</p>
+                
+                <p>Jobs are automatically unscheduled when your application is undeployed.</p>
+                
+                <h2>Wrapping Up</h2>
+                
+                <p>If you have any feedback or questions, <a href="/community">get in touch</a>! </p>
+              </div>
+              <div class="comments">
+                
+                            <div id="disqus_thread"></div>
+                            <script type="text/javascript">
+                            var disqus_shortname = 'immutant';
+                            var disqus_url = "http://immutant.org/tutorials/jobs/";
+                            var disqus_developer = null;
+                            var disqus_identifier = null;
+                            (function() {
+                              var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
+                              dsq.src = "http://immutant.disqus.com/embed.js";
+                              (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq);
+                            })();
+                            </script>
+                            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=immutant">comments powered by Disqus.</a></noscript>
+              </div>
+            </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tutorial-nav">
+              <h3>All Tutorials</h3>
+              <ul class="nav nav-tabs nav-stacked">
+                <li class="">
+                  <a href="/tutorials/installation/index.html">Installation</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/deploying/index.html">Deployment</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/web/index.html">Web</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/messaging/index.html">Messaging</a>
+                </li>
+                <li class="current">
+                  <a href="/tutorials/jobs/index.html">Scheduling</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/caching/index.html">Caching</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/clustering/index.html">Clustering</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/overlay/index.html">Overlay</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>
+                The Immutant project is a member of the
+                <a href="http://jboss.org/">JBoss Community</a> and
+                produced by the <a href="http://projectodd.org/">Project:odd</a> team.
+                It is a community-driven open-source project, and is licensed under the
+                <a href="/license-lgpl.txt">GNU LGPL</a>.
+              </p>
+              <p>
+                Copyright 2011 - 2014 <a href="http://redhat.com/">Red Hat, Inc.</a>
+                Immutant&trade; is a trademark of Red Hat, Inc.
+              </p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+    var pageTracker = _gat._getTracker("UA-6435340-7");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+  </body>
+</html>

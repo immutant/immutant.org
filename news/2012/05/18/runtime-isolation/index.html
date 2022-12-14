@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | Runtime Isolation In Immutant
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            Runtime Isolation In Immutant
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="post article">
+              <div class="byline">
+                <div class="author">
+                  Toby Crawley
+                </div>
+                <div class="date">
+                  Friday, May 18, 2012
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/runtime/">runtime</a>
+                <a href="/news/tags/isolation/">isolation</a>
+                <a href="/news/tags/under-the-hood/">under-the-hood</a>
+              </div>
+              <div class="body">
+                <p>In this article, we&#39;re going to take a look at some of Immutant&#39;s internals
+                to see how we achieve runtime isolation.</p>
+                
+                <p>Each application deployed to Immutant gets its very own <a href="http://clojure.org/">Clojure</a> runtime.
+                These runtimes are truly isolated from each other - each thinks it is the only 
+                Clojure runtime within the JVM. In addition to preventing collisions between
+                application namespaces, it also allows you to optionally use a different Clojure
+                version for each application.</p>
+                
+                <p>Normally Clojure doesn&#39;t support multiple runtimes within the same JVM - the
+                runtime is implemented as static methods/members on the 
+                <a href="https://github.com/clojure/clojure/blob/clojure-1.4.0/src/jvm/clojure/lang/RT.java">RT</a> class,
+                and there is (usually) only one copy of this class loaded.
+                We&#39;ll cover how Immutant achieves runtime isolation given that limitation, along with 
+                some of the implications of doing so.</p>
+                
+                <h2 id="It&#39;s_(mostly)_class_loaders" onclick="window.location = '#It&#39;s_(mostly)_class_loaders'">It&#39;s (mostly) class loaders</h2>
+                
+                <p>Since the Clojure runtime is implemented as statics on <code>RT</code>, each application needs
+                its own copy of the <code>RT</code> class. To achieve this, we have to do a bit of class loader
+                trickery. Immutant is built on top of <a href="http://www.jboss.org/as7">JBoss AS7</a>,
+                so we take advantage of the  modular isolation provided by <a href="https://docs.jboss.org/author/display/MODULES/Introduction">jboss-modules</a>.</p>
+                
+                <p>Under jboss-modules, each module within Immutant (core, web, daemons, messaging, etc.) 
+                is isolated from the others, and must explicitly state the packages and classes
+                it exposes along with the other modules it requires. It achieves this by giving
+                each module its own class loader which tightly controls which classes can be loaded
+                by the module. If you are familiar with <a href="http://en.wikipedia.org/wiki/OSGi">OSGi</a>, 
+                you can think of it as fulfilling similar functionality with regards to isolation, 
+                but in a saner and much less complex way. Inside Immutant, each application is 
+                considered a module as well and gets its own modular class loader.</p>
+                
+                <p>Normally, calling Clojure from Java is pretty straightforward:</p>
+                <pre class="syntax java">...&#x000A;import clojure.lang.RT;&#x000A;...&#x000A;RT.var( "clojure.core", "str" ).invoke( "ham", "biscuit" );&#x000A;...&#x000A;</pre>
+                <p>But, in order to have multiple runtimes, we can&#39;t write code quite that simple - 
+                any reference to <code>RT</code> from Java will trigger the class to be loaded by the same 
+                class loader as the referencing class. In Immutant, this class loader is the one
+                that loads the &#39;core&#39; module, which is shared by all applications. We really want
+                <code>RT</code> to be loaded only in the application&#39;s own modular class loader, which would give
+                each application its own copy. To work around this, we wrap <code>RT</code> in an interface class
+                (<a href="https://github.com/immutant/immutant/blob/master/runtime/api/src/main/java/org/immutant/runtime/ClojureRuntime.java">ClojureRuntime</a>) 
+                and an implementation class 
+                (<a href="https://github.com/immutant/immutant/blob/master/runtime/impl/src/main/java/org/immutant/runtime/impl/ClojureRuntimeImpl.java">ClojureRuntimeImpl</a>)
+                , and never refer to the implementation class directly.</p>
+                
+                <p><code>ClojureRuntime</code> has a bit of AS7 and Java boilerplate in it, but the important parts
+                are:</p>
+                <pre class="syntax java">public static ClojureRuntime newRuntime(ClassLoader classLoader, String name) {&#x000A;    ClojureRuntime runtime;&#x000A;    try {&#x000A;        runtime = (ClojureRuntime)classLoader.loadClass( "org.immutant.runtime.impl.ClojureRuntimeImpl" ).newInstance();&#x000A;    } catch (Exception e) {&#x000A;        throw new RuntimeException( "Failed to load ClojureRuntimeImpl", e );&#x000A;    }&#x000A;&#x000A;    runtime.setClassLoader( classLoader );&#x000A;    runtime.setName( name );&#x000A;&#x000A;    return runtime;&#x000A;}&#x000A;&#x000A;public abstract Object invoke(String namespacedFunction);&#x000A;&#x000A;public abstract Object invoke(String namespacedFunction, Object arg1);&#x000A;&#x000A;public abstract Object invoke(String namespacedFunction, Object arg1, Object arg2);&#x000A;&#x000A;public abstract Object invoke(String namespacedFunction, Object arg1, Object arg2, Object arg3);&#x000A;&#x000A;// ...and many more!&#x000A;</pre>
+                <p><code>newRuntime</code> is responsible for loading an instance of <code>ClojureRuntimeImpl</code> in the given 
+                class loader, which will be the application&#39;s modular class loader. This class loader is handed
+                off to the <code>ClojureRuntime</code> instance (we&#39;ll see why in a bit). </p>
+                
+                <p><code>invoke</code> is the real interface into Clojure - all calls from Java go through it. Its
+                implementation handles looking up the given function <code>Var</code> and invoking it. It comes
+                in 22 varieties to match the arities of 
+                <a href="https://github.com/clojure/clojure/blob/clojure-1.4.0/src/jvm/clojure/lang/Var.java#L410-529">Var#invoke</a>.</p>
+                
+                <p>Its implementation looks like this (we&#39;ll only look at one of the invoke definitions, 
+                they are all the same except for arity):</p>
+                <pre class="syntax java">public Object invoke(String namespacedFunction, Object arg1, Object arg2) {&#x000A;    ClassLoader originalClassLoader = preInvoke();&#x000A;    try {&#x000A;        return var( namespacedFunction ).invoke( arg1, arg2 );&#x000A;    } finally {&#x000A;        postInvoke( originalClassLoader );&#x000A;    }&#x000A;}&#x000A;</pre>
+                <p>It looks almost identical to the <code>RT.var()</code> example above. The interesting bits here 
+                are the <code>preInvoke</code> and <code>postInvoke</code> methods. These two methods are responsible for
+                setting the 
+                <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Thread.html#getContextClassLoader()">thread context class loader (TCCL)</a> to the application&#39;s modular class loader before
+                invoking the function and restoring the original TCCL afterward (Clojure
+                uses the TCCL internally for its class loading). Threads used for deployment and web request handling in 
+                Immutant come from pools that are shared across all applications, so we have to set
+                the TCCL for the thread on each invocation since we don&#39;t know where it has been.</p>
+                
+                <p>In addition to restoring the TCCL, <code>postInvoke</code> handles the removal of a couple of
+                Clojure&#39;s internal thread locals - we&#39;ll explore why in the next section.</p>
+                
+                <h2 id="It&#39;s_also_thread_locals" onclick="window.location = '#It&#39;s_also_thread_locals'">It&#39;s also thread locals</h2>
+                
+                <p>Clojure uses <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/ThreadLocal.html">ThreadLocals</a> 
+                in a few places (<a href="https://github.com/clojure/clojure/blob/clojure-1.4.0/src/jvm/clojure/lang/Agent.java#L55">Agent.nested</a>, 
+                <a href="https://github.com/clojure/clojure/blob/clojure-1.4.0/src/jvm/clojure/lang/LockingTransaction.java#L36">LockingTransaction.transaction</a>,
+                <a href="https://github.com/clojure/clojure/blob/clojure-1.4.0/src/jvm/clojure/lang/Var.java#L73-78">Var.dvals</a>) 
+                to manage state, and doesn&#39;t explicitly 
+                <a href="http://docs.oracle.com/javase/6/docs/api/java/lang/ThreadLocal.html#remove()">remove</a> them from the current
+                thread when they are no longer needed. In two cases (<code>LockingTransaction.transaction</code>,
+                <code>Var.dvals</code>) not removing the ThreadLocal causes a hard reference 
+                to a Clojure class to be retained in the thread&#39;s <code>ThreadLocalMap</code>, which holds a 
+                reference to its class loader, which in turn holds references to every single class that
+                it loaded. This prevents any of those classes from being unloaded, so every application
+                undeploy results in a chunk of memory that cannot be garbage collected. If you undeploy
+                and redeploy enough, you&#39;ll eventually exhaust the heap, which isn&#39;t good for anyone.</p>
+                
+                <p>In addition to making your heap very tired, leaving thread locals set in thread from
+                a global that will possibly be next used by another application is a security risk, since
+                it is possible for that other application to access the thread local data.</p>
+                
+                <p>To prevent these issues, <code>postInvoke</code> calls <code>remove</code> on each of these thread locals after
+                each invocation. Take a look at 
+                <a href="https://github.com/immutant/immutant/blob/master/runtime/impl/src/main/java/org/immutant/runtime/impl/ClojureRuntimeImpl.java">ClojureRuntimeImpl</a> if you are interested in how this is
+                implemented.</p>
+                
+                <h3 id="Why_doesn&#39;t_Clojure_remove_these_thread_locals_itself?" onclick="window.location = '#Why_doesn&#39;t_Clojure_remove_these_thread_locals_itself?'">Why doesn&#39;t Clojure remove these thread locals itself?</h3>
+                
+                <p>Mainly because it hasn&#39;t needed to. It wasn&#39;t designed to allow more than one runtime
+                per JVM, so the security aspect of shared threads wasn&#39;t an issue. And since the leaks
+                are caused by retained classes, they aren&#39;t a concern in a single runtime environment
+                since there will only ever be one copy of the class.</p>
+                
+                <h2 id="Performance" onclick="window.location = '#Performance'">Performance</h2>
+                
+                <p>All this muckery does come at a price - invoking through <code>ClojureRuntime</code> is slightly 
+                slower than invoking a <code>Var</code> directly. It adds a ~60 nanosecond overhead to each call 
+                based on <a href="https://gist.github.com/2721494">this simple benchmark</a>:</p>
+                <pre>>>>> RT.var.invoke: Execution time for 1000000 calls: 162.405ms (162ns/call)&#x000A;>>>> ClojureRuntime.invoke: Execution time for 1000000 calls: 219.0318ms (219ns/call)&#x000A;</pre>
+                <p>For every single immutant component (messaging, caching, daemons, etc) except web, 
+                we only invoke through <code>ClojureRuntime</code> at deployment. For the web component, 
+                we invoke on every request, which means an extra 60ns per request. </p>
+                
+                <h2 id="Fare_thee_well" onclick="window.location = '#Fare_thee_well'">Fare thee well</h2>
+                
+                <p>We hope you&#39;ve enjoyed this peek at some of the guts of Immutant. If you have any 
+                comments or questions, feel free to leave them below, or get in touch via the 
+                <a href="/community">usual methods</a>.</p>
+              </div>
+              <div class="comments">
+                
+                            <div id="disqus_thread"></div>
+                            <script type="text/javascript">
+                            var disqus_shortname = 'immutant';
+                            var disqus_url = "http://immutant.org/news/2012/05/18/runtime-isolation/";
+                            var disqus_developer = null;
+                            var disqus_identifier = null;
+                            (function() {
+                              var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
+                              dsq.src = "http://immutant.disqus.com/embed.js";
+                              (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq);
+                            })();
+                            </script>
+                            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=immutant">comments powered by Disqus.</a></noscript>
+              </div>
+            </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="post-navigation">
+              <div class="previous">
+                Previous:
+                <a href="/news/2012/03/20/clojurewest-preso/">Slides From My Clojure/West Presentation</a>
+              </div>
+              <div class="next">
+                Next:
+                <a href="/news/2012/06/26/transactions/">Introducing Distributed XA Transaction Support</a>
+              </div>
+            </div>
+            <hr>
+            <div class="tags">
+              <div class="tag-cloud">
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/announcement/">announcement</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/app-server/">app-server</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/bears/">bears</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/beginning/">beginning</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/boot/">boot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/boot-immutant/">boot-immutant</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/caching/">caching</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/clustering/">clustering</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/daemons/">daemons</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/datomic/">datomic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/deploy/">deploy</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/distribution/">distribution</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/enterprise/">enterprise</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/event/">event</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/first/">first</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/getting-started/">getting-started</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/hotrod/">hotrod</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/infinispan/">infinispan</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/installation/">installation</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/isolation/">isolation</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein/">lein</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/lein-immutant/">lein-immutant</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/luminus/">luminus</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/messaging/">messaging</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/openshift/">openshift</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/overlay/">overlay</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/pipelines/">pipelines</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/polyglot/">polyglot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/poorsmatic/">poorsmatic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/postgresql/">postgresql</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/presentations/">presentations</a>
+                </span>
+                <span class="tag tag-6">
+                  <a href="http://immutant.org/news/tags/releases/">releases</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/ring/">ring</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/runtime/">runtime</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/scheduling/">scheduling</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/screencast/">screencast</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/slim/">slim</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/sockjs/">sockjs</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/survey/">survey</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/thedeuce/">thedeuce</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/torquebox/">torquebox</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transactions/">transactions</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transit/">transit</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/tutorial/">tutorial</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/under-the-hood/">under-the-hood</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/vertx/">vertx</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/web/">web</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/websockets/">websockets</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wildfly/">wildfly</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wtf/">wtf</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/xa/">xa</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

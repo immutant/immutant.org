@@ -1,0 +1,199 @@
+<html>
+  <head>
+    <title>immutant.web - Immutant Clojure API API documentation</title>
+    <link href="static/favicon.png" rel="icon" />
+    <link href="static/favicon.png" rel="shortcut icon" />
+    <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/wiki.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/internal.css" rel="stylesheet" />
+    <style>.menuWrapper{height: 36px;}</style>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" href="http://www.wikispaces.com/_/2009051601/s/internal_ie.css" type="text/css" />
+    <![endif]-->
+  </head>
+<!--
+This document was auto-generated from the source by the clojure autodoc system.
+To report errors or ask questions about the overall documentation structure, formatting,
+etc., contact Tom Faulhaber (google mail name: tomfaulhaber).
+For errors in the documentation of a particular namespace, contact the author of that
+namespace.
+-->
+  <body>
+    <div id="AllContentContainer">
+      <div id="Header">
+	<!-- <a href="index.html" id="Logo"><img src="static/immutant-icon.gif" width="100" height="100" alt="Immutant" /></a> -->
+	<h1><a title="page header title" id="page-header" href="index.html">Immutant Clojure API</a> - v0.2.0</h1>
+      </div>
+      <div id="leftcolumn"><div style="text-align: center;"></div>
+<div class="menu">
+  <div class="WikiCustomNav WikiElement wiki">
+    <span class="toc-header"><span id="project-name">Immutant Clojure API</span> <span id="version"></span></span><br />
+    <ul>
+      <li><a class="wiki_link" href="index.html">Overview</a></li>
+      <li><a class="wiki_link" href="api-index.html">API Index</a></li>
+    </ul>
+    <div class="NamespaceTOC">
+      <span class="toc-header">Namespaces</span>
+      <ul id="left-sidebar-list">
+        <li><a href="immutant.utilities-api.html" class="wiki_link">immutant.utilities</a></li><li><a href="immutant.runtime-api.html" class="wiki_link">immutant.runtime</a></li><li><a href="immutant.repl-api.html" class="wiki_link">immutant.repl</a></li><li><a href="immutant.registry-api.html" class="wiki_link">immutant.registry</a></li><li><a href="immutant.mbean-api.html" class="wiki_link">immutant.mbean</a></li><li><a href="immutant.codecs-api.html" class="wiki_link">immutant.codecs</a></li><li><a href="immutant.xa-api.html" class="wiki_link">immutant.xa</a></li><li><a href="immutant.messaging-api.html" class="wiki_link">immutant.messaging</a></li><li><a href="immutant.jobs-api.html" class="wiki_link">immutant.jobs</a></li><li><a href="immutant.daemons-api.html" class="wiki_link">immutant.daemons</a></li><li><a href="immutant.cache-api.html" class="wiki_link">immutant.cache</a></li><li><a href="immutant.web-api.html" class="wiki_link">immutant.web</a></li>
+      </ul>
+    </div>
+    
+    <a href="http://immutant.org" class="wiki_link">Immutant Home</a>
+    <a href="../index.html" class="wiki_link">Immutant Manual</a>
+
+  </div>
+</div>
+</div>
+      <div id="rightcolumn">
+	<div id="Content">
+	  <div class="contentBox"><div class="innerContentBox">
+              <div id="content_view" class="wiki wikiPage">
+                <div id="right-sidebar"><div id="toc">
+  <h1 class="nopad">Table of Contents</h1>
+  <div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.web">immutant.web</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.web/start">start</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.web/stop">stop</a>
+    </div>
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.web.core">immutant.web.core</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.web.core/normalize-subcontext-path">normalize-subcontext-path</a>
+    </div>
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.web.session">immutant.web.session</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.web.session/-&gt;ServletStore">-&gt;ServletStore</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.web.session/servlet-session">servlet-session</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.web.session/servlet-store">servlet-store</a>
+    </div>
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.web.session.handler">immutant.web.session.handler</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.web.session.handler/remove-ring-session-cookie">remove-ring-session-cookie</a>
+    </div>
+    <br />
+  </div>
+</div>
+</div>
+                <div id="content-tag">
+<p></p>
+<h2 class="namespace-header" id="immutant.web">immutant.web</h2>
+<pre id="namespace-docstr">Associate one or more Ring handlers with your application, mounted
+at unique context paths</pre>
+
+
+<br />
+
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.web/start">start</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (start handler)
+       (start sub-context-path handler)
+</pre>
+  <pre id="var-docstr">Registers a Ring handler that will be called when requests are received on the given sub-context-path.
+If no sub-context-path is given, "/" is assumed.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/1cf6f656505a0e0a2df738803239ec6ff26c4736/./modules/web/src/main/clojure/immutant/web.clj#L28" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.web/stop">stop</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (stop)
+       (stop sub-context-path)
+</pre>
+  <pre id="var-docstr">Deregisters the Ring handler attached to the given sub-context-path. If no sub-context-path is given,
+"/" is assumed.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/1cf6f656505a0e0a2df738803239ec6ff26c4736/./modules/web/src/main/clojure/immutant/web.clj#L51" id="var-source">Source</a>
+</div>
+<h2 class="namespace-header sub-namespace" id="immutant.web.core">immutant.web.core</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.web.core/normalize-subcontext-path">normalize-subcontext-path</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (normalize-subcontext-path path)
+</pre>
+  <pre id="var-docstr">normalize subcontext path so it matches Servlet Spec v2.3, section 11.2</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/12817e8eadc0e9ca2d741bf2a6fb0daed72f5c7f/./modules/web/src/main/clojure/immutant/web/core.clj#L41" id="var-source">Source</a>
+</div>
+<h2 class="namespace-header sub-namespace" id="immutant.web.session">immutant.web.session</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.web.session/-&gt;ServletStore">-&gt;ServletStore</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (-&gt;ServletStore)
+</pre>
+  <pre id="var-docstr">Positional factory function for class immutant.web.session.ServletStore.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/255ac2b69f5cf09e4357a267eed57fb36af1a6c6/./modules/web/src/main/clojure/immutant/web/session.clj#L32" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.web.session/servlet-session">servlet-session</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (servlet-session)
+</pre>
+  <pre id="var-docstr">Returns the servlet session for the current request.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/255ac2b69f5cf09e4357a267eed57fb36af1a6c6/./modules/web/src/main/clojure/immutant/web/session.clj#L26" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.web.session/servlet-store">servlet-store</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (servlet-store)
+</pre>
+  <pre id="var-docstr">Instantiates and returns a ServletStore</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/255ac2b69f5cf09e4357a267eed57fb36af1a6c6/./modules/web/src/main/clojure/immutant/web/session.clj#L52" id="var-source">Source</a>
+</div>
+<h2 class="namespace-header sub-namespace" id="immutant.web.session.handler">immutant.web.session.handler</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.web.session.handler/remove-ring-session-cookie">remove-ring-session-cookie</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (remove-ring-session-cookie handler)
+</pre>
+  <pre id="var-docstr">Middleware that removes the ring-session cookie if the servlet session is used.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/255ac2b69f5cf09e4357a267eed57fb36af1a6c6/./modules/web/src/main/clojure/immutant/web/session/handler.clj#L26" id="var-source">Source</a>
+</div>
+
+
+</div>
+              </div>
+            </div>
+          </div>
+	</div>
+	<div id="foot">
+	  <div style="text-align: center;" id="copyright">Copyright 2011-2012 Red Hat, Inc.</div>
+	</div>
+      </div>
+      <div id="DesignedBy">Based on a site design by <a title="Visit Tom Hickey's website." href="http://www.tomhickey.com">Tom Hickey</a>.<br />
+      <a href="http://tomfaulhaber.github.com/autodoc/">Clojure auto-documentation system</a> by Tom Faulhaber.</div>
+    </div>
+    <!-- /AllContentContainer -->
+  </body>
+
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="content-type">
+<title>Eclipse Ceylon: Ceylon IDE for Eclipse Features</title>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+<link href="https://plus.google.com/102481741611133754149" rel="publisher">
+<link href="/stylesheets/themes/paraiso-dark.css" rel="stylesheet">
+<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet">
+<link href="/stylesheets/print.css" media="print" rel="stylesheet">
+<!--[if lt IE 8]>
+      <link href="/stylesheets/ie.css" media="screen, projection" rel="stylesheet" />
+    <![endif]--><link href="/blog/blog.atom" rel="alternate" type="application/atom+xml">
+<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro%7CPT+Sans%7CPT+Sans:700%7CInconsolata%7CInconsolata:700%7CArvo" rel="stylesheet" type="text/css">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script><script src="/js/jquery-ui-1.8.22.custom.min.js"></script><script src="/js/common.js"></script><script src="/js/rainbow.min.js"></script><script src="/js/language/ceylon.js"></script><script src="/js/language/java.js"></script><script src="/js/language/javascript.js"></script><script src="/js/language/html.js"></script><script src="/js/language/shell.js"></script><script>
+     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    
+                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    
+                        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    
+                        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+     
+    ga('create', 'UA-24748553-1', 'auto');
+    ga('send', 'pageview');
+    
+    </script>
+</head>
+<body class="bp">
+    <div class="idefeaturespage" id="container">
+      <div class="header-bar">
+        <!-- /cannot use a partial as it loses the page.tab context :( -->
+        <div id="header">
+          <a href="/" id="header-logo">
+            <h1 id="ceylon">
+              Ceylon
+            </h1>
+          </a>
+          <div id="header-tagline">
+            <p id="say_more_more_clearly">
+              Say more, more clearly
+            </p>
+          </div>
+          <div id="menu">
+            <ul id="menu-core">
+<li id="notselected">
+                <a href="/">HOME</a>
+              </li>
+              <li id="notselected">
+                <a href="/documentation/current">LEARN</a>
+              </li>
+              <li id="notselected">
+                <a href="/download">DOWNLOAD</a>
+              </li>
+              <li id="notselected">
+                <a href="/community">COMMUNITY</a>
+              </li>
+              <li id="notselected">
+                <a href="/code">CODE</a>
+              </li>
+              <li id="notselected">
+                <a href="/blog">BLOG</a>
+              </li>
+            </ul>
+</div>
+        </div>
+      </div>
+      <div id="primary-content">
+        <p id=""></p>
+<p></p>
+        <h1 style="text-align:center" id="features_of_ceylon_ide_for_eclipse">Features of Ceylon IDE for Eclipse</h1>
+        <img src="/images/eclipse.png" style="float:left" width="128px"><div style="margin-left:15%;margin-right:15%;text-shadow: 0 -1px 1px #ffffff;padding-bottom:10px;">
+        <p style="margin-left:15%;margin-right:15%;text-align:center" id="ceylon_ide_for_eclipse_is..."><b>
+        Ceylon IDE for Eclipse is a full-featured development environment based on the Eclipse platform. It's of
+        central importance to the Ceylon project, and we're continuously improving it.<br>
+        With the Ceylon language and IDE, you'll be much more productive. Here's a quick list of just
+        some of what you get.</b></p>
+        
+        <p></p>
+<div class="feature">
+        <h2 id="intelligent_proposals">Intelligent proposals</h2>
+        <p id="the_compiler_and_ide_work...">The compiler and IDE work together to find bugs in your code and propose solutions:
+        the editor features quick fixes for errors, and oodles of contextual quick assists.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/quick-fix.png" width="55%" style="box-shadow: 0 0 15px #888;"><img src="/images/screenshots/1.2.0/quick-assist.png" width="40%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="some_proposals_offer_an_interactive...">Some proposals offer an interactive linked mode.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/assign-to-local.png" width="45%" style="box-shadow: 0 0 15px #888;">
+</div>
+        </div>
+        
+        <p></p>
+<div style="text-align:right" class="feature">
+        <h2 id="refactoring">Refactoring</h2>
+        <p id="the_ide_features_rename_inline...">The IDE features <strong>Rename</strong>, <strong>Inline</strong>, <strong>Extract Function</strong>, <strong>Extract Value</strong>,
+        <strong>Extract Parameter</strong>, <strong>Change Parameter List</strong>, <strong>Collect Parameters</strong>, <strong>Move Out</strong>,
+        <strong>Make Receiver</strong>, <strong>Enter Import Alias</strong>, <strong>Introduce Type Alias</strong>, <strong>Extract Interface</strong>,
+        <strong>Invert Boolean</strong>, <strong>Move To Unit</strong>, and <strong>Move To New Unit</strong> refactorings. Even better,
+        it fully integrates with Eclipse's tooling for moving and copying files, for renaming and
+        copying packages, and for renaming Java program elements.</p>
+        <p id="you_can_rename_a_declaration...">You can rename a declaration using the editor's inline "linked mode". References to the
+        Ceylon declaration from Java code will also be renamed. Likewise, if you rename a Java
+        declaration, references from Ceylon code will be renamed.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/rename.png" width="60%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="alternatively_you_can_quickly_switch...">Alternatively, you can quickly switch to dialog mode to get additional options.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/rename-dialog.png" width="60%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="extract_refactorings_let_you_select..."><strong>Extract</strong> refactorings let you select a containing expression, and then allow
+        customization of the extracted function or value in linked mode.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/extract-function.png" width="80%" style="box-shadow: 0 0 15px #888;"><img src="/images/screenshots/1.2.0/extract-linked-mode.png" width="40%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="change_parameter_list_lets_you..."><strong>Change Parameter List</strong> lets you change the signature of a method, including adding
+        or inlining default arguments.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/change-parameters.png" width="70%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="there_are_refactorings_for_creating...">There are refactorings for creating, renaming, and removing aliases.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/import-alias.png" width="50%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="the_refactoring_wizards_provide_previews...">The refactoring wizards provide previews of changes before applying them.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/preview.png" width="75%" style="box-shadow: 0 0 15px #888;">
+</div>
+        </div>
+        
+        <p></p>
+<div class="feature">
+        <h2 id="autocompletion">Autocompletion</h2>
+        <p id="we_havent_forgotten_everyones_favorite...">We haven't forgotten everyone's favorite feature of an IDE: contextual autocompletion.
+        Autocompletion will even find modules for you, in Herd, or elsewhere!</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/complete-module.png" width="70%" style="box-shadow: 0 0 15px #888;"><img src="/images/screenshots/1.2.0/complete-version.png" width="25%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="autocompletion_supports_linked_mode_argument...">Autocompletion supports "linked mode" argument proposals.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/complete-type.png" width="50%" style="box-shadow: 0 0 15px #888;"><img src="/images/screenshots/1.2.0/complete-arg.png" width="40%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="theres_even_intellij_style_chain...">There's even IntelliJ-style "chain completion".</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/chain-completion.png" width="80%" style="box-shadow: 0 0 15px #888;">
+</div>
+        </div>
+        
+        <p></p>
+<div style="text-align:right" class="feature">
+        <h2 id="finding_and_searching">Finding and searching</h2>
+        <p id="with_find_references_find_assignments...">With <strong>Find References</strong>, <strong>Find Assignments</strong>, <strong>Find Refinements</strong>,
+        <strong>Find Subtypes</strong>, and the <strong>Ceylon Search</strong> page, you shouldn't be short of ways
+        to find stuff.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/search.png" width="60%" style="box-shadow: 0 0 15px #888;"><img src="/images/screenshots/1.2.0/find-menu.png" width="35%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <div>
+        <img src="/images/screenshots/1.2.0/search-results.png" width="60%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="theres_even_the_quick_find...">There's even the <strong>Quick Find References</strong> popup control.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/quick-find-references.png" width="80%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="on_the_other_hand_the...">On the other hand, the <strong>Open Ceylon Declaration</strong> dialog is the quickest way to
+        get to a toplevel declaration from wherever you are.</p>
+        <div style="text-align:center">
+        <img src="/images/screenshots/1.2.0/open-declaration.png" width="90%" style="box-shadow: 0 0 15px #888;">
+</div>
+        </div>
+        
+        <p></p>
+<div class="feature">
+        <h2 id="navigation_and_hover">Navigation and hover</h2>
+        <p id="to_understand_and_maintain_a...">To understand and maintain a large codebase, there's nothing more important than
+        easy navigation between code, and easy access to its API documentation. Ceylon IDE for Eclipse
+        provides hyperlink-style "go to" navigation to any referenced declaration, package,
+        or module, including Java declarations.</p>
+        
+        <p></p>
+<p id="hover_puts_the_documentation_for...">Hover puts the documentation for any program element right at your pointer.
+        Hover over a declaration and see its API documentation, dynamically compiled.
+        Hover over a <code>value</code> or <code>function</code> keyword, and see the inferred type.</p>
+        <div style="text-align:center">
+        <img src="/images/screenshots/1.2.0/hover.png" width="60%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="the_popup_outline_and_type...">The popup outline and type hierarchy controls provide two extra useful ways to
+        navigate your code.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/quick-hierarchy.png" width="50%" style="box-shadow: 0 0 15px #888;vertical-align:top"><img src="/images/screenshots/1.2.0/quick-outline.png" width="40%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="finally_theres_the_outline_view...">Finally, there's the <strong>Outline</strong> view and an awesome <strong>Ceylon Type Hierarchy</strong>
+        view.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/big-outline-view.png" width="40%" style="box-shadow: 0 0 15px #888;"><img src="/images/screenshots/1.2.0/big-hierarchy-view.png" width="40%" style="box-shadow: 0 0 15px #888;vertical-align:top">
+</div>
+        </div>
+        
+        <p></p>
+<div style="text-align:right" class="feature">
+        <h2 id="editor_code_formatter_and_structural_compare">Editor, code formatter, and structural compare</h2>
+        <p id="the_editor_features_configurable_syntax...">The editor features configurable syntax highlighting, occurrence marking, search
+        result highlighting, and code folding. The editor integrates with Eclipse's merge
+        viewer for team-based development.</p>
+        <div style="text-align:center">
+        <img src="/images/screenshots/1.2.0/compare.png" width="80%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="the_editor_integrates_ceylon_formatter...">The editor integrates Ceylon Formatter, a high-quality code formatter, alongside
+        the lightweight <strong>Correct Indentation</strong> and <strong>Format Block</strong> commands.</p>
+        <div style="text-align:center">
+        <img src="/images/screenshots/1.2.0/formatter.png" width="80%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="of_course_the_editor_has...">Of course, the editor has so much more offer: paste-with-imports, autoindentation,
+        autoclosing, <strong>Clean Imports</strong>, <strong>Reveal Inferred Types</strong>, the awesome <strong>Terminate
+        Statement</strong> command, configurable keyboard accelerators, and much more!</p>
+        </div>
+        
+        <p></p>
+<div class="feature">
+        <h2 id="incremental_compilation_and_interactive_error_reporting">Incremental compilation and interactive error reporting</h2>
+        <p id="ceylon_ide_for_eclipse_typechecks...">Ceylon IDE for Eclipse typechecks your code as you type, immediately highlighting any
+        errors, and incrementally compiles your changes when you save a file. A Ceylon
+        project may be configured to build for the JVM, for JavaScript, or both. The IDE
+        even supports cross-project builds and inter-compilation with native Java code.</p>
+        
+        <p></p>
+<p id="the_compiler_may_be_configured..."> The compiler may be configured within the IDE via the <strong>Ceylon Build</strong> project
+        properties page, or new project wizard.</p>
+        <div style="text-align:center">
+        <img src="/images/screenshots/1.2.0/ceylon-build.png" width="70%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="the_module_repositories_page_lets...">The <strong>Module Repositories</strong> page lets us specify the module repositories where
+        Ceylon will look for dependencies. The settings are persisted in a configuration
+        file also understood by the command line toolset.</p>
+        <div style="text-align:center">
+        <img src="/images/screenshots/1.2.0/module-repositories.png" width="70%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="finally_the_build_paths_page...">Finally, the <strong>Build Paths</strong> page lets you set up dependencies between projects.</p>
+        </div>
+        
+        <p></p>
+<div class="feature" style="text-align:right">
+        <h2 id="project_and_repository_explorers_and_module_dependency_visualization">Project and repository explorers, and module dependency visualization</h2>
+        <p id="the_ceylon_perspective_offers_the...">The Ceylon perspective offers the <strong>Ceylon Project Explorer</strong> and
+        <strong>Ceylon Repository Explorer</strong>. The <strong>Repository Explorer</strong> lets you quickly view
+        all the modules available in Ceylon Herd, or in whatever other module repositories
+        you select, together with their documentation and version information.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/repository-explorer.png" width="80%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="the_module_dependencies_view_really...">The <strong>Module Dependencies</strong> view really helps understand and resolve problems
+        with complex inter-module dependency graphs.
+        </p>
+<div>
+        <img src="/images/screenshots/1.2.0/module-dependencies.png" width="90%" style="box-shadow: 0 0 15px #888;">
+</div>
+        </div>
+        
+        <p></p>
+<div class="feature">
+        <h2 id="wizards">Wizards</h2>
+        <p id="the_ide_provides_wizards_for...">The IDE provides wizards for creating new Ceylon modules, packages, and source
+        files.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/new-module.png" width="70%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="and_naturally_a_wizard_for...">And, naturally, a wizard for creating new projects.</p>
+        <div style="text-align:right">
+        <img src="/images/screenshots/1.2.0/new-project.png" width="70%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="theres_even_a_wizard_for...">There's even a wizard for exporting a project module to a module
+        repository.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/export-module.png" width="70%" style="box-shadow: 0 0 15px #888;">
+</div>
+        </div>
+        
+        <p></p>
+<div style="text-align:right" class="feature">
+        <h2 id="run_test_and_debug">Run, test, and debug</h2>
+        <p id="you_can_run_and_debug...">You can run and debug your Ceylon projects on Ceylon's modular runtime for the
+        JVM, or on Node.js, directly from the IDE.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/run.png" width="70%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="unlike_other_jvm_languages_the...">Unlike other JVM languages, the debugger for Ceylon IDE for Eclipse shows the runtime type
+        arguments of a generic function or instance of a generic type!</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/debugger.png" width="70%" style="box-shadow: 0 0 15px #888;">
+</div>
+        <p id="you_can_even_run_tests...">You can even run tests written with the Ceylon SDK's testing module.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/test-view.png" width="40%" style="box-shadow: 0 0 15px #888;">
+</div>
+        </div>
+        
+        <p></p>
+<div class="feature">
+        <h2 id="customization">Customization</h2>
+        <p id="of_course_with_so_much...">Of course, with so much functionality on offer, we had to provide some switches and
+        toggles to let you get it working just the way you prefer.</p>
+        <div>
+        <img src="/images/screenshots/1.2.0/completion-preferences.png" width="32%" style="box-shadow: 0 0 15px #888;"><img src="/images/screenshots/1.2.0/editor-preferences.png" width="32%" style="box-shadow: 0 0 15px #888;"><img src="/images/screenshots/1.2.0/filtering.png" width="32%" style="box-shadow: 0 0 15px #888;">
+</div>
+        </div>
+        
+        <p></p>
+<p style="margin-left:15%;margin-right:15%;text-align:center" id="get_ceylon_ide_for_eclipse...">
+        Get Ceylon IDE for Eclipse from the <a href="../install">update site</a>.</p>
+        
+        <p></p>
+</div>
+      </div>
+      <div class="footer-bar">
+        <div id="footer">
+          <div id="footer-core">
+            <div id="sponsor">
+              <a href="http://www.eclipse.org" title="Eclipse Ceylon is an Eclipse Project"><img src="/images/Eclipse2014_RGB.svg" width="150px"></a>
+              <span>
+                Eclipse Ceylon is an <a href="http://www.eclipse.org">Eclipse Project</a>.
+              </span>
+            </div>
+            <div id="copyright">
+              <p id="copyright_©_2010_2019_red...">Copyright © 2010-2019,
+              Red Hat, Inc. or third-party contributors —
+              Ceylon is a trademark of the <a href="http://www.eclipse.org">Eclipse Foundation</a> —
+              <a href="https://eclipse.org/legal/termsofuse.php">Terms of use</a> —
+              <a href="https://eclipse.org/legal/privacy.php">Privacy policy</a> —
+              <a href="http://www.eclipse.org/legal/copyright.php">Copyright agent</a> —
+              <a href="http://www.eclipse.org/legal">Legal</a>.</p>
+              <p id="site_generated_on_october_14...">Site generated on October 14, 2019 at 14:12</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+<script type="text/javascript">
+              var disqus_shortname = 'ceylonlang';
+              (function () {
+                var s = document.createElement('script'); s.async = true;
+                s.src = "//disqus.com/forums/ceylonlang/count.js";
+                (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+              }());
+              </script>
+</html>

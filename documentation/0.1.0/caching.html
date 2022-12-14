@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Immutant Caching</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Immutant Caching" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2012-03-14 15:01:37 EDT" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="messaging.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="daemons.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 9. Immutant Caching</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="caching.html#sec-1">9.1. Introduction</a>
+<ul>
+<li><a href="caching.html#sec-1-1">9.1.1. Infinispan</a></li>
+</ul>
+</li>
+<li><a href="caching.html#sec-2">9.2. Caching Modes</a>
+<ul>
+<li><a href="caching.html#sec-2-1">9.2.1. Local</a></li>
+<li><a href="caching.html#sec-2-2">9.2.2. Invalidated</a></li>
+<li><a href="caching.html#sec-2-3">9.2.3. Replicated</a></li>
+<li><a href="caching.html#sec-2-4">9.2.4. Distributed</a></li>
+</ul>
+</li>
+<li><a href="caching.html#sec-3">9.3. The API</a></li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">9.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  Immutant provides built-in support for local and distributed caches
+  that implement <a href="https://github.com/clojure/core.cache">core.cache/CacheProtocol</a>, and may therefore be used
+  as standard <a href="https://github.com/clojure/core.memoize">memoization</a> stores. It is also possible to use them as
+  enhanced <a href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ConcurrentMap.html">ConcurrentMap</a> implementations.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-1-1">
+<h3 id="sec-1-1"><span class="section-number-3">9.1.1.</span> Infinispan</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<p>
+   Immutant encapsulates the JBoss <a href="http://www.infinispan.org">Infinispan data grid</a>, enabling
+   simple construction of transactional, high-performance key/value
+   stores that can be either run locally or efficiently replicated
+   across a cluster.
+</p>
+<p>
+   Infinispan offers a number of clustering modes that determine what 
+   happens when an entry is written to the cache.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">9.2.</span> Caching Modes</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  Infinispan supports three clustered modes and one non-clustered.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-1">
+<h3 id="sec-2-1"><span class="section-number-3">9.2.1.</span> Local</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   This is the default mode when Immutant runs non-clustered,
+   essentially an enhanced, in-memory <a href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ConcurrentMap.html">ConcurrentMap</a> implementation,
+   featuring write-through/write-behind persistence, eviction,
+   expiration, JTA/XA support, MVCC-based concurency, and JMX
+   manageability.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-2">
+<h3 id="sec-2-2"><span class="section-number-3">9.2.2.</span> Invalidated</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<p>
+   This is the default mode when Immutant runs clustered. No data is
+   actually shared among the cluster nodes in this mode. Instead,
+   notifications are sent to all nodes when data changes, causing
+   them to evict their stale copies of the updated entry.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-3">
+<h3 id="sec-2-3"><span class="section-number-3">9.2.3.</span> Replicated</h3>
+<div class="outline-text-3" id="text-2-3">
+
+
+<p>
+   In this mode, entries added to any cache instance will be copied
+   to all other cache instances in the cluster, and can then be
+   retrieved locally from any instance. This mode is probably
+   impractical for clusters of any significant size. Infinispan
+   recommends 10 as a reasonable upper bound on the number of
+   replicated nodes.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-4">
+<h3 id="sec-2-4"><span class="section-number-3">9.2.4.</span> Distributed</h3>
+<div class="outline-text-3" id="text-2-4">
+
+
+<p>
+   This mode enables Infinispan clusters to achieve "linear
+   scalability". Cache entries are copied to a fixed number of
+   cluster nodes (2, by default) regardless of the cluster
+   size. Distribution uses a consistent hashing algorithm to
+   determine which nodes will store a given entry.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-3">
+<h2 id="sec-3"><span class="section-number-2">9.3.</span> The API</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  Caches are defined using the <code>immutant.cache/cache</code> function. Its
+  only required argument is a name. 
+</p>
+<p>
+  Additionally, one of the following keywords may be passed to
+  indicate the desired caching mode: <code>:local</code>, <code>:invalidated</code>,
+  <code>:replicated</code>, or <code>:distributed</code>. If omitted, the default mode is
+  <code>:invalidated</code> when clustered. When not clustered, the mode will
+  <b>always</b> be <code>:local</code>, as the others are meaningless unless
+  clustered.
+</p>
+<p>
+  The cache can also be seeded from a passed map as well.
+</p>
+<p>
+  Some examples are in order.
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> example.test
+  (<span class="org-builtin">:use</span> [immutant.cache]))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Obtain a cache in :invalidated mode if clustered, :local otherwise</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">c1</span> (cache <span class="org-string">"jimi"</span>))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">A cache in :distributed mode if clustered, :local otherwise</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">c2</span> (cache <span class="org-string">"jeff"</span> <span class="org-builtin">:distributed</span>))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Initialize a cache with a seed</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">c3</span> (cache <span class="org-string">"billy"</span> <span class="org-builtin">:replicated</span> {<span class="org-builtin">:a</span> 1 <span class="org-builtin">:b</span> 2}))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">If seed is second parameter, mode defaults to :invalidated/:local</span>
+(<span class="org-keyword">def</span> <span class="org-function-name">c4</span> (cache <span class="org-string">"jerry"</span> {<span class="org-builtin">:a</span> 1 <span class="org-builtin">:b</span> 2}))
+</pre>
+
+
+<p>
+  In addition to providing implementations for many of Clojure's core
+  interfaces, the returned cache object implements two useful
+  protocols: <code>core.cache/CacheProtocol</code> and
+  <code>immutant.cache/Mutable</code>. The former allows an Immutant cache to be
+  plugged into the <code>core.memoize</code> API. The latter exposes some of
+  Infinispan's handy cache manipulation features.
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">defprotocol</span> <span class="org-function-name">Mutable</span>
+  <span class="org-doc">"Functions for manipulating a shared, distributed cache.</span>
+
+<span class="org-doc">   Every function optionally accepts a map with the following</span>
+<span class="org-doc">   lifespan-oriented keys:</span>
+
+<span class="org-doc">     :ttl - time-to-live, the max time the entry will live before expiry [-1]</span>
+<span class="org-doc">     :idle - the time after which an entry will expire if not accessed [-1]</span>
+<span class="org-doc">     :units - the units for the values of :ttl and :idle [:seconds]</span>
+
+<span class="org-doc">   Negative values imply no expiration.</span>
+<span class="org-doc">   Possible values for :units -- :days, :hours, :minutes, :seconds,</span>
+<span class="org-doc">                                 :milliseconds, :microseconds :nanoseconds</span>
+
+<span class="org-doc">   The conditional functions, e.g. put-if-*, are all atomic."</span>
+  (put [cache key value] [cache key value options]
+    <span class="org-string">"Put an entry in the cache"</span>)
+  (put-all [cache map] [cache map options]
+    <span class="org-string">"Put all the entries in cache"</span>)
+  (put-if-absent [cache key value] [cache key value options]
+    <span class="org-string">"Put it in only if key is not already there"</span>)
+  (put-if-present [cache key value] [cache key value options]
+    <span class="org-string">"Put it in only if key is already there"</span>)
+  (put-if-replace [cache key old new] [cache key old new options]
+    <span class="org-string">"Put it in only if key is there and current matches old"</span>)
+  (delete [cache key] [cache key value]
+    <span class="org-string">"Delete the entry; value must match current if passed"</span>))
+</pre>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="messaging.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="daemons.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 0.1.0</div>
+</div>
+
+
+</body></html>

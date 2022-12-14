@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html><head><link href="css/default.css" rel="stylesheet" type="text/css"><script src="js/jquery.min.js" type="text/javascript"></script><script src="js/page_effects.js" type="text/javascript"></script><title>immutant.jobs documentation</title></head><body><div id="header"><h2><a href="../index.html">Immutant Manual</a></h2><h2><a href="http://immutant.org/">Immutant Home</a></h2><h1><a href="index.html">Immutant 1.1.1 API documentation</a></h1></div><div class="sidebar" id="namespaces"><h3><span>Namespaces</span></h3><ul><li><a href="immutant.cache.html"><span>immutant.cache</span></a></li><li><a href="immutant.cache.core.html"><span>immutant.cache.core</span></a></li><li><a href="immutant.codecs.html"><span>immutant.codecs</span></a></li><li><a href="immutant.daemons.html"><span>immutant.daemons</span></a></li><li><a href="immutant.dev.html"><span>immutant.dev</span></a></li><li class="current"><a href="immutant.jobs.html"><span>immutant.jobs</span></a></li><li><a href="immutant.messaging.html"><span>immutant.messaging</span></a></li><li><a href="immutant.messaging.hornetq.html"><span>immutant.messaging.hornetq</span></a></li><li><a href="immutant.pipeline.html"><span>immutant.pipeline</span></a></li><li><a href="immutant.registry.html"><span>immutant.registry</span></a></li><li><a href="immutant.repl.html"><span>immutant.repl</span></a></li><li><a href="immutant.util.html"><span>immutant.util</span></a></li><li><a href="immutant.web.html"><span>immutant.web</span></a></li><li><a href="immutant.web.session.html"><span>immutant.web.session</span></a></li><li><a href="immutant.xa.html"><span>immutant.xa</span></a></li><li><a href="immutant.xa.transaction.html"><span>immutant.xa.transaction</span></a></li></ul></div><div class="sidebar" id="vars"><h3>Public Vars</h3><ul><li><a href="immutant.jobs.html#var-*job-execution-context*"><span class="">*job-execution-context*</span></a></li><li><a href="immutant.jobs.html#var-internal-scheduler"><span class="">internal-scheduler</span></a></li><li><a href="immutant.jobs.html#var-schedule"><span class="">schedule</span></a></li><li><a href="immutant.jobs.html#var-set-scheduler-options"><span class="">set-scheduler-options</span></a></li><li><a href="immutant.jobs.html#var-unschedule"><span class="">unschedule</span></a></li></ul></div><div class="namespace-docs" id="content"><h2>immutant.jobs documentation</h2><pre class="doc">Associate recurring jobs with an application using cron-like and at-style specifications
+</pre><div class="public " id="var-*job-execution-context*"><h3>*job-execution-context*</h3><h4 class="type">var</h4><div class="usage"></div><pre class="doc">Bound to the currently active org.quartz.JobExecutionContext when a job function is invoked.
+</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.1//modules/jobs/src/main/clojure/immutant/jobs.clj#L24">Source</a></div></div><div class="public " id="var-internal-scheduler"><h3>internal-scheduler</h3><div class="usage"><code>(internal-scheduler)</code></div><pre class="doc">Returns the internal Quartz scheduler for use with other libs, e.g. Quartzite
+</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.1//modules/jobs/src/main/clojure/immutant/jobs.clj#L113">Source</a></div></div><div class="public " id="var-schedule"><h3>schedule</h3><div class="usage"><code>(schedule name f spec &amp; {:keys [singleton], :or {singleton true}})</code><code>(schedule name f &amp; {:keys [at in until every repeat singleton], :or {singleton true}})</code></div><pre class="doc">Schedules a job to execute based on the cron spec or the 'at' options.
+
+Available options [default]:
+  :at        Specifies when the 'at' job should start firing. Can be a
+             java.util.Date, ms since epoch, or a time in HH:mm
+             format (see below). Can't be specified with a cron spec or
+             :in [none, now if no cron spec provided]
+  :in        Specifies when the 'at' job should start firing, in ms from
+             now, a period alias, or a period spec (see below). Can't be 
+             specified with a cron spec or :at [none]
+  :every     Specifies the delay interval between 'at' job firings, in
+             ms, a period alias, or a period spec (see below). If 
+             specified without a :repeat or :until, the job will fire
+             indefinitely. Can't be specified with a cron spec [none]
+  :repeat    Specifies the number of times an 'at' job should repeat
+             beyond its initial firing. Can't be specified with a
+             spec, and requires :every to be provided [none]
+  :until     Specifies when the 'at' job should stop firing. Can be a
+             java.util.Date, ms since epoch, or a time in HH:mm format
+             (see below). Can't be specified with a cron spec [none]
+  :singleton Marks the job as a singleton in a cluster. Singleton
+             jobs will only execute on one node. If false, the job will
+             execute on every node [true]
+
+As a convenience, you can pass a time as a String (in &quot;HH:mm&quot; or
+&quot;HHmm&quot; format) for the :at and :until options. It will be
+interpreted as the next occurence of &quot;HH:mm:00&quot; in the currently
+active timezone.
+
+You can also pass a period alias or period spec for :in or :repeat. A
+period alias is one of: :second, :minute, :hour, :day, :week. A period
+spec is a vector or list with a number followed by a period
+alias (including plural variants): [1 :second], [5 :minutes]. Each will
+be converted into the corresponding milliseconds.
+
+Calling this function with the same name as a previously scheduled job
+will replace that job.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.1//modules/jobs/src/main/clojure/immutant/jobs.clj#L59">Source</a></div></div><div class="public " id="var-set-scheduler-options"><h3>set-scheduler-options</h3><div class="usage"><code>(set-scheduler-options options)</code></div><pre class="doc">Sets defaults for the quartz scheduler(s).
+Must be called before any jobs are scheduled.
+
+Available options [default]:
+  :thread-count   Specifies the number of worker threads for the scheduler's
+                  thread pool [5]</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.1//modules/jobs/src/main/clojure/immutant/jobs.clj#L30">Source</a></div></div><div class="public " id="var-unschedule"><h3>unschedule</h3><div class="usage"><code>(unschedule name)</code></div><pre class="doc">Removes the named job from the scheduler
+</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.1//modules/jobs/src/main/clojure/immutant/jobs.clj#L49">Source</a></div></div></div></body></html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="content-type">
+<title>Eclipse Ceylon: Welcome to the Tour</title>
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+<link href="https://plus.google.com/102481741611133754149" rel="publisher">
+<link href="/stylesheets/themes/paraiso-dark.css" rel="stylesheet">
+<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet">
+<link href="/stylesheets/print.css" media="print" rel="stylesheet">
+<!--[if lt IE 8]>
+      <link href="/stylesheets/ie.css" media="screen, projection" rel="stylesheet" />
+    <![endif]--><link href="/blog/blog.atom" rel="alternate" type="application/atom+xml">
+<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro%7CPT+Sans%7CPT+Sans:700%7CInconsolata%7CInconsolata:700%7CArvo" rel="stylesheet" type="text/css">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script><script src="/js/jquery-ui-1.8.22.custom.min.js"></script><script src="/js/common.js"></script><script src="/js/rainbow.min.js"></script><script src="/js/language/ceylon.js"></script><script src="/js/language/java.js"></script><script src="/js/language/javascript.js"></script><script src="/js/language/html.js"></script><script src="/js/language/shell.js"></script><script>
+     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    
+                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    
+                        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    
+                        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+     
+    ga('create', 'UA-24748553-1', 'auto');
+    ga('send', 'pageview');
+    
+    </script>
+</head>
+<body class="bp">
+    <div class="docspage" id="container">
+      <div class="header-bar">
+        <!-- /cannot use a partial as it loses the page.tab context :( -->
+        <div id="header">
+          <a href="/" id="header-logo">
+            <h1 id="ceylon">
+              Ceylon
+            </h1>
+          </a>
+          <div id="header-tagline">
+            <p id="say_more_more_clearly">
+              Say more, more clearly
+            </p>
+          </div>
+          <div id="menu">
+            <ul id="menu-core">
+<li id="notselected">
+                <a href="/">HOME</a>
+              </li>
+              <li id="selected">
+                <a href="/documentation/current">LEARN</a>
+              </li>
+              <li id="notselected">
+                <a href="/download">DOWNLOAD</a>
+              </li>
+              <li id="notselected">
+                <a href="/community">COMMUNITY</a>
+              </li>
+              <li id="notselected">
+                <a href="/code">CODE</a>
+              </li>
+              <li id="notselected">
+                <a href="/blog">BLOG</a>
+              </li>
+            </ul>
+</div>
+        </div>
+      </div>
+      <div id="primary-content">
+        <div id="sidebar">
+          <div class="point-dark-top">
+             
+          </div>
+          <div class="sidebar-dark">
+            <h3 id="quick_introduction"><a href="/documentation/1.3/introduction">Quick introduction</a></h3>
+            
+            <h3 id="tour_of_ceylon"><a href="/documentation/1.3/tour">Tour of Ceylon</a></h3>
+            
+            <ol>
+<li><a href="/documentation/1.3/tour/basics">Basics</a></li>
+            <li><a href="/documentation/1.3/tour/classes">Classes</a></li>
+            <li><a href="/documentation/1.3/tour/attributes-control-structures">Attributes and variables, control structures</a></li>
+            <li><a href="/documentation/1.3/tour/inheritance">Inheritance, refinement, and interfaces</a></li>
+            <li><a href="/documentation/1.3/tour/anonymous-member-classes">Anonymous and member classes</a></li>
+            <li><a href="/documentation/1.3/tour/sequences">Streams, sequences, and tuples</a></li>
+            <li><a href="/documentation/1.3/tour/typeinference">Type aliases and type inference</a></li>
+            <li><a href="/documentation/1.3/tour/types">Union, intersection, and enumerated types</a></li>
+            <li><a href="/documentation/1.3/tour/generics">Generics</a></li>
+            <li><a href="/documentation/1.3/tour/modules">Packages and modules</a></li>
+            <li><a href="/documentation/1.3/tour/functions">Functions</a></li>
+            <li><a href="/documentation/1.3/tour/named-arguments">Named arguments</a></li>
+            <li><a href="/documentation/1.3/tour/comprehensions">Comprehensions</a></li>
+            <li><a href="/documentation/1.3/tour/language-module">Language module</a></li>
+            <li><a href="/documentation/1.3/tour/initialization">Initialization and constructors</a></li>
+            <li><a href="/documentation/1.3/tour/annotations">Annotations and the metamodel</a></li>
+            <li><a href="/documentation/1.3/tour/interop">Interoperation with Java</a></li>
+            <li><a href="/documentation/1.3/tour/dynamic">Dynamic typing and interoperation with JavaScript</a></li>
+            </ol>
+<h3 id="ceylon_walkthrough"><a href="/documentation/1.3/walkthrough">Ceylon Walkthrough</a></h3>
+            
+            <h3 id="examples"><a href="/documentation/1.3/examples">Examples</a></h3>
+            
+            <!-- ### [Tutorial videos](/documentation/1.3/videos) -->
+            
+            
+            <h3 id="language_specification"><a href="/documentation/1.3/spec">Language specification</a></h3>
+            
+            <h3 id="reference"><a href="/documentation/1.3/reference">Reference</a></h3>
+            
+            <h3 id="language_module_api"><a href="https://modules.ceylon-lang.org/repo/1/ceylon/language/1.3.3/module-doc/index.html">Language module API</a></h3>
+            
+            <h3 id="faqs"><a href="/documentation/1.3/faq">FAQs</a></h3>
+            
+            <h3 id="roadmap"><a href="/documentation/1.3/roadmap">Roadmap</a></h3>
+            
+            <h3 id="ceylon_ide_for_intellij"><a href="/documentation/1.3/ide/intellij">Ceylon IDE for IntelliJ</a></h3>
+            
+            <h3 id="ceylon_ide_for_eclipse"><a href="/documentation/1.3/ide/eclipse">Ceylon IDE for Eclipse</a></h3>
+            
+            <h3 id="vertx"><a href="http://vertx.io/docs/vertx-core/ceylon/">Vert.x</a></h3>
+          </div>
+          <div class="point-dark-bottom">
+             
+          </div>
+          <div class="point-light-top"></div>
+          <div class="toc">
+            <ul>
+<ul>
+<li><a href="#what_if_i_don_t_know_java">What if I don't know Java?
+            </a></li>
+<li><a href="#help_us_improve">Help us improve!
+            </a></li>
+</ul>
+<li><a href="#before_you_start">Before you start
+            </a></li>
+<li><a href="#a_really_simple_program">A <em>really</em> simple program
+            </a></li>
+<ul><li><a href="#gotcha">Gotcha!
+            </a></li></ul>
+<li><a href="#running_the_program_from_the_command_line">Running the program from the command line
+            </a></li>
+<ul>
+<li><a href="#getting_help">Getting help
+            </a></li>
+<li><a href="#selecting_the_jdk">Selecting the JDK
+            </a></li>
+<li><a href="#setting_the_character_encoding">Setting the character encoding
+            </a></li>
+</ul>
+<li><a href="#running_the_program_using_plain_java">Running the program using plain Java
+            </a></li>
+<li><a href="#running_the_program_from_the_intellij_ide">Running the program from the IntelliJ IDE
+            </a></li>
+<ul>
+<li><a href="#selecting_the_jdk">Selecting the JDK
+            </a></li>
+<li><a href="#setting_the_character_encoding">Setting the character encoding
+            </a></li>
+</ul>
+<li><a href="#running_the_program_from_the_eclipse_ide">Running the program from the Eclipse IDE
+            </a></li>
+<ul>
+<li><a href="#selecting_the_jdk">Selecting the JDK
+            </a></li>
+<li><a href="#setting_the_character_encoding">Setting the character encoding
+            </a></li>
+</ul>
+<li><a href="#continue_the_tour">Continue the tour
+            </a></li>
+</ul>
+<p id=""></p>
+          </div>
+          <div class="point-light-end"></div>
+        </div>
+        <div id="banner">
+          <div id="text">
+            Tour of Ceylon
+          </div>
+        </div>
+        <div id="core-page">
+          <div class="gh-edit">
+            <a href="https://github.com/eclipse/ceylon-lang.org/blob/master/documentation/1.3/tour/index.md">
+              View source
+            </a>
+            |
+            <a href="https://github.com/eclipse/ceylon-lang.org/edit/master/documentation/1.3/tour/index.md">
+              Edit
+            </a>
+          </div>
+          <h1 id="welcome_to_the_tour">Welcome to the Tour</h1>
+          
+          <p id="this_tour_of_the_ceylon...">This tour of the Ceylon language is primarily intended for
+          developers with some experience in object-oriented
+          programming. It assumes basic familiarity with concepts like
+          static typing, inheritance, subtyping, and type
+          parameterization (generics). If you already know a language
+          like Java, C#, or C++, you already have all the background
+          you need.</p>
+          
+          <h3 id="what_if_i_don_t_know_java">What if I don't know Java?
+          </h3>
+          
+          
+          <p id="if_youre_new_to_object..."><em>If you're new to object-oriented programming,</em> you'll still
+          be able to learn Ceylon. These concepts aren't difficult to
+          pick up! But you might find some chapters of the tour pretty
+          hard going first time through. If so, take it slowly:
+          experiment with the language using Ceylon IDE
+          <a href="../ide/eclipse">for Eclipse</a> or <a href="../ide/intellij">for IntelliJ</a>,
+          and gradually get a feel for how these things work and how
+          they are useful. None of us learned to program from books or
+          tutorials or from other people telling us how to do it. We
+          learned by playing and experimenting and working with other
+          people's code.</p>
+          
+          <p id="if_youre_completely_new_to..."><em>If you're completely new to static typing,</em> you'll probably
+          find Ceylon very fussy and even a bit complicated at first.
+          There's a lot more rules to know about than in a language like
+          Python, Ruby, or Smalltalk. But we promise that the benefits
+          make it worthwhile in the end, especially once you learn to
+          use the IDE effectively. Tools for a dynamic language simply
+          can't reason about your code like Ceylon IDE can!</p>
+          
+          <h3 id="help_us_improve">Help us improve!
+          </h3>
+          
+          
+          <p id="if_you_find_some_part...">If you find some part of this tour difficult to read or difficult
+          to understand, or if you think one of the examples sucks, or if
+          you think a section is missing some useful information, please
+          <a href="/community">let us know</a>.</p>
+          
+          <h2 id="before_you_start">Before you start
+          </h2>
+          
+          
+          <p id="if_youre_using_the_command...">If you're using the <a href="/download">command line distribution</a> to
+          try out Ceylon for the first time, we highly recommend you
+          start by compiling and running the samples included in the
+          distribution.</p>
+          
+          <p id="instructions_for_getting_started_are...">Instructions for getting started are contained in the file
+          <code>README.md</code> in the root directory of the distribution, or
+          <a href="https://github.com/eclipse/ceylon/blob/master/dist/README.md">right here in GitHub</a>.</p>
+          
+          <p id="now_lets_just_make_sure...">Now, let's just make sure we can compile and run our own program
+          from the command line and IDE.</p>
+          
+          <h2 id="a_really_simple_program">A <em>really</em> simple program
+          </h2>
+          
+          
+          <p id="heres_a_classic_example_program">Here's a classic example program:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>shared void hello() {
+    print("Hello, World!");
+}
+</code></pre>
+          
+          <p id="this_code_declares_a_function...">This code declares a function named <code>hello()</code> that prints
+          <code>Hello, World!</code> on the console.</p>
+          
+          <p id="we_call_this_function_a...">We call this function a <em>toplevel</em> function because it's not
+          a member of a type. So we don't need a receiving object to
+          invoke a toplevel function. Instead, we can just call it like
+          this:</p>
+          
+          <!-- try-pre:
+              void hello() {
+                  print("Hello, World!");
+              }
+              
+          -->
+          
+          
+          <pre data-language="ceylon"><code>hello();
+</code></pre>
+          
+          <p id="or_since_this_toplevel_function...">Or, since this toplevel function is annotated <code>shared</code>, we can
+          run it directly from the command line or IDE.</p>
+          
+          <h3 id="gotcha">Gotcha!
+          </h3>
+          
+          
+          <p id="note_that_ceylon_doesnt_yet...">Note that Ceylon doesn't (yet) support <em>scripting</em>. You can't
+          write statements like <code>print("Hello, World!");</code> outside of a
+          function or class, like you would in a scripting language.
+          This is <em>not</em>, on its own, a legal program:</p>
+          
+          <!-- try: -->
+          
+          
+          <pre data-language="ceylon"><code>print("Hello, World!");  //error: must occur inside a function or class
+</code></pre>
+          
+          <h2 id="running_the_program_from_the_command_line">Running the program from the command line
+          </h2>
+          
+          
+          <p id="lets_try_it_out_save...">Let's try it out. Save the above code in the file
+          <code>./source/hello.ceylon</code> and then run the following command:</p>
+          
+          <pre data-language="shell"><code>ceylon-1.3.3/bin/ceylon run --compile=force --run=hello default
+</code></pre>
+          
+          <p id="where_ceylon_133_is_the...">where <code>ceylon-1.3.3</code> is the path to your Ceylon install directory.
+          You should see the message <code>Hello, World!</code>. You will find the
+          compiled module archive <code>default.car</code> in the directory
+          <code>./modules/default</code>.</p>
+          
+          <p id="note_that">Note that:</p>
+          
+          <ul>
+<li>The option <code>--compile=force</code> specifies that the program
+          should be compiled before execution.</li>
+          <li>The option <code>--run hello</code> specifies the name, in this case,
+          <code>hello</code>, of the function that should be executed. If this
+          option is missing, the function name defaults to <code>run</code>.</li>
+          <li>The parameter <code>default</code> specifies the <em>module</em> that should
+          be executed, in this case, the "default" module, that is,
+          the module you have if you don't have a module.</li>
+          </ul>
+<p id="alternatively_you_can_compile_and...">Alternatively, you can compile and run in two separate steps,
+          with the following commands:</p>
+          
+          <pre data-language="shell"><code>ceylon-1.3.3/bin/ceylon compile
+ceylon-1.3.3/bin/ceylon run --run=hello default
+</code></pre>
+          
+          <p id="if_you_need_to_you...">If you need to, you can explicitly specify the source file
+          you wish to compile:</p>
+          
+          <pre data-language="shell"><code>ceylon-1.3.3/bin/ceylon compile source/hello.ceylon
+</code></pre>
+          
+          <p id="or_alternatively_the_name_of...">Or, alternatively, the name of the <em>module</em> you wish to
+          compile:</p>
+          
+          <pre data-language="shell"><code>ceylon-1.3.3/bin/ceylon compile default
+</code></pre>
+          
+          <h3 id="getting_help">Getting help
+          </h3>
+          
+          
+          <p id="a_very_useful_trick_is">A very useful trick is:</p>
+          
+          <pre data-language="shell"><code>ceylon-1.3.3/bin/ceylon help compile
+</code></pre>
+          
+          <p id="or">Or:</p>
+          
+          <pre data-language="shell"><code>ceylon-1.3.3/bin/ceylon help run
+</code></pre>
+          
+          <p id="the_command_ceylon_help_outputs...">The command <a href="/documentation/current/reference/tool/ceylon/subcommands/ceylon-help.html"><code>ceylon help</code></a> outputs usage information about
+          any of the <a href="/documentation/current/reference/tool/ceylon/subcommands/index.html"><code>ceylon</code> subcommands</a>.</p>
+          
+          <p id="if_youre_still_having_trouble..."><em>If you're still having trouble getting started with the
+          command line tools, try <a href="#before_you_start">compiling and running the samples</a>
+          if you haven't already.</em></p>
+          
+          <h3 id="selecting_the_jdk">Selecting the JDK
+          </h3>
+          
+          
+          <p id="ceylon_requires_java_7_or...">Ceylon requires Java 7 or Java 8, so you might need to verify
+          that you're using a supported version of Java.</p>
+          
+          <pre data-language="shell"><code>bash$ java -version
+java version "1.8.0_92"
+Java(TM) SE Runtime Environment (build 1.8.0_92-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 25.92-b14, mixed mode)
+bash$ javac -version
+javac 1.8.0_92
+</code></pre>
+          
+          <p id="if_youre_using_some_other...">If you're using some other version of Java, you'll need to
+          change to use Java 7 or Java 8:</p>
+          
+          <ul>
+<li>on Linux, use <code>update-java-alternatives</code>,</li>
+          <li>on Mac, use the <code>System Preferences</code> <a href="http://www.java.com/en/download/help/mac_controlpanel.xml">applet</a>, or</li>
+          <li>on Windows, set the <code>JAVA_HOME</code> environment variable.</li>
+          </ul>
+<h3 id="setting_the_character_encoding">Setting the character encoding
+          </h3>
+          
+          
+          <p id="if_you_see_the_following...">If you see the following error, or similar, when compiling a
+          Ceylon program:</p>
+          
+          <pre><code>unmappable character for encoding ASCII
+</code></pre>
+          
+          <p id="then_you_have_a_source...">Then you have a source file whose character encoding doesn't
+          match the default character encoding for your OS. You'll need
+          to explicitly specify the character encoding on the command line
+          like this:</p>
+          
+          <pre data-language="shell"><code>ceylon compile --encoding=UTF-8
+</code></pre>
+          
+          <h2 id="running_the_program_using_plain_java">Running the program using plain Java
+          </h2>
+          
+          
+          <p id="if_you_want_to_run...">If you want to run the program using the <code>java</code> command, instead
+          of using <code>ceylon run</code>, you can use the <code>ceylon fat-jar</code> command to
+          package your program as a Java <code>.jar</code> archive:</p>
+          
+          <pre data-language="shell"><code>ceylon-1.3.3/bin/ceylon fat-jar --run=hello default
+</code></pre>
+          
+          <p id="this_will_create_a_file...">This will create a file named <code>default.jar</code> in the working directory,
+          which you can run using <code>java</code>:</p>
+          
+          <pre data-language="shell"><code>java -jar default.jar
+</code></pre>
+          
+          <p id="this_is_very_useful_if...">This is very useful if you ever need to run a Ceylon program in
+          an environment where Ceylon itself is not installed. The "fat"
+          <code>.jar</code> file contains everything needed to run the Ceylon program,
+          including its dependencies.</p>
+          
+          <h2 id="running_the_program_from_the_intellij_ide">Running the program from the IntelliJ IDE
+          </h2>
+          
+          
+          <p id="to_run_the_program_in...">To run the program in <a href="../ide/intellij">Ceylon IDE for IntelliJ</a>:</p>
+          
+          <ol>
+<li>Create a new project using <code>File &gt; New &gt; Project...</code>, selecting
+          <code>Ceylon</code>, clicking <code>Next</code> three times, entering a name for the
+          project, and finally clicking <code>Finish</code>.</li>
+          <li>Create a new <code>.ceylon</code> file inside the project by selecting
+          the project's <code>source</code> folder, and using<br><code>File &gt; New &gt; Ceylon File/Declaration</code>.</li>
+          <li>Paste the definition of <code>hello()</code> into this new file.</li>
+          <li>Finally, select the file and run it using <code>Run &gt; Run...</code>.</li>
+          </ol>
+<p id="this_executes_the_program_on...">This executes the program on the JVM.</p>
+          
+          <div style="text-align:center">
+          <img src="/images/screenshots/1.3.0/intellij/hello.png" width="85%" style="box-shadow: 0 0 15px #888;">
+</div>
+          
+          
+          <p id="if_you_have_nodejs_installed...">If you have <code>node.js</code> installed, you can go to <code>File &gt; Project Structure...</code>,
+          select the <code>Facets</code> section, select <code>Ceylon</code>, enable <code>Compile project to JavaScript</code>,
+          then click <code>OK</code>, and run the program on node using <code>Run &gt; Run...</code>.</p>
+          
+          <p id="if_you_want_to_be...">If you want to be sure which VM you're executing on, just add
+          this line to your program:</p>
+          
+          <pre data-language="ceylon"><code>print(runtime.name);
+</code></pre>
+          
+          <p id="if_it_prints_jvm_youre...">If it prints <code>jvm</code>, you're running on Java. If it prints <code>node.js</code>,
+          you're running on node.</p>
+          
+          <h3 id="selecting_the_jdk">Selecting the JDK
+          </h3>
+          
+          
+          <p id="you_need_to_make_sure...">You need to make sure that your project is configured to compile
+          using the Java 7 or Java 8 compiler. Go to <code>File &gt; Project Structure...</code>,
+          select the <code>Project</code> section, and make sure that the project is
+          configured to use the Java 7 or Java 8 SDK.</p>
+          
+          <h3 id="setting_the_character_encoding">Setting the character encoding
+          </h3>
+          
+          
+          <p id="to_set_the_source_file...">To set the source file character encoding in IntelliJ, go to
+          <code>File &gt; File &gt; Encoding</code> and select a <code>File Encoding</code>.</p>
+          
+          <h2 id="running_the_program_from_the_eclipse_ide">Running the program from the Eclipse IDE
+          </h2>
+          
+          
+          <p id="to_run_the_program_in_ceylon...">To run the program in <a href="../ide/eclipse">Ceylon IDE for Eclipse</a>,
+          go to the Ceylon perspective, then:</p>
+          
+          <ol>
+<li>Create a new project using <code>File &gt; New &gt; Ceylon Project</code>.</li>
+          <li>Create a new <code>.ceylon</code> file inside the project using
+          <code>File &gt; New &gt; Ceylon Source File</code>.</li>
+          <li>Paste the definition of <code>hello()</code> into this new file.</li>
+          <li>Select the file and run it using <code>Run &gt; Run As &gt; Ceylon Application</code>.</li>
+          </ol>
+<p id="this_executes_the_program_on_the...">This executes the program on the JVM.</p>
+          
+          <p id="if_you_have_nodejs_installed_you...">If you have <code>node.js</code> installed, you can go to <code>Project &gt; Properties</code>,
+          select the <code>Ceylon</code> section, enable <code>Compile project to JavaScript</code>,
+          then click <code>OK</code>, and run the program using
+          <code>Run &gt; Run As &gt; Ceylon JavaScript Application</code>.</p>
+          
+          <h3 id="selecting_the_jdk">Selecting the JDK
+          </h3>
+          
+          
+          <p id="ceylon_ide_for_eclipse_requires...">Ceylon IDE for Eclipse requires Java 7 or Java 8, so you might
+          need to verify that Eclipse is running on a Java 7 or Java 8 VM.
+          Go to <code>Eclipse &gt; About Eclipse</code>, click <code>Installation Details</code>, and go
+          to the <code>Configuration</code> tab. You'll see the Java version listed
+          among the other system properties. See the
+          <a href="#selecting_the_jdk">instructions above</a> to change the version
+          of Java. You might need to edit <code>eclipse.ini</code>.</p>
+          
+          <p id="you_need_to_make_sure_that...">You need to make sure that your project is configured to compile
+          using the Java 7 or Java 8 compiler. Go to <code>Project &gt; Properties</code>,
+          select the <code>Java Compiler</code> section, and make sure that the project
+          is configured to use the Java 7 or Java 8 compiler.</p>
+          
+          <h3 id="setting_the_character_encoding">Setting the character encoding
+          </h3>
+          
+          
+          <p id="to_set_the_source_file_character...">To set the source file character encoding in Eclipse, go to
+          <code>Project &gt; Properties</code>, select the <code>Resource</code> section, and select
+          a <code>Text file encoding</code>, for example, <code>UTF-8</code>.</p>
+          
+          <h2 id="continue_the_tour">Continue the tour
+          </h2>
+          
+          
+          <p id="well_begin_with_the_basics">We'll begin with the <a href="basics">Basics</a>.</p>
+        </div>
+      </div>
+      <div class="footer-bar">
+        <div id="footer">
+          <div id="footer-core">
+            <div id="sponsor">
+              <a href="http://www.eclipse.org" title="Eclipse Ceylon is an Eclipse Project"><img src="/images/Eclipse2014_RGB.svg" width="150px"></a>
+              <span>
+                Eclipse Ceylon is an <a href="http://www.eclipse.org">Eclipse Project</a>.
+              </span>
+            </div>
+            <div id="copyright">
+              <p id="copyright_©_2010_2019_red...">Copyright © 2010-2019,
+              Red Hat, Inc. or third-party contributors —
+              Ceylon is a trademark of the <a href="http://www.eclipse.org">Eclipse Foundation</a> —
+              <a href="https://eclipse.org/legal/termsofuse.php">Terms of use</a> —
+              <a href="https://eclipse.org/legal/privacy.php">Privacy policy</a> —
+              <a href="http://www.eclipse.org/legal/copyright.php">Copyright agent</a> —
+              <a href="http://www.eclipse.org/legal">Legal</a>.</p>
+              <p id="site_generated_on_october_14...">Site generated on October 14, 2019 at 14:12</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+<script type="text/javascript">
+              var disqus_shortname = 'ceylonlang';
+              (function () {
+                var s = document.createElement('script'); s.async = true;
+                s.src = "//disqus.com/forums/ceylonlang/count.js";
+                (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+              }());
+              </script>
+</html>

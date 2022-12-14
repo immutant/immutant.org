@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html><head><link href="css/default.css" rel="stylesheet" type="text/css"><script src="js/jquery.min.js" type="text/javascript"></script><script src="js/page_effects.js" type="text/javascript"></script><title>immutant.messaging documentation</title></head><body><div id="header"><h2><a href="../index.html">Immutant Manual</a></h2><h2><a href="http://immutant.org/">Immutant Home</a></h2><h1><a href="index.html">Immutant 1.1.0 API documentation</a></h1></div><div class="sidebar" id="namespaces"><h3><span>Namespaces</span></h3><ul><li><a href="immutant.cache.html"><span>immutant.cache</span></a></li><li><a href="immutant.cache.core.html"><span>immutant.cache.core</span></a></li><li><a href="immutant.codecs.html"><span>immutant.codecs</span></a></li><li><a href="immutant.daemons.html"><span>immutant.daemons</span></a></li><li><a href="immutant.dev.html"><span>immutant.dev</span></a></li><li><a href="immutant.jobs.html"><span>immutant.jobs</span></a></li><li class="current"><a href="immutant.messaging.html"><span>immutant.messaging</span></a></li><li><a href="immutant.messaging.hornetq.html"><span>immutant.messaging.hornetq</span></a></li><li><a href="immutant.pipeline.html"><span>immutant.pipeline</span></a></li><li><a href="immutant.registry.html"><span>immutant.registry</span></a></li><li><a href="immutant.repl.html"><span>immutant.repl</span></a></li><li><a href="immutant.util.html"><span>immutant.util</span></a></li><li><a href="immutant.web.html"><span>immutant.web</span></a></li><li><a href="immutant.web.session.html"><span>immutant.web.session</span></a></li><li><a href="immutant.xa.html"><span>immutant.xa</span></a></li><li><a href="immutant.xa.transaction.html"><span>immutant.xa.transaction</span></a></li></ul></div><div class="sidebar" id="vars"><h3>Public Vars</h3><ul><li><a href="immutant.messaging.html#var-*raw-message*"><span class="">*raw-message*</span></a></li><li><a href="immutant.messaging.html#var-as-queue"><span class="">as-queue</span></a></li><li><a href="immutant.messaging.html#var-as-topic"><span class="">as-topic</span></a></li><li><a href="immutant.messaging.html#var-listen"><span class="">listen</span></a></li><li><a href="immutant.messaging.html#var-message-seq"><span class="">message-seq</span></a></li><li><a href="immutant.messaging.html#var-publish"><span class="">publish</span></a></li><li><a href="immutant.messaging.html#var-receive"><span class="">receive</span></a></li><li><a href="immutant.messaging.html#var-request"><span class="">request</span></a></li><li><a href="immutant.messaging.html#var-respond"><span class="">respond</span></a></li><li><a href="immutant.messaging.html#var-start"><span class="">start</span></a></li><li><a href="immutant.messaging.html#var-stop"><span class="">stop</span></a></li><li><a href="immutant.messaging.html#var-unlisten"><span class="">unlisten</span></a></li><li><a href="immutant.messaging.html#var-unsubscribe"><span class="">unsubscribe</span></a></li><li><a href="immutant.messaging.html#var-with-connection"><span class="">with-connection</span></a></li></ul></div><div class="namespace-docs" id="content"><h2>immutant.messaging documentation</h2><pre class="doc">Easily publish and receive messages containing any type of nested
+data structure to dynamically-created topics and queues. Message
+distribution is automatically load-balanced when clustered.</pre><div class="public " id="var-*raw-message*"><h3>*raw-message*</h3><h4 class="type">var</h4><div class="usage"></div><pre class="doc">Will be bound to the raw javax.jms.Message during the invocation of a
+destination listener.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L176">Source</a></div></div><div class="public " id="var-as-queue"><h3>as-queue</h3><div class="usage"><code>(as-queue name)</code></div><pre class="doc">Marks the given queue name as a queue. Useful for working with queues that
+don't follow the Immutant convention of containing &quot;queue&quot; in the name.
+The result can be passed to any immutant.messaging functions that take a
+queue name.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L29">Source</a></div></div><div class="public " id="var-as-topic"><h3>as-topic</h3><div class="usage"><code>(as-topic name)</code></div><pre class="doc">Marks the given topic name as a topic. Useful for working with topics that
+don't follow the Immutant convention of containing &quot;topic&quot; in the name.
+The result can be passed to any immutant.messaging functions that take a
+topic name.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L37">Source</a></div></div><div class="public " id="var-listen"><h3>listen</h3><div class="usage"><code>(listen dest f &amp; {:as opts})</code></div><pre class="doc">The handler function, f, will receive each message sent to dest.
+ dest can either be the name of the destination, a
+ javax.jms.Destination, or the result of as-queue or as-topic. If
+ a :selector is provided, then only messages having
+ metadata/properties matching that expression may be received.
+
+ listen is asynchronous - if you need to synchronize on its
+ completion, you should deref the result.
+
+ The following options are supported [default]:
+   :concurrency  the number of threads handling messages [1]
+   :xa           Whether the handler demarcates an XA transaction [true]
+   :selector     A JMS (SQL 92) expression matching message metadata/properties [nil]
+   :decode?      if true, the decoded message body is passed to f. Otherwise, the
+                 javax.jms.Message object is passed [true]
+   :client-id    identifies a durable topic subscriber, ignored for queues [nil]
+   :host         the remote host to connect to (default is to connect in-vm) [nil]
+   :port         the remote port to connect to (requires :host to be set) [nil,
+                 or 5445 if :host is set]
+   :username     the username to use to auth the connection (requires :password
+                 to be set) [nil]
+   :password     the password to use to auth the connection (requires :username
+                 to be set) [nil]
+
+The following options are for connection reconnection/reattachment attributes:
+   :retry-interval             the period in milliseconds between subsequent
+                               reconnection attempts
+   :retry-interval-multiplier  a multiplier to apply to the time since the last
+                               retry to compute the time to the next retry
+   :max-retry-interval         the max retry interval that will be used [2000]
+   :reconnect-attempts         total number of reconnect attempts to make before giving
+                               up and shutting down (-1 for unlimited) [0]</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L230">Source</a></div></div><div class="public " id="var-message-seq"><h3>message-seq</h3><div class="usage"><code>(message-seq dest &amp; {:as opts})</code></div><pre class="doc">A lazy sequence of messages received from a destination. Accepts
+same options as receive.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L168">Source</a></div></div><div class="public " id="var-publish"><h3>publish</h3><div class="usage"><code>(publish dest message &amp; {:as opts})</code></div><pre class="doc">Send a message to a destination. dest can either be the name of the
+destination, a javax.jms.Destination, or the result of as-queue or
+as-topic. If the message is a javax.jms.Message, then the message
+is sent without modification.  If the message contains metadata, it
+will be transferred as JMS properties and reconstituted upon
+receipt. Metadata keys must be valid Java identifiers (because they
+can be used in selectors) and can be overridden using
+the :properties option. Returns the JMS message object that was
+published.
+
+The following options are supported [default]:
+  :encoding        :clojure :edn :fressian :json or :text [:edn]
+  :priority        0-9 or :low :normal :high :critical [4]
+  :ttl             time to live, in ms [0=forever]
+  :persistent      whether undelivered messages survive restarts [true]
+  :properties      a map to which selectors may be applied, overrides metadata [nil]
+  :correlation-id  used to set the JMSCorrelationID [nil]
+                   see http://docs.oracle.com/javaee/6/api/javax/jms/Message.html#setJMSCorrelationID(java.lang.String) 
+  :host            the remote host to connect to (default is to connect in-vm)
+                   [nil]
+  :port            the remote port to connect to (requires :host to be set)
+                   [nil, or 5445 if :host is set]
+  :username        the username to use to auth the connection (requires :password
+                   to be set) [nil]
+  :password        the password to use to auth the connection (requires :username
+                   to be set) [nil]
+  :connection      a JMS Connection to use; caller expected to close [nil]</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L80">Source</a></div></div><div class="public " id="var-receive"><h3>receive</h3><div class="usage"><code>(receive dest &amp; {:as opts})</code></div><pre class="doc">Receive a message from a destination. dest can either be the name
+of the destination, a javax.jms.Destination, or the result of
+as-queue or as-topic. If a :selector is provided, then only
+messages having metadata/properties matching that expression may be
+received.
+
+The following options are supported [default]:
+  :timeout    time in ms, after which nil is returned. 0 means wait forever,
+              -1 means don't wait at all [10000]
+  :selector   A JMS (SQL 92) expression matching message metadata/properties [nil]
+  :decode?    if true, the decoded message body is returned. Otherwise, the
+              javax.jms.Message object is returned [true]
+  :client-id  identifies a durable topic subscriber, ignored for queues [nil]
+  :host       the remote host to connect to (default is to connect in-vm) [nil]
+  :port       the remote port to connect to (requires :host to be set) [nil, or
+              5445 if :host is set]
+  :username   the username to use to auth the connection (requires :password to
+              be set) [nil]
+  :password   the password to use to auth the connection (requires :username to
+              be set) [nil]
+  :connection a JMS Connection to use; caller expected to close [nil]</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L129">Source</a></div></div><div class="public " id="var-request"><h3>request</h3><div class="usage"><code>(request queue message &amp; {:as opts})</code></div><pre class="doc">Send a message to queue and return a delay that will retrieve the response.
+Implements the request-response pattern, and is used in conjunction
+with respond. The queue parameter can either be the name of a
+queue, an actual javax.jms.Queue, or the result of as-queue.
+
+It takes the same options as publish.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L282">Source</a></div></div><div class="public " id="var-respond"><h3>respond</h3><div class="usage"><code>(respond queue f &amp; {:keys [decode? ttl], :or {decode? true, ttl 60000}, :as opts})</code></div><pre class="doc">Listen for messages on queue sent by the request function and
+respond with the result of applying f to the message. queue can
+either be the name of the queue, a javax.jms.Queue, or the result
+of as-queue. Accepts the same options as listen, along with [default]:
+
+  :ttl  time for the response mesage to live, in ms [60000, 1 minute]</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L303">Source</a></div></div><div class="public " id="var-start"><h3>start</h3><div class="usage"><code>(start name &amp; opts)</code></div><pre class="doc">Create a message destination; name should contain either 'queue'
+or 'topic', or be the result of calling as-queue or as-topic. If
+a :selector is provided, then only messages with
+metadata/properties matching that expression will be accepted for
+delivery.
+
+The following options are supported for queues only [default]:
+  :durable    whether messages persist across restarts [true]
+  :selector   a JMS (SQL 92) expression to filter published messages [nil]
+
+Additionally, you can pass any of the options expected by
+immutant.messaging.hornetq/set-address-options and they
+will be applied to the created destination.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L45">Source</a></div></div><div class="public " id="var-stop"><h3>stop</h3><div class="usage"><code>(stop name &amp; {:keys [force], :as opts})</code></div><pre class="doc">Destroy a message destination. Typically not necessary since it
+will be done for you when your app is undeployed. This will fail
+with a warning if any handlers are listening or any messages are
+yet to be delivered unless ':force true' is passed. Returns true on
+success.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L358">Source</a></div></div><div class="public " id="var-unlisten"><h3>unlisten</h3><div class="usage"><code>(unlisten listener)</code></div><pre class="doc">Pass the result of a call to listen or respond to de-register the handler.
+You only need to do this if you wish to stop the handler's
+destination before your app is undeployed.
+
+unlisten is asynchronous - if you need to synchronize on its
+completion, you should deref the result. The result of the
+call. The deref will resolve to a boolean that is true if there was
+actually something to unlisten, false otherwise.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L339">Source</a></div></div><div class="public " id="var-unsubscribe"><h3>unsubscribe</h3><div class="usage"><code>(unsubscribe client-id &amp; {:keys [subscriber-name], :or {subscriber-name default-subscriber-name}, :as opts})</code></div><pre class="doc">Used when durable topic subscribers are no longer interested. This
+cleans up some server-side state, but since it'll be be deleted
+anyway when the topic is stopped, it's an optional call.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L329">Source</a></div></div><div class="public " id="var-with-connection"><h3>with-connection</h3><h4 class="type">macro</h4><div class="usage"><code>(with-connection options &amp; body)</code></div><pre class="doc">Can be used to set default options for the messaging functions
+called within its body. More importantly, the nested calls will
+re-use the JMS Connection created by this function unless the
+nested calls' connection-related options differ.</pre><div class="src-link"><a href="https://github.com/immutant/immutant/tree/1.1.0//modules/messaging/src/main/clojure/immutant/messaging.clj#L66">Source</a></div></div></div></body></html>

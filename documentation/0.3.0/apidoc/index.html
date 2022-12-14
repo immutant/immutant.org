@@ -1,0 +1,348 @@
+<html>
+  <head>
+    <title>Overview - Immutant Clojure API API documentation</title>
+    <link href="static/favicon.png" rel="icon" />
+    <link href="static/favicon.png" rel="shortcut icon" />
+    <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/wiki.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/internal.css" rel="stylesheet" />
+    <style>.menuWrapper{height: 36px;}</style>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" href="http://www.wikispaces.com/_/2009051601/s/internal_ie.css" type="text/css" />
+    <![endif]-->
+  </head>
+<!--
+This document was auto-generated from the source by the clojure autodoc system.
+To report errors or ask questions about the overall documentation structure, formatting,
+etc., contact Tom Faulhaber (google mail name: tomfaulhaber).
+For errors in the documentation of a particular namespace, contact the author of that
+namespace.
+-->
+  <body>
+    <div id="AllContentContainer">
+      <div id="Header">
+	<!-- <a href="index.html" id="Logo"><img src="static/immutant-icon.gif" width="100" height="100" alt="Immutant" /></a> -->
+	<h1><a title="page header title" id="page-header" href="index.html">Immutant Clojure API</a> - v0.3.0</h1>
+      </div>
+      <div id="leftcolumn"><div style="text-align: center;"></div>
+<div class="menu">
+  <div class="WikiCustomNav WikiElement wiki">
+    <span class="toc-header"><span id="project-name">Immutant Clojure API</span> <span id="version"></span></span><br />
+    <ul>
+      <li><a class="wiki_link" href="index.html">Overview</a></li>
+      <li><a class="wiki_link" href="api-index.html">API Index</a></li>
+    </ul>
+    <div class="NamespaceTOC">
+      <span class="toc-header">Namespaces</span>
+      <ul id="left-sidebar-list">
+        <li><a href="immutant.messaging-api.html" class="wiki_link">immutant.messaging</a></li><li><a href="immutant.runtime-api.html" class="wiki_link">immutant.runtime</a></li><li><a href="immutant.repl-api.html" class="wiki_link">immutant.repl</a></li><li><a href="immutant.dev-api.html" class="wiki_link">immutant.dev</a></li><li><a href="immutant.daemons-api.html" class="wiki_link">immutant.daemons</a></li><li><a href="immutant.cache-api.html" class="wiki_link">immutant.cache</a></li><li><a href="immutant.xa-api.html" class="wiki_link">immutant.xa</a></li><li><a href="immutant.web-api.html" class="wiki_link">immutant.web</a></li><li><a href="immutant.jobs-api.html" class="wiki_link">immutant.jobs</a></li>
+      </ul>
+    </div>
+    
+    <a href="http://immutant.org" class="wiki_link">Immutant Home</a>
+    <a href="../index.html" class="wiki_link">Immutant Manual</a>
+
+  </div>
+</div>
+</div>
+      <div id="rightcolumn">
+	<div id="Content">
+	  <div class="contentBox"><div class="innerContentBox">
+              <div id="content_view" class="wiki wikiPage">
+                <div id="right-sidebar"><div id="toc">
+  <h1 class="nopad">Table of Contents</h1>
+  <div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.messaging">immutant.messaging</a>
+    
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.runtime">immutant.runtime</a>
+    
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.repl">immutant.repl</a>
+    
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.dev">immutant.dev</a>
+    
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.daemons">immutant.daemons</a>
+    
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.cache">immutant.cache</a>
+    
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.xa">immutant.xa</a>
+    
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.web">immutant.web</a>
+    
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.jobs">immutant.jobs</a>
+    
+    <br />
+  </div>
+</div>
+</div>
+                <div id="content-tag"><h1 id="toc0">API Overview - <span id="header-project">Immutant Clojure API</span> <span id="header-version"></span></h1>
+<br />
+<div id="project-description"></div>
+<br />
+<div class="namespace-entry" id="namespace-entry">
+  <h2 class="namespace-header" id="immutant.messaging">immutant.messaging</h2>
+  
+  <a href="immutant.messaging-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr">Easily publish and receive messages containing any type of nested
+data structure to dynamically-created topics and queues. Message
+distribution is automatically load-balanced when clustered.</pre>
+  
+  
+  
+  Public variables and functions:
+  <span id="var-link"><a href="immutant.messaging-api.html#immutant.messaging/listen" id="var-tag">listen</a> </span><span id="var-link"><a href="immutant.messaging-api.html#immutant.messaging/message-seq" id="var-tag">message-seq</a> </span><span id="var-link"><a href="immutant.messaging-api.html#immutant.messaging/publish" id="var-tag">publish</a> </span><span id="var-link"><a href="immutant.messaging-api.html#immutant.messaging/receive" id="var-tag">receive</a> </span><span id="var-link"><a href="immutant.messaging-api.html#immutant.messaging/request" id="var-tag">request</a> </span><span id="var-link"><a href="immutant.messaging-api.html#immutant.messaging/respond" id="var-tag">respond</a> </span><span id="var-link"><a href="immutant.messaging-api.html#immutant.messaging/start" id="var-tag">start</a> </span><span id="var-link"><a href="immutant.messaging-api.html#immutant.messaging/stop" id="var-tag">stop</a> </span><span id="var-link"><a href="immutant.messaging-api.html#immutant.messaging/unlisten" id="var-tag">unlisten</a> </span><br />
+  <span id="subspace"><br />Variables and functions in
+    <span id="name">immutant.messaging.codecs</span>:
+    <span id="sub-var-link">
+      <a href="immutant.messaging-api.html#immutant.messaging.codecs/AsText">AsText</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.messaging-api.html#immutant.messaging.codecs/decode-if">decode-if</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.messaging-api.html#immutant.messaging.codecs/get-encoding">get-encoding</a>
+    </span>
+    <br />
+  </span><span id="subspace"><br />Variables and functions in
+    <span id="name">immutant.messaging.core</span>:
+    <span id="sub-var-link">
+      <a href="immutant.messaging-api.html#immutant.messaging.core/create-connection">create-connection</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.messaging-api.html#immutant.messaging.core/enlist-session">enlist-session</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.messaging-api.html#immutant.messaging.core/set-attributes!">set-attributes!</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.messaging-api.html#immutant.messaging.core/set-properties!">set-properties!</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.messaging-api.html#immutant.messaging.core/wait-for-destination">wait-for-destination</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.messaging-api.html#immutant.messaging.core/wash-publish-options">wash-publish-options</a>
+    </span>
+    <br />
+  </span><span id="subspace"><br />Variables and functions in
+    <span id="name">immutant.messaging.hornetq</span>:
+    <span id="sub-var-link">
+      <a href="immutant.messaging-api.html#immutant.messaging.hornetq/connection-factory">connection-factory</a>
+    </span>
+    <br />
+  </span>
+</div><div class="namespace-entry" id="namespace-entry">
+  <h2 class="namespace-header" id="immutant.runtime">immutant.runtime</h2>
+  
+  <a href="immutant.runtime-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr">This namespace is solely for use during the application runtime
+bootstrapping process. Applications shouldn't use anything here.</pre>
+  
+  
+  
+  Public variables and functions:
+  <span id="var-link"><a href="immutant.runtime-api.html#immutant.runtime/initialize" id="var-tag">initialize</a> </span><span id="var-link"><a href="immutant.runtime-api.html#immutant.runtime/require-and-invoke" id="var-tag">require-and-invoke</a> </span><span id="var-link"><a href="immutant.runtime-api.html#immutant.runtime/set-app-config" id="var-tag">set-app-config</a> </span><br />
+  <span id="subspace"><br />Variables and functions in
+    <span id="name">immutant.runtime.bootstrap</span>:
+    <span id="sub-var-link">
+      <a href="immutant.runtime-api.html#immutant.runtime.bootstrap/bundled-jars">bundled-jars</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.runtime-api.html#immutant.runtime.bootstrap/get-dependencies">get-dependencies</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.runtime-api.html#immutant.runtime.bootstrap/lib-dir">lib-dir</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.runtime-api.html#immutant.runtime.bootstrap/read-and-stringify-descriptor">read-and-stringify-descriptor</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.runtime-api.html#immutant.runtime.bootstrap/read-and-stringify-full-app-config">read-and-stringify-full-app-config</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.runtime-api.html#immutant.runtime.bootstrap/read-descriptor">read-descriptor</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.runtime-api.html#immutant.runtime.bootstrap/read-full-app-config">read-full-app-config</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.runtime-api.html#immutant.runtime.bootstrap/read-full-app-config-to-string">read-full-app-config-to-string</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.runtime-api.html#immutant.runtime.bootstrap/read-project">read-project</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.runtime-api.html#immutant.runtime.bootstrap/resource-paths">resource-paths</a>
+    </span>
+    <br />
+  </span>
+</div><div class="namespace-entry" id="namespace-entry">
+  <h2 class="namespace-header" id="immutant.repl">immutant.repl</h2>
+  
+  <a href="immutant.repl-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr">Provides tools for starting swank and nrepl servers.</pre>
+  
+  
+  
+  Public variables and functions:
+  <span id="var-link"><a href="immutant.repl-api.html#immutant.repl/init-repl" id="var-tag">init-repl</a> </span><span id="var-link"><a href="immutant.repl-api.html#immutant.repl/start-nrepl" id="var-tag">start-nrepl</a> </span><span id="var-link"><a href="immutant.repl-api.html#immutant.repl/start-swank" id="var-tag">start-swank</a> </span><span id="var-link"><a href="immutant.repl-api.html#immutant.repl/stop-nrepl" id="var-tag">stop-nrepl</a> </span><span id="var-link"><a href="immutant.repl-api.html#immutant.repl/stop-swank" id="var-tag">stop-swank</a> </span><br />
+  
+</div><div class="namespace-entry" id="namespace-entry">
+  <h2 class="namespace-header" id="immutant.dev">immutant.dev</h2>
+  
+  <a href="immutant.dev-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr">Functions useful for repl based development inside an Immutant container. They
+shouldn't be used in production.</pre>
+  
+  
+  
+  Public variables and functions:
+  <span id="var-link"><a href="immutant.dev-api.html#immutant.dev/current-dependencies" id="var-tag">current-dependencies</a> </span><span id="var-link"><a href="immutant.dev-api.html#immutant.dev/merge-dependencies!" id="var-tag">merge-dependencies!</a> </span><span id="var-link"><a href="immutant.dev-api.html#immutant.dev/reload-dependencies!" id="var-tag">reload-dependencies!</a> </span><br />
+  
+</div><div class="namespace-entry" id="namespace-entry">
+  <h2 class="namespace-header" id="immutant.daemons">immutant.daemons</h2>
+  
+  <a href="immutant.daemons-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr">Asynchronous services that share the lifecycle of your application</pre>
+  
+  
+  
+  Public variables and functions:
+  <span id="var-link"><a href="immutant.daemons-api.html#immutant.daemons/start" id="var-tag">start</a> </span><br />
+  
+</div><div class="namespace-entry" id="namespace-entry">
+  <h2 class="namespace-header" id="immutant.cache">immutant.cache</h2>
+  
+  <a href="immutant.cache-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr">Infinispan-backed implementations of core.cache and core.memoize
+protocols supporting multiple replication options and more.</pre>
+  
+  
+  
+  Public variables and functions:
+  <span id="var-link"><a href="immutant.cache-api.html#immutant.cache/-&gt;DelayedCache" id="var-tag">-&gt;DelayedCache</a> </span><span id="var-link"><a href="immutant.cache-api.html#immutant.cache/-&gt;InfinispanCache" id="var-tag">-&gt;InfinispanCache</a> </span><span id="var-link"><a href="immutant.cache-api.html#immutant.cache/Mutable" id="var-tag">Mutable</a> </span><span id="var-link"><a href="immutant.cache-api.html#immutant.cache/cache" id="var-tag">cache</a> </span><span id="var-link"><a href="immutant.cache-api.html#immutant.cache/delete" id="var-tag">delete</a> </span><span id="var-link"><a href="immutant.cache-api.html#immutant.cache/delete-all" id="var-tag">delete-all</a> </span><span id="var-link"><a href="immutant.cache-api.html#immutant.cache/memo" id="var-tag">memo</a> </span><span id="var-link"><a href="immutant.cache-api.html#immutant.cache/put" id="var-tag">put</a> </span><span id="var-link"><a href="immutant.cache-api.html#immutant.cache/put-all" id="var-tag">put-all</a> </span><span id="var-link"><a href="immutant.cache-api.html#immutant.cache/put-if-absent" id="var-tag">put-if-absent</a> </span><span id="var-link"><a href="immutant.cache-api.html#immutant.cache/put-if-present" id="var-tag">put-if-present</a> </span><span id="var-link"><a href="immutant.cache-api.html#immutant.cache/put-if-replace" id="var-tag">put-if-replace</a> </span><br />
+  <span id="subspace"><br />Variables and functions in
+    <span id="name">immutant.cache.core</span>:
+    <span id="sub-var-link">
+      <a href="immutant.cache-api.html#immutant.cache.core/raw-cache">raw-cache</a>
+    </span>
+    <br />
+  </span>
+</div><div class="namespace-entry" id="namespace-entry">
+  <h2 class="namespace-header" id="immutant.xa">immutant.xa</h2>
+  
+  <a href="immutant.xa-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr">Distributed XA transactional support</pre>
+  
+  
+  
+  Public variables and functions:
+  <span id="var-link"><a href="immutant.xa-api.html#immutant.xa/datasource" id="var-tag">datasource</a> </span><span id="var-link"><a href="immutant.xa-api.html#immutant.xa/transaction" id="var-tag">transaction</a> </span><br />
+  <span id="subspace"><br />Variables and functions in
+    <span id="name">immutant.xa.transaction</span>:
+    <span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/active?">active?</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/after-completion">after-completion</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/available?">available?</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/begin">begin</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/current">current</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/enlist">enlist</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/mandatory">mandatory</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/never">never</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/no-tx-strategy">no-tx-strategy</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/not-supported">not-supported</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/required">required</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/requires-new">requires-new</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/set-rollback-only">set-rollback-only</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/supports">supports</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.xa-api.html#immutant.xa.transaction/suspend">suspend</a>
+    </span>
+    <br />
+  </span>
+</div><div class="namespace-entry" id="namespace-entry">
+  <h2 class="namespace-header" id="immutant.web">immutant.web</h2>
+  
+  <a href="immutant.web-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr">Associate one or more Ring handlers with your application, mounted
+at unique context paths</pre>
+  
+  
+  
+  Public variables and functions:
+  <span id="var-link"><a href="immutant.web-api.html#immutant.web/start" id="var-tag">start</a> </span><span id="var-link"><a href="immutant.web-api.html#immutant.web/stop" id="var-tag">stop</a> </span><br />
+  <span id="subspace"><br />Variables and functions in
+    <span id="name">immutant.web.core</span>:
+    <span id="sub-var-link">
+      <a href="immutant.web-api.html#immutant.web.core/normalize-subcontext-path">normalize-subcontext-path</a>
+    </span>
+    <br />
+  </span><span id="subspace"><br />Variables and functions in
+    <span id="name">immutant.web.session</span>:
+    <span id="sub-var-link">
+      <a href="immutant.web-api.html#immutant.web.session/-&gt;ServletStore">-&gt;ServletStore</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.web-api.html#immutant.web.session/servlet-session">servlet-session</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.web-api.html#immutant.web.session/servlet-store">servlet-store</a>
+    </span>
+    <br />
+  </span><span id="subspace"><br />Variables and functions in
+    <span id="name">immutant.web.session.handler</span>:
+    <span id="sub-var-link">
+      <a href="immutant.web-api.html#immutant.web.session.handler/remove-ring-session-cookie">remove-ring-session-cookie</a>
+    </span>
+    <br />
+  </span>
+</div><div class="namespace-entry" id="namespace-entry">
+  <h2 class="namespace-header" id="immutant.jobs">immutant.jobs</h2>
+  
+  <a href="immutant.jobs-api.html" id="api-link">Detailed API documentation</a><br />
+  <pre id="namespace-docstr">Associate recurring jobs with an application using cron-like specifications</pre>
+  
+  
+  
+  Public variables and functions:
+  <span id="var-link"><a href="immutant.jobs-api.html#immutant.jobs/schedule" id="var-tag">schedule</a> </span><span id="var-link"><a href="immutant.jobs-api.html#immutant.jobs/unschedule" id="var-tag">unschedule</a> </span><br />
+  <span id="subspace"><br />Variables and functions in
+    <span id="name">immutant.jobs.internal</span>:
+    <span id="sub-var-link">
+      <a href="immutant.jobs-api.html#immutant.jobs.internal/create-job">create-job</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.jobs-api.html#immutant.jobs.internal/create-scheduler">create-scheduler</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.jobs-api.html#immutant.jobs.internal/scheduler">scheduler</a>
+    </span><span id="sub-var-link">
+      <a href="immutant.jobs-api.html#immutant.jobs.internal/stop-job">stop-job</a>
+    </span>
+    <br />
+  </span>
+</div>
+</div>
+              </div>
+            </div>
+          </div>
+	</div>
+	<div id="foot">
+	  <div style="text-align: center;" id="copyright">Copyright 2011-2012 Red Hat, Inc.</div>
+	</div>
+      </div>
+      <div id="DesignedBy">Based on a site design by <a title="Visit Tom Hickey's website." href="http://www.tomhickey.com">Tom Hickey</a>.<br />
+      <a href="http://tomfaulhaber.github.com/autodoc/">Clojure auto-documentation system</a> by Tom Faulhaber.</div>
+    </div>
+    <!-- /AllContentContainer -->
+  </body>
+
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Distributed Transactions (XA)</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Distributed Transactions (XA)" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2012-11-12 08:17:44 EST" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="caching.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="daemons.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 9. Distributed Transactions (XA)</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="transactions.html#sec-1">9.1. Introduction</a></li>
+<li><a href="transactions.html#sec-2">9.2. Creating XA DataSources</a>
+<ul>
+<li><a href="transactions.html#sec-2-1">9.2.1. For use with clojure.java.jdbc</a>
+<ul>
+<li><a href="transactions.html#sec-2-1-1">9.2.1.1. Using immutant.xa/datasource</a></li>
+<li><a href="transactions.html#sec-2-1-2">9.2.1.2. Using an AS7-configured DataSource</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="transactions.html#sec-3">9.3. Defining Transactions</a>
+<ul>
+<li><a href="transactions.html#sec-3-1">9.3.1. Transaction Scope</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">9.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>  
+  Immutant encapsulates the distributed transaction support provided
+  by JBoss AS7 within the <a href="./apidoc/immutant.xa-api.html">immutant.xa</a> namespace.
+</p>
+<p>
+  A <b>distributed</b> transaction is one in which multiple types of
+  resources may participate. The most common example of a
+  transactional resource is a relational database, but in Immutant
+  both caching (backed by <a href="http://www.infinispan.org">Infinispan</a>) and messaging (backed by
+  <a href="http://www.jboss.org/hornetq/">HornetQ</a>) are also automatically transactional. Technically speaking,
+  they provide implementations of the <a href="http://en.wikipedia.org/wiki/X/Open_XA">XA protocol</a>, and any back-end
+  data store that does so may participate in an Immutant transaction.
+</p>
+<p>
+  This allows your application to say, tie the success of a SQL
+  database update or the storage of an entry on a replicated data grid
+  to the delivery of a message to a remote queue, i.e. the message is
+  only sent if the database and data grid update successfully. If any
+  single component of an XA transaction fails, all of them rollback.
+</p>
+<p>
+  The <code>immutant.xa</code> namespace contains only two functions:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="left">
+</colgroup>
+<tbody>
+<tr><td class="left"><code>datasource</code></td><td class="left">Creates a valid XA DataSource for the most common SQL databases</td></tr>
+<tr><td class="left"><code>transaction</code></td><td class="left">A macro that wraps its body in a transaction unless one is already active</td></tr>
+</tbody>
+</table>
+
+
+<p>
+  More fine-grained transactional control is available through the
+  <a href="./apidoc/immutant.xa-api.html#immutant.xa.transaction">immutant.xa.transaction</a> namespace, described below.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">9.2.</span> Creating XA DataSources</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  In order for your database to participate in an XA transaction, an
+  XA DataSource must be created for it. In Immutant, you have two
+  options: either 1) call <code>immutant.xa/datasource</code> from your
+  application, or 2) use the JBoss AS7 configuration facilities. The
+  former is simple and recommended for most deployments, but the
+  latter can be easier to manage when multiple applications share the
+  same DataSource in a clustered environment.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-1">
+<h3 id="sec-2-1"><span class="section-number-3">9.2.1.</span> For use with <code>clojure.java.jdbc</code></h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   The spec you pass to <code>clojure.java.jdbc/with-connection</code> depends on
+   how you create the DataSource. If you call
+   <code>immmutant.xa/datasource</code>, then associate the <code>:datasource</code> key to its
+   result. 
+</p>
+<p>
+   Otherwise, set the <code>:name</code> key to the JNDI name you set for the
+   <code>xa-datasource</code> in the JBoss AS7 configuration.
+</p>
+<p>
+   And any library based on <code>clojure.java.jdbc</code> should work just fine
+   with that spec.
+</p>
+
+</div>
+
+<div class="outline-4" id="outline-container-2-1-1">
+<h4 id="sec-2-1-1"><span class="section-number-4">9.2.1.1.</span> Using <code>immutant.xa/datasource</code></h4>
+<div class="outline-text-4" id="text-2-1-1">
+
+
+<p>
+    To create your own DataSource, you must make the appropriate JDBC
+    driver available. This is easily done with a <a href="http://leiningen.org/">Leiningen</a> project in
+    <code>project.clj</code>. The following drivers have been tested
+    successfully:
+</p>
+
+
+
+<pre class="src src-clojure">(defproject foo <span class="org-string">"1.0.0-SNAPSHOT"</span>
+  <span class="org-builtin">:dependencies</span> [[com.h2database/h2 <span class="org-string">"1.3.160"</span>]              <span class="org-comment-delimiter">; </span><span class="org-comment">H2</span>
+                 [org.clojars.gukjoon/ojdbc <span class="org-string">"1.4"</span>]          <span class="org-comment-delimiter">; </span><span class="org-comment">Oracle</span>
+                 [org.clojars.kjw/mysql-connector <span class="org-string">"5.1.11"</span>] <span class="org-comment-delimiter">; </span><span class="org-comment">MySQL</span>
+                 [postgresql <span class="org-string">"9.0-801.jdbc4"</span>]               <span class="org-comment-delimiter">; </span><span class="org-comment">Postgres</span>
+                 [net.sourceforge.jtds/jtds <span class="org-string">"1.2.4"</span>]        <span class="org-comment-delimiter">; </span><span class="org-comment">MS SQL Server</span>
+                 [java.jdbc <span class="org-string">"0.2.2"</span>]])
+</pre>
+
+
+<p>
+    Here's an example creating a DataSource for an in-memory H2 database:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">defonce</span> <span class="org-function-name">ds</span> (immutant.xa/datasource <span class="org-string">"foo"</span> {<span class="org-builtin">:adapter</span> <span class="org-string">"h2"</span> <span class="org-builtin">:database</span> <span class="org-string">"mem:foo"</span>}))
+(jdbc/with-connection {<span class="org-builtin">:datasource</span> ds}
+  (jdbc/create-table <span class="org-builtin">:things</span> [<span class="org-builtin">:name</span> <span class="org-string">"varchar(50)"</span>]))
+</pre>
+
+
+<p>
+    Here's an example creating an Oracle DataSource for an Amazon RDS
+    instance:
+</p>
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;;; </span><span class="org-comment">rds-create-db-instance myinstance -s 10 -c db.m1.small -e oracle-se -u myuser -p mypassword --db-name mydb</span>
+(<span class="org-keyword">defonce</span> <span class="org-function-name">ds</span> (ixa/datasource <span class="org-string">"foo"</span> {<span class="org-builtin">:adapter</span> <span class="org-string">"oracle"</span>
+                                   <span class="org-builtin">:host</span> <span class="org-string">"myinstance.xxxxxxxxxxxx.us-east-1.rds.amazonaws.com"</span>
+                                   <span class="org-builtin">:username</span> <span class="org-string">"myuser"</span>
+                                   <span class="org-builtin">:password</span> <span class="org-string">"mypassword"</span>
+                                   <span class="org-builtin">:database</span> <span class="org-string">"mydb"</span>}))
+(jdbc/with-connection {<span class="org-builtin">:datasource</span> ds} ...)
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-2-1-2">
+<h4 id="sec-2-1-2"><span class="section-number-4">9.2.1.2.</span> Using an AS7-configured DataSource</h4>
+<div class="outline-text-4" id="text-2-1-2">
+
+
+<p>
+    Once you've <a href="https://docs.jboss.org/author/display/AS71/DataSource+configuration">configured your XA DataSource in AS7</a>, you simply refer
+    to its JNDI name:
+</p>
+
+
+
+<pre class="src src-clojure">(jdbc/with-connection {<span class="org-builtin">:name</span> <span class="org-string">"java:jboss/datasources/ExampleXADS"</span>}
+  (jdbc/create-table <span class="org-builtin">:things</span> [<span class="org-builtin">:name</span> <span class="org-string">"varchar(50)"</span>]))
+</pre>
+
+
+
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-3">
+<h2 id="sec-3"><span class="section-number-2">9.3.</span> Defining Transactions</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  A transaction is easily defined using the <code>immutant.xa/transaction</code>
+  macro:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> xa.example
+  (<span class="org-builtin">:require</span> [immutant.xa <span class="org-builtin">:as</span> xa]
+            [immutant.cache <span class="org-builtin">:as</span> cache]
+            [immutant.messaging <span class="org-builtin">:as</span> msg]
+            [clojure.java.jdbc <span class="org-builtin">:as</span> sql]))
+
+(xa/transaction
+ (sql/with-connection {<span class="org-builtin">:datasource</span> my-ds}
+   (sql/insert-records <span class="org-builtin">:things</span> {<span class="org-builtin">:name</span> <span class="org-string">"foo"</span>}))
+ (cache/put my-cache <span class="org-builtin">:a</span> 1)
+ (msg/publish <span class="org-string">"/queue/test"</span> <span class="org-string">"success!"</span>))
+</pre>
+
+
+<p>
+  In the example above, we insert a record into a SQL database, write
+  an entry to a cache and publish a message to a queue, all within the
+  same XA transaction. If the body of <code>xa/transaction</code> runs without
+  tossing an exception, the transaction will be committed. Otherwise
+  it will be rolled back. All or nothing. Simple.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-3-1">
+<h3 id="sec-3-1"><span class="section-number-3">9.3.1.</span> Transaction Scope</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+<p>
+   When transactional components interact, the state of a transaction
+   when a particular function is invoked isn't always easy to predict.
+   For example, can a function that requires a transaction assume one
+   has been started prior to its invocation? In JEE container-managed
+   persistence, a developer answers these questions using the
+   <code>@TransactionAttribute</code> annotation.
+</p>
+<p>
+   But annotations are gross, right? :)
+</p>
+<p>
+   So instead, <a href="./apidoc/immutant.xa-api.html#immutant.xa.transaction">immutant.xa.transaction</a> provides analogs to <a href="http://docs.oracle.com/javaee/6/tutorial/doc/bncij.html">the JEE transaction attributes</a> in the form of Clojure macros. In fact, the
+   <code>xa/transaction</code> macro shown above is merely an alias for
+   <code>immutant.xa.transaction/required</code>, which is the implicit attribute
+   used in JEE. There are a total of 6 macros:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="left">
+</colgroup>
+<tbody>
+<tr><td class="left"><code>required</code></td><td class="left">Execute within current transaction, if any, otherwise start a new one, execute, commit or rollback.</td></tr>
+<tr><td class="left"><code>requires-new</code></td><td class="left">Suspend current transaction, if any, start a new one, execute, commit or rollback, and resume the suspended one.</td></tr>
+<tr><td class="left"><code>not-supported</code></td><td class="left">Suspend current transaction, if any, and execute without a transaction.</td></tr>
+<tr><td class="left"><code>supports</code></td><td class="left">Execute the body whether there's a transaction or not; may lead to unpredictable results</td></tr>
+<tr><td class="left"><code>mandatory</code></td><td class="left">Toss an exception if there's no active transaction</td></tr>
+<tr><td class="left"><code>never</code></td><td class="left">Toss an exception if there is an active transaction</td></tr>
+</tbody>
+</table>
+
+
+<p>
+   These macros give the developer complete declarative control over
+   the transactional semantics of his application as its functional
+   chunks are combined.
+</p></div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="caching.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="daemons.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 0.6.0</div>
+</div>
+
+
+</body></html>

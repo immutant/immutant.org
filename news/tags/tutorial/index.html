@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | News
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            News
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2014/06/09/immutant-messaging-2x/">Messaging with The Deuce</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Toby Crawley
+                </div>
+                <div class="date">
+                  Monday, June  9, 2014
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/thedeuce/">thedeuce</a>
+                <a href="/news/tags/getting-started/">getting-started</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/messaging/">messaging</a>
+              </div>
+              <div class="body">
+                <p><a href="https://flic.kr/p/6ZpegH"><img src="/images/news/mailboxes.jpg" alt="[mailboxes]" class="alignleft bordered"/></a></p>
+                
+                <p>In this installment of our series on
+                <a href="/news/tags/thedeuce/">getting started with Immutant 2</a>, we&#39;ll take a
+                detailed look at the API of our library for messaging, and show
+                a few examples of usage.</p>
+                
+                <p>If you&#39;re coming from Immutant 1.x, you may notice that the artifact
+                has been renamed (<code>org.immutant/immutant-messaging</code> is now
+                <code>org.immutant/messaging</code>), and the API has changed a bit. We&#39;ll point
+                out the notable API changes as we go.</p>
+                
+                <h2 id="The_API" onclick="window.location = '#The_API'">The API</h2>
+                
+                <p>The messaging <a href="/builds/2x/LATEST/target/apidocs/index.html">API</a>
+                 is backed by <a href="http://hornetq.jboss.org/">HornetQ</a>, which is an implementation
+                of <a href="https://en.wikipedia.org/wiki/Java_Message_Service">JMS</a>. JMS provides two primary destination types: <em>queues</em> and
+                <em>topics</em>. Queues represent point-to-point destinations, and topics
+                publish/subscribe.</p>
+                
+                <p>To use a destination, we need to get a reference to one via the
+                <a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-queue">queue</a> or
+                <a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-topic">topic</a>
+                functions, depending on the type required. This will create the
+                destination if it does not already exist. This is a bit different than
+                the 1.x API, which provided a single <code>start</code> function for this, and
+                determined the type of destination based on conventions around the
+                provided name. In 2.x, we&#39;ve removed those naming conventions.</p>
+                
+                <p>Once we have a reference to a destination, we can operate on it with
+                the following functions:</p>
+                
+                <ul>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-publish">publish</a> -
+                sends a message to the destination</li>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-receive">receive</a> -
+                receives a single message from the destination</li>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-listen">listen</a> -
+                registers a function to be called each time a message
+                arrives at the destination</li>
+                </ul>
+                
+                <p>If the destination is a queue, we can do synchronous messaging
+                (<a href="https://en.wikipedia.org/wiki/Request-response">request-response</a>):</p>
+                
+                <ul>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-respond">respond</a> -
+                registers a function that receives each request, and the
+                returned value will be sent back to the requester</li>
+                <li><a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-request">request</a> -
+                sends a message to the responder</li>
+                </ul>
+                
+                <p>Finally, to deregister listeners, responders, and destinations, we
+                provide a single
+                <a href="/builds/2x/LATEST/target/apidocs/immutant.messaging.html#var-stop">stop</a>
+                function. This is another difference from 1.x -
+                the <code>unlisten</code> and <code>stop</code> functions have been collapsed to <code>stop</code>.</p>
+                
+                <h3 id="Some_Examples" onclick="window.location = '#Some_Examples'">Some Examples</h3>
+                
+                <p>The following code fragments were tested against
+                <a href="http://immutant.org/builds/2x/">2.x.incremental.133</a>. You should
+                follow the instructions in the <a href="/news/2014/04/28/getting-started-with-2x/">getting started</a> post to set up a
+                project using Immutant 2.x, and add
+                <code>[org.immutant/messaging &quot;2.x.incremental.133&quot;]</code> and
+                <code>[cheshire &quot;5.3.1&quot;]</code> to the project dependencies (we&#39;ll be encoding
+                some messages as JSON in our examples below, so we&#39;ll go ahead and add
+                <a href="https://github.com/dakrone/cheshire">cheshire</a> while we&#39;re at
+                it). Then, fire up a REPL, and require the <code>immutant.messaging</code>
+                namespace to follow along:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.messaging :refer :all])</pre>
+                
+                <p>First, let&#39;s create a queue:</p>
+                
+                <pre class="syntax clojure">(queue "my-queue")</pre>
+                
+                <p>That will create the queue in the HornetQ broker for us. We&#39;ll need a
+                reference to that queue to operate on it. Let&#39;s go ahead and store
+                that reference in a var:</p>
+                
+                <pre class="syntax clojure">(def q (queue "my-queue"))</pre>
+                
+                <p>We can call <code>queue</code> any number of times - if the queue already exists,
+                we&#39;re just grabbing a reference to it.</p>
+                
+                <p>Now, let&#39;s register a listener on our queue. Let&#39;s just print every
+                message we get:</p>
+                
+                <pre class="syntax clojure">(def listener (listen q println))</pre>
+                
+                <p>We can publish to that queue, and see that the listener gets called:</p>
+                
+                <pre class="syntax clojure">(publish q {:hi :there})</pre>
+                
+                <p>You&#39;ll notice that we&#39;re publishing a map there - we can publish
+                pretty much any data structure as a message. By default, that message
+                will be encoded using <a href="https://github.com/edn-format/edn">edn</a>. We also support other encodings, namely:
+                <code>:clojure</code>, <code>:fressian</code>, <code>:json</code>, and <code>:text</code>. We can choose a
+                different encoding by passing an :encoding option to <code>publish</code>:</p>
+                
+                <pre class="syntax clojure">(publish q {:hi :there} :encoding :json)</pre>
+                
+                <p>Out of the box, we provide full support for the <code>:clojure</code>, <code>:edn</code>,
+                and <code>:text</code> encodings. If you want to use <code>:fressian</code> or <code>:json</code>,
+                you&#39;ll need to add <code>org.clojure/data.fressian</code> or <code>cheshire</code> to your
+                dependencies to enable them, respectively.</p>
+                
+                <p>We passed our options to <code>publish</code> as keyword arguments, but they can
+                also be passed as a map:</p>
+                
+                <pre class="syntax clojure">(publish q {:hi :there} {:encoding :json})</pre>
+                
+                <p>This holds true for any of the messaging functions that take options.</p>
+                
+                <p>We&#39;re also passing the destination reference to <code>publish</code> instead of the
+                destination name. That&#39;s a departure from 1.x, where you could just pass the
+                destination name. Since we no longer have conventions about how queues and
+                topics should be named, we can no longer determine the type of the
+                destination from the name alone.</p>
+                
+                <p>We can deregister the listener by either passing it to <code>stop</code> or
+                calling <code>.close</code> on it:</p>
+                
+                <pre class="syntax clojure">(stop listener)&#x000A;;; identical to&#x000A;(.close listener)</pre>
+                
+                <p>Now let&#39;s take a look at synchronous messaging. Let&#39;s create a new
+                queue for this (you&#39;ll want to use a dedicated queue for each
+                responder) and register a responder that just increments the request:</p>
+                
+                <pre class="syntax clojure">(def sync-q (queue "sync"))&#x000A;&#x000A;(def responder (respond sync-q inc))</pre>
+                
+                <p>Then, we make a request, which returns a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Future.html">Future</a> that we can
+                dereference:</p>
+                
+                <pre class="syntax clojure">@(request sync-q 1)</pre>
+                
+                <p>The responder is just a fancy listener, and can be deregistered the
+                same way as a listener.</p>
+                
+                <h2 id="That&#39;s_not_all..." onclick="window.location = '#That&#39;s_not_all...'">That&#39;s not all...</h2>
+                
+                <p>That was just a brief introduction to the messaging API. There are
+                features we&#39;ve yet to cover (durable topic subscriptions,
+                connection/session sharing, transactional sessions, remote
+                connections), but it&#39;s getting late, so we&#39;ll save those for another
+                time.</p>
+                
+                <h2 id="Try_it_out!" onclick="window.location = '#Try_it_out!'">Try it out!</h2>
+                
+                <p>As always, we&#39;d love to incorporate your feedback. Find us via our
+                <a href="http://immutant.org/community/">community</a> page and join the fun!</p>
+                
+                <p><em>Thanks to <a href="https://flic.kr/p/6ZpegH">John Lillis</a> for the image, used under <a href="https://creativecommons.org/licenses/by-nc-nd/2.0/">CC BY-NC-ND</a></em></p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2014/06/09/immutant-messaging-2x/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2014/05/16/immutant-scheduling-2x/">Schedule Some Time with The Deuce</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Jim Crossley
+                </div>
+                <div class="date">
+                  Friday, May 16, 2014
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/thedeuce/">thedeuce</a>
+                <a href="/news/tags/getting-started/">getting-started</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/scheduling/">scheduling</a>
+              </div>
+              <div class="body">
+                <p><a href="https://flic.kr/p/Ea16j"><img src="/images/news/timeclock.jpg" alt="[timeclock]" class="alignright"/></a></p>
+                
+                <p>In this installment of our series on
+                <a href="/news/tags/thedeuce/">getting started with Immutant 2</a>, we&#39;ll take a
+                detailed look at the API of our library for scheduling jobs, and show
+                a few examples of usage.</p>
+                
+                <p>If you&#39;re coming from Immutant 1.x, you&#39;ll notice that the namespace
+                and artifact have been renamed (what used to be <code>immutant.jobs</code> and
+                <code>org.immutant/immutant-jobs</code> is now <code>immutant.scheduling</code> and
+                <code>org.immutant/scheduling</code>), and the API has changed a bit.  It&#39;s still
+                based on Quartz 2.2, though.</p>
+                
+                <h2 id="The_API" onclick="window.location = '#The_API'">The API</h2>
+                
+                <p>At first glance, the API for <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.scheduling.html">immutant.scheduling</a> appears bigger than
+                it really is, but there are only two essential functions:</p>
+                
+                <ul>
+                <li><code>schedule</code> - for scheduling your jobs</li>
+                <li><code>stop</code> - for canceling them</li>
+                </ul>
+                
+                <p>The remainder of the namespace is syntactic sugar: functions that can
+                be composed to create the specification for when your job should run.</p>
+                
+                <p>Your &quot;job&quot; will take the form of a plain ol&#39; Clojure function taking
+                no arguments. The <code>schedule</code> function takes your job and a
+                <em>specification map</em> as arguments. The map determines when your
+                function gets called. It may contain any of the following keys:</p>
+                
+                <ul>
+                <li><code>:in</code> - a period after which your function will be called</li>
+                <li><code>:at</code> - an instant in time after which your function will be called</li>
+                <li><code>:every</code> - the period between calls</li>
+                <li><code>:until</code> - stops the calls at a specific time</li>
+                <li><code>:limit</code> - limits the calls to a specific count</li>
+                <li><code>:cron</code> - calls your function according to a <a href="http://quartz-scheduler.org/documentation/quartz-2.2.x/tutorials/tutorial-lesson-06">Quartz-style</a> cron spec</li>
+                </ul>
+                
+                <p>For each key there is a corresponding &quot;sugar function&quot;. We&#39;ll see
+                those in the examples below.</p>
+                
+                <p>Units for periods (<code>:in</code> and <code>:every</code>) are milliseconds, but can also
+                be represented as a keyword or a vector of multiplier/keyword pairs,
+                e.g. <code>[1 :week, 4 :days, 2 :hours, 30 :minutes, 59 :seconds]</code>. Both
+                singular and plural keywords are valid.</p>
+                
+                <p>Time values (<code>:at</code> and <code>:until</code>) can be a <code>java.util.Date</code>, a long
+                representing milliseconds-since-epoch, or a String in <code>HH:mm</code> format.
+                The latter will be interpreted as the next occurence of <code>HH:mm:00</code> in
+                the currently active timezone.</p>
+                
+                <p>Two additional options may be passed in the spec map:</p>
+                
+                <ul>
+                <li><code>:id</code> - a unique identifier for the scheduled job</li>
+                <li><code>:singleton</code> - a boolean denoting the job&#39;s behavior in a cluster [true]</li>
+                </ul>
+                
+                <p>In Immutant 1.x, a name for the job was required. In Immutant 2, the
+                <code>:id</code> is optional, and if not provided, a UUID will be generated. If
+                <code>schedule</code> is called with an <code>:id</code> for a job that has already been
+                scheduled, the prior job will be replaced.</p>
+                
+                <p>The return value from <code>schedule</code> is a map of the options with any
+                missing defaults filled in, including a generated id if necessary.
+                This result can be passed to <code>stop</code> to cancel the job.</p>
+                
+                <h3 id="Some_Examples" onclick="window.location = '#Some_Examples'">Some Examples</h3>
+                
+                <p>The following code fragments were tested against
+                <a href="http://immutant.org/builds/2x/">2.x.incremental.119</a>. You should read
+                through the <a href="/news/2014/04/28/getting-started-with-2x/">getting started</a> post and require the <code>immutant.scheduling</code>
+                namespace at a REPL to follow along:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.scheduling :refer :all])</pre>
+                
+                <p>We&#39;ll need a job to schedule. Here&#39;s one!</p>
+                
+                <pre class="syntax clojure">(defn job []&#x000A;  (prn 'fire!))</pre>
+                
+                <p>Let&#39;s schedule it:</p>
+                
+                <pre class="syntax clojure">(schedule job)</pre>
+                
+                <p>That was pretty useless. Without a spec, the job will be immediately
+                called asynchronously on one of the Quartz scheduler&#39;s threads.
+                Instead, let&#39;s have it run in 5 minutes:</p>
+                
+                <pre class="syntax clojure">(schedule job (in 5 :minutes))</pre>
+                
+                <p>And maybe run again every second after that:</p>
+                
+                <pre class="syntax clojure">(schedule job&#x000A;  (-> (in 5 :minutes)&#x000A;    (every :second)))</pre>
+                
+                <p>But no more than 60 times:</p>
+                
+                <pre class="syntax clojure">(schedule job&#x000A;  (-> (in 5 :minutes)&#x000A;    (every :second)&#x000A;    (limit 60)))</pre>
+                
+                <p>We could also anticipate getting stupid bored about halfway through,
+                and schedule another job to cancel the first one:</p>
+                
+                <pre class="syntax clojure">(let [it (schedule job&#x000A;           (-> (in 5 :minutes)&#x000A;             (every :second)&#x000A;             (limit 60)))]&#x000A;  (schedule #(stop it) (in 5 :minutes, 30 :seconds)))</pre>
+                
+                <p>Of course, you can bring your own job id&#39;s if you like:</p>
+                
+                <pre class="syntax clojure">(schedule job (-> (id :purge) (every 30 :minutes)))&#x000A;(schedule job (-> (id :purge) (every :hour)))  ; reschedule&#x000A;(stop (id :purge))</pre>
+                
+                <p>If a job is successfully canceled, <code>stop</code> returns true.</p>
+                
+                <h3 id="It&#39;s_Just_Maps" onclick="window.location = '#It&#39;s_Just_Maps'">It&#39;s Just Maps</h3>
+                
+                <p>Ultimately, the spec passed to <code>schedule</code> is just a map, and the sugar
+                functions are just assoc&#39;ing keys corresponding to their names. The
+                map can be passed either explicitly or via keyword arguments, so all
+                of the following are equivalent:</p>
+                
+                <pre class="syntax clojure">(schedule job (-> (in 5 :minutes) (every :day)))&#x000A;(schedule job {:in [5 :minutes], :every :day})&#x000A;(schedule job :in [5 :minutes], :every :day)</pre>
+                
+                <h3 id="Supports_Joda_clj-time" onclick="window.location = '#Supports_Joda_clj-time'">Supports Joda clj-time</h3>
+                
+                <p>If you&#39;re using the <a href="https://github.com/clj-time/clj-time">clj-time</a> library in your project, you can load
+                the <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.scheduling.joda.html">immutant.scheduling.joda</a> namespace. This will extend
+                <code>org.joda.time.DateTime</code> instances to the <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.scheduling.coercions.html">AsTime</a> protocol, enabling
+                them to be used as arguments to <code>at</code> and <code>until</code>, e.g.</p>
+                
+                <pre class="syntax clojure">(require '[clj-time.core :refer [today-at plus hours]])&#x000A;&#x000A;(let [t (today-at 9 00)]&#x000A;  (schedule job&#x000A;    (-> (at t)&#x000A;      (every 2 :hours)&#x000A;      (until (plus t (hours 8))))))</pre>
+                
+                <p>It also provides the function, <code>schedule-seq</code>. Inspired by <a href="https://github.com/james-henderson/chime#chime-at">chime-at</a>,
+                it takes not a specification map but a sequence of times, as might be
+                returned from <code>clj-time.periodic/periodic-seq</code>, subject to the
+                application of any of Clojure&#39;s core sequence-manipulating functions.</p>
+                
+                <p>When defining complex recurring schedules, this presents an
+                interesting alternative to traditional cron specs. For example,
+                consider a job that must run at 10am every weekday. Here&#39;s how we&#39;d
+                schedule that with a <a href="http://quartz-scheduler.org/documentation/quartz-2.2.x/tutorials/tutorial-lesson-06">Quartz-style</a> cron spec:</p>
+                
+                <pre class="syntax clojure">(schedule job (cron "0 0 10 ? * MON-FRI"))</pre>
+                
+                <p>And here&#39;s the same schedule using a lazy sequence:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.scheduling.joda :refer [schedule-seq]]&#x000A;         '[clj-time.core            :refer [today-at days]]&#x000A;         '[clj-time.periodic        :refer [periodic-seq]]&#x000A;         '[clj-time.predicates      :refer [weekday?]])&#x000A;&#x000A;(schedule-seq job&#x000A;  (->> (periodic-seq (today-at 10 0) (days 1))&#x000A;    (filter weekday?)))</pre>
+                
+                <p>So each has trade-offs, of course. The cron spec is more concise, but
+                also arguably more error-prone, e.g. what is that <code>?</code> for!?</p>
+                
+                <p>One very cool thing about the sequence is that I can test it without
+                actually scheduling it. On the other hand, my cron spec test is going
+                to take more than a week to run! ;)</p>
+                
+                <h2 id="Try_it_out!" onclick="window.location = '#Try_it_out!'">Try it out!</h2>
+                
+                <p>As always, we&#39;d love to incorporate your feedback. Find us via our
+                <a href="http://immutant.org/community/">community</a> page and join the fun!</p>
+                
+                <p><em>Thanks to <a href="https://www.flickr.com/photos/radialmonster/431783164">Phil Hart</a> for the image, used under <a href="https://creativecommons.org/licenses/by-nc-sa/2.0/">CC BY-NC-SA</a></em></p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2014/05/16/immutant-scheduling-2x/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2014/05/05/immutant-web-2x/">Untangling the Web in The Deuce</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Jim Crossley
+                </div>
+                <div class="date">
+                  Monday, May  5, 2014
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/thedeuce/">thedeuce</a>
+                <a href="/news/tags/getting-started/">getting-started</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/web/">web</a>
+              </div>
+              <div class="body">
+                <p>Our <code>org.immutant/web</code> library has changed quite a bit in Immutant 2,
+                both its API and its foundation: the <a href="http://undertow.io/">Undertow</a> web server. Among
+                other things, this gives us
+                <a href="https://github.com/ptaoussanis/clojure-web-server-benchmarks">much better performance</a>
+                (~35% more throughput than v1.1.1) and built-in support for
+                websockets.</p>
+                
+                <p>We&#39;ve given a lot of thought to the API, specifically argument names,
+                types, order, and return values. We&#39;re reasonably happy with what we
+                have at this point, but still very much open to suggestions for
+                improvements.</p>
+                
+                <h2 id="The_Web_API" onclick="window.location = '#The_Web_API'">The Web API</h2>
+                
+                <p>The API for <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.web.html">immutant.web</a> is small, just two functions and a
+                convenient macro:</p>
+                
+                <ul>
+                <li><code>run</code> - runs your handler in a specific environment, responding to
+                web requests matching a given host, port, and path. The handler may
+                be either a Ring function, Servlet instance, or Undertow
+                HttpHandler.</li>
+                <li><code>run-dmc</code> - runs your handler in <em>Development Mode</em> (the &#39;C&#39; is silent)</li>
+                <li><code>stop</code> - stops your handler[s]</li>
+                </ul>
+                
+                <p>The following code fragments were tested against
+                <a href="http://immutant.org/builds/2x/">2.x.incremental.96</a>. You should read
+                through the <a href="/news/2014/04/28/getting-started-with-2x/">getting started</a> post and require the <code>immutant.web</code>
+                namespace at a REPL to follow along:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.web :refer :all])</pre>
+                
+                <h3 id="Common_Usage" onclick="window.location = '#Common_Usage'">Common Usage</h3>
+                
+                <p>First, we&#39;ll need a <a href="https://github.com/ring-clojure/ring/wiki">Ring</a> handler. Yours is probably fancier, but
+                this one will do:</p>
+                
+                <pre class="syntax clojure">(defn app [request]&#x000A;  {:status 200&#x000A;   :body "Hello world!"})</pre>
+                
+                <p>To make the app available at <a href="http://localhost:8080/">http://localhost:8080/</a>, do this:</p>
+                
+                <pre class="syntax clojure">(run app)</pre>
+                
+                <p>Which, if we make the default values explicit, is equivalent to this:</p>
+                
+                <pre class="syntax clojure">(run app {:host "localhost" :port 8080 :path "/"})</pre>
+                
+                <p>Or, since <code>run</code> takes options as either an explicit map or keyword
+                arguments (kwargs), this:</p>
+                
+                <pre class="syntax clojure">(run app :host "localhost" :port 8080 :path "/")</pre>
+                
+                <p>The options passed to <code>run</code> determine the URL used to invoke your
+                handler: <code>http://{host}:{port}{path}</code></p>
+                
+                <p>To replace your <code>app</code> handler with another, just call run again with
+                the same options, and it&#39;ll replace the old handler with the new:</p>
+                
+                <pre class="syntax clojure">(run (fn [_] {:status 200 :body "hi!"}))</pre>
+                
+                <p>To stop the handler, do this:</p>
+                
+                <pre class="syntax clojure">(stop)</pre>
+                
+                <p>Which is equivalent to this:</p>
+                
+                <pre class="syntax clojure">(stop {:host "localhost" :port 8080 :path "/"})</pre>
+                
+                <p>Or, if you prefer kwargs, this:</p>
+                
+                <pre class="syntax clojure">(stop :host "localhost" :port 8080 :path "/")</pre>
+                
+                <p>Alternatively, you can save run&#39;s return value and pass it to stop to
+                stop your handler.</p>
+                
+                <pre class="syntax clojure">(def server (run app {:port 4242 :path "/hello"}))&#x000A;...&#x000A;(stop server)</pre>
+                
+                <p>That&#39;s pretty much all there is to it.</p>
+                
+                <p>You don&#39;t even really need to stop your handlers if you&#39;re content to
+                just let the JVM exit, but it can be handy at a REPL.</p>
+                
+                <h3 id="Advanced_Usage" onclick="window.location = '#Advanced_Usage'">Advanced Usage</h3>
+                
+                <p>The <code>run</code> function returns a map that includes the options passed to
+                it, so you can thread <code>run</code> calls together, useful when your
+                application runs multiple handlers. For example,</p>
+                
+                <pre class="syntax clojure">(def everything (-> (run hello)&#x000A;                  (assoc :path "/howdy")&#x000A;                  (->> (run howdy))&#x000A;                  (merge {:path "/" :port 8081})&#x000A;                  (->> (run ola))))</pre>
+                
+                <p>The above actually creates two Undertow web server instances: one
+                serving requests for the <code>hello</code> and <code>howdy</code> handlers on port 8080,
+                and one serving <code>ola</code> responses on port 8081.</p>
+                
+                <p>You can stop all three apps (and shutdown the two web servers) like
+                so:</p>
+                
+                <pre class="syntax clojure">(stop everything)</pre>
+                
+                <p>Alternatively, you could stop only the <code>ola</code> app like so:</p>
+                
+                <pre class="syntax clojure">(stop {:path "/" :port 8081})</pre>
+                
+                <p>You could even omit <code>:path</code> since &quot;/&quot; is the default. And because ola
+                was the only app running on the web server listening on port 8081, it
+                will be shutdown automatically.</p>
+                
+                <h3 id="Handler_Types" onclick="window.location = '#Handler_Types'">Handler Types</h3>
+                
+                <p>Though the handlers you run will typically be Ring functions, you can
+                also pass any valid implementation of <code>javax.servlet.Servlet</code> or
+                <code>io.undertow.server.HttpHandler</code>. For an example of the former, here&#39;s
+                a very simple <a href="https://github.com/pedestal/pedestal">Pedestal</a> service running on Immutant:</p>
+                
+                <pre class="syntax clojure">(ns testing.hello.service&#x000A;  (:require [io.pedestal.service.http :as http]&#x000A;            [io.pedestal.service.http.route.definition :refer [defroutes]]&#x000A;            [ring.util.response :refer [response]]&#x000A;            [immutant.web :refer [run]]))&#x000A;&#x000A;(defn home-page [request] (response "Hello World!"))&#x000A;(defroutes routes [[["/" {:get home-page}]]])&#x000A;(def service {::http/routes routes})&#x000A;&#x000A;(defn start [options]&#x000A;  (run (::http/servlet (http/create-servlet service)) options))</pre>
+                
+                <h3 id="Development_Mode" onclick="window.location = '#Development_Mode'">Development Mode</h3>
+                
+                <p>The <code>run-dmc</code> macro resulted from a desire to provide a no-fuss way to
+                enjoy all the benefits of REPL-based development. Before calling
+                <code>run</code>, <code>run-dmc</code> will first ensure that your Ring handler is
+                var-quoted and wrapped in the <code>reload</code> and <code>stacktrace</code> middleware
+                from the <code>ring-devel</code> library (which must be included among your
+                <code>[:profiles :dev :dependencies]</code> in <code>project.clj</code>). It&#39;ll then open
+                your app in a browser.</p>
+                
+                <p>Both <code>run</code> and <code>run-dmc</code> accept the same options. You can even mix
+                them within a single threaded call.</p>
+                
+                <h2 id="The_Websocket_API" onclick="window.location = '#The_Websocket_API'">The Websocket API</h2>
+                
+                <p>Also included in the <code>org.immutant/web</code> library is the
+                <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/immutant.websocket.html">immutant.websocket</a> namespace, which includes a <code>Channel</code> protocol
+                and the <code>create-handler</code> function. It accepts a map of callback
+                functions, invoked asynchronously during the lifecycle of a websocket.
+                The valid websocket event keywords and their corresponding callback
+                signatures are as follows:</p>
+                
+                <pre class="syntax clojure">  :on-message (fn [channel message])&#x000A;  :on-open    (fn [channel])&#x000A;  :on-close   (fn [channel {:keys [code reason]}])&#x000A;  :on-error   (fn [channel throwable])&#x000A;  :fallback   (fn [request] (response ...))</pre>
+                
+                <p>To create your websocket endpoint, pass the result from
+                <code>create-handler</code> to <code>immutant.web/run</code>. Here&#39;s an example that
+                asynchronously returns the upper-cased equivalent of whatever message
+                it receives:</p>
+                
+                <pre class="syntax clojure">(ns whatever&#x000A;  (:require [immutant.web :as web]&#x000A;            [immutant.websocket :as ws]&#x000A;            [clojure.string :refer [upper-case]]))&#x000A;&#x000A;(defn create-websocket []&#x000A;  (web/run&#x000A;    (ws/create-handler {:on-message (fn [c m] (ws/send! c (upper-case m)))})&#x000A;    {:path "/websocket"}))</pre>
+                
+                <p>Another function, <code>immutant.websocket/create-servlet</code>, can be used to
+                create a <a href="https://jcp.org/en/jsr/detail?id=356">JSR 356</a> Endpoint. The channel passed to the callbacks is an
+                instance of <code>javax.websocket.Session</code>, extended to the
+                <code>immutant.websocket.Channel</code> protocol.</p>
+                
+                <h2 id="Try_it_out!" onclick="window.location = '#Try_it_out!'">Try it out!</h2>
+                
+                <p>We&#39;d love to hear some feedback on this stuff. Find us on our
+                <a href="http://immutant.org/community/">community</a> page and join the fun!</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2014/05/05/immutant-web-2x/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2014/04/28/getting-started-with-2x/">Getting Started With Immutant 2</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  The Immutant Team
+                </div>
+                <div class="date">
+                  Monday, April 28, 2014
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/thedeuce/">thedeuce</a>
+                <a href="/news/tags/getting-started/">getting-started</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+              </div>
+              <div class="body">
+                <p>We&#39;re <a href="http://i.imgur.com/cSSB8Dx.jpg">hard at work</a> on
+                <a href="/news/2014/04/02/the-deuce/">Immutant 2.0</a>, and have a ways to go before we reach
+                feature parity with 1.x. But if you are interested in playing with
+                what we have now, then this article is for you!</p>
+                
+                <h2 id="Getting_Immutant" onclick="window.location = '#Getting_Immutant'">Getting Immutant</h2>
+                
+                <p>Our CI server publishes an <a href="http://immutant.org/builds/2x/">incremental release</a> for each
+                successful build. In order to use an incremental build, you&#39;ll need to
+                add a repository and dependencies to your <code>project.clj</code>. Currently,
+                only our <code>scheduling</code> and <code>web</code> artifacts contain implementations, so
+                let&#39;s add those:</p>
+                
+                <pre class="syntax clojure">(defproject some-project "1.2.3"&#x000A;  ...&#x000A;  :dependencies [...&#x000A;                 [org.immutant/scheduling "2.x.incremental.BUILD_NUM"]&#x000A;                 [org.immutant/web        "2.x.incremental.BUILD_NUM"]]&#x000A;  :repositories [["Immutant 2.x incremental builds"&#x000A;                  "http://downloads.immutant.org/incremental/"]])</pre>
+                
+                <p>replacing <code>BUILD_NUM</code> with the build number for the version you want
+                to use. You can get the build number from our <a href="http://immutant.org/builds/2x/">builds</a> page - the
+                latest build number is 62 as of this article.</p>
+                
+                <p><strong>Edit: build 62 has been garbage collected - be sure to grab the latest
+                build from the <a href="http://immutant.org/builds/2x/">builds</a> page.</strong></p>
+                
+                <p><em>Note:</em> We&#39;re bringing in the artifacts piecemeal above, but we also provide
+                an aggregate artifact that brings in all of the Immutant dependencies
+                in one shot if you&#39;d rather use that: <code>org.immutant/immutant</code>.</p>
+                
+                <p>That&#39;s it! If you are used to Immutant 1.x, you&#39;ll notice that there
+                is no download or install step - Immutant 2 is usable as a set of
+                libraries that you consume just like any other Clojure library.</p>
+                
+                <h2 id="What&#39;s_in_those_artifacts?" onclick="window.location = '#What&#39;s_in_those_artifacts?'">What&#39;s in those artifacts?</h2>
+                
+                <p>Along with the artifacts, each CI build publishes the API docs for all
+                of the Immutant namespaces. You can see the docs for
+                <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/62/artifact/target/apidocs/index.html">a specific build</a> (build #62 in this case), or the
+                <a href="https://projectodd.ci.cloudbees.com/job/immutant2-incremental/lastSuccessfulBuild/artifact/target/apidocs/index.html">latest build</a>.</p>
+                
+                <p>If you start playing with any of that API, be aware that it is
+                currently in a pre-alpha state, and may change dramatically at any
+                time.</p>
+                
+                <h2 id="What&#39;s_next?" onclick="window.location = '#What&#39;s_next?'">What&#39;s next?</h2>
+                
+                <p>We plan on publishing articles in the near future focusing on using
+                the web and scheduling namespaces, followed by articles on websockets,
+                messaging, and caching as soon as we get those implementations off of
+                the ground. We&#39;ll also cover using those same namespaces within a
+                <a href="http://wildfly.org/">WildFly</a> container, taking advantage of the clustering features the
+                container provides.</p>
+                
+                <p>Once we have most of our namespaces in semi-decent shape, we&#39;ll
+                release our first alpha, probably in mid to late June.</p>
+                
+                <p>As always, if you have any questions, comments, or other feedback, feel
+                free to <a href="/community">get in touch</a>.</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2014/04/28/getting-started-with-2x/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2013/08/20/openshift-clustering/">Clustering Immutants on OpenShift</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Jim Crossley
+                </div>
+                <div class="date">
+                  Tuesday, August 20, 2013
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/openshift/">openshift</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/clustering/">clustering</a>
+                <a href="/news/tags/messaging/">messaging</a>
+                <a href="/news/tags/caching/">caching</a>
+                <a href="/news/tags/daemons/">daemons</a>
+                <a href="/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                <a href="/news/tags/ring/">ring</a>
+              </div>
+              <div class="body">
+                <p>Lately I&#39;ve been spending a lot of time on <a href="http://openshift.com/">OpenShift</a>, building and
+                testing a <a href="https://www.openshift.com/developers/technologies">cartridge</a> for Immutant that will properly form a cluster
+                across multiple OpenShift <a href="https://www.openshift.com/products/pricing">gears</a>. In this post, I&#39;ll go through the steps
+                of deploying a simple application that demonstrates all of the
+                Immutant clustering features running on the three small gears you get
+                for free on OpenShift.</p>
+                
+                <p>Here are the features we&#39;ll be demonstrating:</p>
+                
+                <ul>
+                <li>Load-balanced message distribution with automatic peer discovery</li>
+                <li>Replicated caching</li>
+                <li>Highly-Available, long-running daemons</li>
+                <li>HA scheduled jobs</li>
+                <li>Web load balancing and session replication</li>
+                </ul>
+                
+                <p>If you haven&#39;t already, go <a href="https://www.openshift.com/get-started#cli">set up an OpenShift account</a> and update
+                your <code>rhc</code> gem to the latest version. I used 1.12.4 for this article.
+                Below you&#39;ll see references to <em>$namespace</em> -- this corresponds to
+                your OpenShift domain name, set by running <code>rhc setup</code>.</p>
+                
+                <p><em>Note</em>: If this is the first time you&#39;ve used OpenShift, you&#39;ll need
+                to visit the <a href="https://openshift.redhat.com/app/console">console</a> and accept the usage agreement before running
+                the <code>rhc</code> command.</p>
+                
+                <h2 id="Create_a_scaled_OpenShift_app" onclick="window.location = '#Create_a_scaled_OpenShift_app'">Create a scaled OpenShift app</h2>
+                
+                <p>The Immutant cartridge is available here:
+                <a href="https://github.com/immutant/openshift-immutant-cart">https://github.com/immutant/openshift-immutant-cart</a>. As described in
+                its README, we create our app using the following command:</p>
+                
+                <pre><code>rhc app-create -s demo https://raw.github.com/immutant/openshift-immutant-cart/master/metadata/manifest.yml&#x000A;</code></pre>
+                
+                <p>We&#39;re calling our app <em>demo</em> and we&#39;re passing the <code>-s</code> option to
+                make our app scalable. Notice that we&#39;re passing a raw URL to the
+                cartridge&#39;s <code>manifest.yml</code>.</p>
+                
+                <p>Small gears are pretty slow, but when <code>app-create</code> finally completes,
+                you&#39;ll have a bare-bones, standard Leiningen application beneath the
+                <code>demo/</code> directory. At this point, you might tail your app&#39;s logs or
+                ssh into your gear:</p>
+                
+                <pre><code>rhc tail demo&#x000A;rhc ssh demo&#x000A;</code></pre>
+                
+                <p>The critical log file for Immutant on OpenShift is
+                <code>immutant/logs/server.log</code>. Monitor this file until you eventually see
+                the line, <em>Deployed &quot;your-clojure-application.clj&quot;</em>. Then point a
+                browser at <a href="http://demo-$namespace.rhcloud.com">http://demo-$namespace.rhcloud.com</a> to see a simple
+                welcome page.</p>
+                
+                <p>Now we&#39;ll put some meat on our bare-bones app!</p>
+                
+                <h2 id="Push_Me,_Pull_You" onclick="window.location = '#Push_Me,_Pull_You'">Push Me, Pull You</h2>
+                
+                <p>Typically, you will add the remote git repository for your real
+                application to the local OpenShift repository you just created. We&#39;re
+                going to use <a href="https://github.com/immutant/cluster-demo">https://github.com/immutant/cluster-demo</a> as our &quot;real&quot;
+                application.</p>
+                
+                <pre><code>git remote add upstream -m master git@github.com:immutant/cluster-demo.git&#x000A;</code></pre>
+                
+                <p>Deployment of your app to OpenShift amounts to pulling from your real
+                repository and pushing to OpenShift&#39;s.</p>
+                
+                <pre><code>git pull -s recursive -X theirs upstream master&#x000A;git push&#x000A;</code></pre>
+                
+                <p>While waiting for that to complete, run <code>rhc tail demo</code> in another
+                shell to monitor your log. This time, the <em>Deployed
+                &quot;your-clojure-application.clj&quot;</em> message is going to scroll off the
+                screen as the cluster-demo app starts logging its output. Eventually,
+                the app should settle into a steady state looking something like this:</p>
+                
+                <p><img src="/images/news/demo-log.png"/></p>
+                
+                <h2 id="The_cluster-demo_app" onclick="window.location = '#The_cluster-demo_app'">The cluster-demo app</h2>
+                
+                <p>If you can ignore the inconsistent thread identifiers in the above
+                output, you&#39;ll notice there are exactly four types of messages:
+                <strong>send</strong>, <strong>recv</strong>, <strong>web</strong>, and <strong>job</strong>. Noting the timestamps in the
+                left column, a <strong>send</strong> is logged every 5 seconds, as is its
+                corresponding <strong>recv</strong>, a <strong>web</strong> logged every 2 seconds, and a
+                <strong>job</strong> every 20 seconds.</p>
+                
+                <p>The cluster-demo app is comprised of the following:</p>
+                
+                <ul>
+                <li>A message queue named <em>/queue/msg</em></li>
+                <li>A distributed cache named <em>counters</em></li>
+                <li>A listener for the queue that prints the received message and the
+                current contents of the cache</li>
+                <li>An HA daemon named <em>counter</em> that queues a cached value and
+                increments it every 5 seconds</li>
+                <li>An HA scheduled job named <em>ajob</em> that increments another counter in
+                the cache every 20 seconds</li>
+                <li>A web request handler mounted at <strong>/</strong> that logs its <code>:path-info</code>
+                and returns the current values of the two cached counters</li>
+                <li>Another request handler mounted at <strong>/count</strong> that increments a
+                counter in the user&#39;s web session.</li>
+                </ul>
+                
+                <p>All the code (~60 lines) is <a href="https://github.com/immutant/cluster-demo/blob/master/src/immutant/init.clj">contained in a single file</a>.</p>
+                
+                <h2 id="Programming_is_hard,_let&#39;s_build_a_cluster!" onclick="window.location = '#Programming_is_hard,_let&#39;s_build_a_cluster!'">Programming is hard, let&#39;s build a cluster!</h2>
+                
+                <p>Now we&#39;re ready to form a cluster by adding a gear to our app:</p>
+                
+                <pre><code>rhc scale-cartridge immutant -a demo 2&#x000A;</code></pre>
+                
+                <p>Again, this will take a few minutes, and it may return an error even
+                though the operation actually succeeded. You can run the following to
+                see the definitive state of your gears:</p>
+                
+                <pre><code>rhc show-app --gears&#x000A;</code></pre>
+                
+                <p>This also gives you the SSH URLs for your two gears. Fire up two
+                shells and ssh into each of your gears using those SSH URLs. Then
+                tail the log on each:</p>
+                
+                <pre><code>tail -f immutant/logs/server.log&#x000A;</code></pre>
+                
+                <p>When the dust settles, you&#39;ll eventually see the gears discover each
+                other, and you should see both gears logging <strong>recv</strong> messages, one
+                getting the even numbers and one getting the odd. This is your
+                automatic load-balanced message distribution. </p>
+                
+                <p>Note also that the counters cache logged in the <strong>recv</strong> message is
+                correct on both gears, even though it&#39;s only being updated by one.
+                This is our cache replication at work.</p>
+                
+                <h2 id="Let&#39;s_break_stuff!" onclick="window.location = '#Let&#39;s_break_stuff!'">Let&#39;s break stuff!</h2>
+                
+                <p>And see how robust our cluster is.</p>
+                
+                <h3 id="High_Availability_Daemons_and_Jobs" onclick="window.location = '#High_Availability_Daemons_and_Jobs'">High Availability Daemons and Jobs</h3>
+                
+                <p>Of course, the <strong>send</strong> and <strong>job</strong> log entries should still only
+                appear on our original gear, because those are our HA singletons. If
+                that gear crashes, our daemon and job should migrate to the other
+                gear. While logged into the gear running your singletons, run this:</p>
+                
+                <pre><code>immutant/bin/control stop&#x000A;</code></pre>
+                
+                <p>And watch the other gear&#39;s log to verify the daemon and job pick up
+                right where they left off, fetching their counters from the replicated
+                cache. That gear should be consuming all the queued messages, too. Now
+                start the original gear back up:</p>
+                
+                <pre><code>immutant/bin/control start&#x000A;</code></pre>
+                
+                <p>Eventually, it&#39;ll start receiving half the messages again.</p>
+                
+                <h3 id="Web" onclick="window.location = '#Web'">Web</h3>
+                
+                <p>You may be wondering about those <strong>web</strong> entries showing up in both
+                logs. They are &quot;health check&quot; requests from the <a href="https://www.openshift.com/blogs/how-haproxy-scales-openshift-apps">HAProxy</a> web load
+                balancer, automatically installed on your primary gear. You can always
+                check the state of your cluster from HAProxy&#39;s perspective by visiting
+                <a href="http://demo-$namespace.rhcloud.com/haproxy-status">http://demo-$namespace.rhcloud.com/haproxy-status</a>. If you see that
+                page without intending to, it means something about your app is
+                broken, so check <code>immutant/logs/server.log</code> for errors and make sure
+                your app responds to a request for the root context, i.e. &quot;/&quot;.</p>
+                
+                <p>Let&#39;s try some web stuff. Use curl to hit your app while observing the
+                logs on both gears:</p>
+                
+                <pre><code>curl http://demo-$namespace.rhcloud.com/xxxxxxxxxxxxxxxxxxxx&#x000A;curl http://demo-$namespace.rhcloud.com/yyyyyyyyyyyyyyyyyyyy&#x000A;curl http://demo-$namespace.rhcloud.com/zzzzzzzzzzzzzzzzzzzz&#x000A;</code></pre>
+                
+                <p>Use an obnoxious path to distinguish your request from the health
+                checks. Repeat the command a few times to observe the gears taking
+                turns responding to your request. Now try it in a browser, and you&#39;ll
+                see the same gear handling your request every time you reload. This is
+                because HAProxy is setting cookies in the response to enable session
+                affinity, which your browser is probably sending back. And <code>curl</code>
+                didn&#39;t.</p>
+                
+                <p>Speaking of session affinity, let&#39;s break that while we&#39;re at it, by
+                invoking our other web handler, the one that increments a counter in
+                the user&#39;s web session: <a href="http://demo-$namespace.rhcloud.com/count">http://demo-$namespace.rhcloud.com/count</a></p>
+                
+                <p>You should see the counter increment each time you reload your
+                browser. (You&#39;ll need to give <code>curl</code> a cookie store to see it respond
+                with anything other than &quot;1 times&quot;)</p>
+                
+                <p>Pay attention to which gear is responding to the <em>/count</em> request. Now
+                stop that gear like you did before. When you reload your browser, you
+                should see the other gear return the expected value. This is the
+                automatic session replication provided by
+                <code>immutant.web.session/servlet-store</code>.</p>
+                
+                <p>Don&#39;t forget to restart that gear.</p>
+                
+                <h2 id="The_Hat_Trick" onclick="window.location = '#The_Hat_Trick'">The Hat Trick</h2>
+                
+                <p>Hey, OpenShift is giving us 3 free gears, we may as well use &#39;em all,
+                right?</p>
+                
+                <pre><code>rhc scale-cartridge immutant -a demo 3&#x000A;</code></pre>
+                
+                <p>When the third one finally comes up, there are a couple of things you
+                may notice:</p>
+                
+                <ul>
+                <li>The health checks will disappear from the primary gear as HAProxy
+                takes it out of the rotation when 2 or more other gears are
+                available, ostensibly to mitigate the <a href="http://en.wikipedia.org/wiki/Observer_effect_(information_technology)">observer effect</a> of the
+                health checks.</li>
+                <li>Each cache key will only show up in the <strong>recv</strong> log messages on 2
+                of the 3 gears. This is because Immutant caches default to
+                Infinispan&#39;s <code>:distributed</code> replication mode in a cluster. This
+                enables Infinispan clusters to achieve &quot;linear scalability&quot; as
+                entries are copied to a fixed number of cluster nodes (default 2)
+                regardless of the cluster size. Distribution uses a consistent
+                hashing algorithm to determine which nodes will store a given entry.</li>
+                </ul>
+                
+                <h2 id="Now_what?" onclick="window.location = '#Now_what?'">Now what?</h2>
+                
+                <p>Well, that was a lot to cover. I doubt many apps will use all these
+                features, but I think it&#39;s nice to have a free playground on which to
+                try them out, even with the resources as constrained as they are on a
+                small gear.</p>
+                
+                <p>Regardless, I&#39;m pretty happy that Immutant is finally feature-complete
+                on OpenShift now. :-)</p>
+                
+                <p>Of course, I had a lot of help getting things to this point. Many
+                folks on the OpenShift and JBoss teams were generous with their
+                expertise, but the &quot;three B&#39;s&quot; deserve special mention:
+                <a href="https://twitter.com/bbrowning">Ben</a>,
+                <a href="http://belaban.blogspot.com/">Bela</a>, and
+                <a href="http://www.billdecoste.net/">Bill</a>.</p>
+                
+                <p>Thanks!</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2013/08/20/openshift-clustering/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="pagination-links"><span class="current-page">1</span> <a href="/news/tags/tutorial/page/2.html" class="page-link">2</a> <a href="/news/tags/tutorial/page/3.html" class="page-link">3</a> <a href="/news/tags/tutorial/page/2.html" class="next-link">Next</a> </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tags">
+              <div class="tag-cloud">
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/announcement/">announcement</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/app-server/">app-server</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/bears/">bears</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/beginning/">beginning</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/boot/">boot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/boot-immutant/">boot-immutant</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/caching/">caching</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/clustering/">clustering</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/daemons/">daemons</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/datomic/">datomic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/deploy/">deploy</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/distribution/">distribution</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/enterprise/">enterprise</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/event/">event</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/first/">first</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/getting-started/">getting-started</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/hotrod/">hotrod</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/infinispan/">infinispan</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/installation/">installation</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/isolation/">isolation</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein/">lein</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/lein-immutant/">lein-immutant</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/luminus/">luminus</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/messaging/">messaging</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/openshift/">openshift</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/overlay/">overlay</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/pipelines/">pipelines</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/polyglot/">polyglot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/poorsmatic/">poorsmatic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/postgresql/">postgresql</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/presentations/">presentations</a>
+                </span>
+                <span class="tag tag-6">
+                  <a href="http://immutant.org/news/tags/releases/">releases</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/ring/">ring</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/runtime/">runtime</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/scheduling/">scheduling</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/screencast/">screencast</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/slim/">slim</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/sockjs/">sockjs</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/survey/">survey</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/thedeuce/">thedeuce</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/torquebox/">torquebox</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transactions/">transactions</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transit/">transit</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/tutorial/">tutorial</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/under-the-hood/">under-the-hood</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/vertx/">vertx</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/web/">web</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/websockets/">websockets</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wildfly/">wildfly</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wtf/">wtf</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/xa/">xa</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

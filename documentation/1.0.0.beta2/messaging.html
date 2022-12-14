@@ -1,0 +1,1164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Immutant Messaging</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Immutant Messaging" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2013-06-27 17:44:23 EDT" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="jobs.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="caching.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 7. Immutant Messaging</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="messaging.html#sec-1">7.1. Introduction</a>
+<ul>
+<li><a href="messaging.html#sec-1-1">7.1.1. HornetQ</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#sec-2">7.2. Destinations</a>
+<ul>
+<li><a href="messaging.html#sec-2-1">7.2.1. Durable Topic Subscribers</a></li>
+<li><a href="messaging.html#sec-2-2">7.2.2. Deployment</a></li>
+<li><a href="messaging.html#sec-2-3">7.2.3. Accessing Destinations Controllers</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#sec-3">7.3. Messages</a>
+<ul>
+<li><a href="messaging.html#sec-3-1">7.3.1. Publishing</a>
+<ul>
+<li><a href="messaging.html#sec-3-1-1">7.3.1.1. Some Examples</a></li>
+<li><a href="messaging.html#messaging-publishing-encodings-note">7.3.1.2. A note about encodings</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#messaging-receiving">7.3.2. Receiving</a>
+<ul>
+<li><a href="messaging.html#sec-3-2-1">7.3.2.1. Transactional by default</a></li>
+<li><a href="messaging.html#sec-3-2-2">7.3.2.2. Some Examples</a></li>
+<li><a href="messaging.html#sec-3-2-3">7.3.2.3. Accessing Listeners via JMX</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="messaging.html#messaging-request-response">7.4. Request/Response</a>
+<ul>
+<li><a href="messaging.html#sec-4-1">7.4.1. Request</a></li>
+<li><a href="messaging.html#sec-4-2">7.4.2. Respond</a></li>
+<li><a href="messaging.html#sec-4-3">7.4.3. Some Examples</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#messaging-pipelines">7.5. Pipelines</a>
+<ul>
+<li><a href="messaging.html#sec-5-1">7.5.1. Creating a pipeline</a>
+<ul>
+<li><a href="messaging.html#sec-5-1-1">7.5.1.1. Pipeline options</a></li>
+<li><a href="messaging.html#sec-5-1-2">7.5.1.2. Per-step options</a></li>
+</ul>
+</li>
+<li><a href="messaging.html#sec-5-2">7.5.2. Using a pipeline</a></li>
+<li><a href="messaging.html#messaging-pipelines-bindings">7.5.3. Available bindings</a></li>
+<li><a href="messaging.html#sec-5-4">7.5.4. Error handling</a></li>
+<li><a href="messaging.html#sec-5-5">7.5.5. Halting the pipeline for a particular message</a></li>
+<li><a href="messaging.html#sec-5-6">7.5.6. Stopping the pipeline</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">7.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  The term "messaging" encompasses a large area of functionality.
+  Messaging solutions are used to achieve loosely-coupled,
+  asynchronous systems. The primary actors in a messaging-based
+  system are messages, destinations, consumers, and producers. The
+  broker mediates the relationships between the other actors.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-1-1">
+<h3 id="sec-1-1"><span class="section-number-3">7.1.1.</span> HornetQ</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<p>
+   Immutant encapsulates the JBoss <a href="http://www.jboss.org/hornetq/">HornetQ message broker</a>.  It is
+   automatically available to you, with no additional configuration
+   required to start the messaging service. HornetQ supports clustered
+   messaging, which provides auto-discovery, load-balancing, and
+   failover, among other things.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">7.2.</span> Destinations</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  A destination represents a rendezvous point where messages are
+  exchanged. A message may be sent to a destination by one actor,
+  and received from the destination by another.
+</p>
+<p>
+  There are two main types of destinations: <b>queues</b> (point-to-point)
+  and <b>topics</b> (publish-subscribe). All destinations allow multiple
+  actors to send messages. The type of destination determines how the
+  message is routed. A queue delivers the message to a single
+  recipient (possibly one of many candidates). And a topic delivers
+  the message to all interested recipients. In both cases, the message
+  producers have no direct knowledge of the message consumers.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-1">
+<h3 id="sec-2-1"><span class="section-number-3">7.2.1.</span> Durable Topic Subscribers</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   Typically, messages published to a topic are only delivered to
+   consumers connected to the topic at that time. But if a consumer
+   identifies itself with a unique name, then the broker will
+   accumulate messages for that client when it's disconnected and
+   deliver them in order whenever the client reconnects.
+</p>
+<p>
+   You implicitly create a durable topic subscriber by passing the
+   <code>:client-id</code> option to the <code>receive</code> and <code>listen</code> functions,
+   described below. As long as you pass the same <code>:client-id</code> in
+   subsequent <code>receive/listen</code> calls, you'll receive every message
+   published to that topic, whether you were connected at the time or
+   not.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-2">
+<h3 id="sec-2-2"><span class="section-number-3">7.2.2.</span> Deployment</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<p>
+   Use the <a href="./apidoc/immutant.messaging.html#var-start">immutant.messaging/start</a> function to define a messaging
+   destination. A simple naming convention designates the destination
+   as either a queue or a topic: if its name contains "queue",
+   it's a queue; if it contains "topic", it's a topic. If you
+   need to use queue or topic names that don't match the above
+   convention, you can wrap the name in a call to
+   <a href="./apidoc/immutant.messaging.html#var-as-queue">immutant.messaging/as-queue</a> or <a href="./apidoc/immutant.messaging.html#var-as-topic">immutant.messaging/as-topic</a>
+   respectively. If you do wrap a destination name, you'll need to
+   pass the wrapped version to any <code>immutant.messaging</code> function that
+   takes a destination name. It's common to separate sections of the
+   destination name with <code>.</code> or <code>/</code>, but is not required.
+</p>
+<p>
+   In addition to the destination name, the <code>start</code> function accepts
+   the following options:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="center"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="center" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:durable</code></td><td class="center"><code>true</code></td><td class="left">Whether messages persist across restarts</td></tr>
+<tr><td class="left"><code>:selector</code></td><td class="center"><code>nil</code></td><td class="left">A JMS expression used to filter messages by their metadata/properties</td></tr>
+</tbody>
+</table>
+
+
+<p>
+   If a <code>:selector</code> is provided, then only messages with
+   metadata/properties matching that expression will be accepted for
+   delivery.
+</p>
+<p>
+   Some examples:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.messaging <span class="org-builtin">:as</span> msg])
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">to start queues - these are all valid names</span>
+(msg/start <span class="org-string">"/queue/work"</span>)
+(msg/start <span class="org-string">".queue.play"</span>)
+(msg/start <span class="org-string">"queue.sing"</span>)
+(msg/start <span class="org-string">"dancequeued"</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">wrap an ambiguous queue name in as-queue</span>
+(msg/start (msg/as-queue <span class="org-string">"no-q-word"</span>))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">to start topics - these are all valid names</span>
+(msg/start <span class="org-string">"/topic/news"</span>)
+(msg/start <span class="org-string">"topic/infotainment"</span>)
+(msg/start <span class="org-string">".topic"</span>)
+(msg/start <span class="org-string">"topicality"</span>)
+(msg/start <span class="org-string">"some.kinda.topic"</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">wrap an ambiguous topic name in as-topic</span>
+(msg/start (msg/as-topic <span class="org-string">"no-t-word"</span>))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">only blue messages will be queued for delivery</span>
+(msg/start <span class="org-string">"/queue/blue"</span> <span class="org-builtin">:selector</span> <span class="org-string">"color = 'blue'"</span>)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">like this one...</span>
+(msg/publish <span class="org-string">"/queue/blue"</span> <span class="org-string">"success"</span> <span class="org-builtin">:properties</span> {<span class="org-builtin">:color</span> <span class="org-string">"blue"</span>})
+</pre>
+
+
+<p>
+   Starting a destination is dynamic, and can occur anywhere in your
+   application code.  You can invoke <code>start</code> anytime during the
+   lifecycle of your application.
+</p>
+<p>
+   While <code>start</code> has a complement, <a href="./apidoc/immutant.messaging.html#var-stop">immutant.messaging/stop</a>, you
+   needn't call it directly. It will be invoked when your application
+   is undeployed. And it's important to note that <code>start</code> is
+   idempotent: if an destination has already been started, likely by a
+   cooperating application, the call is effectively a
+   no-op. Similarly, a call to <code>stop</code> will silently fail if the
+   destination is in use by any other application. Note that in cases
+   where a destination is started by another application, you will
+   still need to <code>start</code> it locally for it to be visible to other
+   messaging functions within your application.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-2-3">
+<h3 id="sec-2-3"><span class="section-number-3">7.2.3.</span> Accessing Destinations Controllers</h3>
+<div class="outline-text-3" id="text-2-3">
+
+
+<p>
+   Each messaging destination has associated controllers that can be
+   used to see message counts, list &amp; remove messages, and perform
+   other operations. Two different controllers are provided by HornetQ
+   for queues, and one for topics, each with slightly different
+   controls. All are available via JMX or from
+   <a href="./apidoc/immutant.messaging.hornetq.html#var-destination-controller">immutant.messaging.hornetq/destination-controller</a>.
+</p>
+<p>   
+   For a given destination name (<code>queue.example</code> and <code>topic.example</code>
+   in this case), you can access the MBeans via JMX with the following
+   addresses:
+</p>
+
+
+
+<pre class="src src-text"># to access the JMS Queue MBean
+org.hornetq:module=JMS,type=Queue,name="queue.example"
+
+# to access the JMS Topic MBean
+org.hornetq:module=JMS,type=Topic,name="topic.example"
+
+# to access the HornetQ 'core' Queue MBean
+org.hornetq:module=Core,type=Queue,address="jms.queue.queue.example",name="jms.queue.queue.example"
+</pre>
+
+
+<p>
+   or via code with:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.messaging.hornetq <span class="org-builtin">:as</span> hq])
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">for the JMS queue controller</span>
+(hq/destination-controller <span class="org-string">"queue.example"</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">for the JMS topic controller</span>
+(hq/destination-controller <span class="org-string">"queue.topic"</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">for the HornetQ 'core' queue controller</span>
+(hq/destination-controller <span class="org-string">"queue.example"</span> <span class="org-builtin">:core</span>)
+</pre>
+
+
+<p>
+   The returned controller depends on the type of the given
+   destination and, for queues, the requested control-type (which
+   defaults to <code>:jms</code>):
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="left"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">destination</th><th class="left" scope="col">control-type</th><th class="left" scope="col">controller</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">Queue</td><td class="left"><code>:jms</code></td><td class="left"><a href="http://docs.jboss.org/hornetq/2.3.0.Final/docs/api/hornetq-jms-client/org/hornetq/api/jms/management/JMSQueueControl.html">org.hornetq.api.jms.management.JMSQueueControl</a></td></tr>
+<tr><td class="left">Queue</td><td class="left"><code>:core</code></td><td class="left"><a href="http://docs.jboss.org/hornetq/2.3.0.Final/docs/api/hornetq-client/org/hornetq/api/core/management/QueueControl.html">org.hornetq.core.management.impl.QueueControl</a></td></tr>
+<tr><td class="left">Topic</td><td class="left"><i>ignored</i></td><td class="left"><a href="http://docs.jboss.org/hornetq/2.3.0.Final/docs/api/hornetq-jms-client/org/hornetq/api/jms/management/TopicControl.html">org.hornetq.api.jms.management.TopicControl</a></td></tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-3">
+<h2 id="sec-3"><span class="section-number-2">7.3.</span> Messages</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  The unit of communication within a messaging system is a message.  A
+  message may either be simply a blob of octets, or it might have some
+  higher-order, application-defined semantics. All messages include a
+  set of headers, similar to email.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-3-1">
+<h3 id="sec-3-1"><span class="section-number-3">7.3.1.</span> Publishing</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+<p>
+   Any component or client code that creates messages and gives them
+   to the message broker for delivery is considered a
+   <i>producer</i>. Generally speaking, the producer does not know the
+   details of the destination or any of its <i>consumers</i>.
+</p>
+<p>
+   In Immutant, there is only one way to send a message, whether to a
+   queue or a topic: via the <a href="./apidoc/immutant.messaging.html#var-publish">immutant.messaging/publish</a> function. It 
+   accepts two required parameters: the name of the destination and the
+   message content, which can be just about anything.
+</p>
+<p>
+   If the message has any <a href="http://clojure.org/metadata">Clojure metadata</a> attached, it will be passed
+   as <a href="http://docs.oracle.com/javaee/6/api/javax/jms/Message.html">the JMS Message's properties</a>, the names of which are subject to
+   certain naming restrictions (they must be valid Java identifiers)
+   since they may be used as expressions in <i>selectors</i> (see below).
+   It's also possible to pass properties via the <code>:properties</code> option,
+   which will override any matching keys in the payload metadata, if
+   present.
+</p>
+<p>
+   The <code>publish</code> function accepts the following options:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="center"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="center" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:encoding</code></td><td class="center"><code>:edn</code></td><td class="left">One of <code>:clojure</code>, <code>:edn</code>, <code>:json</code>, or <code>:text</code></td></tr>
+<tr><td class="left"><code>:priority</code></td><td class="center"><code>4</code></td><td class="left">An integer (0-9) or one of <code>:low</code>, <code>:normal</code>, <code>:high</code> and <code>:critical</code> which correspond to 0, 4, 7 and 9, respectively</td></tr>
+<tr><td class="left"><code>:ttl</code></td><td class="center"><code>0</code></td><td class="left">An integer greater than 0, indicating the number of milliseconds after which the message is discarded if not consumed. A <code>0</code> indicates that the message should be held indefinitely.</td></tr>
+<tr><td class="left"><code>:persistent</code></td><td class="center"><code>true</code></td><td class="left">If true, undelivered messages survive restarts (if the destination is durable).</td></tr>
+<tr><td class="left"><code>:properties</code></td><td class="center"><code>{}</code></td><td class="left">A hash of arbitrary metadata upon which JMS selector expressions may be constructed to filter received messages</td></tr>
+<tr><td class="left"><code>:correlation-id</code></td><td class="center"><code>nil</code></td><td class="left">Used to set the JMSCorrelationID (see <a href="http://docs.oracle.com/javaee/6/api/javax/jms/Message.html#setJMSCorrelationID(java.lang.String)">setJMSCorrelationID</a>)</td></tr>
+<tr><td class="left"><code>:host</code></td><td class="center"><code>nil</code></td><td class="left">A remote HornetQ host to connect to.</td></tr>
+<tr><td class="left"><code>:port</code></td><td class="center"><code>nil</code>, or <code>5445</code> if <code>:host</code> is set</td><td class="left">A remote HornetQ port to connect to. Requires <code>:host</code> to be set.</td></tr>
+<tr><td class="left"><code>:username</code></td><td class="center"><code>nil</code></td><td class="left">The username to authenticate the connection with (if the broker has authentication enabled). Requires <code>:password</code> to be set.</td></tr>
+<tr><td class="left"><code>:password</code></td><td class="center"><code>nil</code></td><td class="left">The password to authenticate the connection with (if the broker has authentication enabled). Requires <code>:username</code> to be set.</td></tr>
+</tbody>
+</table>
+
+
+<p>
+   The <code>:json</code> and <code>:edn</code> encodings are useful when the message
+   consumers aren't written in Clojure. For example, <a href="http://torquebox.org">TorqueBox</a> Ruby
+   processors will automatically convert edn-encoded messages
+   generated by a Clojure function into their analogous Ruby data
+   structures, so as long as you limit the content of your messages to
+   standard collections and types, they are transparently
+   interoperable between Clojure and Ruby in either direction.
+</p>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-1-1">
+<h4 id="sec-3-1-1"><span class="section-number-4">7.3.1.1.</span> Some Examples</h4>
+<div class="outline-text-4" id="text-3-1-1">
+
+
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">A simple string</span>
+(msg/publish <span class="org-string">"/queue/work"</span> <span class="org-string">"simple string"</span>)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Notify everyone something interesting just happened</span>
+(msg/publish <span class="org-string">"topic/news"</span> {<span class="org-builtin">:event</span> <span class="org-string">"VISIT"</span> <span class="org-builtin">:url</span> <span class="org-string">"/sales-inquiry"</span>})
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Move this message to the front of the line</span>
+(msg/publish <span class="org-string">"/queue/work"</span> some-message <span class="org-builtin">:priority</span> <span class="org-builtin">:high</span> <span class="org-builtin">:ttl</span> 1000)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Make messages as complex as necessary</span>
+(msg/publish <span class="org-string">"/queue/work"</span> {<span class="org-builtin">:a</span> <span class="org-string">"b"</span> <span class="org-builtin">:c</span> [1 2 3 {<span class="org-builtin">:foo</span> 42}]})
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Make messages consumable by a Ruby app</span>
+(msg/publish <span class="org-string">"/queue/work"</span> {<span class="org-builtin">:a</span> <span class="org-string">"b"</span> <span class="org-builtin">:c</span> [1 2 3 {<span class="org-builtin">:foo</span> 42}]} <span class="org-builtin">:encoding</span> <span class="org-builtin">:json</span>)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Publish to a remote broker</span>
+(msg/publish <span class="org-string">"queue.remote-work"</span> <span class="org-string">"a message"</span> <span class="org-builtin">:host</span> <span class="org-string">"foo.example.com"</span> <span class="org-builtin">:port</span> 5445)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">The received message's metadata =&gt; {:foo 42, :bar 1}</span>
+(msg/publish q (<span class="org-builtin">with-meta</span> msg {<span class="org-builtin">:foo</span> 42 <span class="org-builtin">:bar</span> 0}) <span class="org-builtin">:properties</span> {<span class="org-builtin">:bar</span> 1})
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-messaging-publishing-encodings-note">
+<h4 id="messaging-publishing-encodings-note"><a id="sec-3-1-2" name="sec-3-1-2"></a><span class="section-number-4">7.3.1.2.</span> A note about encodings</h4>
+<div class="outline-text-4" id="text-messaging-publishing-encodings-note">
+
+
+<p>
+    None of the built-in encodings can encode every java object, so
+    you need to pay attention to the payloads you publish. For
+    example, none of the encodings can handle an OutputStream.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-messaging-receiving">
+<h3 id="messaging-receiving"><a id="sec-3-2" name="sec-3-2"></a><span class="section-number-3">7.3.2.</span> Receiving</h3>
+<div class="outline-text-3" id="text-messaging-receiving">
+
+
+<p>
+   Any component that waits for messages to be delivered to it by
+   the message broker is consider a <i>consumer</i>. Typically, a
+   consumer is unaware of the producer or any other consumers.
+</p>
+<p>   
+   If the published message payload contains metadata, the received
+   message should have it, too, transferred in the form of JMS
+   properties, subject to any overridden values passed in the
+   <code>:properties</code> option (see above). If the payload cannot accept
+   metadata, the message properties can be converted to a convenient
+   Clojure hash using <a href="./apidoc/immutant.messaging.html#var-get-properties">immutant.messaging.core/get-properties</a>.
+</p>
+<p>
+   Immutant features three functions for consuming messages.
+</p><ul>
+<li><a href="./apidoc/immutant.messaging.html#var-receive">immutant.messaging/receive</a> Blocks the caller until a message arrives and returns
+     the decoded message
+</li>
+<li><a href="./apidoc/immutant.messaging.html#var-message-seq">immutant.messaging/message-seq</a> Creates a lazy sequence of messages
+</li>
+<li><a href="./apidoc/immutant.messaging.html#var-listen">immutant.messaging/listen</a> Register a handler function that will receive the
+     decoded message when it arrives
+</li>
+</ul>
+
+
+<p>
+   Both <code>receive</code> and <code>message-seq</code> expect the destination name as the
+   first parameter, and optionally, the following key/value pairs:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="center"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="center" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:timeout</code></td><td class="center"><code>10000</code></td><td class="left">An expiration in milliseconds, after which nil is returned; a value of 0 means wait forever, a value of -1 means don't wait at all</td></tr>
+<tr><td class="left"><code>:selector</code></td><td class="center"><code>nil</code></td><td class="left">A JMS expression used to filter messages according to the values of arbitrary <code>:properties</code></td></tr>
+<tr><td class="left"><code>:decode?</code></td><td class="center"><code>true</code></td><td class="left">If true, the decoded message body is returned. Otherwise, the javax.jms.Message object is returned</td></tr>
+<tr><td class="left"><code>:client-id</code></td><td class="center"><code>nil</code></td><td class="left">Identifies a durable topic subscriber; ignored for queues</td></tr>
+<tr><td class="left"><code>:host</code></td><td class="center"><code>nil</code></td><td class="left">A remote HornetQ host to connect to.</td></tr>
+<tr><td class="left"><code>:port</code></td><td class="center"><code>nil</code>, or <code>5445</code> if <code>:host</code> is set</td><td class="left">A remote HornetQ port to connect to. Requires <code>:host</code> to be set.</td></tr>
+<tr><td class="left"><code>:username</code></td><td class="center"><code>nil</code></td><td class="left">The username to authenticate the connection with (if the broker has authentication enabled). Requires <code>:password</code> to be set.</td></tr>
+<tr><td class="left"><code>:password</code></td><td class="center"><code>nil</code></td><td class="left">The password to authenticate the connection with (if the broker has authentication enabled). Requires <code>:username</code> to be set.</td></tr>
+</tbody>
+</table>
+
+
+<p>
+   By default, the dynamic variable, <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/*read-eval*">clojure.core/*read-eval*</a> is set
+   to false when decoding messages. To override this, you should set
+   <code>:decode?</code> to false and bind <code>*read-eval*</code> to true before passing
+   the encoded message to
+   <a href="./apidoc/immutant.messaging.codecs.html#var-decode-with-metadata">immutant.messaging.codecs/decode-with-metadata</a> yourself.
+</p>
+<p>
+   For more details on message selectors, see <a href="http://docs.oracle.com/javaee/6/api/javax/jms/Message.html">javax.jms.Message</a>. 
+</p>
+<p>
+   The <code>listen</code> function takes two parameters: the destination name
+   and a function accepting one parameter which will be applied to any
+   received message. All of the above options for <code>receive</code> except
+   <code>:timeout</code> are supported, plus <code>listen</code> also accepts the following:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="center"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="center" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:concurrency</code></td><td class="center"><code>1</code></td><td class="left">The maximum number of listening threads that can simultaneouly call the function</td></tr>
+<tr><td class="left"><code>:xa</code></td><td class="center"><code>true</code></td><td class="left">Whether the handler demarcates an XA transaction</td></tr>
+<tr><td class="left"><code>:retry-interval</code></td><td class="center"></td><td class="left">The period in milliseconds between subsequent reconnection attempts.</td></tr>
+<tr><td class="left"><code>:retry-interval-multiplier</code></td><td class="center"></td><td class="left">A multiplier to apply to the time since the last retry to compute the time to the next retry.</td></tr>
+<tr><td class="left"><code>:max-retry-interval</code></td><td class="center"><code>2000</code></td><td class="left">The max retry interval that will be used.</td></tr>
+<tr><td class="left"><code>:reconnect-attempts</code></td><td class="center"><code>0</code></td><td class="left">Total number of reconnect attempts to make before giving up and shutting down. (-1: unlimited)</td></tr>
+</tbody>
+</table>
+
+
+<p>
+   <code>listen</code> is asynchronous; if you need to synchronize on the
+   completion of its initialization, you should deref the result.
+</p>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-1">
+<h4 id="sec-3-2-1"><span class="section-number-4">7.3.2.1.</span> Transactional by default</h4>
+<div class="outline-text-4" id="text-3-2-1">
+
+
+<p>
+    By default, message handlers are transactional, so the function
+    invoked in response to a message effectively demarcates a
+    transaction that will be automatically committed if no exceptions
+    are raised, and otherwise rolled back.
+</p>
+<p>
+    Any messages published within the handler automatically become
+    part of its transaction. So they won't be delivered until that
+    transaction commits, i.e. the handler runs to completion
+    successfully. Operations on Immutant caches and datasources work
+    the same way when called from within a handler.
+</p>
+<p>
+    To override this behavior, set the <code>:xa</code> option to false when
+    invoking <code>listen</code>. You should probably do this for any handlers
+    you expect to take a long time to complete (&gt;1 minute). By
+    default, a reaper process will abort any transaction taking longer
+    than 5 minutes.
+</p>
+<p>
+    For finer-grained control, another option is to wrap any
+    operations outside the scope of your handler's transaction inside
+    a call to <a href="./apidoc/immutant.xa.transaction.html#var-not-supported">immutant.xa.transaction/not-supported</a>.
+</p>
+<p>
+    See <a href="./transactions.html">Distributed Transactions</a> for more details.
+</p>
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-2">
+<h4 id="sec-3-2-2"><span class="section-number-4">7.3.2.2.</span> Some Examples</h4>
+<div class="outline-text-4" id="text-3-2-2">
+
+
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Wait on a task</span>
+(<span class="org-keyword">let</span> [task (msg/receive <span class="org-string">"/queue/work"</span>)]
+  (perform task))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Case-sensitive work queues?</span>
+(msg/listen <span class="org-string">".queue.lower"</span> #(msg/publish <span class="org-string">"/queue/upper"</span> (<span class="org-preprocessor">.toUpperCase</span> %)))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Listen to a remote queue</span>
+(msg/listen <span class="org-string">"queue/remote"</span> #(do-someting %) <span class="org-builtin">:host</span> <span class="org-string">"foo.example.com"</span> <span class="org-builtin">:port</span> 5445)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Contrived laziness</span>
+(<span class="org-keyword">let</span> [messages (message-seq queue)]
+  (<span class="org-keyword">doseq</span> [i (<span class="org-builtin">range</span> 4)] (publish queue i))
+  (<span class="org-builtin">=</span> (<span class="org-builtin">range</span> 4) (<span class="org-builtin">take</span> 4 messages)))
+</pre>
+
+
+<p>
+    The complement of <code>listen</code> is <a href="./apidoc/immutant.messaging.html#var-unlisten">immutant.messaging/unlisten</a>, to
+    which you pass the value returned by <code>listen</code> to cease the flow of
+    messages to that handler. Note that <code>unlisten</code> will be called for
+    you automatically when your application is undeployed.
+</p>
+<p>
+    Queues and topics behave differently when you map a handler to the
+    same destination. For queues, the current handler, if any, is
+    replaced, effectively making the <code>listen</code> call idempotent.
+    Multiple <code>listen</code> calls for topics are idempotent, too, but <b>only</b>
+    if the parameters are exactly the same. If you call <code>listen</code> for a
+    certain topic with different handlers, they are additive. For
+    example:
+</p>
+
+
+
+<pre class="src src-clojure">(listen <span class="org-string">"queue"</span> #(<span class="org-builtin">println</span> (<span class="org-builtin">inc</span> %)))
+(listen <span class="org-string">"queue"</span> #(<span class="org-builtin">println</span> (<span class="org-builtin">dec</span> %)))
+(publish <span class="org-string">"queue"</span> 42)
+=&gt; 41
+
+(listen <span class="org-string">"topic"</span> #(<span class="org-builtin">println</span> (<span class="org-builtin">inc</span> %)))
+(listen <span class="org-string">"topic"</span> #(<span class="org-builtin">println</span> (<span class="org-builtin">dec</span> %)))
+(publish <span class="org-string">"topic"</span> 42)
+=&gt; 43
+=&gt; 41
+</pre>
+
+
+<p>
+    Note that even if the contents within <code>#()</code> are identical, the
+    actual anonymous functions are still different objects. If you
+    want idempotent topic listeners, you should pass the same var to
+    each. And even then, during development, you may inadvertently
+    redefine the var and create multiple, redundant versions of the
+    topic listener. Hijinks may ensue.
+</p>
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-3-2-3">
+<h4 id="sec-3-2-3"><span class="section-number-4">7.3.2.3.</span> Accessing Listeners via JMX</h4>
+<div class="outline-text-4" id="text-3-2-3">
+
+
+<p>
+   Each message listener has a MBean exposed via JMX. Currently, you
+   can only stop and start the listener from the MBean.
+</p>
+<p>   
+   The MBean name is derived from URL-encoded concatenation of
+   destination name and the <code>:selector</code>, if any. If the destination is
+   a topic, the <code>:client-id</code> and the handler function name will be
+   included as well.
+</p>
+<p>
+   The names are so gross-looking that we're loathe to include any
+   examples at this time.
+</p>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-messaging-request-response">
+<h2 id="messaging-request-response"><a id="sec-4" name="sec-4"></a><span class="section-number-2">7.4.</span> Request/Response</h2>
+<div class="outline-text-2" id="text-messaging-request-response">
+
+
+<p>
+  Immutant also provides an implementation of the <a href="http://en.wikipedia.org/wiki/Request-response">request/response</a> pattern 
+  for synchronous work distribution. This feature is provided by two 
+  cleverly named functions: <code>request</code> and <code>respond</code>. Since they leverage
+  the existing messaging subsystem, the work is automatically distributed
+  across multiple workers within the same JVM or across multiple nodes if
+  in a cluster.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-4-1">
+<h3 id="sec-4-1"><span class="section-number-3">7.4.1.</span> Request</h3>
+<div class="outline-text-3" id="text-4-1">
+
+
+<p>   
+   The <a href="./apidoc/immutant.messaging.html#var-request">immutant.messaging/request</a> function takes a queue, a message, and an
+   optional list of options. It publishes the message to the queue, marking 
+   it as a <i>synchronous</i> message and returns a delay that will receive the 
+   response from the worker initiated by the <code>respond</code> function. It accepts
+   the same options as <code>publish</code>. 
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-4-2">
+<h3 id="sec-4-2"><span class="section-number-3">7.4.2.</span> Respond</h3>
+<div class="outline-text-3" id="text-4-2">
+
+
+<p>
+   The <a href="./apidoc/immutant.messaging.html#var-respond">immutant.messaging/respond</a> method takes a queue, a function, and an
+   optional list of options. It sets up a listener (via the <code>listen</code>
+   function) that applies the given function to any received message and publishes
+   the result back to the queue for the delay returned by <code>request</code> to receive.
+   It accepts the same options as <code>listen</code>.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-4-3">
+<h3 id="sec-4-3"><span class="section-number-3">7.4.3.</span> Some Examples</h3>
+<div class="outline-text-3" id="text-4-3">
+
+
+<p>
+   A basic example:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.messaging <span class="org-builtin">:as</span> msg])
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">setup a responder</span>
+(msg/respond <span class="org-string">"/queue/work"</span> (<span class="org-builtin">partial</span> apply +))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">send a request</span>
+(<span class="org-keyword">let</span> [result (msg/request <span class="org-string">"/queue/work"</span> [1 2 3])]
+  (<span class="org-builtin">println</span> (<span class="org-builtin">deref</span> result 1000 nil)) <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; 6</span>
+</pre>
+
+
+<p>
+   An example of using properties and selectors to segment work on the same 
+   queue:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.messaging <span class="org-builtin">:as</span> msg])
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">respond to 'add' messages</span>
+(msg/respond <span class="org-string">"/queue/work"</span> (<span class="org-builtin">partial</span> apply +) <span class="org-builtin">:selector</span> <span class="org-string">"operation='add'"</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">respond to 'multiply' messages</span>
+(msg/respond <span class="org-string">"/queue/work"</span> (<span class="org-builtin">partial</span> apply *) <span class="org-builtin">:selector</span> <span class="org-string">"operation='multiply'"</span>)
+
+(<span class="org-builtin">deref</span>
+ (msg/request <span class="org-string">"/queue/work"</span> [1 2 3 4] <span class="org-builtin">:properties</span> {<span class="org-string">"operation"</span> <span class="org-string">"add"</span>})
+ 1000 nil) <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; 9</span>
+
+(<span class="org-builtin">deref</span>
+ (msg/request <span class="org-string">"/queue/work"</span> [1 2 3 4] <span class="org-builtin">:properties</span> {<span class="org-string">"operation"</span> <span class="org-string">"multiply"</span>})
+ 1000 nil) <span class="org-comment-delimiter">;; </span><span class="org-comment">=&gt; 24</span>
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-messaging-pipelines">
+<h2 id="messaging-pipelines"><a id="sec-5" name="sec-5"></a><span class="section-number-2">7.5.</span> Pipelines</h2>
+<div class="outline-text-2" id="text-messaging-pipelines">
+
+
+<p>
+  Immutant provides a tool called a <i>pipeline</i>. A pipeline is
+  basically a composition of functions (<i>steps</i>), where each function
+  is passed the result of the previous function, dereferenced if
+  needed. It is built on top of the messaging subsystem, allowing each
+  step to have multiple processing threads, and to be automatically
+  load balanced across a cluster. The pipeline functions are available
+  via the <a href="./apidoc/immutant.pipeline.html">immutant.pipeline</a> namespace.
+</p>
+<p>
+  Since messaging is used to pass the data between step functions, the
+  data has to be in a format that can be encoded as clojure via
+  <a href="http://clojuredocs.org/clojure_core/clojure.core/pr">pr</a>. See the above <a href="#messaging-publishing-encodings-note">note about encodings</a>.
+</p>
+
+</div>
+
+<div class="outline-3" id="outline-container-5-1">
+<h3 id="sec-5-1"><span class="section-number-3">7.5.1.</span> Creating a pipeline</h3>
+<div class="outline-text-3" id="text-5-1">
+
+
+<p>
+   You create a pipeline with the <a href="./apidoc/immutant.pipeline.html#var-pipeline">immutant.pipeline/pipeline</a>
+   function. The <code>pipeline</code> function takes a unique (within the scope
+   of the application) name, one or more single-arity functions, and
+   optional keyword argument options, returning a function that acts
+   as an entry point into the pipeline:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.pipeline <span class="org-builtin">:as</span> pl])
+
+(<span class="org-keyword">defonce</span> <span class="org-function-name">foo-pipeline</span>
+  (pl/pipeline <span class="org-string">"foo"</span>
+    function-that-does-something
+    another-function))
+</pre>
+
+
+
+</div>
+
+<div class="outline-4" id="outline-container-5-1-1">
+<h4 id="sec-5-1-1"><span class="section-number-4">7.5.1.1.</span> Pipeline options</h4>
+<div class="outline-text-4" id="text-5-1-1">
+
+
+<p>
+    <code>pipeline</code> can take the following options, passed as keyword
+    arguments after the step functions:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="center"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="center" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:concurrency</code></td><td class="center"><code>1</code></td><td class="left">The number of threads to use for each step. Can be overridden on a per-step basis (see below).</td></tr>
+<tr><td class="left"><code>:error-handler</code></td><td class="center"><code>nil</code></td><td class="left">A function to call when a step function throws an exception. Receives the exception and the data passed to the step function. Can be overriden on a per-step basis (see below).</td></tr>
+<tr><td class="left"><code>:result-ttl</code></td><td class="center"><i>1 hour</i></td><td class="left">The time-to-live for the final pipeline result, in ms. Set to 0 for "forever", -1 to disable returning the result via a delay</td></tr>
+<tr><td class="left"><code>:step-deref-timeout</code></td><td class="center"><i>10 seconds</i></td><td class="left">The amount of time to wait when dereferencing the result of a step that returns a delay, in ms</td></tr>
+</tbody>
+</table>
+
+
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.pipeline <span class="org-builtin">:as</span> pl])
+
+(<span class="org-keyword">defonce</span> <span class="org-function-name">foo-pipeline</span>
+  (pl/pipeline <span class="org-string">"foo"</span>
+    function-that-does-something
+    another-function
+    <span class="org-builtin">:concurrency</span> 2))
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-4" id="outline-container-5-1-2">
+<h4 id="sec-5-1-2"><span class="section-number-4">7.5.1.2.</span> Per-step options</h4>
+<div class="outline-text-4" id="text-5-1-2">
+
+
+<p>
+   Each function can optionally be wrapped with metadata via the
+   <a href="./apidoc/immutant.pipeline.html#var-step">immutant.pipeline/step</a> function, providing settings for how that
+   particular function is handled within the pipeline:
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="center"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Option</th><th class="center" scope="col">Default</th><th class="left" scope="col">Description</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><code>:name</code></td><td class="center"><i>the index of the fn</i></td><td class="left">A name to use for the step</td></tr>
+<tr><td class="left"><code>:concurrency</code></td><td class="center"><code>1</code></td><td class="left">The number of threads to use, overriding the pipeline setting</td></tr>
+<tr><td class="left"><code>:error-handler</code></td><td class="center"><code>nil</code></td><td class="left">An error handler function, overriding the pipeline setting</td></tr>
+<tr><td class="left"><code>:step-deref-timeout</code></td><td class="center"><i>10 seconds</i></td><td class="left">The amount of time to wait when dereferencing the result of a step that returns a delay, in ms. Overrides the pipeline setting</td></tr>
+</tbody>
+</table>
+
+
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.pipeline <span class="org-builtin">:as</span> pl])
+
+(pl/pipeline <span class="org-string">"foo"</span>
+  function-that-does-something
+  (pl/step another-function <span class="org-builtin">:concurrency</span> 10)
+  <span class="org-builtin">:concurrency</span> 2)
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-5-2">
+<h3 id="sec-5-2"><span class="section-number-3">7.5.2.</span> Using a pipeline</h3>
+<div class="outline-text-3" id="text-5-2">
+
+
+<p>
+   The function returned by <a href="./apidoc/immutant.pipeline.html#var-pipeline">pipeline</a> acts as an entry function,
+   placing its argument onto the pipeline when called, returning a
+   delay around the end of the pipeline (by default):
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.pipeline <span class="org-builtin">:as</span> pl])
+
+(<span class="org-keyword">defonce</span> <span class="org-function-name">foo-pipeline</span>
+  (pl/pipeline <span class="org-string">"foo"</span>
+    function-that-does-something
+    another-function))
+
+(<span class="org-builtin">deref</span> (foo-pipeline {<span class="org-builtin">:ham</span> <span class="org-builtin">:biscuit</span>}) 10000 <span class="org-builtin">:timeout!</span>)
+</pre>
+
+
+<p>
+   Pipelines store the result of an execution by default, allowing it
+   to be retrieved by dereferencing the delay returned by the
+   pipeline-fn call.  To prevent results that may not be retrieved
+   from being stored indefinitely, they have a default time-to-live of
+   1 hour. You can control the retention time by passing a
+   <code>:result-ttl</code> option to <code>pipeline</code>. It is specified in
+   milliseconds, with a value of <code>0</code> indicating that the result should
+   be saved indefinitely, and <code>-1</code> indicating that the results should
+   be discarded immediately. If you set the <code>:result-ttl</code> to <code>-1</code>, any 
+   attempt to dereference the returned delay will raise an error.
+</p>
+<p>
+   If the result from a step is reference, it will be dereferenced
+   before being passed to the next step. This allows you to use a
+   pipeline within a pipeline. The amount of time to wait for the
+   <code>deref</code> is controlled by the <code>:step-deref-timeout</code> option, and
+   defaults to 10 seconds. Setting it to <code>0</code> will cause it to wait
+   forever, which will tie up a thread indefinitely.
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.pipeline <span class="org-builtin">:as</span> pl])
+
+(<span class="org-keyword">defonce</span> <span class="org-function-name">pipeline-x</span>
+  (pl/pipeline <span class="org-builtin">:x</span>
+    function-that-does-something
+    another-function))
+
+(<span class="org-keyword">defonce</span> <span class="org-function-name">pipeline-y</span>
+  (pl/pipeline <span class="org-builtin">:y</span>
+    yet-another-function
+    pipeline-x
+    and-another
+    <span class="org-builtin">:step-deref-timeout</span> 60000))
+</pre>
+
+
+<p>   
+   By default, the pipeline entry function places its argument onto
+   the front of the pipeline. You can insert the data into the
+   pipeline at any step by passing a <code>:step</code> keyword argument. The
+   step name would be the name you provided as an option for that step
+   using the <a href="./apidoc/immutant.pipeline.html#var-step">step</a> function, or the index of the step in the list of
+   steps if you haven't provided a name:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.pipeline <span class="org-builtin">:as</span> pl])
+
+(<span class="org-keyword">defonce</span> <span class="org-function-name">foo-pipeline</span>
+  (pl/pipeline <span class="org-string">"foo"</span>
+    function-that-does-something
+    (pl/step another-function <span class="org-builtin">:name</span> <span class="org-builtin">:another</span>)
+    a-third-function))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">insert at head</span>
+(foo-pipeline {<span class="org-builtin">:ham</span> <span class="org-builtin">:biscuit</span>})
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">skip the first step</span>
+(foo-pipeline {<span class="org-builtin">:ham</span> <span class="org-builtin">:biscuit</span>} <span class="org-builtin">:step</span> <span class="org-builtin">:another</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">insert at the last step </span>
+(foo-pipeline {<span class="org-builtin">:ham</span> <span class="org-builtin">:biscuit</span>} <span class="org-builtin">:step</span> 2)
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-messaging-pipelines-bindings">
+<h3 id="messaging-pipelines-bindings"><a id="sec-5-3" name="sec-5-3"></a><span class="section-number-3">7.5.3.</span> Available bindings</h3>
+<div class="outline-text-3" id="text-messaging-pipelines-bindings">
+
+
+<p>
+   The following vars have bound values inside a step or error-handler
+   invocation: 
+</p>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<caption></caption>
+<colgroup><col class="left"><col class="left">
+</colgroup>
+<thead>
+<tr><th class="left" scope="col">Var</th><th class="left" scope="col">Value</th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><a href="./apidoc/immutant.pipeline.html#var-*pipeline*"><code>*pipeline*</code></a></td><td class="left">The pipeline entry function for the currently active pipeline.</td></tr>
+<tr><td class="left"><a href="./apidoc/immutant.pipeline.html#var-*current-step*"><code>*current-step*</code></a></td><td class="left">The name of the currently executing step.</td></tr>
+<tr><td class="left"><a href="./apidoc/immutant.pipeline.html#var-*next-step*"><code>*next-step*</code></a></td><td class="left">The name of the next step in the pipeline.</td></tr>
+</tbody>
+</table>
+
+
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-5-4">
+<h3 id="sec-5-4"><span class="section-number-3">7.5.4.</span> Error handling</h3>
+<div class="outline-text-3" id="text-5-4">
+
+
+<p>
+   When an exception occurs in a step function, an error-handler
+   function will be invoked if provided for the pipeline or for the
+   particular step. This function will be passed the exception and the
+   original data passed to the step function, and have all of the
+   <a href="#messaging-pipelines-bindings">above bindings</a> available:
+</p>
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">a naive error handler that sleeps then retries on a network error,</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">logging and discarding otherwise</span>
+(<span class="org-keyword">defn</span> <span class="org-function-name">error-handler</span> [ex data]
+  (<span class="org-keyword">if</span> (<span class="org-builtin">instance?</span> <span class="org-preprocessor">NoRouteToHostException</span> ex)
+    (<span class="org-keyword">do</span>
+      (<span class="org-preprocessor">Thread/sleep</span> 1000)
+      (pl/*pipeline* data <span class="org-builtin">:step</span> pl/*current-step*))
+    (<span class="org-builtin">println</span> <span class="org-string">"ERROR:"</span> ex)))
+
+(<span class="org-builtin">require</span> '[immutant.pipeline <span class="org-builtin">:as</span> pl])
+
+(pl/pipeline <span class="org-string">"foo"</span>
+  connects-to-foo
+  connects-to-bar
+  <span class="org-builtin">:error-handler</span> error-handler)
+</pre>
+
+
+<p>
+   If no error-handler function is provided, the error handling
+   semantics provided by HornetQ are used, which causes the offending
+   step to be retried up to ten times before giving up.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-5-5">
+<h3 id="sec-5-5"><span class="section-number-3">7.5.5.</span> Halting the pipeline for a particular message</h3>
+<div class="outline-text-3" id="text-5-5">
+
+
+<p>
+   If, in a step function, you determine that the data requires no
+   further processing, you can halt that particular pipeline execution
+   by returning a special flag symbol - <a href="./apidoc/immutant.pipeline.html#var-halt">immutant.pipeline/halt</a>:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.pipeline <span class="org-builtin">:as</span> pl])
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">halt the pipeline at the second step, causing another-function to</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">not be called</span>
+(pl/pipeline <span class="org-string">"foo"</span>
+  function-that-does-something
+  #(<span class="org-keyword">if</span> (<span class="org-builtin">:some-done-condition</span> %)
+     pl/halt
+     %)
+  another-function)
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-5-6">
+<h3 id="sec-5-6"><span class="section-number-3">7.5.6.</span> Stopping the pipeline</h3>
+<div class="outline-text-3" id="text-5-6">
+
+
+<p>
+   When your application is undeployed, Immutant will automatically
+   shut down the pipeline. If you need to stop the pipeline at
+   runtime, use the <a href="./apidoc/immutant.pipeline.html#var-stop">immutant.pipeline/stop</a> function:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.pipeline <span class="org-builtin">:as</span> pl])
+
+(<span class="org-keyword">let</span> [pipeline (pl/pipeline <span class="org-string">"foo"</span> ...)]
+  ...
+  (pl/stop pipeline))
+</pre>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="jobs.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="caching.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 1.0.0.beta2</div>
+</div>
+
+
+</body></html>

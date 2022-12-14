@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | Clustering
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/install/">Install</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/tutorials/">Tutorials</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/">Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/current/apidoc/">API Docs</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="/builds/">1.x Incremental Builds</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            Tutorial: Clustering
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="tutorial article">
+              <div class="byline">
+                <div class="date">
+                  Last updated:
+                  <span class="date">
+                    Monday, February  3, 2014
+                  </span>
+                </div>
+                <div class="author">
+                  Author:
+                  The Immutant Team
+                </div>
+              </div>
+              <div class="body">
+                <p>One of the primary benefits provided by the <a href="http://www.jboss.org/jbossas">JBoss AS7</a>
+                application server, upon which Immutant is built, is clustering. The
+                Immutant libraries are orthogonal to clustering, but each library is
+                automatically enhanced with certain features inside a cluster:</p>
+                
+                <h3>immutant.web</h3>
+                
+                <p>In a cluster, HTTP session data is automatically replicated. When
+                coupled with the JBoss <a href="http://www.jboss.org/mod_cluster">mod_cluster</a> load-balancer, this enables
+                transparent failover and fine-grained, dynamic configuration and
+                control of your web applications.</p>
+                
+                <h3>immutant.messaging</h3>
+                
+                <p><a href="http://hornetq.org">HornetQ</a> is cluster-aware, so load balancing and failover of message
+                consumers within a cluster are automatic and require no extra
+                configuration on your part.</p>
+                
+                <h3>immutant.cache</h3>
+                
+                <p><a href="http://infinispan.org">Infinispan</a> caches adhere to a particular <a href="https://docs.jboss.org/author/display/ISPN/Clustering+modes">mode</a> of operation. In a
+                non-clustered, standalone Immutant, <code>:local</code> is the <strong>only</strong> supported
+                mode. But when clustered, you have other options.</p>
+                
+                <ul>
+                <li><code>:distributed</code> -- This is the default clustered mode. It&#39;s what
+                enables Infinispan clusters to achieve &quot;linear scalability&quot;. Cache
+                entries are copied to a fixed number of cluster nodes (default is
+                2) regardless of the cluster size. Distribution uses a consistent
+                hashing algorithm to determine which nodes will store a given
+                entry.</li>
+                <li><code>:replicated</code> -- In this mode, entries added to any cache instance
+                will be copied to all other cache instances in the cluster, and can
+                then be retrieved locally from any instance.  Though simple, it&#39;s
+                impractical for clusters of any significant size (&gt;10), and its
+                capacity is equal to the amount of RAM in its smallest peer.</li>
+                <li><code>:invalidated</code> -- This mode doesn&#39;t actually share any data at all,
+                so it&#39;s very &quot;bandwidth friendly&quot;. Whenever data is changed in a
+                cache, other caches in the cluster are notified that their copies
+                are now stale and should be evicted from memory.</li>
+                </ul>
+                
+                <h3>immutant.jobs</h3>
+                
+                <p>By default, scheduled jobs are <em>singletons</em>, but this term only has
+                relevance in a cluster. It means that your job will only execute on
+                one node in the cluster, and if it can&#39;t, it will failover to the next
+                available node until successful.</p>
+                
+                <h3>immutant.daemons</h3>
+                
+                <p>Similar to jobs, long-running services are also <em>singletons</em>, by
+                default. A singleton daemon will only be started on one node in your
+                cluster, and should that node crash, it will be automatically started
+                on another node, enabling you to create robust, highly-available
+                services.</p>
+                
+                <h2>Forming a cluster</h2>
+                
+                <p>By passing the <code>--clustered</code> option when you start Immutant, you
+                configure it as a node that will automatically discover other nodes
+                (via multicast, by default) to form a cluster:</p>
+                
+                <pre><code>lein immutant run --clustered&#x000A;</code></pre>
+                
+                <p>It&#39;s just that simple.</p>
+                
+                <p>But it can become complicated in environments where multicast isn&#39;t
+                enabled, e.g. Amazon&#39;s EC2. There are alternative configurations
+                available, of course, but for this tutorial we&#39;re going to demonstrate
+                how to simulate a cluster on a single machine so that you can
+                experiment with the features listed above.</p>
+                
+                <h2>Simulating a Cluster</h2>
+                
+                <h3>TL;DR</h3>
+                
+                <p>To run two immutant instances on a single machine, fire up two shells and...</p>
+                
+                <p>In one shell, run:</p>
+                
+                <pre><code>cp -r ~/.immutant/current/ /tmp/node2 &#x000A;lein immutant run --clustered&#x000A;</code></pre>
+                
+                <p>In another shell, run:</p>
+                
+                <pre><code>rm -rf /tmp/node2/jboss/standalone/data&#x000A;IMMUTANT_HOME=/tmp/node2 lein immutant run --clustered --node-name two --offset 100&#x000A;</code></pre>
+                
+                <p>And BAM, you&#39;re a cluster!</p>
+                
+                <h3>TL;DR for Mac users</h3>
+                
+                <p>If you&#39;re on a Mac, the above may not work. Try IP aliases instead:</p>
+                
+                <pre><code>for i in {1,2}; do sudo ifconfig en1 inet 192.168.6.20${i}/32 alias; done&#x000A;lein immutant run --clustered -b 192.168.6.201&#x000A;IMMUTANT_HOME=/tmp/node2 lein immutant run --clustered --node-name two -b 192.168.6.202&#x000A;</code></pre>
+                
+                <p>Note that IP aliases obviate the need for a port offset -- your web
+                servers will be available at 192.168.6.201:8080 and 192.168.6.202:8080
+                -- but you still need a unique node name for each instance.</p>
+                
+                <h3>Details</h3>
+                
+                <p>It is possible to run a test cluster out of one Immutant install, but
+                you can get strange results if multiple nodes in the cluster share the
+                same deployments directory. So, we make a copy of the Immutant install
+                to <code>/tmp</code>. The <code>/</code> on the end of the <code>current</code> path is important -
+                without it, <code>cp</code> will just copy the symbolic link instead of the
+                directory it points to.</p>
+                
+                <p>We then have to clear the new node&#39;s data directory - the AS caches a
+                UUID-based node id there, and if we don&#39;t clear it, both nodes will
+                end up with the same id, resulting in some nasty log messages.</p>
+                
+                <p>Each cluster node requires a unique name, which is usually derived
+                from the hostname, but since our Immutants are on the same host, we
+                pass the <code>--node-name</code> option on our second node to prevent a
+                conflict.</p>
+                
+                <p>JBoss listens for various types of connections on a few ports. One
+                obvious solution to the potential conflicts is to bind each Immutant
+                to a different interface, which we could specify using the <code>-b</code>
+                option. </p>
+                
+                <p>But rather than go through a platform-specific example of creating an
+                IP alias (unless you&#39;re on a Mac, see above), we can take advantage of
+                another JBoss feature: the <code>--offset</code> option will cause each default
+                port number to be incremented by a specified amount.</p>
+                
+                <p>So for the second Immutant, we set the offset to 100, resulting in its
+                HTTP service, for example, listening on 8180 instead of the default
+                8080, on which the first Immutant is listening.</p>
+                
+                <h2>Deploy an Application</h2>
+                
+                <p>With any luck at all, you have two Immutants running locally, both
+                hungry for an app to deploy, so let&#39;s create one.</p>
+                
+                <p>We&#39;ve been over how to <a href="../deploying/">deploy</a> an application before, and we&#39;re going
+                to use what we learned there to creae a simple app:</p>
+                
+                <pre><code>lein immutant new cluster-example&#x000A;cd cluster-example&#x000A;</code></pre>
+                
+                <p>Next, edit the Immutant application bootstrap file,
+                <code>src/immutant/init.clj</code>, and replace its contents with this:</p>
+                
+                <pre class="syntax clojure">(ns immutant.init&#x000A;  (:require [immutant.cache     :as cache]&#x000A;            [immutant.messaging :as messaging]&#x000A;            [immutant.daemons   :as daemon]))&#x000A;&#x000A;;;; Create a message queue&#x000A;(messaging/start "/queue/msg")&#x000A;&#x000A;;;; Define a consumer for our queue&#x000A;(def listener (messaging/listen "/queue/msg" #(println "received:" %)))&#x000A;&#x000A;;;; Create a distributed cache to hold our counter value&#x000A;(def cache (cache/lookup-or-create "counters"))&#x000A;&#x000A;;;; Controls the state of our daemon&#x000A;(def done (atom false))&#x000A;&#x000A;;;; Our daemon's start function&#x000A;(defn start []&#x000A;  (reset! done false)&#x000A;  (while (not @done)&#x000A;    (let [i (:value cache 1)]&#x000A;      (println "sending:" i)&#x000A;      (messaging/publish "/queue/msg" i)&#x000A;      (cache/put cache :value (inc i))&#x000A;      (Thread/sleep 1000))))&#x000A;&#x000A;;;; Our daemon's stop function&#x000A;(defn stop []&#x000A;  (reset! done true))&#x000A;&#x000A;;;; Register the daemon&#x000A;(daemon/daemonize "counter" start stop)</pre>
+                
+                <p>We&#39;ve defined a message queue, a message listener, a distributed
+                cache, and a daemon service that, once started, continuously publishes
+                a cached value to the queue and increments it.</p>
+                
+                <p>Daemons require a name (for referencing as a JMX MBean), a start
+                function to be invoked asynchronously, and a stop function that will
+                be automatically invoked when your app is undeployed, allowing you to
+                cleanly teardown any resources used by your service. By default, our
+                daemon is a <em>singleton</em>, meaning it will only ever run on one node in
+                your cluster.</p>
+                
+                <p>In the <code>cluster-example</code> directory, deploy to our first node:</p>
+                
+                <pre><code>lein immutant deploy&#x000A;</code></pre>
+                
+                <p>And to our second:</p>
+                
+                <pre><code>IMMUTANT_HOME=/tmp/node2 lein immutant deploy&#x000A;</code></pre>
+                
+                <p>Now watch the output of the shells in which your Immutants are
+                running. You should see the daemon start up on only one of them, but
+                both should be receiving messages. This is the automatic load
+                balancing of message consumers.</p>
+                
+                <p>Now kill the Immutant running the daemon. Watch the other one to see
+                that the daemon will start there within seconds. There&#39;s your
+                automatic HA service failover. Because the cache is shared among any
+                apps that reference it by name in the cluster, you&#39;ll see the second
+                daemon pick up the count where the first daemon left off. Now restart
+                the killed Immutant to see him start to receive messages again. It&#39;s
+                fun, right? :)</p>
+                
+                <h2>Domain Mode</h2>
+                
+                <p>AS7 features a brand new way of configuring and managing clusters
+                called <em>Domain Mode</em>, but unfortunately its documentation is still
+                evolving. If you insist, try <a href="http://xebee.xebia.in/2011/11/01/all-about-managed-domain-jboss-as7/">this</a> or possibly <a href="https://docs.jboss.org/author/display/AS71/AS7+Cluster+Howto">this</a>.</p>
+                
+                <p><em>Domain Mode</em> is not required for clustering, but it is an option for
+                easier cluster management. We hope to better document its use with
+                respect to Immutant in the future.</p>
+              </div>
+              <div class="comments">
+                
+                            <div id="disqus_thread"></div>
+                            <script type="text/javascript">
+                            var disqus_shortname = 'immutant';
+                            var disqus_url = "http://immutant.org/tutorials/clustering/";
+                            var disqus_developer = null;
+                            var disqus_identifier = null;
+                            (function() {
+                              var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
+                              dsq.src = "http://immutant.disqus.com/embed.js";
+                              (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq);
+                            })();
+                            </script>
+                            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=immutant">comments powered by Disqus.</a></noscript>
+              </div>
+            </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tutorial-nav">
+              <h3>All Tutorials</h3>
+              <ul class="nav nav-tabs nav-stacked">
+                <li class="">
+                  <a href="/tutorials/installation/index.html">Installation</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/deploying/index.html">Deployment</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/web/index.html">Web</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/messaging/index.html">Messaging</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/jobs/index.html">Scheduling</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/caching/index.html">Caching</a>
+                </li>
+                <li class="current">
+                  <a href="/tutorials/clustering/index.html">Clustering</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials/overlay/index.html">Overlay</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>
+                The Immutant project is a member of the
+                <a href="http://jboss.org/">JBoss Community</a> and
+                produced by the <a href="http://projectodd.org/">Project:odd</a> team.
+                It is a community-driven open-source project, and is licensed under the
+                <a href="/license-lgpl.txt">GNU LGPL</a>.
+              </p>
+              <p>
+                Copyright 2011 - 2014 <a href="http://redhat.com/">Red Hat, Inc.</a>
+                Immutant&trade; is a trademark of Red Hat, Inc.
+              </p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+    var pageTracker = _gat._getTracker("UA-6435340-7");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+  </body>
+</html>

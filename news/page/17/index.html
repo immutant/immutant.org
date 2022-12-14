@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | News
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            News
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2011/11/08/deploying-an-application/">Getting Started: Deploying a Web Application</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Toby Crawley
+                </div>
+                <div class="date">
+                  Tuesday, November  8, 2011
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/lein/">lein</a>
+                <a href="/news/tags/deploy/">deploy</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/getting-started/">getting-started</a>
+                <a href="/news/tags/ring/">ring</a>
+              </div>
+              <div class="body">
+                <p>Welcome back! This article covers creating a basic <a href="https://github.com/mmcgrana/ring">Ring</a> web application and deploying 
+                to an Immutant. It is the second installment in a 
+                <a href="/news/tags/getting-started/">series of tutorials on getting started</a> with Immutant. If you haven&#39;t
+                read the <a href="/news/2011/11/08/installing/">first installment</a>, go do so now, since it covers installation
+                and setup. This tutorial assumes you are on a *nix system.</p>
+                
+                <h2 id="Creating_an_Immutant_Clojure_application" onclick="window.location = '#Creating_an_Immutant_Clojure_application'">Creating an Immutant Clojure application</h2>
+                
+                <p>In our <a href="/news/2011/11/08/installing/">previous article</a>, we installed the <a href="https://github.com/immutant/lein-immutant/">lein plugin</a>. Let&#39;s take another
+                look at the tasks it provides:</p>
+                
+                <pre><code>~/immutant $ lein immutant&#x000A;Manage the deployment lifecycle of an Immutant application.&#x000A;&#x000A;Subtasks available:&#x000A;new        Create a new project skeleton initialized for immutant.&#x000A;init       Adds a sample immutant.clj configuration file to an existing project&#x000A;deploy     Deploys the current project to the Immutant specified by $IMMUTANT_HOME&#x000A;undeploy   Undeploys the current project from the Immutant specified by $IMMUTANT_HOME&#x000A;run        Starts up the Immutant specified by $IMMUTANT_HOME, displaying its console output&#x000A;</code></pre>
+                
+                <p>We talked about <code>run</code> last time. This time, we&#39;ll cover <code>new</code> and <code>deploy</code>. To do so, 
+                we&#39;ll build a basic application that demonstrates the current web features. To get
+                started, let&#39;s create an Immutant project:</p>
+                
+                <pre><code>~/immutant $ lein immutant new immutant-demo&#x000A;Created new project in: /Users/tobias/immutant/immutant-demo&#x000A;Look over project.clj and start coding in immutant_demo/core.clj&#x000A;Wrote sample immutant.clj&#x000A;</code></pre>
+                
+                <p>The <code>new</code> task creates a <a href="https://github.com/technomancy/leiningen">Leiningen</a> project and gives it a sample Immutant configuration
+                file (<code>immutant.clj</code>). It is equivalent to calling:</p>
+                
+                <pre><code>~/immutant $ lein new immutant-demo &amp;&amp; cd immutant-demo &amp;&amp; lein immutant init&#x000A;</code></pre>
+                
+                <p>We&#39;ll come back to <code>immutant.clj</code> in a sec. Now, let&#39;s add a ring handler to our core namespace:</p>
+                
+                <pre class="syntax clojure">(ns immutant-demo.core)&#x000A;&#x000A;(defn ring-handler [request]&#x000A;  {:status 200&#x000A;    :headers {"Content-Type" "text/html"}&#x000A;    :body "Hello from Immutant!" })</pre>
+                
+                <h2 id="Configuring_the_application_for_Immutant" onclick="window.location = '#Configuring_the_application_for_Immutant'">Configuring the application for Immutant</h2>
+                
+                <p>When the Immutant deploys an application, it looks for a file named <code>immutant.clj</code> 
+                at the root and evaluates it if it exists. This file is used to configure the
+                Immutant services you want your application to consume. It&#39;s the single place you 
+                defines all the components required by your application, and saves you from having to
+                keep external configuration files in sync (crontabs, message queue definitions, init scripts, etc).</p>
+                
+                <p>The file has example code for configuring web endpoints and messaging services, but we&#39;re
+                just going to deal with web endpoints in this article. Edit your <code>immutant.clj</code> so it 
+                looks like:</p>
+                
+                <pre class="syntax clojure">(ns immutant-demo.init&#x000A;  (:use immutant-demo.core)&#x000A;  (:require [immutant.messaging :as messaging]&#x000A;            [immutant.web :as web]))&#x000A;&#x000A;(web/start "/" #'ring-handler)</pre>
+                
+                <p>We&#39;ll come back to what <code>web/start</code> is doing after we get the application running.</p>
+                
+                <h2 id="Deploying_your_application" onclick="window.location = '#Deploying_your_application'">Deploying your application</h2>
+                
+                <p>Before we can start up an Immutant, we need to tell it about our application. We do that
+                by deploying (for this to work, you need to have <code>IMMUTANT_HOME</code> set - see the 
+                <a href="/news/2011/11/08/installing/">previous article</a> for details):</p>
+                
+                <pre><code>~/immutant/immutant-demo $ lein immutant deploy&#x000A;Deployed immutant-demo to /Users/tobias/immutant/current/jboss/standalone/deployments/immutant-demo.clj&#x000A;</code></pre>
+                
+                <p>This writes a <em>deployment descriptor</em> to Immutant&#39;s deploy directory which points back
+                to the application&#39;s root directory. Now the Immutant can find your application - so let&#39;s 
+                fire it up.</p>
+                
+                <h2 id="Starting_Immutant" onclick="window.location = '#Starting_Immutant'">Starting Immutant</h2>
+                
+                <p>To launch an Immutant, use the <code>lein immutant run</code> command. This will
+                start the Immutant&#39;s JBoss server, and will run in the foreground displaying the console log.
+                You&#39;ll see lots of log messages that you can ignore - the
+                one to look for should be the last message, and should tell you the app was deployed:</p>
+                
+                <pre><code>~/immutant/immutant-demo $ lein immutant run&#x000A;Starting Immutant via /Users/tobias/immutant/current/jboss/bin/standalone.sh&#x000A;...&#x000A;(a plethora of log messages deleted)&#x000A;...&#x000A;13:04:39,888 INFO  [org.jboss.as.server.controller] (DeploymentScanner-threads - 2) Deployed &quot;immutant-demo.clj&quot;&#x000A;</code></pre>
+                
+                <p>Now, let&#39;s verify that our app is really there. Immutant runs on port 8080 by default, so 
+                let&#39;s hit it and see what happens:</p>
+                
+                <pre><code>~ $ curl http://localhost:8080/immutant-demo/&#x000A;Hello from Immutant!&#x000A;</code></pre>
+                
+                <p>Yay!</p>
+                
+                <p>You can kill the Immutant with Ctrl-C.</p>
+                
+                <h2 id="Context_Paths" onclick="window.location = '#Context_Paths'">Context Paths</h2>
+                
+                <p>Remember our call to <code>web/start</code> earlier? Let&#39;s talk about what that is doing. To 
+                do that, however, we need to first talk about <em>context paths</em>. The context path is 
+                the portion of the URL between the hostname and the routes within the application.
+                It basically tells Immutant which requests to route to a particular application.</p>
+                
+                <p>An Immutant can host multiple applications at the same time, but each application must 
+                have a unique context path. If no context path is provided when an application
+                is deployed, it defaults to one based on the name of the deployment. The 
+                deployment name is taken from the name of the deployment descriptor, which
+                in turn is taken from the name of the project given to <code>defproject</code> in
+                <code>project.clj</code>. So for our sample app above, the context path defaults to 
+                <code>/immutant-demo</code>. You can override this default by specifying
+                a <code>:context-path</code> within an <code>:immutant</code> map in your <code>project.clj</code>. Let&#39;s
+                go ahead and do that:</p>
+                
+                <pre class="syntax clojure">(defproject immutant-demo "1.0.0-SNAPSHOT"&#x000A;  :description "A basic demo"&#x000A;  :dependencies [[org.clojure/clojure "1.2.1"]]&#x000A;  :immutant {:context-path "/"})</pre>
+                
+                <p>Now, when you call <code>lein immutant deploy</code>, the context path will be picked up
+                from your <code>project.clj</code> and included in the deployment descriptor and any
+                web endpoints your application stands up will be accessible under that
+                context path.</p>
+                
+                <p>Which brings us back to <code>web/start</code>. <code>web/start</code> stands up a web endpoint
+                for you, and takes two arguments: a <em>sub-context path</em> and a <a href="https://github.com/mmcgrana/ring">Ring</a> handler
+                function. The sub-context path is relative to the application&#39;s context
+                path, so a context path of &quot;/ham&quot; and a sub-context path of &quot;/&quot; makes
+                the handler function available at <code>/ham</code>, whereas a sub-context path
+                of &quot;/biscuits&quot; makes the handler function available at <code>/ham/biscuits</code>.
+                Make sense?</p>
+                
+                <p>You can register as many web endpoints as you like within an application -
+                they just each need an application unique sub-context path. If we add 
+                this to our <code>core.clj</code>:</p>
+                
+                <pre class="syntax clojure">(defn another-ring-handler [request]&#x000A;  {:status 200&#x000A;   :headers {"Content-Type" "text/html"}&#x000A;   :body "Pssst! Over here!"})</pre>
+                
+                <p>And this to our <code>immutant.clj</code>:</p>
+                
+                <pre class="syntax clojure">(web/start "/biscuits" #'another-ring-handler)</pre>
+                
+                <p>Redeploy the application to pick up the <code>:context-path</code> from <code>immutant.clj</code>:</p>
+                
+                <pre><code>~/immutant/immutant-demo $ lein immutant deploy&#x000A;Deployed immutant-demo to /Users/tobias/immutant/current/jboss/standalone/deployments/immutant-demo.clj&#x000A;</code></pre>
+                
+                <p>Then fire an Immutant up again with <code>lein immutant run</code>, we can see they
+                both work:</p>
+                
+                <pre><code>~ $ curl http://localhost:8080&#x000A;Hello from Immutant!&#x000A;~ $ curl http://localhost:8080/biscuits&#x000A;Pssst! Over here!&#x000A;</code></pre>
+                
+                <p><code>web/start</code> has a companion function for shutting down a web endpoint:
+                <code>web/stop</code>. It takes the sub-context path for the endpoint, and can
+                be called from anywhere. You aren&#39;t required to shut down your endpoints -
+                Immutant will do that on your behalf when it is shut down or the application 
+                is undeployed.</p>
+                
+                <h2 id="Wrapping_up" onclick="window.location = '#Wrapping_up'">Wrapping up</h2>
+                
+                <p>I hope you&#39;ve enjoyed this quick run-through of deploying a web application
+                to Immutant. Since Immutant is still in a pre-alpha state, none of what I
+                said above is set in stone. If anything does change, I&#39;ll edit this post
+                to keep it accurate. I&#39;ve posted the <a href="https://github.com/immutant/immutant-basic-web-demo">demo application</a> we&#39;ve built if you want
+                to download it. </p>
+                
+                <p>If you have any feedback or questions, <a href="/community">get in touch</a>! And stay tuned - our next 
+                tutorial will cover using Immutant&#39;s messaging features. </p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2011/11/08/deploying-an-application/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2011/11/08/installing/">Getting Started: Installing Immutant</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Toby Crawley
+                </div>
+                <div class="date">
+                  Tuesday, November  8, 2011
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/installation/">installation</a>
+                <a href="/news/tags/lein/">lein</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/getting-started/">getting-started</a>
+              </div>
+              <div class="body">
+                <div class="notice big">
+                  This article is out of date - see our <a href="/news/2011/12/21/installing-redux/">new tutorial</a> for
+                  the latest instructions for installing Immutant.
+                </div>
+                
+                <p>Greetings! This article is the first in a <a href="/news/tags/getting-started/">series of tutorials on getting started</a>
+                with Immutant. This entry covers setting up a development environment and installing
+                Immutant. This tutorial assumes you are on a *nix system. It also assumes you have 
+                <a href="https://github.com/technomancy/leiningen">Leiningen</a> installed. If not, follow <a href="https://github.com/technomancy/leiningen#readme">these instructions</a>, then come back here.</p>
+                
+                <h2 id="Installing_the_lein_plugin" onclick="window.location = '#Installing_the_lein_plugin'">Installing the lein plugin</h2>
+                
+                <p>We provide a <a href="https://github.com/immutant/lein-immutant/">lein plugin</a> for creating your Immutant applications and 
+                managing their life-cycles. As of this post, the latest version of the plugin 
+                is 0.2.0. Check <a href="http://clojars.org/lein-immutant">clojars</a> for the current version.</p>
+                
+                <p>Let&#39;s install it as a global plugin:</p>
+                
+                <pre><code>~ $ lein plugin install lein-immutant 0.2.0&#x000A;Copying 3 files to /a/nice/long/tmp/path/lib&#x000A;Including lein-immutant-0.2.0.jar&#x000A;Including clojure-1.2.0.jar&#x000A;Including commons-exec-1.1.jar&#x000A;Including fleet-0.9.5.jar&#x000A;Created lein-immutant-0.2.0.jar&#x000A;</code></pre>
+                
+                <p>Now, run <code>lein immutant</code> to see what tasks the plugin provides:</p>
+                
+                <pre><code>~ $ lein immutant&#x000A;Manage the deployment lifecycle of an Immutant application.&#x000A;&#x000A;Subtasks available:&#x000A;new        Create a new project skeleton initialized for immutant.&#x000A;init       Adds a sample immutant.clj configuration file to an existing project&#x000A;deploy     Deploys the current project to the Immutant specified by $IMMUTANT_HOME&#x000A;undeploy   Undeploys the current project from the Immutant specified by $IMMUTANT_HOME&#x000A;run        Starts up the Immutant specified by $IMMUTANT_HOME, displaying its console output&#x000A;</code></pre>
+                
+                <p>We&#39;ll only talk about the <code>run</code> task today, and save the rest for the next tutorial.</p>
+                
+                <h2 id="Installing_Immutant" onclick="window.location = '#Installing_Immutant'">Installing Immutant</h2>
+                
+                <p>Now we need to install an Immutant distribution. We&#39;ve yet to make any official
+                releases, but our <a href="https://projectodd.ci.cloudbees.com/view/Immutant/">CI</a> server is setup to publish an <a href="/builds">incremental build</a> every time
+                we push to the <a href="https://github.com/immutant/immutant">git repo</a>. The latest incremental build is always available at
+                <a href="http://immutant.org/builds/immutant-dist-bin.zip">http://immutant.org/builds/immutant-dist-bin.zip</a>. </p>
+                
+                <p>At this point, I&#39;d love to tell you to install Immutant via:</p>
+                
+                <pre><code>lein immutant install # coming soon!&#x000A;</code></pre>
+                
+                <p>But that currently won&#39;t work. Until we actually implement that, you&#39;ll have to download
+                and setup Immutant manually. Go ahead and download our <a href="http://immutant.org/builds/immutant-dist-bin.zip">latest incremental build</a>.</p>
+                
+                <p>Once you have the zip file downloaded, unzip it somewhere handy. For this 
+                walk-through, I&#39;m going to put it in <code>~/immutant/</code>. When unzipped, the distribution
+                will have the build number in the directory name. It&#39;s handy to have a consistent
+                path to the distribution, allowing us to download other incremental builds in the
+                future with minimal fuss. To do that, link the distribution to <code>current</code>. Here is
+                my shell session doing just that:</p>
+                
+                <pre><code>~ $ mkdir immutant&#x000A;~ $ cd immutant&#x000A;~/immutant $ unzip -q ../downloads/immutant-dist-bin.zip&#x000A;~/immutant $ ln -s immutant-1.x.incremental.15 current&#x000A;~/immutant $ ls&#x000A;current                     immutant-1.x.incremental.15&#x000A;~/immutant $ ls -l&#x000A;total 8&#x000A;lrwxr-xr-x  1 tobias  staff   27 Nov  7 22:41 current -&gt; immutant-1.x.incremental.15&#x000A;drwxrwxr-x  3 tobias  staff  102 Nov  7 13:20 immutant-1.x.incremental.15&#x000A;</code></pre>
+                
+                <p>Now we&#39;ll set a environment variable pointing to the distribution:</p>
+                
+                <pre><code>export IMMUTANT_HOME=~/immutant/current&#x000A;</code></pre>
+                
+                <p>This will tell the lein plugin where to find Immutant. Once we implement <code>lein immutant install</code>,
+                this requirement will go away.</p>
+                
+                <h2 id="Running_Immutant" onclick="window.location = '#Running_Immutant'">Running Immutant</h2>
+                
+                <p>To verify that Immutant is properly installed, let&#39;s fire it up. To do so, 
+                use the <code>lein immutant run</code> command. This is a convenient way to start the Immutant&#39;s 
+                JBoss server, and will run in the foreground displaying the console log. 
+                You&#39;ll see lots of log messages that you can ignore - the
+                one to look for should be the last message, and will tell you the Immutant was properly
+                started:</p>
+                
+                <pre><code>~/immutant $ lein immutant run&#x000A;Starting Immutant via /Users/tobias/immutant/current/jboss/bin/standalone.sh&#x000A;...&#x000A;(a plethora of log messages deleted)&#x000A;...&#x000A;22:46:31,663 INFO  [org.jboss.as] (Controller Boot Thread) JBoss AS 7.x.incremental.182 &quot;Ahoy!&quot; started in 2990ms - Started 136 of 200 services (61 services are passive or on-demand)&#x000A;</code></pre>
+                
+                <p>You can kill the Immutant with Ctrl-C.</p>
+                
+                <h2 id="Wrapping_up" onclick="window.location = '#Wrapping_up'">Wrapping up</h2>
+                
+                <p>If you&#39;ve done all of the above, you&#39;re now ready to deploy an application. We&#39;ll
+                cover that in our <a href="/news/2011/11/08/deploying-an-application/">next tutorial</a>. </p>
+                
+                <p>Since Immutant is still in a pre-alpha state, none of what I
+                said above is set in stone. If anything does change, I&#39;ll edit this post
+                to keep it accurate. </p>
+                
+                <p>If you have any feedback or questions, <a href="/community">get in touch</a>! </p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2011/11/08/installing/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2011/11/02/enterprise-grade/">WTF is an enterprise-grade app server?</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Jim Crossley
+                </div>
+                <div class="date">
+                  Wednesday, November  2, 2011
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/wtf/">wtf</a>
+                <a href="/news/tags/enterprise/">enterprise</a>
+                <a href="/news/tags/app-server/">app-server</a>
+              </div>
+              <div class="body">
+                <p>That&#39;s a great question. We get it a lot. It was <a href="http://news.ycombinator.com/item?id=3184284">asked on Hacker News</a>
+                in response to our birth announcement of Immutant yesterday.</p>
+                
+                <p>So as someone who has worked in multiple enterprises, and now works
+                for a <a href="http://redhat.com">company</a> whose primary customers <em>are</em> enterprises, and since I
+                routinely toss around the term like everyone knows what it means, and
+                since it&#39;s one of those awful terms that means something different to
+                everyone...</p>
+                
+                <p>I&#39;m compelled to answer the question, &quot;WTF is an enterprise-grade
+                application server?&quot;</p>
+                
+                <p>The answer requires answering another question first: </p>
+                
+                <h2 id="What&#39;s_an_Enterprise?" onclick="window.location = '#What&#39;s_an_Enterprise?'">What&#39;s an Enterprise?</h2>
+                
+                <p>Here&#39;s my definition: it&#39;s an organization of mostly-independent teams
+                building and maintaining applications used by other internal groups
+                and external customers.</p>
+                
+                <p>The key identifier of an enterprise is &quot;a group of groups&quot; in which
+                <em>more than one of them builds software</em>.</p>
+                
+                <p>There&#39;s usually a single &quot;system operations&quot; group. Their life is
+                hell. They&#39;re ultimately responsibile for the security and integrity
+                of the organization&#39;s data and the lifecycles of all the applications
+                built for and used by all the other groups in the organization.</p>
+                
+                <p>Did I mention their life is hell?</p>
+                
+                <p>They can&#39;t afford to support all the myriad databases, message queues
+                and web frameworks each team might decide to build their apps
+                around. Not to mention supporting multiple languages! They prefer a
+                single, &quot;all in the tin&quot; solution. Sadly, that usually means .Net or
+                Java.</p>
+                
+                <p>So <strong>enterprise-grade</strong> implies a capacity for supporting these types
+                of environments. It usually involves, among other things,
+                <strong>messaging</strong> so that the disparate apps may communicate,
+                <strong>transactions</strong> to ensure the integrity of distributed data stores,
+                and <strong>clustering</strong>, not only for scalability, but also to allow the
+                lifecycles of the multiple versions of the apps to vary
+                independently. And oh yeah, it also has to stay up, all the time.</p>
+                
+                <h2 id="What&#39;s_an_App_Server?" onclick="window.location = '#What&#39;s_an_App_Server?'">What&#39;s an App Server?</h2>
+                
+                <p>An app server is a single product that provides all those
+                services. It&#39;s a multi-threaded process that, once started, provides
+                any app deployed to it with a web server, messaging, transactions,
+                scheduling, security, caching, clustering, and more. JBoss AS7 is one
+                such app server. It&#39;s <a href="https://github.com/jbossas/jboss-as">open-source</a> and it&#39;s <a href="http://torquebox.org/news/2011/10/06/torquebox-2x-performance/">fast</a>.</p>
+                
+                <p>Unfortunately, most popular commercial Java app servers provide those
+                robust enterprise services at a very high price. Not only in dollars,
+                but in the form of complex Java API&#39;s, overly-configured slow
+                implementations, vendor-negotiated standards and general &quot;acronym
+                soup&quot;.</p>
+                
+                <p>But it doesn&#39;t have to be that way. The Rails &quot;convention over
+                configuration&quot; mantra inspired the creation of <a href="http://torquebox.org">TorqueBox</a>,
+                encapsulating the enterprise-grade services provided by JBoss AS7
+                behind simple Ruby API&#39;s. The immediate goal for Immutant is to do the
+                same with Clojure.</p>
+                
+                <p>But by integrating <strong>any</strong> JVM-based language with JBoss AS7, the
+                ultimate goal is to keep all the groups in an enterprise -- both
+                operations and development -- happy. Or at least significantly less
+                soul-sucky and hopefully more productive.</p>
+                
+                <h2 id="But_why_should_you_care?" onclick="window.location = '#But_why_should_you_care?'">But why should you care?</h2>
+                
+                <p>Maybe you shouldn&#39;t. Maybe you only need a web server and a database,
+                maybe just a JVM! Maybe you&#39;re not in a group of groups. Heck, maybe
+                you&#39;re not even in a group!</p>
+                
+                <p>Maybe you&#39;re perfectly content being both developer and admin for your
+                apps and the various external processes on which they depend, or
+                you&#39;re quite happy delegating some of those responsibilities to the
+                fine folks at <a href="http://heroku.com">Heroku</a>, <a href="http://engineyard.com">EngineYard</a>, or <a href="https://openshift.redhat.com/">someone else</a>.</p>
+                
+                <p>If that&#39;s the case, you are probably a very happy person, and I&#39;m very
+                happy for you!</p>
+                
+                <p>But if you feel you could benefit from a more integrated &quot;all in the
+                tin&quot; solution, and especially if you&#39;re thinking along polyglot lines,
+                I think TorqueBox (and Immutant, once it matures) is a compelling
+                alternative, whether you work in an enterprise or not.</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2011/11/02/enterprise-grade/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2011/11/01/announcing/">Introducing Immutant</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Jim Crossley
+                </div>
+                <div class="date">
+                  Tuesday, November  1, 2011
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/announcement/">announcement</a>
+                <a href="/news/tags/first/">first</a>
+                <a href="/news/tags/beginning/">beginning</a>
+              </div>
+              <div class="body">
+                <p><img src="http://clojure.org/file/view/clojure-icon.gif" alt="[Clojure]" class="alignright"/></p>
+                
+                <p>The time has come for us to officially announce the Immutant
+                project. Immutant is going to be for <a href="http://clojure.org/">Clojure</a> what <a href="http://torquebox.org/">TorqueBox</a> is for
+                <a href="http://jruby.org/">Ruby</a>: a true, enterprise-grade application server, encapsulating the
+                robust services provided by JBoss AS7 within intuitive Clojure API&#39;s.</p>
+                
+                <p>Further, Immutant has inspired us to attempt to achieve a sort of
+                &quot;polyglot cafeteria plan&quot; of app serving. For example, your
+                &quot;application&quot; might consist of a Ruby web app in the front and Clojure
+                data mining services in the rear, loosely but securely coupled via
+                JSON-encoded asynchronous messages. You choose the JVM-based languages
+                and frameworks that make the most sense for each of your application
+                components. And Immutant will provide a uniform deployment platform
+                and the &quot;glue&quot;, i.e. those critical enterprisey services like
+                messaging, security, transactions, clustering, etc. that all
+                successful applications eventually require.</p>
+                
+                <h2 id="Why?" onclick="window.location = '#Why?'">Why?</h2>
+                
+                <p>Because learning new programming languages is fun. Because no one
+                language is good for everything a non-trivial application needs to
+                do. Because JBoss wants to be &quot;everywhere&quot;.</p>
+                
+                <p>But mostly because we want to.</p>
+                
+                <p>App servers get a bad rap -- and bad app servers deserve it -- but
+                simple deployment, clustering and messaging are all good
+                things. Embracing polyglot and enabling the choice of the right
+                language/framework for a specific job is a good thing. We hope to
+                deliver that goodness via Immutant.</p>
+                
+                <h2 id="An_Invitation" onclick="window.location = '#An_Invitation'">An Invitation</h2>
+                
+                <p>We just got started with this, and though still Clojure noobs, we&#39;re
+                learning fast. We have a lot to do, and we&#39;d love to have you help
+                shape Immutant into something that&#39;ll best serve your needs.</p>
+                
+                <p>In the coming weeks, we&#39;ll be publishing more articles about Immutant,
+                such as:</p>
+                
+                <ul>
+                <li>How to deploy your Clojure apps (hint: Leiningen plugin)</li>
+                <li>How to configure Immutant to serve both Ruby and Clojure apps</li>
+                <li>How to pass messages between Ruby and Clojure components</li>
+                <li>How to distribute Clojure message handlers across a cluster of immutants</li>
+                </ul>
+                
+                <p>Please follow along on <a href="http://twitter.com/immutant">Twitter</a>, join the <a href="/community/mailing_lists/">mailing lists</a> and/or hang
+                out with us on <a href="/community#irc">IRC</a>. It&#39;ll be fun!</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2011/11/01/announcing/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="pagination-links"><a href="/news/page/16/" class="previous-link">Previous</a> <a href="/news/" class="page-link">1</a> <a href="/news/page/2/" class="page-link">2</a> <span class="skip">...</span><a href="/news/page/16/" class="page-link">16</a> <span class="current-page">17</span> </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tags">
+              <div class="tag-cloud">
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/announcement/">announcement</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/app-server/">app-server</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/bears/">bears</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/beginning/">beginning</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/boot/">boot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/boot-immutant/">boot-immutant</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/caching/">caching</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/clustering/">clustering</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/daemons/">daemons</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/datomic/">datomic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/deploy/">deploy</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/distribution/">distribution</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/enterprise/">enterprise</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/event/">event</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/first/">first</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/getting-started/">getting-started</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/hotrod/">hotrod</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/infinispan/">infinispan</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/installation/">installation</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/isolation/">isolation</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein/">lein</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/lein-immutant/">lein-immutant</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/luminus/">luminus</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/messaging/">messaging</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/openshift/">openshift</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/overlay/">overlay</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/pipelines/">pipelines</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/polyglot/">polyglot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/poorsmatic/">poorsmatic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/postgresql/">postgresql</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/presentations/">presentations</a>
+                </span>
+                <span class="tag tag-6">
+                  <a href="http://immutant.org/news/tags/releases/">releases</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/ring/">ring</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/runtime/">runtime</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/scheduling/">scheduling</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/screencast/">screencast</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/slim/">slim</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/sockjs/">sockjs</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/survey/">survey</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/thedeuce/">thedeuce</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/torquebox/">torquebox</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transactions/">transactions</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transit/">transit</a>
+                </span>
+                <span class="tag tag-3">
+                  <a href="http://immutant.org/news/tags/tutorial/">tutorial</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/under-the-hood/">under-the-hood</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/vertx/">vertx</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/web/">web</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/websockets/">websockets</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wildfly/">wildfly</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wtf/">wtf</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/xa/">xa</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

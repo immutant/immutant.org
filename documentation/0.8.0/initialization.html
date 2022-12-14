@@ -1,0 +1,443 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<title>Application Initialization &amp; Configuration</title>
+<meta content="text/html;charset=iso-8859-1" http-equiv="Content-Type">
+<meta content="Application Initialization &amp; Configuration" name="title">
+<meta content="Org-mode" name="generator">
+<meta content="2013-01-14 12:10:32 EST" name="generated">
+<meta content="" name="author">
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+&lt;!--/*--&gt;&lt;![CDATA[/*&gt;&lt;!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]&gt;*///--&gt;
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+<p id="title"><span class="site"><strong>JBoss.org</strong></span><span class="doc"><strong>Community Documentation</strong></span></p><ul class="docnav"><li class="previous"><a accesskey="p" href="deployment.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="web.html"><strong>Next</strong></a></li></ul>
+</div>
+
+<div id="content">
+<h1 class="title">Chapter 4. Application Initialization &amp; Configuration</h1>
+
+
+<div id="table-of-contents">
+
+<div id="text-table-of-contents">
+<ul>
+<li><a href="initialization.html#sec-1">4.1. Introduction</a></li>
+<li><a href="initialization.html#sec-2">4.2. The Initialization Process</a></li>
+<li><a href="initialization.html#initialization-configuration">4.3. Configuration Options</a>
+<ul>
+<li><a href="initialization.html#sec-3-1">4.3.1. Arbitrary Configuration Values</a></li>
+</ul>
+</li>
+<li><a href="initialization.html#sec-4">4.4. Files Used In Configuration &amp; Initialization</a>
+<ul>
+<li><a href="initialization.html#sec-4-1">4.4.1. Deployment Descriptor</a></li>
+<li><a href="initialization.html#initialization-project-clj">4.4.2. project.clj</a></li>
+<li><a href="initialization.html#initialization-immutant-init">4.4.3. immutant.init</a></li>
+</ul>
+</li>
+<li><a href="initialization.html#initialization-dependencies">4.5. Dependencies &amp; Resources</a></li>
+</ul>
+</div>
+</div>
+
+<div class="outline-2" id="outline-container-1">
+<h2 id="sec-1"><span class="section-number-2">4.1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>  
+  The initialization and configuration of applications deployed to 
+  Immutant can potentially involve multiple files:
+</p>
+<ul>
+<li>the <a href="./deployment.html#deployment-descriptor">deployment descriptor</a> (if used)
+</li>
+<li>the Leiningen <a href="#initialization-project-clj">project.clj</a> (if present at the application root)
+</li>
+<li>the <a href="#initialization-immutant-init">immutant.init</a> namespace (if present beneath <code>src/</code>)
+</li>
+</ul>
+
+
+<p>
+  Each of these files have the opportunity to contribute to the configuration
+  or initialization of the application.
+</p>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-2">
+<h2 id="sec-2"><span class="section-number-2">4.2.</span> The Initialization Process</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  When an Immutant detects a Clojure deployment (either a <a href="./deployment.html#deployment-descriptor">deployment descriptor</a>
+  or an <a href="./deployment.html#deployment-archive">Immutant archive</a>), it begins the application initialization process:
+</p>
+<ol>
+<li>If the deployment is a descriptor file, this file is loaded in a
+     global Clojure runtime to parse the map from the file. The
+     <code>:root</code> entry from that map is then used to determine the actual
+     root of the application, and can refer to the application
+     directory or the path to an Immutant archive. Any additional
+     configuration information from the descriptor is stored for later
+     merging with data from other configuration sources.
+
+</li>
+<li>If the deployment is an archive, or the <code>:root</code> from the descriptor
+     points to an archive, the archive is expanded on disk to a temporary
+     directory. 
+
+</li>
+<li>Once the application root has been determined, Immutant looks for
+     a <a href="http://leiningen.org/">Leiningen</a> <code>project.clj</code> in the root. If present, the project
+     file is loaded and if an <code>:immutant</code> key is preset in the
+     resulting <code>project</code>, it is merged with the configuration data
+     from the descriptor with the configuration from the descriptor
+     taking precedence. Leiningen is then used to resolve the
+     dependencies present in the <code>project</code> via Maven (this behavior
+     can be overridden - see <a href="#initialization-configuration">:resolve-dependencies</a>).
+
+</li>
+<li>If a <code>lib/</code> directory is present in the application root, any jars
+     within it are merged with the dependencies calculated in the previous
+     step. Each of these jars are added to the isolated classpath for the
+     application, along with source and resource directories within the
+     application root (see <a href="#initialization-dependencies">Dependencies &amp; Resources</a> for more information). 
+
+</li>
+<li>At this point, Immutant creates a Clojure runtime 
+     for the application. Runtimes in Immutant are isolated from each other,
+     and can each load their own versions of Clojure or any other jar.
+
+</li>
+<li>If an initialization function was specified in either the
+     descriptor or the <code>:immutant</code> map in the project (via the
+     <code>:init</code> key), it is loaded and invoked within the application's
+     runtime (see <a href="#initialization-configuration">:init</a> for more details). If no init function was
+     specified, Immutant will attempt to load an <code>immutant.init</code>
+     namespace. See <a href="#initialization-immutant-init">immutant.init</a> for more information on using this
+     initialization method. At this point, the application is fully
+     initialized.
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-initialization-configuration">
+<h2 id="initialization-configuration"><a id="sec-3" name="sec-3"></a><span class="section-number-2">4.3.</span> Configuration Options</h2>
+<div class="outline-text-2" id="text-initialization-configuration">
+
+
+<p>
+  The following configuration options can appear in the <a href="./deployment.html#deployment-descriptor">deployment descriptor</a> 
+  or (with the exception of <code>:root</code>) the <code>:immutant</code> map of <code>project.clj</code>.
+</p>
+<ul>
+<li><code>:root</code> - specifies the path to the 'root' of the application. This can 
+    either be the path to the application directory, or the path to an 
+    <a href="./deployment.html#deployment-archive">Immutant archive</a>. <code>:root</code> is only valid in a deployment descriptor, and
+    is ignored if specified in <code>project.clj</code>.
+
+</li>
+<li><code>:resolve-dependencies</code> - determines if dependencies defined in 
+    <code>project.clj</code> will be resolved via <a href="https://github.com/cemerick/pomegranate">Pomegranate</a>. This resolution process
+    downloads and installs any missing dependencies to <code>$M2_REPO</code> 
+    (<code>~/.m2/repository</code> by default). If not specified, <code>:resolve-dependencies</code>
+    defaults to <i>true</i>. See <a href="#initialization-dependencies">Dependencies &amp; Resources</a> for more details on the dependency
+    resolution process.
+
+</li>
+<li><code>:lein-profiles</code> - If the application is a Leiningen 2 (or greater) project, 
+    you can specify the <a href="https://github.com/technomancy/leiningen/blob/master/doc/PROFILES.md">Leiningen profiles</a> (as a collection) to apply when loading 
+    <code>project.clj</code>. If no profiles are specified, only the <code>:default</code> profile is 
+    loaded.
+
+</li>
+<li><code>:swank-port</code> &amp; <code>:nrepl-port</code> - Immutant can provide a
+    per-application repl, either via <a href="https://github.com/technomancy/swank-clojure">Swank</a> or <a href="https://github.com/clojure/tools.nrepl">nREPL</a>. Immutant will
+    automatically start a repl for you if you specify an unused port
+    using either <code>:swank-port</code> or <code>:nrepl-port</code>.  See <a href="./interactive.html">Interactive Development</a> 
+    for more details.
+
+</li>
+<li><code>:init</code> - optionally specifies a function to call to initialize your
+    application. It can be either a namespace-qualified symbol
+    (<code>my.app/do-something</code>) or a string ("my.app/do-something").
+    Because the <a href="./deployment.html#deployment-descriptor">deployment descriptor</a> is evaluated, it must be quoted (or
+    a string) if present there.
+
+</li>
+<li><code>:context-path</code> - overrides the default web context path that is generated
+    based on the deployment name. See <a href="./web.html#web-context-path">Web - Context Paths</a> for more details.
+
+</li>
+<li><code>:virtual-host</code> - allows setting a virtual host for the application. See
+    <a href="./web.html#web-virtual-host">Web - Virtual Host</a> for more details.
+</li>
+</ul>
+
+
+<p>
+  A sample deployment descriptor:
+</p>
+
+
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">:root is the only required option</span>
+{<span class="org-builtin">:root</span> <span class="org-string">"/the/path/to/my/app"</span>
+ <span class="org-builtin">:resolve-dependecies</span> false
+ <span class="org-builtin">:lein-profiles</span> [<span class="org-builtin">:dev</span> <span class="org-builtin">:clj15</span>]
+ <span class="org-builtin">:swank-port</span> 4242
+ <span class="org-builtin">:nrepl-port</span> 4343
+ <span class="org-builtin">:init</span> 'my.app/init
+ <span class="org-builtin">:context-path</span> <span class="org-string">"/"</span>
+ <span class="org-builtin">:virtual-host</span> <span class="org-string">"foo.host"</span>} <span class="org-comment-delimiter">;; </span><span class="org-comment">can also be: ["foo1.host" "foo2.host"]</span>
+</pre>
+
+
+
+</div>
+
+<div class="outline-3" id="outline-container-3-1">
+<h3 id="sec-3-1"><span class="section-number-3">4.3.1.</span> Arbitrary Configuration Values</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+<p>
+   Since Immutant can host multiple apps, using system properties
+   or environment variables may not be a practical way to provide per app 
+   configuration. In addition to the above options, you can put any values you need 
+   into the configuration within the deployment descriptor or the <code>:immutant</code> map of 
+   <code>project.clj</code>. This full configuration (including the above options) is available
+   to your application by passing the <code>:config</code> key to <a href="./apidoc/immutant.registry.html#var-get">immutant.registry/get</a>:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.registry <span class="org-builtin">:as</span> registry])
+
+(<span class="org-keyword">let</span> [cfg (registry/get <span class="org-builtin">:config</span>)]
+  (<span class="org-builtin">:root</span> cfg)              <span class="org-comment-delimiter">;; </span><span class="org-comment">"/the/path/to/my/app"</span>
+  (<span class="org-builtin">:init</span> cfg)              <span class="org-comment-delimiter">;; </span><span class="org-comment">my.app/init</span>
+  (<span class="org-builtin">:my-custom-option</span> cfg)) <span class="org-comment-delimiter">;; </span><span class="org-comment">:my-custom-value</span>
+</pre>
+
+
+<p>
+   If you need access to the leiningen project map for the application, it is available
+   from <a href="./apidoc/immutant.registry.html#var-get">immutant.registry/get</a> under the <code>:project</code> key:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-builtin">require</span> '[immutant.registry <span class="org-builtin">:as</span> registry])
+
+(registry/get <span class="org-builtin">:project</span>)
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-4">
+<h2 id="sec-4"><span class="section-number-2">4.4.</span> Files Used In Configuration &amp; Initialization</h2>
+<div class="outline-text-2" id="text-4">
+
+
+
+</div>
+
+<div class="outline-3" id="outline-container-4-1">
+<h3 id="sec-4-1"><span class="section-number-3">4.4.1.</span> Deployment Descriptor</h3>
+<div class="outline-text-3" id="text-4-1">
+
+
+<p>
+   A deployment descriptor is simply a Clojure source file containing a map
+   of configuration options that is placed in Immutant's deployment directory
+   to trigger the deployment of an application. It must contain a <code>:root</code> entry
+   (see <a href="#initialization-configuration">above</a>), but any other configuration is optional. Any configuration 
+   specified here overrides configuration from <code>project.clj</code>. See the 
+   <a href="./deployment.html#deployment-descriptor">deployment descriptor</a> for more details.
+</p>
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-initialization-project-clj">
+<h3 id="initialization-project-clj"><a id="sec-4-2" name="sec-4-2"></a><span class="section-number-3">4.4.2.</span> project.clj</h3>
+<div class="outline-text-3" id="text-initialization-project-clj">
+
+
+<p>   
+   <code>project.clj</code> is the standard configuration file used by the <a href="http://leiningen.org/">Leiningen</a> project
+   management tool. If a <code>project.clj</code> exists at the root of the application, 
+   Immutant will parse it and use it to determine dependencies and resource paths, 
+   as well as read Immutant specific configuration from the <code>:immutant</code> map. Here is a 
+   sample <code>project.clj</code> including all of the Immutant options that are usable
+   in that file:
+</p>
+
+
+
+<pre class="src src-clojure">(defproject my-app <span class="org-string">"1.2.3"</span>
+            <span class="org-builtin">:dependencies</span> [[org.clojure/clojure <span class="org-string">"1.3.0"</span>]
+                           [noir <span class="org-string">"1.2.0"</span>]]
+            <span class="org-builtin">:immutant</span> {<span class="org-builtin">:init</span> my-app.core/initialize
+                       <span class="org-builtin">:resolve-dependencies</span> true
+                       <span class="org-builtin">:lein-profiles</span> [<span class="org-builtin">:dev</span> <span class="org-builtin">:clj15</span>]
+                       <span class="org-builtin">:context-path</span> <span class="org-string">"/"</span>
+                       <span class="org-builtin">:virtual-host</span> <span class="org-string">"foo.host"</span> <span class="org-comment-delimiter">;; </span><span class="org-comment">can also be: ["foo1.host" "foo2.host"]</span>
+                       <span class="org-builtin">:swank-port</span> 4111
+                       <span class="org-builtin">:nrepl-port</span> 4112})
+</pre>
+
+
+</div>
+
+</div>
+
+<div class="outline-3" id="outline-container-initialization-immutant-init">
+<h3 id="initialization-immutant-init"><a id="sec-4-3" name="sec-4-3"></a><span class="section-number-3">4.4.3.</span> immutant.init</h3>
+<div class="outline-text-3" id="text-initialization-immutant-init">
+
+
+<p>
+   <code>immutant.init</code> provides an alternate initialization mechanism to
+   the <a href="#initialization-configuration">:init</a> function. If no <code>:init</code> function is specified, Immutant
+   will attempt to load the <code>immutant.init</code> namespace. Typically, this
+   namespace is used to start Immutant-specific services, like so:
+</p>
+
+
+
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> immutant.init
+  (<span class="org-builtin">:require</span> [immutant.daemons   <span class="org-builtin">:as</span> daemons]
+            [immutant.jobs      <span class="org-builtin">:as</span> jobs]
+            [immutant.messaging <span class="org-builtin">:as</span> messaging]
+            [immutant.web       <span class="org-builtin">:as</span> web]
+            [immutant.repl      <span class="org-builtin">:as</span> repl]
+            [immutant.util      <span class="org-builtin">:as</span> util]
+            [noir.server        <span class="org-builtin">:as</span> server]
+            [my-app.core        <span class="org-builtin">:as</span> core]))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">point noir to the right place for views</span>
+(server/load-views (util/app-relative <span class="org-string">"src/my_app/views"</span>))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">start a web endpoint</span>
+(web/start <span class="org-string">"/"</span> (server/gen-handler {<span class="org-builtin">:mode</span> <span class="org-builtin">:dev</span> <span class="org-builtin">:ns</span> 'my-app}))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">spin up a repl</span>
+(repl/start-swank 4321)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">schedule a job</span>
+(jobs/schedule <span class="org-string">"my-job"</span> <span class="org-string">"*/5 * * * * ?"</span> core/process-tps-reports)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">start a daemon</span>
+(deamons/daemonize <span class="org-string">"my-daemon"</span> core/daemon-start core/daemon-stop)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">create a queue</span>
+(messaging/start <span class="org-string">"/queue/foo"</span>)
+
+</pre>
+
+
+<p>
+   The services started in the above example are documented elsewhere
+   in this manual.
+</p>
+
+</div>
+</div>
+
+</div>
+
+<div class="outline-2" id="outline-container-initialization-dependencies">
+<h2 id="initialization-dependencies"><a id="sec-5" name="sec-5"></a><span class="section-number-2">4.5.</span> Dependencies &amp; Resources</h2>
+<div class="outline-text-2" id="text-initialization-dependencies">
+
+
+<p>
+  Immutant generates a unique classpath for each deployed application
+  based upon dependencies and source &amp; resource directories defined in
+  <a href="#initialization-project-clj">project.clj</a> and any jars found in the <code>lib/</code> at the application root. 
+</p>
+<p>
+  The <code>lib/</code> directory can be used to bundle dependencies with your
+  application, and can be useful in the following situations:
+</p>
+<ul>
+<li>you want to verify an application through a QA process without any 
+    external dependencies
+</li>
+<li>you don't have the option of resolving dependencies at deploy time
+</li>
+<li>you have dependencies that aren't published to a maven repository
+</li>
+<li>your project doesn't use Leiningen
+</li>
+</ul>
+
+
+<p>
+  When dependency resolution is enabled for an application, Immutant
+  uses <a href="https://github.com/cemerick/pomegranate">Pomegranate</a> (via <a href="https://github.com/technomancy/leiningen/tree/master/leiningen-core">leiningen-core</a>) to resolve the dependencies
+  against a local <a href="http://maven.apache.org/guides/introduction/introduction-to-repositories.html">Maven repository</a>. If the dependencies aren't available 
+  in the local repository, they are downloaded into it. The local repository
+  is located based on the value of <code>$M2_REPO</code>, and defaults to 
+  <code>~/.m2/repository/</code>. If this dependency resolution fails, none of the
+  application's dependencies will be available from the local repository
+  and must be be present elsewhere on the
+  application's resource path (<code>lib/</code> for example) to be accessible to the
+  application.
+</p>
+<p>
+  The enablement of dependency resolution depends upon the value of
+  the <code>:resolve-dependencies</code> option. Dependencies are resolved
+   by default, but resolution can be disabled by setting <code>:resolve-dependencies</code>
+   to <i>false</i>.     
+</p></div>
+</div>
+</div>
+
+<div id="postamble">
+<ul class="docnav"><li class="previous"><a accesskey="p" href="deployment.html"><strong>Prev</strong></a></li><li class="home"><a accesskey="h" href="index.html"><strong>Table Of Contents</strong></a></li><li class="next"><a accesskey="n" href="web.html"><strong>Next</strong></a></li></ul><div class="version">Immutant 0.8.0</div>
+</div>
+
+
+</body></html>

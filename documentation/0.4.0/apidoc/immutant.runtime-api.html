@@ -1,0 +1,248 @@
+<html>
+  <head>
+    <title>immutant.runtime - Immutant Clojure API API documentation</title>
+    <link href="static/favicon.png" rel="icon" />
+    <link href="static/favicon.png" rel="shortcut icon" />
+    <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/wiki.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/internal.css" rel="stylesheet" />
+    <style>.menuWrapper{height: 36px;}</style>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" href="http://www.wikispaces.com/_/2009051601/s/internal_ie.css" type="text/css" />
+    <![endif]-->
+  </head>
+<!--
+This document was auto-generated from the source by the clojure autodoc system.
+To report errors or ask questions about the overall documentation structure, formatting,
+etc., contact Tom Faulhaber (google mail name: tomfaulhaber).
+For errors in the documentation of a particular namespace, contact the author of that
+namespace.
+-->
+  <body>
+    <div id="AllContentContainer">
+      <div id="Header">
+	<!-- <a href="index.html" id="Logo"><img src="static/immutant-icon.gif" width="100" height="100" alt="Immutant" /></a> -->
+	<h1><a title="page header title" id="page-header" href="index.html">Immutant Clojure API</a> - v0.4.0</h1>
+      </div>
+      <div id="leftcolumn"><div style="text-align: center;"></div>
+<div class="menu">
+  <div class="WikiCustomNav WikiElement wiki">
+    <span class="toc-header"><span id="project-name">Immutant Clojure API</span> <span id="version"></span></span><br />
+    <ul>
+      <li><a class="wiki_link" href="index.html">Overview</a></li>
+      <li><a class="wiki_link" href="api-index.html">API Index</a></li>
+    </ul>
+    <div class="NamespaceTOC">
+      <span class="toc-header">Namespaces</span>
+      <ul id="left-sidebar-list">
+        <li><a href="immutant.web-api.html" class="wiki_link">immutant.web</a></li><li><a href="immutant.daemons-api.html" class="wiki_link">immutant.daemons</a></li><li><a href="immutant.messaging-api.html" class="wiki_link">immutant.messaging</a></li><li><a href="immutant.runtime-api.html" class="wiki_link">immutant.runtime</a></li><li><a href="immutant.repl-api.html" class="wiki_link">immutant.repl</a></li><li><a href="immutant.hooks-api.html" class="wiki_link">immutant.hooks</a></li><li><a href="immutant.dev-api.html" class="wiki_link">immutant.dev</a></li><li><a href="immutant.jobs-api.html" class="wiki_link">immutant.jobs</a></li><li><a href="immutant.cache-api.html" class="wiki_link">immutant.cache</a></li><li><a href="immutant.xa-api.html" class="wiki_link">immutant.xa</a></li>
+      </ul>
+    </div>
+    
+    <a href="http://immutant.org" class="wiki_link">Immutant Home</a>
+    <a href="../index.html" class="wiki_link">Immutant Manual</a>
+
+  </div>
+</div>
+</div>
+      <div id="rightcolumn">
+	<div id="Content">
+	  <div class="contentBox"><div class="innerContentBox">
+              <div id="content_view" class="wiki wikiPage">
+                <div id="right-sidebar"><div id="toc">
+  <h1 class="nopad">Table of Contents</h1>
+  <div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.runtime">immutant.runtime</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime/initialize">initialize</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime/require-and-invoke">require-and-invoke</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime/set-app-config">set-app-config</a>
+    </div>
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.runtime.bootstrap">immutant.runtime.bootstrap</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime.bootstrap/bundled-jars">bundled-jars</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime.bootstrap/get-dependencies">get-dependencies</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime.bootstrap/lib-dir">lib-dir</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime.bootstrap/read-and-stringify-descriptor">read-and-stringify-descriptor</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime.bootstrap/read-and-stringify-full-app-config">read-and-stringify-full-app-config</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime.bootstrap/read-descriptor">read-descriptor</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime.bootstrap/read-full-app-config">read-full-app-config</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime.bootstrap/read-full-app-config-to-string">read-full-app-config-to-string</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime.bootstrap/read-project">read-project</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.runtime.bootstrap/resource-paths">resource-paths</a>
+    </div>
+    <br />
+  </div>
+</div>
+</div>
+                <div id="content-tag">
+<p></p>
+<h2 class="namespace-header" id="immutant.runtime">immutant.runtime</h2>
+<pre id="namespace-docstr">This namespace is solely for use during the application runtime
+bootstrapping process. Applications shouldn't use anything here.</pre>
+
+
+<br />
+
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime/initialize">initialize</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (initialize init-fn config-hash)
+</pre>
+  <pre id="var-docstr">Attempts to initialize the app by calling an init-fn (if given) or, lacking that,
+tries to load an immutant.clj from the app-root. In either case, post-initialize is called
+to finalize initialization.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/f9d9efdee7cc45c8b5b1a3f50e4880b4de7c8e2b/./modules/core/src/main/clojure/immutant/runtime.clj#L48" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime/require-and-invoke">require-and-invoke</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (require-and-invoke namespaced-fn &amp; [args])
+</pre>
+  <pre id="var-docstr">Takes a string of the form "namespace/fn", requires the namespace, then invokes fn</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/f9d9efdee7cc45c8b5b1a3f50e4880b4de7c8e2b/./modules/core/src/main/clojure/immutant/runtime.clj#L28" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime/set-app-config">set-app-config</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (set-app-config config)
+</pre>
+  <pre id="var-docstr">Takes the full application config as a data string and makes it available as data under the :config key in the registry.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/f9d9efdee7cc45c8b5b1a3f50e4880b4de7c8e2b/./modules/core/src/main/clojure/immutant/runtime.clj#L65" id="var-source">Source</a>
+</div>
+<h2 class="namespace-header sub-namespace" id="immutant.runtime.bootstrap">immutant.runtime.bootstrap</h2>
+<pre id="namespace-docstr">Functions used in app bootstrapping.</pre>
+
+
+<br />
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime.bootstrap/bundled-jars">bundled-jars</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (bundled-jars project)
+</pre>
+  <pre id="var-docstr">Returns a set of any jars that are bundled in the application's lib-dir.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/8ff73ed461882bad8ef968f1689e8a485a898aae/./modules/core/src/main/clojure/immutant/runtime/bootstrap.clj#L175" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime.bootstrap/get-dependencies">get-dependencies</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (get-dependencies app-root profiles resolve-deps?)
+       (get-dependencies project resolve-deps?)
+</pre>
+  <pre id="var-docstr">Resolves the dependencies for an application. It concats bundled jars with any aether resolved
+dependencies, with bundled jars taking precendence. If resolve-deps is false, dependencies aren't
+resolved via aether and only bundled jars are returned.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/8ff73ed461882bad8ef968f1689e8a485a898aae/./modules/core/src/main/clojure/immutant/runtime/bootstrap.clj#L185" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime.bootstrap/lib-dir">lib-dir</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (lib-dir project)
+</pre>
+  <pre id="var-docstr">Resolve the library dir for the application.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/8ff73ed461882bad8ef968f1689e8a485a898aae/./modules/core/src/main/clojure/immutant/runtime/bootstrap.clj#L134" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime.bootstrap/read-and-stringify-descriptor">read-and-stringify-descriptor</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (read-and-stringify-descriptor file)
+</pre>
+  <pre id="var-docstr">Reads a deployment descriptor and returns the resulting stringified map.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/8ff73ed461882bad8ef968f1689e8a485a898aae/./modules/core/src/main/clojure/immutant/runtime/bootstrap.clj#L63" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime.bootstrap/read-and-stringify-full-app-config">read-and-stringify-full-app-config</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (read-and-stringify-full-app-config descriptor-file app-root)
+</pre>
+  <pre id="var-docstr">Loads the full app config and stringifies the keys.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/8ff73ed461882bad8ef968f1689e8a485a898aae/./modules/core/src/main/clojure/immutant/runtime/bootstrap.clj#L109" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime.bootstrap/read-descriptor">read-descriptor</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (read-descriptor file)
+</pre>
+  <pre id="var-docstr">Reads a deployment descriptor and returns the resulting map.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/8ff73ed461882bad8ef968f1689e8a485a898aae/./modules/core/src/main/clojure/immutant/runtime/bootstrap.clj#L58" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime.bootstrap/read-full-app-config">read-full-app-config</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (read-full-app-config descriptor-file app-root)
+</pre>
+  <pre id="var-docstr">Returns the full configuration for an app. This consists of the :immutant map
+from project.clj (if any) with the contents of the descriptor map merged onto it (if any). Returns
+nil if neither are available.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/8ff73ed461882bad8ef968f1689e8a485a898aae/./modules/core/src/main/clojure/immutant/runtime/bootstrap.clj#L99" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime.bootstrap/read-full-app-config-to-string">read-full-app-config-to-string</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (read-full-app-config-to-string descriptor-file app-root)
+</pre>
+  <pre id="var-docstr">Returns the full configuration for an app as a pr string that can move across runtimes.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/8ff73ed461882bad8ef968f1689e8a485a898aae/./modules/core/src/main/clojure/immutant/runtime/bootstrap.clj#L117" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime.bootstrap/read-project">read-project</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (read-project app-root profiles)
+</pre>
+  <pre id="var-docstr">Reads a leiningen project.clj file in the given root dir.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/8ff73ed461882bad8ef968f1689e8a485a898aae/./modules/core/src/main/clojure/immutant/runtime/bootstrap.clj#L81" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.runtime.bootstrap/resource-paths">resource-paths</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (resource-paths app-root profiles)
+</pre>
+  <pre id="var-docstr">Resolves the resource paths (in the AS7 usage of the term) for an application.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/8ff73ed461882bad8ef968f1689e8a485a898aae/./modules/core/src/main/clojure/immutant/runtime/bootstrap.clj#L167" id="var-source">Source</a>
+</div>
+
+
+</div>
+              </div>
+            </div>
+          </div>
+	</div>
+	<div id="foot">
+	  <div style="text-align: center;" id="copyright">Copyright 2011-2012 Red Hat, Inc.</div>
+	</div>
+      </div>
+      <div id="DesignedBy">Based on a site design by <a title="Visit Tom Hickey's website." href="http://www.tomhickey.com">Tom Hickey</a>.<br />
+      <a href="http://tomfaulhaber.github.com/autodoc/">Clojure auto-documentation system</a> by Tom Faulhaber.</div>
+    </div>
+    <!-- /AllContentContainer -->
+  </body>
+
+</html>

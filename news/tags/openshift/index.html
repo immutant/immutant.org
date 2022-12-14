@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | News
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            News
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2013/08/20/openshift-clustering/">Clustering Immutants on OpenShift</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Jim Crossley
+                </div>
+                <div class="date">
+                  Tuesday, August 20, 2013
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/openshift/">openshift</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/clustering/">clustering</a>
+                <a href="/news/tags/messaging/">messaging</a>
+                <a href="/news/tags/caching/">caching</a>
+                <a href="/news/tags/daemons/">daemons</a>
+                <a href="/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                <a href="/news/tags/ring/">ring</a>
+              </div>
+              <div class="body">
+                <p>Lately I&#39;ve been spending a lot of time on <a href="http://openshift.com/">OpenShift</a>, building and
+                testing a <a href="https://www.openshift.com/developers/technologies">cartridge</a> for Immutant that will properly form a cluster
+                across multiple OpenShift <a href="https://www.openshift.com/products/pricing">gears</a>. In this post, I&#39;ll go through the steps
+                of deploying a simple application that demonstrates all of the
+                Immutant clustering features running on the three small gears you get
+                for free on OpenShift.</p>
+                
+                <p>Here are the features we&#39;ll be demonstrating:</p>
+                
+                <ul>
+                <li>Load-balanced message distribution with automatic peer discovery</li>
+                <li>Replicated caching</li>
+                <li>Highly-Available, long-running daemons</li>
+                <li>HA scheduled jobs</li>
+                <li>Web load balancing and session replication</li>
+                </ul>
+                
+                <p>If you haven&#39;t already, go <a href="https://www.openshift.com/get-started#cli">set up an OpenShift account</a> and update
+                your <code>rhc</code> gem to the latest version. I used 1.12.4 for this article.
+                Below you&#39;ll see references to <em>$namespace</em> -- this corresponds to
+                your OpenShift domain name, set by running <code>rhc setup</code>.</p>
+                
+                <p><em>Note</em>: If this is the first time you&#39;ve used OpenShift, you&#39;ll need
+                to visit the <a href="https://openshift.redhat.com/app/console">console</a> and accept the usage agreement before running
+                the <code>rhc</code> command.</p>
+                
+                <h2 id="Create_a_scaled_OpenShift_app" onclick="window.location = '#Create_a_scaled_OpenShift_app'">Create a scaled OpenShift app</h2>
+                
+                <p>The Immutant cartridge is available here:
+                <a href="https://github.com/immutant/openshift-immutant-cart">https://github.com/immutant/openshift-immutant-cart</a>. As described in
+                its README, we create our app using the following command:</p>
+                
+                <pre><code>rhc app-create -s demo https://raw.github.com/immutant/openshift-immutant-cart/master/metadata/manifest.yml&#x000A;</code></pre>
+                
+                <p>We&#39;re calling our app <em>demo</em> and we&#39;re passing the <code>-s</code> option to
+                make our app scalable. Notice that we&#39;re passing a raw URL to the
+                cartridge&#39;s <code>manifest.yml</code>.</p>
+                
+                <p>Small gears are pretty slow, but when <code>app-create</code> finally completes,
+                you&#39;ll have a bare-bones, standard Leiningen application beneath the
+                <code>demo/</code> directory. At this point, you might tail your app&#39;s logs or
+                ssh into your gear:</p>
+                
+                <pre><code>rhc tail demo&#x000A;rhc ssh demo&#x000A;</code></pre>
+                
+                <p>The critical log file for Immutant on OpenShift is
+                <code>immutant/logs/server.log</code>. Monitor this file until you eventually see
+                the line, <em>Deployed &quot;your-clojure-application.clj&quot;</em>. Then point a
+                browser at <a href="http://demo-$namespace.rhcloud.com">http://demo-$namespace.rhcloud.com</a> to see a simple
+                welcome page.</p>
+                
+                <p>Now we&#39;ll put some meat on our bare-bones app!</p>
+                
+                <h2 id="Push_Me,_Pull_You" onclick="window.location = '#Push_Me,_Pull_You'">Push Me, Pull You</h2>
+                
+                <p>Typically, you will add the remote git repository for your real
+                application to the local OpenShift repository you just created. We&#39;re
+                going to use <a href="https://github.com/immutant/cluster-demo">https://github.com/immutant/cluster-demo</a> as our &quot;real&quot;
+                application.</p>
+                
+                <pre><code>git remote add upstream -m master git@github.com:immutant/cluster-demo.git&#x000A;</code></pre>
+                
+                <p>Deployment of your app to OpenShift amounts to pulling from your real
+                repository and pushing to OpenShift&#39;s.</p>
+                
+                <pre><code>git pull -s recursive -X theirs upstream master&#x000A;git push&#x000A;</code></pre>
+                
+                <p>While waiting for that to complete, run <code>rhc tail demo</code> in another
+                shell to monitor your log. This time, the <em>Deployed
+                &quot;your-clojure-application.clj&quot;</em> message is going to scroll off the
+                screen as the cluster-demo app starts logging its output. Eventually,
+                the app should settle into a steady state looking something like this:</p>
+                
+                <p><img src="/images/news/demo-log.png"/></p>
+                
+                <h2 id="The_cluster-demo_app" onclick="window.location = '#The_cluster-demo_app'">The cluster-demo app</h2>
+                
+                <p>If you can ignore the inconsistent thread identifiers in the above
+                output, you&#39;ll notice there are exactly four types of messages:
+                <strong>send</strong>, <strong>recv</strong>, <strong>web</strong>, and <strong>job</strong>. Noting the timestamps in the
+                left column, a <strong>send</strong> is logged every 5 seconds, as is its
+                corresponding <strong>recv</strong>, a <strong>web</strong> logged every 2 seconds, and a
+                <strong>job</strong> every 20 seconds.</p>
+                
+                <p>The cluster-demo app is comprised of the following:</p>
+                
+                <ul>
+                <li>A message queue named <em>/queue/msg</em></li>
+                <li>A distributed cache named <em>counters</em></li>
+                <li>A listener for the queue that prints the received message and the
+                current contents of the cache</li>
+                <li>An HA daemon named <em>counter</em> that queues a cached value and
+                increments it every 5 seconds</li>
+                <li>An HA scheduled job named <em>ajob</em> that increments another counter in
+                the cache every 20 seconds</li>
+                <li>A web request handler mounted at <strong>/</strong> that logs its <code>:path-info</code>
+                and returns the current values of the two cached counters</li>
+                <li>Another request handler mounted at <strong>/count</strong> that increments a
+                counter in the user&#39;s web session.</li>
+                </ul>
+                
+                <p>All the code (~60 lines) is <a href="https://github.com/immutant/cluster-demo/blob/master/src/immutant/init.clj">contained in a single file</a>.</p>
+                
+                <h2 id="Programming_is_hard,_let&#39;s_build_a_cluster!" onclick="window.location = '#Programming_is_hard,_let&#39;s_build_a_cluster!'">Programming is hard, let&#39;s build a cluster!</h2>
+                
+                <p>Now we&#39;re ready to form a cluster by adding a gear to our app:</p>
+                
+                <pre><code>rhc scale-cartridge immutant -a demo 2&#x000A;</code></pre>
+                
+                <p>Again, this will take a few minutes, and it may return an error even
+                though the operation actually succeeded. You can run the following to
+                see the definitive state of your gears:</p>
+                
+                <pre><code>rhc show-app --gears&#x000A;</code></pre>
+                
+                <p>This also gives you the SSH URLs for your two gears. Fire up two
+                shells and ssh into each of your gears using those SSH URLs. Then
+                tail the log on each:</p>
+                
+                <pre><code>tail -f immutant/logs/server.log&#x000A;</code></pre>
+                
+                <p>When the dust settles, you&#39;ll eventually see the gears discover each
+                other, and you should see both gears logging <strong>recv</strong> messages, one
+                getting the even numbers and one getting the odd. This is your
+                automatic load-balanced message distribution. </p>
+                
+                <p>Note also that the counters cache logged in the <strong>recv</strong> message is
+                correct on both gears, even though it&#39;s only being updated by one.
+                This is our cache replication at work.</p>
+                
+                <h2 id="Let&#39;s_break_stuff!" onclick="window.location = '#Let&#39;s_break_stuff!'">Let&#39;s break stuff!</h2>
+                
+                <p>And see how robust our cluster is.</p>
+                
+                <h3 id="High_Availability_Daemons_and_Jobs" onclick="window.location = '#High_Availability_Daemons_and_Jobs'">High Availability Daemons and Jobs</h3>
+                
+                <p>Of course, the <strong>send</strong> and <strong>job</strong> log entries should still only
+                appear on our original gear, because those are our HA singletons. If
+                that gear crashes, our daemon and job should migrate to the other
+                gear. While logged into the gear running your singletons, run this:</p>
+                
+                <pre><code>immutant/bin/control stop&#x000A;</code></pre>
+                
+                <p>And watch the other gear&#39;s log to verify the daemon and job pick up
+                right where they left off, fetching their counters from the replicated
+                cache. That gear should be consuming all the queued messages, too. Now
+                start the original gear back up:</p>
+                
+                <pre><code>immutant/bin/control start&#x000A;</code></pre>
+                
+                <p>Eventually, it&#39;ll start receiving half the messages again.</p>
+                
+                <h3 id="Web" onclick="window.location = '#Web'">Web</h3>
+                
+                <p>You may be wondering about those <strong>web</strong> entries showing up in both
+                logs. They are &quot;health check&quot; requests from the <a href="https://www.openshift.com/blogs/how-haproxy-scales-openshift-apps">HAProxy</a> web load
+                balancer, automatically installed on your primary gear. You can always
+                check the state of your cluster from HAProxy&#39;s perspective by visiting
+                <a href="http://demo-$namespace.rhcloud.com/haproxy-status">http://demo-$namespace.rhcloud.com/haproxy-status</a>. If you see that
+                page without intending to, it means something about your app is
+                broken, so check <code>immutant/logs/server.log</code> for errors and make sure
+                your app responds to a request for the root context, i.e. &quot;/&quot;.</p>
+                
+                <p>Let&#39;s try some web stuff. Use curl to hit your app while observing the
+                logs on both gears:</p>
+                
+                <pre><code>curl http://demo-$namespace.rhcloud.com/xxxxxxxxxxxxxxxxxxxx&#x000A;curl http://demo-$namespace.rhcloud.com/yyyyyyyyyyyyyyyyyyyy&#x000A;curl http://demo-$namespace.rhcloud.com/zzzzzzzzzzzzzzzzzzzz&#x000A;</code></pre>
+                
+                <p>Use an obnoxious path to distinguish your request from the health
+                checks. Repeat the command a few times to observe the gears taking
+                turns responding to your request. Now try it in a browser, and you&#39;ll
+                see the same gear handling your request every time you reload. This is
+                because HAProxy is setting cookies in the response to enable session
+                affinity, which your browser is probably sending back. And <code>curl</code>
+                didn&#39;t.</p>
+                
+                <p>Speaking of session affinity, let&#39;s break that while we&#39;re at it, by
+                invoking our other web handler, the one that increments a counter in
+                the user&#39;s web session: <a href="http://demo-$namespace.rhcloud.com/count">http://demo-$namespace.rhcloud.com/count</a></p>
+                
+                <p>You should see the counter increment each time you reload your
+                browser. (You&#39;ll need to give <code>curl</code> a cookie store to see it respond
+                with anything other than &quot;1 times&quot;)</p>
+                
+                <p>Pay attention to which gear is responding to the <em>/count</em> request. Now
+                stop that gear like you did before. When you reload your browser, you
+                should see the other gear return the expected value. This is the
+                automatic session replication provided by
+                <code>immutant.web.session/servlet-store</code>.</p>
+                
+                <p>Don&#39;t forget to restart that gear.</p>
+                
+                <h2 id="The_Hat_Trick" onclick="window.location = '#The_Hat_Trick'">The Hat Trick</h2>
+                
+                <p>Hey, OpenShift is giving us 3 free gears, we may as well use &#39;em all,
+                right?</p>
+                
+                <pre><code>rhc scale-cartridge immutant -a demo 3&#x000A;</code></pre>
+                
+                <p>When the third one finally comes up, there are a couple of things you
+                may notice:</p>
+                
+                <ul>
+                <li>The health checks will disappear from the primary gear as HAProxy
+                takes it out of the rotation when 2 or more other gears are
+                available, ostensibly to mitigate the <a href="http://en.wikipedia.org/wiki/Observer_effect_(information_technology)">observer effect</a> of the
+                health checks.</li>
+                <li>Each cache key will only show up in the <strong>recv</strong> log messages on 2
+                of the 3 gears. This is because Immutant caches default to
+                Infinispan&#39;s <code>:distributed</code> replication mode in a cluster. This
+                enables Infinispan clusters to achieve &quot;linear scalability&quot; as
+                entries are copied to a fixed number of cluster nodes (default 2)
+                regardless of the cluster size. Distribution uses a consistent
+                hashing algorithm to determine which nodes will store a given entry.</li>
+                </ul>
+                
+                <h2 id="Now_what?" onclick="window.location = '#Now_what?'">Now what?</h2>
+                
+                <p>Well, that was a lot to cover. I doubt many apps will use all these
+                features, but I think it&#39;s nice to have a free playground on which to
+                try them out, even with the resources as constrained as they are on a
+                small gear.</p>
+                
+                <p>Regardless, I&#39;m pretty happy that Immutant is finally feature-complete
+                on OpenShift now. :-)</p>
+                
+                <p>Of course, I had a lot of help getting things to this point. Many
+                folks on the OpenShift and JBoss teams were generous with their
+                expertise, but the &quot;three B&#39;s&quot; deserve special mention:
+                <a href="https://twitter.com/bbrowning">Ben</a>,
+                <a href="http://belaban.blogspot.com/">Bela</a>, and
+                <a href="http://www.billdecoste.net/">Bill</a>.</p>
+                
+                <p>Thanks!</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2013/08/20/openshift-clustering/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2012/12/11/openshift-postgresql/">OpenShift, PostgreSQL and Poorsmatic</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Jim Crossley
+                </div>
+                <div class="date">
+                  Tuesday, December 11, 2012
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/openshift/">openshift</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/postgresql/">postgresql</a>
+                <a href="/news/tags/poorsmatic/">poorsmatic</a>
+              </div>
+              <div class="body">
+                <p>Today we&#39;ll get a Clojure application running in Immutant on
+                <a href="http://openshift.com/">OpenShift</a>, persisting its data to a <a href="http://www.postgresql.org/">PostgreSQL</a> database. We&#39;ll use
+                <a href="https://github.com/jcrossley3/poorsmatic">Poorsmatic</a>, the app I built in <a href="http://www.youtube.com/watch?v=P9tfxdcpkCc">my recent talk</a> at Clojure/Conj 2012.</p>
+                
+                <p><a href="https://github.com/jcrossley3/poorsmatic">Poorsmatic</a>, a &quot;poor man&#39;s <a href="http://getprismatic.com">Prismatic</a>&quot;, is a truly awful content
+                discovery service that merely returns URL&#39;s from Twitter that contain
+                at least one occurrence of the search term used to find the tweets
+                containing the URL&#39;s in the first place.</p>
+                
+                <p>Got that? Don&#39;t worry. It doesn&#39;t matter.</p>
+                
+                <p>Because Poorsmatic was contrived to be a pretty good example of many
+                of Immutant&#39;s features, including topics, queues, XA transactions, HA
+                services, and a few other things. In my talk I used <a href="http://www.datomic.com/">Datomic</a> as my
+                database, but here we&#39;ll try a different approach, using <a href="https://github.com/budu/lobos">Lobos</a> for
+                database migrations, the <a href="http://sqlkorma.com/">Korma</a> DSL, and OpenShift&#39;s PostgreSQL
+                cartridge for persistence.</p>
+                
+                <h2 id="Create_an_app_on_OpenShift" onclick="window.location = '#Create_an_app_on_OpenShift'">Create an app on OpenShift</h2>
+                
+                <p>To <a href="https://openshift.redhat.com/community/get-started">get started</a> on OpenShift you&#39;ll need an account, the command line
+                tools installed, and a domain setup. Below you&#39;ll see references to
+                <em>$namespace</em> -- this corresponds to your domain name.</p>
+                
+                <p>Once you&#39;ve setup your domain, create an app. Call it poorsmatic.</p>
+                
+                <pre><code>$ rhc app create -a poorsmatic -t jbossas-7&#x000A;</code></pre>
+                
+                <p>We&#39;re specifying the <code>jbossas-7</code> OpenShift cartridge. That will create
+                a sample Java application in the <code>poorsmatic/</code> directory. But we don&#39;t
+                want that. Instead, we&#39;ll use the <a href="https://github.com/openshift-quickstart/immutant-quickstart">Immutant Quickstart</a> to add the
+                Immutant modules to AS7 and replace the Java app with a Clojure app:</p>
+                
+                <pre><code>cd poorsmatic&#x000A;rm -rf pom.xml src&#x000A;git remote add quickstart -m master git://github.com/openshift-quickstart/immutant-quickstart.git&#x000A;git pull --no-commit -s recursive -X theirs quickstart master&#x000A;git add -A .&#x000A;git commit -m &quot;Add Immutant modules and setup Clojure project&quot;&#x000A;</code></pre>
+                
+                <p>At this point, we could <code>git push</code>, and after a couple of minutes hit
+                <a href="http://poorsmatic-$namespace.rhcloud.com">http://poorsmatic-$namespace.rhcloud.com</a> to see a static welcome
+                page. Instead, we&#39;ll configure our database and add the Poorsmatic
+                source files before pushing.</p>
+                
+                <h1 id="Add_the_PostgreSQL_cartridge" onclick="window.location = '#Add_the_PostgreSQL_cartridge'">Add the PostgreSQL cartridge</h1>
+                
+                <p>To add a PostgreSQL database to our app, we add a cartridge:</p>
+                
+                <pre><code>$ rhc cartridge add postgresql-8.4 -a poorsmatic&#x000A;</code></pre>
+                
+                <p>And boom, we have a database. We have to tweak it just a bit, though.
+                So we&#39;re going to log into our app using the ssh URI from the output
+                of the <code>app create</code> command (available via <code>rhc app show -a&#x000A;poorsmatic</code> or from the <em>My Applications</em> tab of the web UI). Here&#39;s
+                the URI it gave me:</p>
+                
+                <pre><code>$ ssh a4117d5ebac04c5f8114f7a96eba2737@poorsmatic-jimi.rhcloud.com&#x000A;</code></pre>
+                
+                <p>Once logged in, we need to modify PostgreSQL&#39;s default configuration
+                to enable distributed transactions, which Poorsmatic uses. We&#39;re going
+                to set <code>max_prepared_transactions</code> to 10 and then restart the database:</p>
+                
+                <pre><code>$ perl -p -i -e &#39;s/#(max_prepared_transactions).*/\1 = 10/&#39; postgresql-8.4/data/postgresql.conf&#x000A;$ pg_ctl restart -D $PWD/postgresql-8.4/data -m fast&#x000A;$ exit&#x000A;</code></pre>
+                
+                <p>If you forget to do this, you&#39;ll see errors referencing
+                <code>max_prepared_transactions</code> in the logs.</p>
+                
+                <h1 id="Add_the_Poorsmatic_source_to_your_app" onclick="window.location = '#Add_the_Poorsmatic_source_to_your_app'">Add the Poorsmatic source to your app</h1>
+                
+                <p>We&#39;ll use git to pull in the Poorsmatic source code. You can use the
+                same technique to get your own apps deployed to OpenShift:</p>
+                
+                <pre><code>$ git pull -s recursive -X theirs git://github.com/jcrossley3/poorsmatic.git korma-lobos&#x000A;</code></pre>
+                
+                <p>Note that we specified the <code>korma-lobos</code> branch.</p>
+                
+                <h1 id="Configure_the_app_to_use_PostgreSQL" onclick="window.location = '#Configure_the_app_to_use_PostgreSQL'">Configure the app to use PostgreSQL</h1>
+                
+                <p>You&#39;ll see Leiningen profiles in <code>project.clj</code> that determine which
+                database both the lobos and korma libraries will use. One of these
+                profiles, <code>:openshift</code>, refers to the name of the PostgreSQL
+                datasource configured in your <code>.openshift/config/standalone.xml</code>
+                provided by the quickstart.</p>
+                
+                <p>We&#39;ll activate the <code>:openshift</code> profile in
+                <code>deployments/your-clojure-application.clj</code>:</p>
+                
+                <pre class="syntax clojure">{&#x000A; :root (System/getenv "OPENSHIFT_REPO_DIR")&#x000A; :context-path "/"&#x000A; :swank-port 24005&#x000A; :nrepl-port 27888&#x000A;&#x000A; :lein-profiles [:openshift]&#x000A;}</pre>
+                
+                <h1 id="Add_your_Twitter_credentials" onclick="window.location = '#Add_your_Twitter_credentials'">Add your Twitter credentials</h1>
+                
+                <p>Finally, because Poorsmatic accesses Twitter&#39;s streaming API, you must
+                create an account at <a href="http://dev.twitter.com">http://dev.twitter.com</a> and add a file called
+                <code>resources/twitter-creds</code> that contains your OAuth credentials in a
+                simple Clojure vector:</p>
+                
+                <pre class="syntax clojure">["app-key" "app-secret" "user-token" "user-token-secret"]</pre>
+                
+                <p>You may be concerned about storing sensitive information with your
+                app, but remember that OpenShift secures your git repo with ssh
+                public/private key pairs and only those people whose public keys
+                you&#39;ve associated with your app have access to it.</p>
+                
+                <h1 id="Push!" onclick="window.location = '#Push!'">Push!</h1>
+                
+                <p>Now we can commit our changes and push:</p>
+                
+                <pre><code>$ git add -A .&#x000A;$ git commit -m &quot;Database config and twitter creds&quot;&#x000A;$ git push&#x000A;</code></pre>
+                
+                <p>And now we wait. The first push will take a few minutes. Immutant will
+                be installed and started, your app deployed, the app&#39;s dependencies
+                fetched, the database schema installed, etc. You should login to your
+                app and view the logs while your app boots:</p>
+                
+                <pre><code>$ ssh a4117d5ebac04c5f8114f7a96eba2737@poorsmatic-jimi.rhcloud.com&#x000A;$ tail_all&#x000A;</code></pre>
+                
+                <p>Eventually, you should see a log message saying <code>Deployed&#x000A;&quot;your-clojure-application.clj&quot;</code>, at which point you can go to
+                <a href="http://poorsmatic-$namespace.rhcloud.com">http://poorsmatic-$namespace.rhcloud.com</a>, enter <em>bieber</em> and then
+                watch your <code>server.log</code> fill up with more meaningless drivel than you
+                ever dreamed possible.</p>
+                
+                <p><a href="http://instantrimshot.com/index.php?sound=rimshot&amp;play=true">And you may even see some bieber tweets.</a> ;-)</p>
+                
+                <p>Reload the web page to see the scraped URL&#39;s and their counts.</p>
+                
+                <h1 id="The_REPL" onclick="window.location = '#The_REPL'">The REPL</h1>
+                
+                <p>You may have noticed the <a href="https://github.com/clojure/tools.nrepl">nREPL</a> and <a href="https://github.com/technomancy/swank-clojure">Swank</a> ports configured in the
+                deployment descriptor above. They are not externally accessible. They
+                can only be accessed via an ssh tunnel secured with your private key.</p>
+                
+                <p>Run the following:</p>
+                
+                <pre><code>$ rhc port-forward -a poorsmatic&#x000A;</code></pre>
+                
+                <p>Depending on your OS, this may not work. If it doesn&#39;t, try the <code>-L</code>
+                option:</p>
+                
+                <pre><code>$ ssh -L 27888:127.11.205.129:27888 a4117d5ebac04c5f8114f7a96eba2737@poorsmatic-jimi.rhcloud.com&#x000A;</code></pre>
+                
+                <p>But replace <code>127.11.205.129</code> with whatever <code>rhc port-forward</code> told you
+                (or ssh to your instance and <code>echo $OPENSHIFT_INTERNAL_IP</code>). And
+                obviously, you should use the ssh URI associated with your own app.</p>
+                
+                <p>Once the tunnel is established, you can then connect to the remote
+                REPL at <code>127.0.0.1:27888</code> using whatever REPL client you prefer.</p>
+                
+                <h1 id="Tune_in_next_time..." onclick="window.location = '#Tune_in_next_time...'">Tune in next time...</h1>
+                
+                <p>Immutant&#39;s clustering capabilities yield some of its coolest features,
+                e.g. load-balanced message distribution, highly-available services and
+                scheduled jobs, etc. But clustering is a pain to configure when
+                multicast is disabled. OpenShift aims to simplify that, but it&#39;s
+                <a href="https://bugzilla.redhat.com/show_bug.cgi?id=883944">not quite there yet</a>. In a future post, I hope to demonstrate
+                those clustering features by creating a <em>scaled</em> OpenShift
+                application, letting it deal with all the murky cluster configuration
+                for you.</p>
+                
+                <p>Stay tuned!</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2012/12/11/openshift-postgresql/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="pagination-links"><span class="current-page">1</span> </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tags">
+              <div class="tag-cloud">
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/announcement/">announcement</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/app-server/">app-server</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/bears/">bears</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/beginning/">beginning</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/boot/">boot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/boot-immutant/">boot-immutant</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/caching/">caching</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/clustering/">clustering</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/daemons/">daemons</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/datomic/">datomic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/deploy/">deploy</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/distribution/">distribution</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/enterprise/">enterprise</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/event/">event</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/first/">first</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/getting-started/">getting-started</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/hotrod/">hotrod</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/infinispan/">infinispan</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/installation/">installation</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/isolation/">isolation</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein/">lein</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/lein-immutant/">lein-immutant</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/luminus/">luminus</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/messaging/">messaging</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/openshift/">openshift</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/overlay/">overlay</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/pipelines/">pipelines</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/polyglot/">polyglot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/poorsmatic/">poorsmatic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/postgresql/">postgresql</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/presentations/">presentations</a>
+                </span>
+                <span class="tag tag-6">
+                  <a href="http://immutant.org/news/tags/releases/">releases</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/ring/">ring</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/runtime/">runtime</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/scheduling/">scheduling</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/screencast/">screencast</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/slim/">slim</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/sockjs/">sockjs</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/survey/">survey</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/thedeuce/">thedeuce</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/torquebox/">torquebox</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transactions/">transactions</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transit/">transit</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/tutorial/">tutorial</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/under-the-hood/">under-the-hood</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/vertx/">vertx</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/web/">web</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/websockets/">websockets</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wildfly/">wildfly</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wtf/">wtf</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/xa/">xa</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,307 @@
+<html>
+  <head>
+    <title>immutant.xa - Immutant Clojure API API documentation</title>
+    <link href="static/favicon.png" rel="icon" />
+    <link href="static/favicon.png" rel="shortcut icon" />
+    <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/wiki.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/internal.css" rel="stylesheet" />
+    <style>.menuWrapper{height: 36px;}</style>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" href="http://www.wikispaces.com/_/2009051601/s/internal_ie.css" type="text/css" />
+    <![endif]-->
+  </head>
+<!--
+This document was auto-generated from the source by the clojure autodoc system.
+To report errors or ask questions about the overall documentation structure, formatting,
+etc., contact Tom Faulhaber (google mail name: tomfaulhaber).
+For errors in the documentation of a particular namespace, contact the author of that
+namespace.
+-->
+  <body>
+    <div id="AllContentContainer">
+      <div id="Header">
+	<!-- <a href="index.html" id="Logo"><img src="static/immutant-icon.gif" width="100" height="100" alt="Immutant" /></a> -->
+	<h1><a title="page header title" id="page-header" href="index.html">Immutant Clojure API</a> - v0.6.0</h1>
+      </div>
+      <div id="leftcolumn"><div style="text-align: center;"></div>
+<div class="menu">
+  <div class="WikiCustomNav WikiElement wiki">
+    <span class="toc-header"><span id="project-name">Immutant Clojure API</span> <span id="version"></span></span><br />
+    <ul>
+      <li><a class="wiki_link" href="index.html">Overview</a></li>
+      <li><a class="wiki_link" href="api-index.html">API Index</a></li>
+    </ul>
+    <div class="NamespaceTOC">
+      <span class="toc-header">Namespaces</span>
+      <ul id="left-sidebar-list">
+        <li><a href="immutant.cache-api.html" class="wiki_link">immutant.cache</a></li><li><a href="immutant.messaging-api.html" class="wiki_link">immutant.messaging</a></li><li><a href="immutant.jobs-api.html" class="wiki_link">immutant.jobs</a></li><li><a href="immutant.daemons-api.html" class="wiki_link">immutant.daemons</a></li><li><a href="immutant.web-api.html" class="wiki_link">immutant.web</a></li><li><a href="immutant.xa-api.html" class="wiki_link">immutant.xa</a></li><li><a href="immutant.runtime-api.html" class="wiki_link">immutant.runtime</a></li><li><a href="immutant.repl-api.html" class="wiki_link">immutant.repl</a></li><li><a href="immutant.hooks-api.html" class="wiki_link">immutant.hooks</a></li><li><a href="immutant.dev-api.html" class="wiki_link">immutant.dev</a></li>
+      </ul>
+    </div>
+    
+    <a href="http://immutant.org" class="wiki_link">Immutant Home</a>
+    <a href="../index.html" class="wiki_link">Immutant Manual</a>
+
+  </div>
+</div>
+</div>
+      <div id="rightcolumn">
+	<div id="Content">
+	  <div class="contentBox"><div class="innerContentBox">
+              <div id="content_view" class="wiki wikiPage">
+                <div id="right-sidebar"><div id="toc">
+  <h1 class="nopad">Table of Contents</h1>
+  <div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.xa">immutant.xa</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa/datasource">datasource</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa/transaction">transaction</a>
+    </div>
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.xa.transaction">immutant.xa.transaction</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/active?">active?</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/after-completion">after-completion</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/available?">available?</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/begin">begin</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/current">current</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/enlist">enlist</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/mandatory">mandatory</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/never">never</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/no-tx-strategy">no-tx-strategy</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/not-supported">not-supported</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/required">required</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/requires-new">requires-new</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/set-rollback-only">set-rollback-only</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/supports">supports</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.xa.transaction/suspend">suspend</a>
+    </div>
+    <br />
+  </div>
+</div>
+</div>
+                <div id="content-tag">
+<p></p>
+<h2 class="namespace-header" id="immutant.xa">immutant.xa</h2>
+<pre id="namespace-docstr">Distributed XA transactional support</pre>
+
+
+<br />
+
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa/datasource">datasource</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (datasource id spec)
+</pre>
+  <pre id="var-docstr">Create an XA-capable datasource named by 'id'. The result can be
+associated with the :datasource key in a clojure.java.jdbc spec,
+e.g.
+
+  (defonce ds (immutant.xa/datasource "myds" {...}))
+  (clojure.java.jdbc/with-connection {:datasource ds} ...)
+
+The spec hash keys are adapter-specific, but all should support the
+following:
+ :adapter   one of h2|oracle|mysql|postgres|mssql (required)
+ :host      the host on which the database server is running [localhost]
+ :port      the port on which the server is listening [adapter-specific]
+ :database  the database name
+ :username  the username for the database connection
+ :password  the password associated with the username
+ :pool      the maximum number of simultaneous connections used</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/26992ceb72fcf4eace14e8defb2680388d143c92/./modules/xa/src/main/clojure/immutant/xa.clj#L25" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa/transaction">transaction</h2>
+  <span id="var-type">macro</span><br />
+  <pre id="var-usage">Usage: (transaction &amp; body)
+</pre>
+  <pre id="var-docstr">Execute body within the current transaction, if available,
+ otherwise invoke body within a new transaction.
+
+This is really just a convenient alias for
+immutant.xa.transaction/required, which is the default behavior for
+transactions in standard JEE containers. See the macros in
+immutant.xa.transaction for finer-grained transactional control
+corresponding to all the analogous attributes of the JEE @Transaction
+annotation.</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/26992ceb72fcf4eace14e8defb2680388d143c92/./modules/xa/src/main/clojure/immutant/xa.clj#L47" id="var-source">Source</a>
+</div>
+<h2 class="namespace-header sub-namespace" id="immutant.xa.transaction">immutant.xa.transaction</h2>
+<pre id="namespace-docstr">Fine-grained XA transactional control</pre>
+
+
+<br />
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/active?">active?</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (active?)
+</pre>
+  <pre id="var-docstr">Returns true if currently running within a transaction</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L47" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/after-completion">after-completion</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (after-completion f)
+</pre>
+  <pre id="var-docstr">Register a callback to fire when the current transaction is complete</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L63" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/available?">available?</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (available?)
+</pre>
+  <pre id="var-docstr">Returns true if a TransactionManager is available to manage XA transactions</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L37" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/begin">begin</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (begin func)
+</pre>
+  <pre id="var-docstr">Begin, invoke func, commit, rollback if error</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L81" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/current">current</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (current)
+</pre>
+  <pre id="var-docstr">Return the active transaction</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L42" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/enlist">enlist</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (enlist &amp; resources)
+</pre>
+  <pre id="var-docstr">Enlist XA resources in the current transaction</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L57" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/mandatory">mandatory</h2>
+  <span id="var-type">macro</span><br />
+  <pre id="var-usage">Usage: (mandatory &amp; body)
+</pre>
+  <pre id="var-docstr">JEE Mandatory - throws an exception unless there's an active transaction</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L137" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/never">never</h2>
+  <span id="var-type">macro</span><br />
+  <pre id="var-usage">Usage: (never &amp; body)
+</pre>
+  <pre id="var-docstr">JEE Never - throws an exception if there's an active transaction</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L145" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/no-tx-strategy">no-tx-strategy</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (no-tx-strategy f)
+</pre>
+  <pre id="var-docstr">Pass this to java.jdbc to prevent it from managing the tx on its connection</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L73" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/not-supported">not-supported</h2>
+  <span id="var-type">macro</span><br />
+  <pre id="var-usage">Usage: (not-supported &amp; body)
+</pre>
+  <pre id="var-docstr">JEE NotSupported - suspend current transaction, if any, and run body without a transaction</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L123" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/required">required</h2>
+  <span id="var-type">macro</span><br />
+  <pre id="var-usage">Usage: (required &amp; body)
+</pre>
+  <pre id="var-docstr">JEE Required - execute within current transaction, if any, otherwise wrap body in a new one</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L107" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/requires-new">requires-new</h2>
+  <span id="var-type">macro</span><br />
+  <pre id="var-usage">Usage: (requires-new &amp; body)
+</pre>
+  <pre id="var-docstr">JEE RequiresNew - suspend current transaction, if any, and wrap body in a new one</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L115" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/set-rollback-only">set-rollback-only</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (set-rollback-only)
+</pre>
+  <pre id="var-docstr">Modify the current transaction such that the only possible outcome is a roll back</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L52" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/supports">supports</h2>
+  <span id="var-type">macro</span><br />
+  <pre id="var-usage">Usage: (supports &amp; body)
+</pre>
+  <pre id="var-docstr">JEE Supports - run body regardless of current transaction state (unpredictable)</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L131" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.xa.transaction/suspend">suspend</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (suspend func)
+</pre>
+  <pre id="var-docstr">Suspend, invoke func, resume</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/bde701f6990b2cd4e1a0475a9637e2a80aa67e70/./modules/xa/src/main/clojure/immutant/xa/transaction.clj#L95" id="var-source">Source</a>
+</div>
+
+
+</div>
+              </div>
+            </div>
+          </div>
+	</div>
+	<div id="foot">
+	  <div style="text-align: center;" id="copyright">Copyright 2011-2012 Red Hat, Inc.</div>
+	</div>
+      </div>
+      <div id="DesignedBy">Based on a site design by <a title="Visit Tom Hickey's website." href="http://www.tomhickey.com">Tom Hickey</a>.<br />
+      <a href="http://tomfaulhaber.github.com/autodoc/">Clojure auto-documentation system</a> by Tom Faulhaber.</div>
+    </div>
+    <!-- /AllContentContainer -->
+  </body>
+
+</html>

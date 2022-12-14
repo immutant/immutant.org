@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | News
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            News
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2013/08/09/lein-immutant-1-0-1/">lein-immutant Plugin 1.0.1 Released</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  The Immutant Team
+                </div>
+                <div class="date">
+                  Friday, August  9, 2013
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/lein/">lein</a>
+                <a href="/news/tags/lein-immutant/">lein-immutant</a>
+                <a href="/news/tags/installation/">installation</a>
+              </div>
+              <div class="body">
+                <p>We just released version <a href="https://clojars.org/lein-immutant">1.0.1</a> of
+                our Leiningen plugin. This is a patch release, with the following
+                changes:</p>
+                
+                <ul>
+                <li>Archive creation no longer uses <code>lib/</code> as a staging area for
+                dependencies - this prevents stale dependencies from being picked up
+                in development after creating an archive.</li>
+                <li>Archives are no longer created in the current directory, but under
+                <code>project-root/target/</code> instead. The exact location will depend on
+                the profiles that are active. The archive command will output the
+                full path to the archive.</li>
+                <li>The url used by the <code>install</code> and <code>overlay</code> tasks to download
+                Immutant has been changed to use a
+                <a href="https://aws.amazon.com/cloudfront/">CDN</a>. This should provide
+                shorter download times, and allows us to track download counts to
+                get a feel for usage.</li>
+                </ul>
+                
+                <h2 id="Get_it" onclick="window.location = '#Get_it'">Get it</h2>
+                
+                <p>If you&#39;re already using <code>lein-immutant</code> you probably already know how
+                to do this, but just in case - to install it, add it to the <code>:plugins</code>
+                list in your <code>:user</code> profile in <code>~/.lein/profiles.clj</code>:</p>
+                
+                <pre><code>{:user {:plugins [[lein-immutant &quot;1.0.1&quot;]]}}&#x000A;</code></pre>
+                
+                <h2 id="Get_in_touch" onclick="window.location = '#Get_in_touch'">Get in touch</h2>
+                
+                <p>If you have any questions, issues, or other feedback, you can always
+                find us on <a href="/community/">#immutant on freenode</a> or you can file an
+                issue on
+                <a href="https://github.com/immutant/lein-immutant/issues">lein-immutant</a>.</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2013/08/09/lein-immutant-1-0-1/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2013/05/29/lein-immutant-1-0-0-beta1/">lein-immutant Plugin 1.0.0.beta1 Released</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  The Immutant Team
+                </div>
+                <div class="date">
+                  Wednesday, May 29, 2013
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/lein/">lein</a>
+                <a href="/news/tags/lein-immutant/">lein-immutant</a>
+                <a href="/news/tags/installation/">installation</a>
+              </div>
+              <div class="body">
+                <p>As we <a href="../announcing-1-0-0-beta1/">approach a 1.0.0 of Immutant</a>, we&#39;ve also been focusing on
+                getting our
+                <a href="https://github.com/immutant/lein-immutant/">Leiningen plugin</a> ready
+                for a 1.0.0 release as well.</p>
+                
+                <p>Today, we&#39;re as pleased as a
+                <a href="http://en.wikipedia.org/wiki/Punch_buggy">punch bug player</a> to
+                announce the first 1.0.0 beta release of the plugin: <strong>1.0.0.beta1</strong>. </p>
+                
+                <p>For 1.0.0.beta1, we&#39;ve made quite a few changes to the plugin, some of
+                which are not backwards compatible. We&#39;ll talk about all of the
+                changes, starting with the breaking ones.</p>
+                
+                <h2 id="The_base_install_dir_location_and_structure" onclick="window.location = '#The_base_install_dir_location_and_structure'">The base install dir location and structure</h2>
+                
+                <p>When we wrote the initial version of the plugin, we used
+                <code>.lein/immutant</code> as base directory for storing Immutant installs and
+                other files. But as the plugin has grown, we&#39;ve realized that&#39;s not
+                the best place for storing those files, since they aren&#39;t Leiningen
+                specific. Therefore, we&#39;ve moved the base directory to <code>~/.immutant</code>.</p>
+                
+                <p>In addition, we&#39;ve reorganized the layout of <code>~/.immutant/releases</code> to
+                be a bit cleaner.</p>
+                
+                <p>Since the new plugin will be looking in <code>~/.immutant</code>, it won&#39;t see
+                the prior installs in <code>~/.lein/immutant</code>. You&#39;ll need to re-install
+                the Immutant versions you need, and can safely delete
+                <code>~/.lein/immutant</code>.</p>
+                
+                <h2 id="The_plugin_now_installs_the_latest_release_by_default" onclick="window.location = '#The_plugin_now_installs_the_latest_release_by_default'">The plugin now installs the latest release by default</h2>
+                
+                <p>Pre-1.0.0.beta1, the plugin installed the latest incremental build
+                when you executed <code>lein immutant install</code>. As we approach 1.0.0 of
+                Immutant, we&#39;ve changed the plugin to install the latest stable
+                release instead.</p>
+                
+                <p>So, to install the latest stable release:</p>
+                
+                <pre><code>lein immutant install&#x000A;</code></pre>
+                
+                <p>If you want to install the latest incremental build:</p>
+                
+                <pre><code>lein immutant install LATEST&#x000A;</code></pre>
+                
+                <p>You can still specify any stable release version or incremental build
+                number to get an exact version.</p>
+                
+                <h2 id="Listing_installed_versions" onclick="window.location = '#Listing_installed_versions'">Listing installed versions</h2>
+                
+                <p>A couple of releases ago, we added the <code>lein immutant list</code> command
+                that lists currently deployed applications. In 1.0.0.beta1, this
+                command has been extended with a <code>--installs</code> flag (or <code>-i</code>) to list
+                all of the installed Immutant versions instead of deployments:</p>
+                
+                <pre><code>$ lein immutant list --installs&#x000A;The following versions of Immutant are installed to /home/tobias/.immutant&#x000A;(* is currently active via /home/tobias/.immutant/current):&#x000A;&#x000A;   0.10.0                         (type: full)&#x000A;   0.10.0                         (type: slim)&#x000A;   0.6.0                          (type: full)&#x000A;   0.9.0                          (type: slim)&#x000A;   0.9.0                          (type: full)&#x000A; * 1.0.0.beta1                    (type: slim)&#x000A;   1.x.incremental.879            (type: slim)&#x000A;   1.x.incremental.882            (type: slim)&#x000A;</code></pre>
+                
+                <p>You&#39;ll also now see this list after every <code>lein immutant install</code> invocation.</p>
+                
+                <h2 id="Overriding_the_base_directory" onclick="window.location = '#Overriding_the_base_directory'">Overriding the base directory</h2>
+                
+                <p>In addition to moving the base directory to <code>~/.immutant</code>, we&#39;ve added
+                the option to override its location, either per-project or globally.</p>
+                
+                <p>You can override it on a per-project basis by setting <code>:lein-immutant&#x000A;{:base-dir &quot;/path&quot;}</code> in your <code>project.clj</code></p>
+                
+                <p>You can override it globally two ways:</p>
+                
+                <ul>
+                <li>by setting <code>:lein-immutant {:base-dir &quot;/path&quot;}</code> in your user profile
+                in <code>.lein/profiles.clj</code></li>
+                <li>by setting an environment variable: <code>$LEIN_IMMUTANT_BASE_DIR</code></li>
+                </ul>
+                
+                <p>Setting the base directory in <code>project.clj</code> will override the setting
+                in <code>.lein/profiles.clj</code>. Using the environment variable will override
+                both.</p>
+                
+                <h2 id="Get_it" onclick="window.location = '#Get_it'">Get it</h2>
+                
+                <p>If you&#39;re already using <code>lein-immutant</code> you probably already know how
+                to do this, but just in case - to install it, add it to the <code>:plugins</code>
+                list in your <code>:user</code> profile in <code>~/.lein/profiles.clj</code>:</p>
+                
+                <pre><code>{:user {:plugins [[lein-immutant &quot;1.0.0.beta1&quot;]]}}&#x000A;</code></pre>
+                
+                <h2 id="Get_in_touch" onclick="window.location = '#Get_in_touch'">Get in touch</h2>
+                
+                <p>We realize this release has quite a few changes, and we may not have
+                all of the kinks worked out. If you have any questions, issues, or
+                other feedback, you can always find us on
+                <a href="/community/">#immutant on freenode</a> or you can file an issue on
+                <a href="https://github.com/immutant/lein-immutant/issues">lein-immutant</a>.</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2013/05/29/lein-immutant-1-0-0-beta1/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="pagination-links"><a href="/news/tags/lein-immutant/" class="previous-link">Previous</a> <a href="/news/tags/lein-immutant/" class="page-link">1</a> <span class="current-page">2</span> </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tags">
+              <div class="tag-cloud">
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/announcement/">announcement</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/app-server/">app-server</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/bears/">bears</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/beginning/">beginning</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/boot/">boot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/boot-immutant/">boot-immutant</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/caching/">caching</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/clustering/">clustering</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/daemons/">daemons</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/datomic/">datomic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/deploy/">deploy</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/distribution/">distribution</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/enterprise/">enterprise</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/event/">event</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/first/">first</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/getting-started/">getting-started</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/hotrod/">hotrod</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/infinispan/">infinispan</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/installation/">installation</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/isolation/">isolation</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein/">lein</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/lein-immutant/">lein-immutant</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/luminus/">luminus</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/messaging/">messaging</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/openshift/">openshift</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/overlay/">overlay</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/pipelines/">pipelines</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/polyglot/">polyglot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/poorsmatic/">poorsmatic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/postgresql/">postgresql</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/presentations/">presentations</a>
+                </span>
+                <span class="tag tag-6">
+                  <a href="http://immutant.org/news/tags/releases/">releases</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/ring/">ring</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/runtime/">runtime</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/scheduling/">scheduling</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/screencast/">screencast</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/slim/">slim</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/sockjs/">sockjs</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/survey/">survey</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/thedeuce/">thedeuce</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/torquebox/">torquebox</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transactions/">transactions</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transit/">transit</a>
+                </span>
+                <span class="tag tag-3">
+                  <a href="http://immutant.org/news/tags/tutorial/">tutorial</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/under-the-hood/">under-the-hood</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/vertx/">vertx</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/web/">web</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/websockets/">websockets</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wildfly/">wildfly</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wtf/">wtf</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/xa/">xa</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | News
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            News
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2012/03/20/clojurewest-preso/">Slides From My Clojure/West Presentation</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Jim Crossley
+                </div>
+                <div class="date">
+                  Tuesday, March 20, 2012
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/presentations/">presentations</a>
+                <a href="/news/tags/event/">event</a>
+              </div>
+              <div class="body">
+                <p>This past weekend I gave an &quot;Introducing Immutant&quot; talk at
+                <a href="http://clojurewest.org">Clojure/West</a> in San Jose, CA. And except for
+                one tiny slide, it seemed to go fairly well.</p>
+                
+                <p>I was a little nervous to see both
+                <a href="http://twitter.com/richhickey">Rich</a> and
+                <a href="http://twitter.com/stuarthalloway">Stu</a> in attendance. And that was
+                <em>before</em> they gently chided me for slide #63, in which I demonstrate
+                the use of core Clojure functions to alter Immutant caches. They were
+                justifiably concerned that doing so would be confusing, to say the
+                least.</p>
+                
+                <p>In the talk, I explained that the <code>core.cache</code> library, upon which the
+                Immutant cache is built, requires <code>IPersistentMap</code>
+                implementations. But after reviewing the code later, I realized I was
+                wrong. I got this wrong impression by attempting to make the Immutant
+                caches successfully pass the <code>core.cache</code> test suite. That was very
+                close to being a good idea.</p>
+                
+                <p>The <code>core.cache</code> test suite ensures that its caches can <code>assoc</code> and
+                <code>dissoc</code> expected results, which works great for local,
+                efficiently-copied persistent collections. Not so much for
+                distributed, inefficiently-copied collections. So I implemented them
+                by mutating instead of copying, just to make the tests pass...</p>
+                
+                <p>...and completely violated
+                <a href="http://en.wikipedia.org/wiki/Principle_of_least_astonishment">The Principle Of Least Surprise</a>. I
+                was focusing more on the polymorphic aspect of the core functions than
+                their implied immutability.</p>
+                
+                <p>The
+                <a href="https://github.com/immutant/immutant/commit/fabe041d995c5b02dbeaafa87bc161b5b79bd883">fix was easy</a>,
+                of course: just remove the core interface implementations that mutate
+                stuff along with the <code>assoc/dissoc</code> tests. We can still use the
+                read-only core functions (<code>get</code>, <code>seq</code>, <code>find</code>, etc.) and we still
+                have the mutation functions in their own <code>immutant.cache/Mutable</code>
+                namespace. In effect, an Immutant cache now responds to the core
+                Clojure functions exactly like a <code>java.util.HashMap</code> would.</p>
+                
+                <p>Slide decks for open-source projects often quickly become obsolete. In
+                this deck, #63 already is.</p>
+                
+                <p>The slides are also available on
+                <a href="https://github.com/strangeloop/clojurewest2012-slides">github along with all the others</a>
+                from Clojure/West.</p>
+                
+                <div style="width:425px" id="__ss_12072036"><iframe src="http://www.slideshare.net/slideshow/embed_code/12072036" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe></div>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2012/03/20/clojurewest-preso/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2012/03/14/announcing-0-1-0/">Immutant 0.1.0 Released</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  The Immutant Team
+                </div>
+                <div class="date">
+                  Wednesday, March 14, 2012
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/releases/">releases</a>
+              </div>
+              <div class="body">
+                <p>We&#39;re pleased as punch to announce the first official release of
+                Immutant - version <strong><em>0.1.0</em></strong>. We consider this release to be beta quality,
+                and lacks some of the features and API stability that will end up in the 
+                1.0.0 release. </p>
+                
+                <h2 id="What_is_Immutant?" onclick="window.location = '#What_is_Immutant?'">What is Immutant?</h2>
+                
+                <p>Immutant is an application server for <a href="http://clojure.org">Clojure</a>. 
+                It&#39;s an integrated platform built on <a href="http://www.jboss.org/as7">JBoss AS7</a>
+                that aims to reduce the <a href="http://en.wikipedia.org/wiki/Accidental_complexity">incidental complexity</a> 
+                that comes along with real world applications.</p>
+                
+                <h2 id="What&#39;s_in_this_release?" onclick="window.location = '#What&#39;s_in_this_release?'">What&#39;s in this release?</h2>
+                
+                <p>For this first release, we&#39;ve focused on the basics of application 
+                <a href="/documentation/0.1.0/deployment.html">deployment</a> 
+                and <a href="/documentation/0.1.0/initialization.html">initialization</a> 
+                along with a few components:</p>
+                
+                <ul>
+                <li><a href="/documentation/0.1.0/web.html">Ring support</a></li>
+                <li><a href="/documentation/0.1.0/messaging.html">Messaging</a></li>
+                <li><a href="/documentation/0.1.0/caching.html">Caching</a></li>
+                <li><a href="/documentation/0.1.0/daemons.html">Long-running services (daemons)</a></li>
+                <li><a href="/documentation/0.1.0/jobs.html">Scheduled jobs</a></li>
+                <li><a href="/documentation/0.1.0/interactive.html">REPL support</a></li>
+                </ul>
+                
+                <h2 id="What&#39;s_next?" onclick="window.location = '#What&#39;s_next?'">What&#39;s next?</h2>
+                
+                <p>Now that we have 0.1.0 out the door, we&#39;ll be focusing on:</p>
+                
+                <ul>
+                <li>XA Transaction support</li>
+                <li>Benchmarking to identify (and resolve!) performance bottlenecks</li>
+                <li>Getting Immutant running on <a href="http://openshift.com">OpenShift</a></li>
+                <li>General API simplification and improvement</li>
+                </ul>
+                
+                <h2 id="Get_It" onclick="window.location = '#Get_It'">Get It</h2>
+                
+                <p>The simplest way to install 0.1.0 is via our Leiningen plugin. See
+                our <a href="/install/">install page</a> for more details. Once you have it installed,
+                take a look at our <a href="/news/tags/getting-started/">Getting Started</a> tutorials. 
+                We&#39;ll be updating those and adding more in the next couple of weeks.</p>
+                
+                <h2 id="Get_In_Touch" onclick="window.location = '#Get_In_Touch'">Get In Touch</h2>
+                
+                <p>If you have any questions, issues, or other feedback about Immutant, you
+                can find us on <a href="/community/">#immutant on freenode</a> or 
+                <a href="/community/mailing_lists">our mailing lists</a>.
+                We&#39;ll also be at <a href="http://clojurewest.org">Clojure/West</a> where Jim will be
+                <a href="http://clojurewest.org/sessions/#crossley">presenting Immutant</a>
+                and we would love to chat with you.</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2012/03/14/announcing-0-1-0/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2012/02/27/caching/">Getting Started: Caching</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Jim Crossley
+                </div>
+                <div class="date">
+                  Monday, February 27, 2012
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/caching/">caching</a>
+                <a href="/news/tags/infinispan/">infinispan</a>
+                <a href="/news/tags/clustering/">clustering</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/getting-started/">getting-started</a>
+              </div>
+              <div class="body">
+                <p>This is the next tutorial in our
+                <a href="/news/tags/getting-started/">getting started series</a>: an exploration of
+                Immutant&#39;s caching features. <a href="http://www.jboss.org/jbossas">JBoss AS7</a> -- and therefore,
+                Immutant -- comes with the <a href="http://infinispan.org">Infinispan</a> data grid baked right in,
+                obviating the need to manage a separate caching service like Memcached
+                for your applications.</p>
+                
+                <p>Infinispan is a state-of-the-art, high-speed, low-latency, distributed
+                data grid. It is capable of efficiently replicating key-value stores
+                -- essentially souped-up <a href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ConcurrentMap.html">ConcurrentMap</a> implementations -- across a
+                cluster. But it can also serve as a capable in-memory data cache, too:
+                providing features such as write-through/write-behind persistence,
+                multiple eviction policies, and transactions.</p>
+                
+                <h2 id="Clustering_Modes" onclick="window.location = '#Clustering_Modes'">Clustering Modes</h2>
+                
+                <p>Infinispan caches adhere to a particular <a href="https://docs.jboss.org/author/display/ISPN/Clustering+modes">mode</a> of operation. In a
+                non-clustered, standalone Immutant, <code>:local</code> is the <strong>only</strong> supported
+                mode. But when clustered, you have other options.</p>
+                
+                <ul>
+                <li><code>:local</code> -- This is what you get in non-clustered mode, roughly
+                equivalent to a hash map with write-through/write-behind
+                persistence, JTA/XA support, MVCC (non-blocking, thread-safe reads
+                even during concurrent writes), and JMX manageability.</li>
+                <li><code>:invalidated</code> -- This is the default clustered mode. It doesn&#39;t
+                actually share any data at all, so it&#39;s very &quot;bandwidth friendly&quot;.
+                Whenever data is changed in a cache, other caches in the cluster
+                are notified that their copies are now stale and should be evicted
+                from memory.</li>
+                <li><code>:replicated</code> -- In this mode, entries added to any cache instance
+                will be copied to all other cache instances in the cluster, and can
+                then be retrieved locally from any instance.  Though simple, it&#39;s
+                impractical for clusters of any significant size (&gt;10), and its
+                capacity is equal to the amount of RAM in its smallest peer.</li>
+                <li><code>:distributed</code> -- This mode is what enables Infinispan clusters to
+                achieve &quot;linear scalability&quot;. Cache entries are copied to a fixed
+                number of cluster nodes (default is 2) regardless of the cluster
+                size.  Distribution uses a consistent hashing algorithm to
+                determine which nodes will store a given entry.</li>
+                </ul>
+                
+                <h2 id="immutant.cache/InfinispanCache" onclick="window.location = '#immutant.cache/InfinispanCache'">immutant.cache/InfinispanCache</h2>
+                
+                <p>The first thing you must understand about Immutant&#39;s <code>InfinispanCache</code>
+                is that it&#39;s <strong>mutable</strong>. This is sensible in a clustered environment,
+                because the local process benefits from fast reads of data that may
+                have been put there by a remote process. We effectively shift the
+                responsibility of &quot;sane data management&quot;, i.e. MVCC, from Clojure to
+                Infinispan.</p>
+                
+                <p>The second thing to know is that every Immutant cache has a
+                cluster-scoped name and a mode. When you call <code>immutant.cache/cache</code>,
+                the name is required, and it may refer to an existing cache that is
+                already populated. The mode argument (one of <code>:local</code>, <code>:invalidated</code>,
+                <code>:replicated</code>, or <code>:distributed</code>) is optional, defaulting to
+                <code>:invalidated</code> if clustered and <code>:local</code> otherwise.</p>
+                
+                <p>Because the cache implements many core Clojure interfaces, functions
+                that typically return immutable copies will actually affect the cache
+                contents:</p>
+                
+                <div class="notice big">
+                
+                  <i><b>UPDATE 3/22/2012</b></i>: Due to <a
+                  href="/news/2012/03/20/clojurewest-preso/">feedback from our
+                  Clojure/West talk</a> we no longer alter the Immutant caches through
+                  the core Clojure functions as shown below. See <a
+                  href="/builds/LATEST/html-docs/caching.html">the latest docs</a> for
+                  current info and examples.
+                
+                </div>
+                
+                <pre class="syntax clojure">&#x000A;  user> (def cache (immutant.cache/cache "test"))&#x000A;  #'user/cache&#x000A;  user> cache&#x000A;  {}&#x000A;  user> (assoc cache :a 1)&#x000A;  {:a 1}&#x000A;  user> (merge cache {:b 2, :c 3})&#x000A;  {:c 3, :a 1, :b 2}&#x000A;  user> (dissoc cache :c)&#x000A;  {:a 1, :b 2}&#x000A;  user> cache&#x000A;  {:a 1, :b 2}&#x000A;  user> (empty cache)&#x000A;  {}&#x000A;  user> cache&#x000A;  {}</pre>
+                
+                <p>Further, the <code>InfinispanCache</code> supports a variety of <code>put</code> methods,
+                some that expose the <a href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ConcurrentMap.html">ConcurrentMap</a> features of atomically storing
+                entries based on their presence or absence. These all take lifespan
+                options for <em>time-to-live</em> and <em>max-idle</em> expiration policies.</p>
+                
+                <h2 id="Memoization" onclick="window.location = '#Memoization'">Memoization</h2>
+                
+                <p>Memoization is an optimization technique associating a cache of
+                calculated values with a potentially expensive function, incurring the
+                expense only once, with subsequent calls retrieving the result from
+                the cache. The keys of the cache are the arguments passed to the
+                function.</p>
+                
+                <p>Standards for caching and memoization in Clojure are emerging in the
+                form of <a href="https://github.com/clojure/core.cache">core.cache</a> and <a href="https://github.com/clojure/core.memoize">core.memoize</a>, respectively. Because the
+                <code>InfinispanCache</code> implements <code>clojure.core.cache/CacheProtocol</code> it can
+                act as an underlying implementation for
+                <code>clojure.core.memoize/PluggableMemoization</code>. Immutant includes a
+                higher-order <code>memo</code> function for doing exactly that:</p>
+                
+                <pre class="syntax clojure">(immutant.cache/memo a-slow-function "a name" :distributed)</pre>
+                
+                <h2 id="An_Example" onclick="window.location = '#An_Example'">An Example</h2>
+                
+                <p>Let&#39;s ammend the example from <a href="/news/2012/02/16/clustering/">our clustering tutorial</a> to
+                demonstrate a replicated cache. We&#39;ll create a simple web app with a
+                single request to which we&#39;ll pass an integer. The request handler
+                will pass that number to a very slow increment function: it&#39;ll sleep
+                for that number of seconds before returning its increment. For us,
+                this sleepy function represents a particularly time-consuming
+                operation that will benefit from memoization.</p>
+                
+                <p>Of course we&#39;ll need a <code>project.clj</code></p>
+                
+                <pre class="syntax clojure">(defproject example "1.0.0-SNAPSHOT"&#x000A;  :dependencies [[org.clojure/clojure "1.3.0"]])</pre>
+                
+                <p>Next, the Immutant application bootstrap file, <code>immutant.clj</code>, into
+                which we&#39;ll put all our code for this example.</p>
+                
+                <pre class="syntax clojure">(ns example.init&#x000A;  (:use [ring.util.response]&#x000A;        [ring.middleware.params])&#x000A;  (:require [immutant.cache :as cache]&#x000A;            [immutant.web :as web]))&#x000A;&#x000A;;; Our slow function&#x000A;(defn slow-inc [t]&#x000A;  (Thread/sleep (* t 1000))&#x000A;  (inc t))&#x000A;&#x000A;;; Our memoized version of the slow function&#x000A;(def memoized-inc (cache/memo slow-inc "sleepy" :replicated))&#x000A;&#x000A;;; Our Ring handler&#x000A;(defn handler [{params :params}]&#x000A;  (let [t (Integer. (get params "t" 1))]&#x000A;    (response (str "value=" (memoized-inc t) "\n"))))&#x000A;&#x000A;;; Start up our web app&#x000A;(web/start "/" (wrap-params handler))</pre>
+                
+                <p>Make sure you have a recent version of Immutant:</p>
+                
+                <pre><code>$ lein immutant install&#x000A;</code></pre>
+                
+                <p>And cd to the directory containing the above two files and deploy your app:</p>
+                
+                <pre><code>$ lein immutant deploy&#x000A;</code></pre>
+                
+                <p>Now bring up your simulated cluster. In one shell, run:</p>
+                
+                <pre><code>$ lein immutant run --clustered -Djboss.node.name=one -Djboss.server.data.dir=/tmp/one&#x000A;</code></pre>
+                
+                <p>In another shell, run:</p>
+                
+                <pre><code>$ lein immutant run --clustered -Djboss.node.name=two -Djboss.server.data.dir=/tmp/two -Djboss.socket.binding.port-offset=100&#x000A;</code></pre>
+                
+                <p>You should have one server listening on port 8080 and another on
+                8180. So in yet another shell, run this:</p>
+                
+                <pre><code>$ curl &quot;http://localhost:8080/example/?t=5&quot;&#x000A;</code></pre>
+                
+                <p>With any luck, that should return 6 after about 5 seconds. Now run it
+                again and it should return 6 immediately. Now for the moment of truth:
+                change the port to 8180. That should return 6 immediately, too! Each
+                unique value of <code>t</code> should only sleep <code>t</code> seconds the first time
+                called on any peer in the cluster.</p>
+                
+                <p>Here&#39;s another trick. Fire off a request with <code>t=20</code> or so, and wait a
+                few seconds, but before it completes hit the same server again with
+                the same <code>t</code> value. You&#39;ll notice that the second request will not
+                have to sleep for the full 20 seconds; it returns immediately after
+                the first completes.</p>
+                
+                <h2 id="Caveats" onclick="window.location = '#Caveats'">Caveats</h2>
+                
+                <p>Though tested and toyed with, this is seriously Alpha code, and the
+                API is still coagulating, especially with respect to the options for
+                the <code>cache</code> and <code>memo</code> functions, which should probably include <code>:ttl</code>
+                and <code>:idle</code> themselves, for example. Other options may be introduced
+                as more of Infinispan&#39;s features are exposed, e.g. transactions and
+                persistence.</p>
+                
+                <p>By the way, we&#39;ve recently gotten a decent start on our
+                <a href="http://immutant.org/builds/LATEST/html-docs/index.html">user manual</a> and <a href="http://immutant.org/builds/LATEST/html-docs/apidoc/index.html">api</a> docs, so take a gander there for more
+                details on caching or any of the other Immutant components. And
+                remember to <a href="http://immutant.org/community/">pester us in the usual ways</a> if you have any
+                questions.</p>
+                
+                <p>Happy hacking!</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2012/02/27/caching/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2012/02/16/clustering/">Getting Started: Simulated Clustering</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Jim Crossley
+                </div>
+                <div class="date">
+                  Thursday, February 16, 2012
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/clustering/">clustering</a>
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/getting-started/">getting-started</a>
+                <a href="/news/tags/daemons/">daemons</a>
+              </div>
+              <div class="body">
+                <p>For this installment of our <a href="/news/tags/getting-started/">getting started series</a>
+                we&#39;ll experiment a bit with clustering, one of the primary benefits
+                provided by the <a href="http://www.jboss.org/jbossas">JBoss AS7</a> application server, upon which
+                Immutant is built. AS7 features a brand new way of configuring and
+                managing clusters called <em>Domain Mode</em>, but unfortunately its
+                documentation is still evolving. If you insist, try <a href="http://xebee.xebia.in/2011/11/01/all-about-managed-domain-jboss-as7/">this</a> or
+                possibly <a href="https://docs.jboss.org/author/display/AS71/AS7+Cluster+Howto">this</a>.</p>
+                
+                <p>We&#39;ll save <em>Domain Mode</em> with respect to Immutant for a future
+                post. It&#39;s not required for clustering, but it is an option for easier
+                cluster management. In this post, we&#39;ll reveal a trick to simulate a
+                cluster on your development box so that you can experiment with
+                Immutant clustering features, which we should probably enumerate now:</p>
+                
+                <ul>
+                <li>Automatic load balancing and failover of message consumers</li>
+                <li>HTTP session replication</li>
+                <li>Fine-grained, dynamic web-app configuration and control via
+                <a href="http://www.jboss.org/mod_cluster">mod_cluster</a></li>
+                <li>Efficiently-replicated distributed caching via <a href="http://infinispan.org">Infinispan</a></li>
+                <li>Singleton scheduled jobs</li>
+                <li>Automatic failover of singleton daemons</li>
+                </ul>
+                
+                <h2 id="Running_an_Immutant" onclick="window.location = '#Running_an_Immutant'">Running an Immutant</h2>
+                
+                <p>As you know, <a href="/news/2011/12/21/installing-redux/">installing</a> Immutant is simple:</p>
+                
+                <pre><code>$ lein plugin install lein-immutant 0.4.1&#x000A;$ lein immutant install&#x000A;</code></pre>
+                
+                <p>And running an Immutant is, too:</p>
+                
+                <pre><code>$ lein immutant run&#x000A;</code></pre>
+                
+                <p>By passing the <code>--clustered</code> option, you configure the Immutant as a
+                node that will discover other nodes (via multicast, by default) to
+                form a cluster:</p>
+                
+                <pre><code>$ lein immutant run --clustered&#x000A;</code></pre>
+                
+                <p>From the first line of its output, you can see what that command is
+                really running:</p>
+                
+                <pre><code>$ $JBOSS_HOME/bin/standalone.sh --server-config=standalone-ha.xml&#x000A;</code></pre>
+                
+                <p>Any options passed to <code>lein immutant run</code> are forwarded to
+                <code>standalone.sh</code>, so run the following to see what those are:</p>
+                
+                <pre><code>$ lein immutant run --help&#x000A;</code></pre>
+                
+                <h2 id="Simulating_a_Cluster" onclick="window.location = '#Simulating_a_Cluster'">Simulating a Cluster</h2>
+                
+                <h3 id="TL;DR" onclick="window.location = '#TL;DR'">TL;DR</h3>
+                
+                <p>To run two immutant instances on a single machine, fire up two shells and...</p>
+                
+                <p>In one shell, run:</p>
+                
+                <pre><code>$ lein immutant run --clustered -Djboss.node.name=one -Djboss.server.data.dir=/tmp/one&#x000A;</code></pre>
+                
+                <p>In another shell, run:</p>
+                
+                <pre><code>$ lein immutant run --clustered -Djboss.node.name=two -Djboss.server.data.dir=/tmp/two -Djboss.socket.binding.port-offset=100&#x000A;</code></pre>
+                
+                <p>Boom, you&#39;re a cluster!</p>
+                
+                <h3 id="Details" onclick="window.location = '#Details'">Details</h3>
+                
+                <p>Each cluster node requires a unique name, which is usually derived
+                from the hostname, but since our Immutants are on the same host, we
+                set the <code>jboss.node.name</code> property uniquely.</p>
+                
+                <p>Each Immutant will attempt to persist its runtime state to the same
+                files. Hijinks will ensue. We prevent said hijinks by setting the
+                <code>jboss.server.data.dir</code> property uniquely.</p>
+                
+                <p>JBoss listens for various types of connections on a few ports. One
+                obvious solution to the potential conflicts is to bind each Immutant
+                to a different interface, which we could specify using the <code>-b</code>
+                option. </p>
+                
+                <p>But rather than go through a platform-specific example of creating an
+                IP alias, I&#39;m going to take advantage of another JBoss feature: the
+                <code>jboss.socket.binding.port-offset</code> property will cause each default
+                port number to be incremented by a specified amount.</p>
+                
+                <p>So for the second Immutant, I set the offset to 100, resulting in its
+                HTTP service, for example, listening on 8180 instead of the default
+                8080, on which the first Immutant is listening.</p>
+                
+                <h2 id="Deploy_an_Application" onclick="window.location = '#Deploy_an_Application'">Deploy an Application</h2>
+                
+                <p>With any luck at all, you have two Immutants running locally, both
+                hungry for an app to deploy, so let&#39;s create one.</p>
+                
+                <p>We&#39;ve been over how to <a href="/news/2011/11/08/deploying-an-application/">deploy</a> an application before, but this time
+                we&#39;re gonna keep it real simple: create a new directory and add two
+                files.</p>
+                
+                <p>First, you&#39;ll need a <code>project.clj</code></p>
+                
+                <pre class="syntax clojure">(defproject example "1.0.0-SNAPSHOT"&#x000A;  :dependencies [[org.clojure/clojure "1.3.0"]])</pre>
+                
+                <p>Next, the Immutant application bootstrap file, <code>immutant.clj</code>, into
+                which we&#39;ll put all our code for this example.</p>
+                
+                <pre class="syntax clojure">(ns example.init&#x000A;  (:require [immutant.messaging :as messaging]&#x000A;            [immutant.daemons :as daemon])&#x000A;&#x000A;;; Create a message queue&#x000A;(messaging/start "/queue/msg")&#x000A;;; Define a consumer for our queue&#x000A;(def listener (messaging/listen "/queue/msg" #(println "received:" %)))&#x000A;&#x000A;;; Controls the state of our daemon&#x000A;(def done (atom false))&#x000A;&#x000A;;; Our daemon's start function&#x000A;(defn start []&#x000A;  (reset! done false)&#x000A;  (loop [i 0]&#x000A;    (Thread/sleep 1000)&#x000A;    (when-not @done&#x000A;      (println "sending:" i)&#x000A;      (messaging/publish "/queue/msg" i)&#x000A;      (recur (inc i)))))&#x000A;&#x000A;;; Our daemon's stop function&#x000A;(defn stop []&#x000A;  (reset! done true))&#x000A;&#x000A;;; Register the daemon&#x000A;(daemon/start "counter" start stop :singleton true)</pre>
+                
+                <p>We&#39;ve defined a message queue, a message listener, and a daemon
+                service that, once started, publishes messages to the queue every
+                second. </p>
+                
+                <p>Daemons require a name (for referencing as a JMX MBean), a start
+                function to be invoked asynchronously, and a stop function that will
+                be automatically invoked when your app is undeployed, allowing you to
+                cleanly teardown any resources used by your service. Optionally, you
+                can declare the service to be a <em>singleton</em>. This means it will only
+                be started on one node in your cluster, and should that node crash, it
+                will be automatically started on another node, essentially giving you
+                a robust, highly-available service.</p>
+                
+                <p>In the same directory that contains your files, run this:</p>
+                
+                <pre><code>$ lein immutant deploy&#x000A;</code></pre>
+                
+                <p>Because both Immutants are monitoring the same deployment directory,
+                this should trigger both to deploy the app.</p>
+                
+                <p>Now watch the output of the shells in which your Immutants are
+                running. You should see the daemon start up on only one of them, but
+                both should be receiving messages. This is the automatic load
+                balancing of message consumers.</p>
+                
+                <p>Now kill the Immutant running the daemon. Watch the other one to see
+                that the daemon will start there within seconds. There&#39;s your
+                automatic failover. Restart the killed Immutant to see him start to
+                receive messages again. It&#39;s fun, right? :)</p>
+                
+                <h2 id="Whew!" onclick="window.location = '#Whew!'">Whew!</h2>
+                
+                <p>So that&#39;s probably enough to show for now. Give it a try, and let us
+                know if it worked for you the very first time. If it doesn&#39;t, please
+                reach out to us <a href="http://immutant.org/community/">in the usual ways</a> and we&#39;ll be happy to
+                get you going. Above all, have fun!</p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2012/02/16/clustering/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="post">
+              <h2 class="title">
+                <a href="/news/2012/02/09/scheduling/">Getting Started: Scheduling Jobs</a>
+              </h2>
+              <div class="byline">
+                <div class="author">
+                  Toby Crawley
+                </div>
+                <div class="date">
+                  Thursday, February  9, 2012
+                </div>
+              </div>
+              <div class="tags">
+                <a href="/news/tags/tutorial/">tutorial</a>
+                <a href="/news/tags/getting-started/">getting-started</a>
+                <a href="/news/tags/scheduled-jobs/">scheduled-jobs</a>
+              </div>
+              <div class="body">
+                <div class="notice big">
+                
+                  Note: this article is out of date. For more recent instructions on using
+                  scheduled jobs, see the <a href="/tutorials/jobs/">tutorial</a>.
+                
+                </div>
+                
+                <p>This article covers job schedulding in Immutant, and is part of our
+                <a href="/news/tags/getting-started/">getting started series of tutorials</a>. </p>
+                
+                <p>Jobs in Immutant are simply functions that execute on a recurring 
+                schedule. They fire asynchronously, outside of the thread where they are 
+                defined, and fire in the same runtime as the rest of the application, so 
+                have access to any shared state.</p>
+                
+                <p>Jobs are built on top of the <a href="http://quartz-scheduler.org/">Quartz</a> library, and support scheduling via a 
+                cron-like specification. </p>
+                
+                <h2 id="Why_would_I_use_this_over_quartz-clj_or_calling_Quartz_directly?" onclick="window.location = '#Why_would_I_use_this_over_quartz-clj_or_calling_Quartz_directly?'">Why would I use this over quartz-clj or calling Quartz directly?</h2>
+                
+                <p>I&#39;m glad you asked! There are several reasons:</p>
+                
+                <ul>
+                <li>Immutant abstracts away the complexity of Quartz&#39;s internals, so you don&#39;t
+                have to worry about managing <a href="http://quartz-scheduler.org/api/1.8.5/org/quartz/Scheduler.html">Schedulers</a> and creating <a href="http://quartz-scheduler.org/api/1.8.5/org/quartz/JobDetail.html">JobDetails</a>, and
+                provides enough functionality for a majority of use cases. For 
+                cases where you need advanced scheduling functionality, you can still use
+                <a href="https://github.com/mdpendergrass/quartz-clj">quartz-clj</a> or the Quartz classes directly.</li>
+                <li>If you are using Immutant in a cluster, jobs that should fire only once per
+                cluster (aka &#39;singleton jobs&#39;) are handled automatically (see below).</li>
+                <li>When your application is undeployed, your jobs are automatically unscheduled.
+                Note that if you use quartz-clj or Quartz directly from your application,
+                you&#39;ll need  to clean up after yourself so you don&#39;t leave jobs lingering around 
+                since Immutant can&#39;t automatically unschedule them for you.</li>
+                </ul>
+                
+                <h2 id="Scheduling_Jobs" onclick="window.location = '#Scheduling_Jobs'">Scheduling Jobs</h2>
+                
+                <p>Scheduling a job is as simple as calling the <code>schedule</code>  function from the
+                <code>immutant.jobs</code> namespace:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.jobs :as jobs])&#x000A;(jobs/schedule "my-job-name" "*/5 * * * * ?" &#x000A;                #(println "I was called!"))</pre>
+                
+                <p>The <code>schedule</code> function requires three arguments:</p>
+                
+                <ul>
+                <li><em>name</em> - the name of the job.</li>
+                <li><em>spec</em> - the cron-style specification string (see below).</li>
+                <li><em>f</em> - the zero argument function that will be invoked each time the job fires.</li>
+                </ul>
+                
+                <p>Job scheduling is dynamic, and can occur anywhere in your application code. 
+                Jobs that share the lifecycle of your application are idiomatically placed in <code>immutant.clj</code>.</p>
+                
+                <p>You can safely call <code>schedule</code> multiple times with the same job name - the named job will 
+                rescheduled.</p>
+                
+                <h2 id="Cron_Sytanx" onclick="window.location = '#Cron_Sytanx'">Cron Sytanx</h2>
+                
+                <p>The spec attribute should contain a crontab-like entry. This is similar to cron specifications
+                used by Vixie cron, anacron and friends, but includes an additional field for specifying seconds.
+                It is composed of 7 fields (6 are required):</p>
+                
+                <table class="fancy">
+                    <tr><th>Seconds</th><th>Minutes</th><th>Hours</th><th>Day of Month</th><th>Month</th><th>Day of Week</th><th>Year</th></tr>
+                    <tr><td>0-59</td><td>0-59</td><td>0-23</td><td>1-31</td><td>1-12 or JAN-DEC</td><td>1-7 or SUN-SAT</td><td>1970-2099 (optional)</td></tr>
+                </table>
+                
+                <p>For several fields, you may denote subdivision by using the forward-slash (/) character. To execute a job 
+                every 5 minutes, */5 in the minutes field would specify this condition.</p>
+                
+                <p>Spans may be indicated using the dash (-) character. To execute a job Monday through Friday, MON-FRI 
+                should be used in the day-of-week field.</p>
+                
+                <p>Multiple values may be separated using the comma (,) character. The specification of 1,15 in the 
+                day-of-month field would result in the job firing on the 1st and 15th of each month.</p>
+                
+                <p>Either day-of-month or day-of-week must be specified using the ? character, since specifying
+                both is contradictory.</p>
+                
+                <p>See the <a href="http://www.quartz-scheduler.org/documentation/quartz-1.x/tutorials/TutorialLesson06">Quartz cron specification</a> for additional details.</p>
+                
+                <h2 id="Unscheduling_Jobs" onclick="window.location = '#Unscheduling_Jobs'">Unscheduling Jobs</h2>
+                
+                <p>Jobs can be unscheduled via the <code>unschedule</code> function:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.jobs :as jobs])&#x000A;    &#x000A;(jobs/unschedule "my-job-name")</pre>
+                
+                <p>The <code>unschedule</code> function requires one argument:</p>
+                
+                <ul>
+                <li><em>name</em> - the name of a previously scheduled job.</li>
+                </ul>
+                
+                <p>If the given name resolves to an existing job, that job will be unscheduled and the call will
+                return <code>true</code>, otherwise <code>nil</code> is returned.</p>
+                
+                <p>Jobs are automatically unscheduled when your application is undeployed.</p>
+                
+                <h2 id="Clustering" onclick="window.location = '#Clustering'">Clustering</h2>
+                
+                <p>When using Immutant in a cluster, you&#39;ll need to mark any jobs that should only be scheduled
+                once for the entire cluster with the <code>:singleton</code> option:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.jobs :as jobs])&#x000A;(jobs/schedule "my-job-name" "*/5 * * * * ?" &#x000A;                #(println "I only fire on one node")&#x000A;                :singleton true)</pre>
+                
+                <p>If <code>:singleton</code> is <code>true</code>, the job will be scheduled to run on only one node in the cluster
+                at a time. If that node goes down, the job will automatically be scheduled on another node, giving
+                you failover. If <code>:singleton</code> is <code>false</code> or not provided, the job will be scheduled to run on
+                all nodes where the <code>schedule</code> call is executed.</p>
+                
+                <p>Look for a future post in our <a href="/news/tags/getting-started/">Getting Started series</a> on using Immutant in
+                a cluster.</p>
+                
+                <h2 id="The_Future" onclick="window.location = '#The_Future'">The Future</h2>
+                
+                <p>Currently, jobs can only be scheduled using <a href="http://quartz-scheduler.org/api/1.8.5/org/quartz/CronTrigger.html">CronTrigger</a> functionality. We plan to add
+                support for <a href="or" title="at">SimpleTrigger</a> functionality at some point in the future, 
+                allowing you to do something similar to:</p>
+                
+                <pre class="syntax clojure">(require '[immutant.jobs :as jobs])&#x000A;(jobs/schedule "my-at-job" (jobs/every "3s" :times 5)&#x000A;                #(println "I fire 5 times, every 3 seconds"))</pre>
+                
+                <p>Since Immutant is still in a pre-alpha state, none of what I said above is set in stone. If 
+                anything does change, We&#39;ll update this post to keep it accurate. </p>
+                
+                <p>If you have any feedback or questions, <a href="/community">get in touch</a>! </p>
+              </div>
+              <div class="tail">
+                 <a href="http://immutant.org/news/2012/02/09/scheduling/#disqus_thread">Comments</a>
+                <hr>
+              </div>
+            </div>
+            <div class="pagination-links"><a href="/news/page/12/" class="previous-link">Previous</a> <a href="/news/" class="page-link">1</a> <a href="/news/page/2/" class="page-link">2</a> <span class="skip">...</span><a href="/news/page/12/" class="page-link">12</a> <span class="current-page">13</span> <a href="/news/page/14/" class="page-link">14</a> <a href="/news/page/15/" class="page-link">15</a> <a href="/news/page/14/" class="next-link">Next</a> </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tags">
+              <div class="tag-cloud">
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/announcement/">announcement</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/app-server/">app-server</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/bears/">bears</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/beginning/">beginning</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/boot/">boot</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/caching/">caching</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/clustering/">clustering</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/daemons/">daemons</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/datomic/">datomic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/deploy/">deploy</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/distribution/">distribution</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/enterprise/">enterprise</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/event/">event</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/first/">first</a>
+                </span>
+                <span class="tag tag-3">
+                  <a href="http://immutant.org/news/tags/getting-started/">getting-started</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/hotrod/">hotrod</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/infinispan/">infinispan</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/installation/">installation</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/isolation/">isolation</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein/">lein</a>
+                </span>
+                <span class="tag tag-2">
+                  <a href="http://immutant.org/news/tags/lein-immutant/">lein-immutant</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/luminus/">luminus</a>
+                </span>
+                <span class="tag tag-3">
+                  <a href="http://immutant.org/news/tags/messaging/">messaging</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/openshift/">openshift</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/overlay/">overlay</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/pipelines/">pipelines</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/polyglot/">polyglot</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/poorsmatic/">poorsmatic</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/postgresql/">postgresql</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/presentations/">presentations</a>
+                </span>
+                <span class="tag tag-6">
+                  <a href="http://immutant.org/news/tags/releases/">releases</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/ring/">ring</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/runtime/">runtime</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/scheduled-jobs/">scheduled-jobs</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/scheduling/">scheduling</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/screencast/">screencast</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/slim/">slim</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/sockjs/">sockjs</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/survey/">survey</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/thedeuce/">thedeuce</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/torquebox/">torquebox</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transactions/">transactions</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/transit/">transit</a>
+                </span>
+                <span class="tag tag-3">
+                  <a href="http://immutant.org/news/tags/tutorial/">tutorial</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/under-the-hood/">under-the-hood</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/vertx/">vertx</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/web/">web</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/websockets/">websockets</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/wildfly/">wildfly</a>
+                </span>
+                <span class="tag tag-1">
+                  <a href="http://immutant.org/news/tags/wtf/">wtf</a>
+                </span>
+                <span class="tag tag-0">
+                  <a href="http://immutant.org/news/tags/xa/">xa</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2014 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,248 @@
+<html>
+  <head>
+    <title>immutant.messaging - Immutant Clojure API API documentation</title>
+    <link href="static/favicon.png" rel="icon" />
+    <link href="static/favicon.png" rel="shortcut icon" />
+    <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/wiki.css" rel="stylesheet" />
+    <link media="all" type="text/css" href="static/internal.css" rel="stylesheet" />
+    <style>.menuWrapper{height: 36px;}</style>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" href="http://www.wikispaces.com/_/2009051601/s/internal_ie.css" type="text/css" />
+    <![endif]-->
+  </head>
+<!--
+This document was auto-generated from the source by the clojure autodoc system.
+To report errors or ask questions about the overall documentation structure, formatting,
+etc., contact Tom Faulhaber (google mail name: tomfaulhaber).
+For errors in the documentation of a particular namespace, contact the author of that
+namespace.
+-->
+  <body>
+    <div id="AllContentContainer">
+      <div id="Header">
+	<!-- <a href="index.html" id="Logo"><img src="static/immutant-icon.gif" width="100" height="100" alt="Immutant" /></a> -->
+	<h1><a title="page header title" id="page-header" href="index.html">Immutant Clojure API</a> - v0.1.0</h1>
+      </div>
+      <div id="leftcolumn"><div style="text-align: center;"></div>
+<div class="menu">
+  <div class="WikiCustomNav WikiElement wiki">
+    <span class="toc-header"><span id="project-name">Immutant Clojure API</span> <span id="version"></span></span><br />
+    <ul>
+      <li><a class="wiki_link" href="index.html">Overview</a></li>
+      <li><a class="wiki_link" href="api-index.html">API Index</a></li>
+    </ul>
+    <div class="NamespaceTOC">
+      <span class="toc-header">Namespaces</span>
+      <ul id="left-sidebar-list">
+        <li><a href="immutant.utilities-api.html" class="wiki_link">immutant.utilities</a></li><li><a href="immutant.runtime-api.html" class="wiki_link">immutant.runtime</a></li><li><a href="immutant.repl-api.html" class="wiki_link">immutant.repl</a></li><li><a href="immutant.registry-api.html" class="wiki_link">immutant.registry</a></li><li><a href="immutant.mbean-api.html" class="wiki_link">immutant.mbean</a></li><li><a href="immutant.codecs-api.html" class="wiki_link">immutant.codecs</a></li><li><a href="immutant.web-api.html" class="wiki_link">immutant.web</a></li><li><a href="immutant.cache-api.html" class="wiki_link">immutant.cache</a></li><li><a href="immutant.daemons-api.html" class="wiki_link">immutant.daemons</a></li><li><a href="immutant.jobs-api.html" class="wiki_link">immutant.jobs</a></li><li><a href="immutant.messaging-api.html" class="wiki_link">immutant.messaging</a></li>
+      </ul>
+    </div>
+    
+    <a href="http://immutant.org" class="wiki_link">Immutant Home</a>
+    <a href="../index.html" class="wiki_link">Immutant Manual</a>
+
+  </div>
+</div>
+</div>
+      <div id="rightcolumn">
+	<div id="Content">
+	  <div class="contentBox"><div class="innerContentBox">
+              <div id="content_view" class="wiki wikiPage">
+                <div id="right-sidebar"><div id="toc">
+  <h1 class="nopad">Table of Contents</h1>
+  <div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.messaging">immutant.messaging</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.messaging/listen">listen</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.messaging/message-seq">message-seq</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.messaging/publish">publish</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.messaging/receive">receive</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.messaging/start">start</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.messaging/stop">stop</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.messaging/unlisten">unlisten</a>
+    </div>
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.messaging.core">immutant.messaging.core</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.messaging.core/set-properties!">set-properties!</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.messaging.core/wait-for-destination">wait-for-destination</a>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.messaging.core/wash-publish-options">wash-publish-options</a>
+    </div>
+    <br />
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#immutant.messaging.hornetq">immutant.messaging.hornetq</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a href="#immutant.messaging.hornetq/connection-factory">connection-factory</a>
+    </div>
+    <br />
+  </div>
+</div>
+</div>
+                <div id="content-tag">
+<p></p>
+<h2 class="namespace-header" id="immutant.messaging">immutant.messaging</h2>
+<pre id="namespace-docstr">Easily publish and receive messages containing any type of nested
+data structure to dynamically-created topics and queues. Message
+distribution is automatically load-balanced when clustered.</pre>
+
+
+<br />
+
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.messaging/listen">listen</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (listen dest-name f &amp; {:keys [concurrency selector], :or {concurrency 1}})
+</pre>
+  <pre id="var-docstr">The handler function, f, will receive any messages sent to dest-name.
+
+The following options are supported [default]:
+ :concurrency   the number of threads handling messages [1]</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/20efd05ce6ca0c60d032e39597a804bfb1bacfb0/./modules/messaging/src/main/clojure/immutant/messaging.clj#L71" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.messaging/message-seq">message-seq</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (message-seq dest-name &amp; opts)
+</pre>
+  <pre id="var-docstr">A lazy sequence of messages received from a destination. Accepts same options as receive</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/20efd05ce6ca0c60d032e39597a804bfb1bacfb0/./modules/messaging/src/main/clojure/immutant/messaging.clj#L66" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.messaging/publish">publish</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (publish dest-name message &amp; {:as opts})
+</pre>
+  <pre id="var-docstr">Send a message to a destination
+
+The following options are supported [default]:
+ :encoding     :clojure :json or :text [:clojure]
+ :priority     0-9 or :low :normal :high :critical [4]
+ :ttl          time to live, in ms [0=forever]
+ :persistent   whether undelivered messages survive restarts [true]
+ :properties   a hash to which selectors may be applied</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/20efd05ce6ca0c60d032e39597a804bfb1bacfb0/./modules/messaging/src/main/clojure/immutant/messaging.clj#L35" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.messaging/receive">receive</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (receive dest-name &amp; {:keys [timeout selector]})
+</pre>
+  <pre id="var-docstr">Receive a message from a destination
+
+The following options are supported [default]:
+ :timeout    time in ms, after which nil is returned [10000]
+ :selector   A JMS (SQL 92) expression matching message properties</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/20efd05ce6ca0c60d032e39597a804bfb1bacfb0/./modules/messaging/src/main/clojure/immutant/messaging.clj#L53" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.messaging/start">start</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (start name &amp; opts)
+</pre>
+  <pre id="var-docstr">Create a message destination; name should be prefixed with either /queue or /topic</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/20efd05ce6ca0c60d032e39597a804bfb1bacfb0/./modules/messaging/src/main/clojure/immutant/messaging.clj#L26" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.messaging/stop">stop</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (stop name)
+</pre>
+  <pre id="var-docstr">Destroy a message destination. Typically not necessary since it
+will be done for you when your app is undeployed. This will fail
+with a warning if any handlers are listening</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/20efd05ce6ca0c60d032e39597a804bfb1bacfb0/./modules/messaging/src/main/clojure/immutant/messaging.clj#L100" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.messaging/unlisten">unlisten</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (unlisten listener)
+</pre>
+  <pre id="var-docstr">Pass the result of a call to listen to de-register the handler. You
+only need to do this if you wish to stop the handler's destination
+before your app is undeployed</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/20efd05ce6ca0c60d032e39597a804bfb1bacfb0/./modules/messaging/src/main/clojure/immutant/messaging.clj#L93" id="var-source">Source</a>
+</div>
+<h2 class="namespace-header sub-namespace" id="immutant.messaging.core">immutant.messaging.core</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.messaging.core/set-properties!">set-properties!</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (set-properties! message properties)
+</pre>
+  <pre id="var-docstr">Set user-defined properties on a JMS message. Returns message</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/229c9d9437ebced65709ccbc45f83e5a13f5e43a/./modules/messaging/src/main/clojure/immutant/messaging/core.clj#L54" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.messaging.core/wait-for-destination">wait-for-destination</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (wait-for-destination f &amp; [count])
+</pre>
+  <pre id="var-docstr">Ignore exceptions, retrying until destination completely starts up</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/229c9d9437ebced65709ccbc45f83e5a13f5e43a/./modules/messaging/src/main/clojure/immutant/messaging/core.clj#L106" id="var-source">Source</a>
+</div><div class="var-entry" id="var-entry">
+  <h2 id="immutant.messaging.core/wash-publish-options">wash-publish-options</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (wash-publish-options opts producer)
+</pre>
+  <pre id="var-docstr">Wash publish options relative to default values from a producer</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/229c9d9437ebced65709ccbc45f83e5a13f5e43a/./modules/messaging/src/main/clojure/immutant/messaging/core.clj#L40" id="var-source">Source</a>
+</div>
+<h2 class="namespace-header sub-namespace" id="immutant.messaging.hornetq">immutant.messaging.hornetq</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+<div class="var-entry" id="var-entry">
+  <h2 id="immutant.messaging.hornetq/connection-factory">connection-factory</h2>
+  <span id="var-type">function</span><br />
+  <pre id="var-usage">Usage: (connection-factory &amp; {:keys [host port], :or {host localhost, port 5445}})
+</pre>
+  <pre id="var-docstr">Create a connection factory, typically invoked when outside container</pre>
+  
+  
+  <a href="https://github.com/immutant/immutant/blob/229c9d9437ebced65709ccbc45f83e5a13f5e43a/./modules/messaging/src/main/clojure/immutant/messaging/hornetq.clj#L23" id="var-source">Source</a>
+</div>
+
+
+</div>
+              </div>
+            </div>
+          </div>
+	</div>
+	<div id="foot">
+	  <div style="text-align: center;" id="copyright">Copyright 2011-2012 Red Hat, Inc.</div>
+	</div>
+      </div>
+      <div id="DesignedBy">Based on a site design by <a title="Visit Tom Hickey's website." href="http://www.tomhickey.com">Tom Hickey</a>.<br />
+      <a href="http://tomfaulhaber.github.com/autodoc/">Clojure auto-documentation system</a> by Tom Faulhaber.</div>
+    </div>
+    <!-- /AllContentContainer -->
+  </body>
+
+</html>

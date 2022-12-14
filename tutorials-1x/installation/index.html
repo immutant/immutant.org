@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Immutant | Installation
+    </title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/stylesheets/styles.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <link href="/news.atom" rel="alternate" type="application/atom+xml">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/dateformat.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">
+            <img id="logo" src="/images/logos/logo-horizontal-centered.png">
+          </a>
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li>
+                <a href="/news/">News</a>
+              </li>
+              <li>
+                <a href="/documentation/">Documentation</a>
+              </li>
+              <li>
+                <a href="/community/">Community</a>
+              </li>
+              <li>
+                <a href="/development/">Development</a>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Quick Links
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/documentation/current/apidoc/">2.x API Docs & Guides</a>
+                  </li>
+                  <li>
+                    <a href="/builds/2x/">2.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/documentation/1.1.4/" rel="nofollow">1.x Manual</a>
+                  </li>
+                  <li>
+                    <a href="/documentation/1.1.4/apidoc/" rel="nofollow">1.x API Docs</a>
+                  </li>
+                  <li>
+                    <a href="/tutorials-1x/" rel="nofollow">1.x Tutorials</a>
+                  </li>
+                  <li>
+                    <a href="/builds/" rel="nofollow">1.x Incremental Builds</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="/releases/">All Versioned Releases</a>
+                  </li>
+                  <li>
+                    <a href="https://issues.jboss.org/browse/IMMUTANT">Issues</a>
+                  </li>
+                  <li>
+                    <a href="http://webchat.freenode.net/?channels=immutant">#immutant on IRC</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/immutant/immutant">Source</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div class="container" id="main-content">
+        <div class="page-header">
+          <h1>
+            Tutorial: Installation
+          </h1>
+        </div>
+        <div class="row">
+          <div class="span8" id="main-column">
+            <div class="tutorial article">
+              <div class="byline">
+                <div class="date">
+                  Last updated:
+                  <span class="date">
+                    Tuesday, August 26, 2014
+                  </span>
+                </div>
+                <div class="author">
+                  Author:
+                  The Immutant Team
+                </div>
+              </div>
+              <div class="body">
+                <div class="notice big">
+                This tutorial is for Immutant 1.x.
+                Go <a href="/documentation/">here</a> for the 2.x documentation!
+                </div>
+                <p>This tutorial provides an in-depth look at the process for installing Immutant.
+                It covers setting up a development environment and installing
+                Immutant itself. This tutorial assumes you are on a *nix system. It also assumes you have
+                <a href="https://github.com/technomancy/leiningen">Leiningen</a> installed. If not, follow <a href="https://github.com/technomancy/leiningen#readme">these instructions</a> then come back here.</p>
+                
+                <h2>Installing the lein plugin</h2>
+                
+                <p>We provide a <a href="https://github.com/immutant/lein-immutant/">lein plugin</a> for creating your Immutant applications and
+                managing their life-cycles. The current version of the plugin is
+                <strong>1.2.3</strong>.</p>
+                
+                <p>The plugin only supports Leiningen 2.0.0 and higher.</p>
+                
+                <h3>Installing under Leiningen</h3>
+                
+                <p>Installing the plugin for Leiningen is just a matter of adding it to the
+                <code>:plugin</code> list in the <code>:user</code> profile of <code>~/.lein/profiles.clj</code>:</p>
+                
+                <pre><code>{:user {:plugins [[lein-immutant &quot;1.2.3&quot;]]}}&#x000A;</code></pre>
+                
+                <h2>Plugin tasks</h2>
+                
+                <p>The plugin provides several subtasks, but this tutorial will only
+                focus on <code>install</code> and <code>run</code>. To list all of them, simply run <code>lein&#x000A;immutant</code>:</p>
+                
+                <pre><code>$ lein immutant&#x000A;</code></pre>
+                
+                <h2>Installing Immutant</h2>
+                
+                <p>Now we need to install an Immutant distribution. You have the option of either
+                installing a versioned release or an <a href="/builds">incremental build</a>. Our latest versioned release
+                is <a href="/news/2014/08/01/announcing-1-1-4/">1.1.4</a>
+                (released Friday, August  1, 2014), but if
+                you want to stay on the cutting edge, you may want to install the latest incremental
+                build. We generate one after every push to <a href="https://github.com/immutant/immutant">our repo</a> if our
+                comprehensive test suite passes.</p>
+                
+                <p>The plugin provides an <code>install</code> subtask that can install a versioned release,
+                the latest incremental release, or any prior incremental release.</p>
+                
+                <p>To install the latest versioned release, call <code>immutant install</code> with no arguments:</p>
+                
+                <pre><code>$ lein immutant install&#x000A;Downloading http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/1.1.4/immutant-dist-1.1.4-slim.zip&#x000A;done!&#x000A;Extracting /a/nice/long/tmp/path/immutant-dist-1.1.4-slim.zip&#x000A;Extracted /Users/tobias/.immutant/releases/slim/immutant-1.1.4-slim&#x000A;Linking /Users/tobias/.immutant/current to /Users/tobias/.immutant/releases/immutant-1.1.4-slim&#x000A;</code></pre>
+                
+                <p>Part of the install process links the most recently installed version to
+                <code>~/.immutant/current</code> so the plugin can find the Immutant install without
+                requiring you to set <code>$IMMUTANT_HOME</code>. If <code>$IMMUTANT_HOME</code> is set, it will
+                override the <code>current</code> link.</p>
+                
+                <p>Passing the special word <code>LATEST</code> will install the latest incremental
+                build:</p>
+                
+                <pre><code>$ lein immutant install LATEST&#x000A;</code></pre>
+                
+                <p>If you want to install a specific version (either an incremental build
+                or a release), specify the build number (available from our
+                <a href="/builds">builds page</a>) for an incremental build:</p>
+                
+                <pre><code>$ lein immutant install 705&#x000A;</code></pre>
+                
+                <p>or a version for a release:</p>
+                
+                <pre><code>$ lein immutant install 1.1.4&#x000A;</code></pre>
+                
+                <p>You can list your installations, and see the current one, with the
+                <code>list</code> subtask:</p>
+                
+                <pre><code>$ lein immutant list -i&#x000A;</code></pre>
+                
+                <p>The <code>install</code> command also verifies the sha1 sum of the downloaded
+                artifact, and will abort the installation if the sum is incorrect.</p>
+                
+                <p>You can override the plugin base directory (<code>~/.immutant</code>) by setting
+                <code>$LEIN_IMMUTANT_BASE_DIR</code> or by adding <code>:lein-immutant {:base-dir&#x000A;&quot;/path&quot;}</code> to your user profile in <code>.lein/profiles.clj</code> or to your
+                <code>project.clj</code>. Setting the base directory in <code>project.clj</code> will
+                override the setting in <code>.lein/profiles.clj</code>. Using the environment
+                variable will override both.</p>
+                
+                <h2>Running Immutant</h2>
+                
+                <p>To verify that Immutant is properly installed, let&#39;s fire it up. To do
+                so, use the <code>lein immutant run</code> command. This is a convenient way to
+                start the Immutant&#39;s JBoss server, and will run in the foreground
+                displaying the console log. You&#39;ll see lots of log messages that you
+                can ignore - the one to look for should be the last message, and will
+                tell you the Immutant was properly started:</p>
+                
+                <pre><code>$ lein immutant run&#x000A;Starting Immutant via /Users/tobias/.immutant/current/jboss/bin/standalone.sh&#x000A;...&#x000A;(a plethora of log messages deleted)&#x000A;...&#x000A;09:18:03,709 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015874: JBoss AS 7.1.x.incremental.107 &quot;Arges&quot; started in 1610ms - Started 166 of 252 services (85 services are passive or on-demand)&#x000A;</code></pre>
+                
+                <p>You can kill the Immutant with Ctrl-C.</p>
+                
+                <h2>Alternate Install via Zip Download</h2>
+                
+                <p>You can manually download any of the same builds that you can install
+                via the plugin. You can download incremental builds from the
+                <a href="/builds/">builds page</a> and official releases from the
+                <a href="/releases/">releases page</a>.</p>
+                
+                <p>Once you have the zip downloaded, expand it somewhere handy. If you
+                want to use the Leiningen plugin with this build, you&#39;ll need to set
+                <code>$IMMUTANT_HOME</code>:</p>
+                
+                <pre><code>$ mkdir immutant-releases&#x000A;$ cd immutant-releases&#x000A;$ unzip path/to/immutant-dist-slim.zip&#x000A;$ export IMMUTANT_HOME=~/immutant-releases/immutant-1.1.4-slim/&#x000A;</code></pre>
+                
+                <h2>Wrapping up</h2>
+                
+                <p>If you&#39;ve done all of the above, you&#39;re now ready to deploy an application. We
+                cover that in our <a href="../deploying/">deployment tutorial</a>.</p>
+                
+                <p>If you have any feedback or questions, <a href="/community">get in touch</a>!</p>
+              </div>
+              <div class="comments">
+                
+                            <div id="disqus_thread"></div>
+                            <script type="text/javascript">
+                            var disqus_shortname = 'immutant';
+                            var disqus_url = "http://immutant.org/tutorials-1x/installation/";
+                            var disqus_developer = null;
+                            var disqus_identifier = null;
+                            (function() {
+                              var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
+                              dsq.src = "http://immutant.disqus.com/embed.js";
+                              (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq);
+                            })();
+                            </script>
+                            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=immutant">comments powered by Disqus.</a></noscript>
+              </div>
+            </div>
+          </div>
+          <div class="span4" id="sidebar-column">
+            <div class="tutorial-nav">
+              <h3>All Tutorials</h3>
+              <ul class="nav nav-tabs nav-stacked">
+                <li class="current">
+                  <a href="/tutorials-1x/installation/index.html">Installation</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials-1x/deploying/index.html">Deployment</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials-1x/web/index.html">Web</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials-1x/messaging/index.html">Messaging</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials-1x/jobs/index.html">Scheduling</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials-1x/caching/index.html">Caching</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials-1x/clustering/index.html">Clustering</a>
+                </li>
+                <li class="">
+                  <a href="/tutorials-1x/overlay/index.html">Overlay</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row" id="bottom-nav">
+          <div class="span8">
+            <div id="legal">
+              <p>The Immutant project is a member of the <a href="http://jboss.org/">JBoss
+              Community</a> and produced by the
+              <a href="http://projectodd.org/">Project:odd</a> team.  It is a
+              community-driven open-source project, and is licensed under
+              the <a href="/license-lgpl.txt">GNU LGPL</a> or <a href="/license-asl.txt">Apache Software
+              License</a>, depending on the version.</p>
+              
+              <p>Copyright 2011 - 2017 <a href="http://redhat.com/">Red Hat, Inc.</a>
+              Immutant&trade; is a trademark of Red Hat, Inc.</p>
+              
+              <p>Content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+            </div>
+          </div>
+          <div class="span4">
+            <div id="badges">
+              <a href="http://jboss.org/"><img id="jbosscommunity-logo" src="http://torquebox.org/images/jbosscommunity-logo.png"></a>
+              <a href="http://projectodd.org/"><img id="projectodd-logo" src="http://projectodd.org/images/projectodd-logo.png"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/javascripts/bootstrap-collapse.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-dropdown.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap-tab.js" type="text/javascript"></script>
+    <script>
+      $( function () {
+         var syntax_root = "/javascripts/jquery-syntax/"
+      
+         if (!$.browser.msie && $( '.syntax' ).length) {
+           $.getScript( syntax_root + "jquery.syntax.min.js", function () {
+             $.syntax( {root: syntax_root,
+                       blockLayout: 'plain'} )
+           } )
+         }
+       } )
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-6435340-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+  </body>
+</html>
